@@ -60,4 +60,9 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
           ServerFailure(serverMessage: error.serverMessage, code: error.code));
     }
   }
+
+  @override
+  Future<bool> isEmailVerified() async {
+    return await authenticationDataSource.isEmailVerified();
+  }
 }

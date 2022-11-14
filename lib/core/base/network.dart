@@ -9,7 +9,7 @@ class DioModule {
 
   Dio get dio {
     final newDio = Dio();
-    newDio.options.baseUrl = "https://priorli.oa.r.appspot.com";
+    newDio.options.baseUrl = "https://priorli.oa.r.appspot.com/api/v1";
     newDio.options.connectTimeout = 60000; //60s
     newDio.options.receiveTimeout = 30000;
     newDio.interceptors

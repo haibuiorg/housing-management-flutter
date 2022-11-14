@@ -80,4 +80,10 @@ class AuthenticationRemoteDataSource implements AuthenticationDataSource {
           serverMessage: 'Invalid password', code: 'wrong_password');
     }
   }
+
+  @override
+  Future<bool> isEmailVerified() async {
+    await firebaseAuth.currentUser?.reload();
+    return firebaseAuth.currentUser?.emailVerified == true;
+  }
 }

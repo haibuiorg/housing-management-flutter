@@ -1,3 +1,5 @@
+import 'package:priorli/core/base/auth/usecases/is_email_verified.dart';
+
 import '../../result.dart';
 
 abstract class AuthenticationRepository {
@@ -5,6 +7,7 @@ abstract class AuthenticationRepository {
       {required String email, required String password});
   Future<bool> isAuthenticated();
   Future<bool> isLoggedIn();
+  Future<bool> isEmailVerified();
   Future<bool> logOut();
   Future<String?> getToken();
   Future<Result<bool>> resetPassword({required String email});

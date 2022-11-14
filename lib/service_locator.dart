@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:priorli/auth_cubit.dart';
+import 'package:priorli/core/base/auth/usecases/is_email_verified.dart';
 
 import 'setting_cubit.dart';
 import 'core/base/auth/data/authentication_data_source.dart';
@@ -40,8 +41,8 @@ Future<void> init() async {
         serviceLocator(),
       ));
 
-  serviceLocator.registerFactory(
-      () => AuthCubit(serviceLocator(), serviceLocator(), serviceLocator()));
+  serviceLocator.registerFactory(() => AuthCubit(serviceLocator(),
+      serviceLocator(), serviceLocator(), serviceLocator(), serviceLocator()));
 
   /** usecases */
   // Auth
@@ -49,6 +50,8 @@ Future<void> init() async {
       () => IsAuthenticated(authenticationRepository: serviceLocator()));
   serviceLocator.registerLazySingleton<IsLoggedIn>(
       () => IsLoggedIn(authenticationRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<IsEmailVerified>(
+      () => IsEmailVerified(authenticationRepository: serviceLocator()));
   serviceLocator.registerLazySingleton<LoginEmailPassword>(
       () => LoginEmailPassword(authenticationRepository: serviceLocator()));
   serviceLocator.registerLazySingleton<LogOut>(

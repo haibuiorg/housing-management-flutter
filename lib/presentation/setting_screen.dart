@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../setting_cubit.dart';
-import '../app_state.dart';
+import '../setting_state.dart';
 import '../auth_cubit.dart';
 
 const settingPath = '/settings';

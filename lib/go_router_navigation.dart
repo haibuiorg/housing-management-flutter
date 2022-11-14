@@ -1,9 +1,9 @@
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
-import 'package:priorli/presentation/login_screen.dart';
+import 'package:priorli/presentation/login/login_screen.dart';
 import 'package:priorli/presentation/main_screen.dart';
 import 'package:priorli/presentation/setting_screen.dart';
-import 'presentation/register_screen.dart';
+import 'presentation/register/register_screen.dart';
 
 final appRouter = GoRouter(
   initialLocation: mainPath,

@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:priorli/app_state.dart';
+import 'package:priorli/setting_state.dart';
 import 'package:priorli/core/base/result.dart';
 import 'package:priorli/core/base/settings/usecases/get_setting.dart';
 import 'package:priorli/core/base/settings/usecases/save_setting.dart';
