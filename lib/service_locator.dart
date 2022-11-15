@@ -43,6 +43,20 @@ import 'core/user/usecases/delete_user_notification_token.dart';
 import 'core/user/usecases/get_user_info.dart';
 import 'core/user/usecases/update_user_info.dart';
 import 'core/user/usecases/update_user_notification_token.dart';
+import 'core/water_usage/data/water_usage_data_source.dart';
+import 'core/water_usage/data/water_usage_remote_data_source.dart';
+import 'core/water_usage/repos/water_usage_repository.dart';
+import 'core/water_usage/repos/water_usage_repository_impl.dart';
+import 'core/water_usage/usecases/add_consumption_value.dart';
+import 'core/water_usage/usecases/add_new_water_price.dart';
+import 'core/water_usage/usecases/delete_water_price.dart';
+import 'core/water_usage/usecases/get_active_water_price.dart';
+import 'core/water_usage/usecases/get_latest_water_consumption.dart';
+import 'core/water_usage/usecases/get_previous_water_consumption.dart';
+import 'core/water_usage/usecases/get_water_bill.dart';
+import 'core/water_usage/usecases/get_water_bill_by_year.dart';
+import 'core/water_usage/usecases/get_water_consumption.dart';
+import 'core/water_usage/usecases/start_new_water_consumptio_period.dart';
 import 'setting_cubit.dart';
 import 'core/base/network.dart';
 
@@ -110,6 +124,28 @@ Future<void> init() async {
   serviceLocator.registerLazySingleton<SendInvitationToApartment>(
       () => SendInvitationToApartment(apartmentRepository: serviceLocator()));
 
+  // water consumption
+  serviceLocator.registerLazySingleton<AddConsumptionValue>(
+      () => AddConsumptionValue(waterUsageRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<AddNewWaterPrice>(
+      () => AddNewWaterPrice(waterUsageRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<DeleteWaterPrice>(
+      () => DeleteWaterPrice(waterUsageRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<GetActiveWaterPrice>(
+      () => GetActiveWaterPrice(waterUsageRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<GetLatestWaterConsumption>(
+      () => GetLatestWaterConsumption(waterUsageRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<GetPreviousWaterConsumption>(() =>
+      GetPreviousWaterConsumption(waterUsageRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<GetWaterBillByYear>(
+      () => GetWaterBillByYear(waterUsageRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<GetWaterBill>(
+      () => GetWaterBill(waterUsageRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<GetWaterConsumption>(
+      () => GetWaterConsumption(waterUsageRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<StartNewWaterConsumptionPeriod>(() =>
+      StartNewWaterConsumptionPeriod(waterUsageRepository: serviceLocator()));
+
   /** repos */
   serviceLocator.registerLazySingleton<AuthenticationRepository>(() =>
       AuthenticationRepositoryImpl(authenticationDataSource: serviceLocator()));
@@ -121,6 +157,8 @@ Future<void> init() async {
       HousingCompanyRepositoryImpl(housingCompanyDataSource: serviceLocator()));
   serviceLocator.registerLazySingleton<ApartmentRepository>(
       () => ApartmentRepositoryImpl(apartmentDataSource: serviceLocator()));
+  serviceLocator.registerLazySingleton<WaterUsageRepository>(
+      () => WaterUsageRepositoryImpl(waterUsageDataSource: serviceLocator()));
 
   /** datasource*/
   serviceLocator.registerLazySingleton<AuthenticationDataSource>(() =>
@@ -135,6 +173,8 @@ Future<void> init() async {
       () => HousingCompanyRemoteDataSource(serviceLocator<Dio>()));
   serviceLocator.registerLazySingleton<ApartmentDataSource>(
       () => ApartmentRemoteDataSource(serviceLocator<Dio>()));
+  serviceLocator.registerLazySingleton<WaterUsageDataSource>(
+      () => WaterUsageRemoteDataSource(client: serviceLocator<Dio>()));
 
   /** network */
   serviceLocator.registerLazySingleton<Dio>(
