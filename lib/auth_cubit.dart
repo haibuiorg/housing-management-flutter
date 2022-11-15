@@ -1,14 +1,14 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:priorli/core/base/auth/usecases/is_email_verified.dart';
-import 'package:priorli/core/base/auth/usecases/is_logged_in.dart';
-import 'package:priorli/core/base/auth/usecases/log_out.dart';
-import 'package:priorli/core/base/auth/usecases/login_email_password.dart';
 import 'package:priorli/core/base/result.dart';
 import 'package:priorli/core/base/usecase.dart';
-import 'package:priorli/core/base/user/entities/user.dart';
-import 'package:priorli/core/base/user/usecases/create_user.dart';
 
 import 'auth_state.dart';
+import 'core/auth/usecases/is_email_verified.dart';
+import 'core/auth/usecases/is_logged_in.dart';
+import 'core/auth/usecases/log_out.dart';
+import 'core/auth/usecases/login_email_password.dart';
+import 'core/user/entities/user.dart';
+import 'core/user/usecases/create_user.dart';
 
 class AuthCubit extends Cubit<AuthState> {
   final IsLoggedIn _isLoggedIn;

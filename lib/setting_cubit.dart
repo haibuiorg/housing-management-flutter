@@ -2,9 +2,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:priorli/setting_state.dart';
 import 'package:priorli/core/base/result.dart';
-import 'package:priorli/core/base/settings/usecases/get_setting.dart';
-import 'package:priorli/core/base/settings/usecases/save_setting.dart';
-import 'package:priorli/core/base/settings/usecases/setting_constants.dart';
+
+import 'core/settings/usecases/get_setting.dart';
+import 'core/settings/usecases/save_setting.dart';
+import 'core/settings/usecases/setting_constants.dart';
 
 class SettingCubit extends Cubit<SettingState> {
   final GetSetting _getSetting;

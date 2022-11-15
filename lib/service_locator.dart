@@ -1,36 +1,43 @@
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
-import 'package:priorli/auth_cubit.dart';
-import 'package:priorli/core/base/auth/usecases/is_email_verified.dart';
+import 'package:priorli/core/housing/data/housing_company_data_source.dart';
+import 'package:priorli/core/housing/data/housing_company_remote_data_source.dart';
+import 'package:priorli/core/housing/repos/housing_company_repository.dart';
+import 'package:priorli/core/housing/repos/housing_company_repository_impl.dart';
+import 'package:priorli/core/housing/usecases/create_housing_company.dart';
+import 'package:priorli/core/housing/usecases/get_housing_companies.dart';
+import 'package:priorli/core/housing/usecases/update_housing_company_info.dart';
 
+import 'auth_cubit.dart';
+import 'core/auth/data/authentication_data_source.dart';
+import 'core/auth/data/authentication_remote_data_source.dart';
+import 'core/auth/repos/authentication_repository.dart';
+import 'core/auth/repos/authentication_repository_impl.dart';
+import 'core/auth/usecases/change_password.dart';
+import 'core/auth/usecases/is_authenticated.dart';
+import 'core/auth/usecases/is_email_verified.dart';
+import 'core/auth/usecases/is_logged_in.dart';
+import 'core/auth/usecases/log_out.dart';
+import 'core/auth/usecases/login_email_password.dart';
+import 'core/auth/usecases/reset_password.dart';
+import 'core/settings/data/setting_data_source.dart';
+import 'core/settings/data/setting_local_data_source.dart';
+import 'core/settings/repo/setting_repository.dart';
+import 'core/settings/repo/setting_repository_impl.dart';
+import 'core/settings/usecases/get_setting.dart';
+import 'core/settings/usecases/save_setting.dart';
+import 'core/user/data/user_data_source.dart';
+import 'core/user/data/user_remote_data_source.dart';
+import 'core/user/repos/user_repository.dart';
+import 'core/user/repos/user_repository_impl.dart';
+import 'core/user/usecases/create_user.dart';
+import 'core/user/usecases/delete_user_notification_token.dart';
+import 'core/user/usecases/get_user_info.dart';
+import 'core/user/usecases/update_user_info.dart';
+import 'core/user/usecases/update_user_notification_token.dart';
 import 'setting_cubit.dart';
-import 'core/base/auth/data/authentication_data_source.dart';
-import 'core/base/auth/data/authentication_remote_data_source.dart';
-import 'core/base/auth/repos/authentication_repository.dart';
-import 'core/base/auth/repos/authentication_repository_impl.dart';
-import 'core/base/auth/usecases/change_password.dart';
-import 'core/base/auth/usecases/is_authenticated.dart';
-import 'core/base/auth/usecases/is_logged_in.dart';
-import 'core/base/auth/usecases/log_out.dart';
-import 'core/base/auth/usecases/login_email_password.dart';
-import 'core/base/auth/usecases/reset_password.dart';
 import 'core/base/network.dart';
-import 'core/base/settings/data/setting_data_source.dart';
-import 'core/base/settings/data/setting_local_data_source.dart';
-import 'core/base/settings/repo/setting_repository.dart';
-import 'core/base/settings/repo/setting_repository_impl.dart';
-import 'core/base/settings/usecases/get_setting.dart';
-import 'core/base/settings/usecases/save_setting.dart';
-import 'core/base/user/data/user_data_source.dart';
-import 'core/base/user/data/user_remote_data_source.dart';
-import 'core/base/user/repos/user_repository.dart';
-import 'core/base/user/repos/user_repository_impl.dart';
-import 'core/base/user/usecases/create_user.dart';
-import 'core/base/user/usecases/delete_user_notification_token.dart';
-import 'core/base/user/usecases/get_user_info.dart';
-import 'core/base/user/usecases/update_user_info.dart';
-import 'core/base/user/usecases/update_user_notification_token.dart';
 
 final serviceLocator = GetIt.instance;
 
@@ -80,6 +87,14 @@ Future<void> init() async {
   serviceLocator.registerLazySingleton<SaveSetting>(
       () => SaveSetting(settingRepository: serviceLocator()));
 
+  // housing company
+  serviceLocator.registerLazySingleton<GetHousingCompanies>(
+      () => GetHousingCompanies(housingCompanyRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<CreateHousingCompany>(
+      () => CreateHousingCompany(housingCompanyRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<UpdateHousingCompanyInfo>(() =>
+      UpdateHousingCompanyInfo(housingCompanyRepository: serviceLocator()));
+
   /** repos */
   serviceLocator.registerLazySingleton<AuthenticationRepository>(() =>
       AuthenticationRepositoryImpl(authenticationDataSource: serviceLocator()));
@@ -87,6 +102,8 @@ Future<void> init() async {
       () => UserRepositoryImpl(userRemoteDataSource: serviceLocator()));
   serviceLocator.registerLazySingleton<SettingRepository>(
       () => SettingRepositoryImpl(settingRemoteDataSource: serviceLocator()));
+  serviceLocator.registerLazySingleton<HousingCompanyRepository>(() =>
+      HousingCompanyRepositoryImpl(housingCompanyDataSource: serviceLocator()));
 
   /** datasource*/
   serviceLocator.registerLazySingleton<AuthenticationDataSource>(() =>
@@ -97,6 +114,8 @@ Future<void> init() async {
       () => UserRemoteDataSource(client: serviceLocator()));
   serviceLocator
       .registerLazySingleton<SettingDataSource>(() => SettingLocalDataSource());
+  serviceLocator.registerLazySingleton<HousingCompanyDataSource>(
+      () => HousingCompanyRemoteDataSource(serviceLocator<Dio>()));
 
   /** network */
   serviceLocator.registerLazySingleton<Dio>(
