@@ -1,15 +1,15 @@
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
-import 'package:priorli/core/housing/data/housing_company_data_source.dart';
-import 'package:priorli/core/housing/data/housing_company_remote_data_source.dart';
-import 'package:priorli/core/housing/repos/housing_company_repository.dart';
-import 'package:priorli/core/housing/repos/housing_company_repository_impl.dart';
-import 'package:priorli/core/housing/usecases/create_housing_company.dart';
-import 'package:priorli/core/housing/usecases/get_housing_companies.dart';
-import 'package:priorli/core/housing/usecases/update_housing_company_info.dart';
 
 import 'auth_cubit.dart';
+import 'core/apartment/data/apartment_data_source.dart';
+import 'core/apartment/data/apartment_remote_data_source.dart';
+import 'core/apartment/repos/apartment_repository.dart';
+import 'core/apartment/repos/apartment_repository_impl.dart';
+import 'core/apartment/usecases/add_apartments.dart';
+import 'core/apartment/usecases/get_apartments.dart';
+import 'core/apartment/usecases/send_invitation_to_apartment.dart';
 import 'core/auth/data/authentication_data_source.dart';
 import 'core/auth/data/authentication_remote_data_source.dart';
 import 'core/auth/repos/authentication_repository.dart';
@@ -21,6 +21,13 @@ import 'core/auth/usecases/is_logged_in.dart';
 import 'core/auth/usecases/log_out.dart';
 import 'core/auth/usecases/login_email_password.dart';
 import 'core/auth/usecases/reset_password.dart';
+import 'core/housing/data/housing_company_data_source.dart';
+import 'core/housing/data/housing_company_remote_data_source.dart';
+import 'core/housing/repos/housing_company_repository.dart';
+import 'core/housing/repos/housing_company_repository_impl.dart';
+import 'core/housing/usecases/create_housing_company.dart';
+import 'core/housing/usecases/get_housing_companies.dart';
+import 'core/housing/usecases/update_housing_company_info.dart';
 import 'core/settings/data/setting_data_source.dart';
 import 'core/settings/data/setting_local_data_source.dart';
 import 'core/settings/repo/setting_repository.dart';
@@ -95,6 +102,14 @@ Future<void> init() async {
   serviceLocator.registerLazySingleton<UpdateHousingCompanyInfo>(() =>
       UpdateHousingCompanyInfo(housingCompanyRepository: serviceLocator()));
 
+  // apartment
+  serviceLocator.registerLazySingleton<AddApartments>(
+      () => AddApartments(apartmentRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<GetApartments>(
+      () => GetApartments(apartmentRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<SendInvitationToApartment>(
+      () => SendInvitationToApartment(apartmentRepository: serviceLocator()));
+
   /** repos */
   serviceLocator.registerLazySingleton<AuthenticationRepository>(() =>
       AuthenticationRepositoryImpl(authenticationDataSource: serviceLocator()));
@@ -104,6 +119,8 @@ Future<void> init() async {
       () => SettingRepositoryImpl(settingRemoteDataSource: serviceLocator()));
   serviceLocator.registerLazySingleton<HousingCompanyRepository>(() =>
       HousingCompanyRepositoryImpl(housingCompanyDataSource: serviceLocator()));
+  serviceLocator.registerLazySingleton<ApartmentRepository>(
+      () => ApartmentRepositoryImpl(apartmentDataSource: serviceLocator()));
 
   /** datasource*/
   serviceLocator.registerLazySingleton<AuthenticationDataSource>(() =>
@@ -116,6 +133,8 @@ Future<void> init() async {
       .registerLazySingleton<SettingDataSource>(() => SettingLocalDataSource());
   serviceLocator.registerLazySingleton<HousingCompanyDataSource>(
       () => HousingCompanyRemoteDataSource(serviceLocator<Dio>()));
+  serviceLocator.registerLazySingleton<ApartmentDataSource>(
+      () => ApartmentRemoteDataSource(serviceLocator<Dio>()));
 
   /** network */
   serviceLocator.registerLazySingleton<Dio>(
