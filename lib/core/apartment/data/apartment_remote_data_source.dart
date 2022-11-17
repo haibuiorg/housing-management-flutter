@@ -67,11 +67,9 @@ class ApartmentRemoteDataSource implements ApartmentDataSource {
       if (emails != null) {
         data["emails"] = emails;
       }
-      print(data);
       final result = await client.post('$_path/invite', data: data);
       return ApartmentInvitationModel.fromJson(result.data);
     } catch (error) {
-      print(error);
       throw ServerException();
     }
   }
