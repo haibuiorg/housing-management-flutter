@@ -4,7 +4,7 @@ import 'package:priorli/setting_cubit.dart';
 import 'package:priorli/setting_state.dart';
 import 'package:priorli/auth_state.dart';
 import 'package:priorli/presentation/login/login_screen.dart';
-import 'package:priorli/presentation/main_screen.dart';
+import 'package:priorli/presentation/home/main_screen.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 
 import 'auth_cubit.dart';

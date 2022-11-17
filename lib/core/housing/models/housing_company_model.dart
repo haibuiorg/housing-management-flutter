@@ -7,17 +7,17 @@ part 'housing_company_model.g.dart';
 class HousingCompanyModel extends Equatable {
   final String id;
   @JsonKey(name: 'street_address_1')
-  final String streetAddress1;
+  final String? streetAddress1;
   @JsonKey(name: 'street_address_2')
-  final String streetAddress2;
+  final String? streetAddress2;
   @JsonKey(name: 'postal_code')
-  final String postalCode;
-  final String city;
+  final String? postalCode;
+  final String? city;
   @JsonKey(name: 'country_code')
-  final String countryCode;
-  final double lat;
-  final double lng;
-  final String name;
+  final String? countryCode;
+  final double? lat;
+  final double? lng;
+  final String? name;
 
   const HousingCompanyModel(
       this.id,

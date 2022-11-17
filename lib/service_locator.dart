@@ -1,6 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
+import 'package:priorli/presentation/add_apartment/add_apart_cubit.dart';
+import 'package:priorli/presentation/create_housing_company/create_housing_company_cubit.dart';
+import 'package:priorli/presentation/home/main_cubit.dart';
+import 'package:priorli/presentation/housing_company/housing_company_cubit.dart';
 
 import 'auth_cubit.dart';
 import 'core/apartment/data/apartment_data_source.dart';
@@ -27,6 +31,7 @@ import 'core/housing/repos/housing_company_repository.dart';
 import 'core/housing/repos/housing_company_repository_impl.dart';
 import 'core/housing/usecases/create_housing_company.dart';
 import 'core/housing/usecases/get_housing_companies.dart';
+import 'core/housing/usecases/get_housing_company.dart';
 import 'core/housing/usecases/update_housing_company_info.dart';
 import 'core/settings/data/setting_data_source.dart';
 import 'core/settings/data/setting_local_data_source.dart';
@@ -57,6 +62,7 @@ import 'core/water_usage/usecases/get_water_bill.dart';
 import 'core/water_usage/usecases/get_water_bill_by_year.dart';
 import 'core/water_usage/usecases/get_water_consumption.dart';
 import 'core/water_usage/usecases/start_new_water_consumptio_period.dart';
+import 'presentation/send_invitation/invite_tenant_cubit.dart';
 import 'setting_cubit.dart';
 import 'core/base/network.dart';
 
@@ -71,6 +77,16 @@ Future<void> init() async {
 
   serviceLocator.registerFactory(() => AuthCubit(serviceLocator(),
       serviceLocator(), serviceLocator(), serviceLocator(), serviceLocator()));
+  serviceLocator.registerFactory(
+      () => MainCubit(serviceLocator(), serviceLocator(), serviceLocator()));
+  serviceLocator
+      .registerFactory(() => CreateHousingCompanyCubit(serviceLocator()));
+  serviceLocator.registerFactory(
+      () => HousingCompanyCubit(serviceLocator(), serviceLocator()));
+  serviceLocator.registerFactory(
+      () => AddApartmentCubit(serviceLocator(), serviceLocator()));
+  serviceLocator.registerFactory(() =>
+      InviteTenantCubit(serviceLocator(), serviceLocator(), serviceLocator()));
 
   /** usecases */
   // Auth
@@ -111,6 +127,8 @@ Future<void> init() async {
   // housing company
   serviceLocator.registerLazySingleton<GetHousingCompanies>(
       () => GetHousingCompanies(housingCompanyRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<GetHousingCompany>(
+      () => GetHousingCompany(housingCompanyRepository: serviceLocator()));
   serviceLocator.registerLazySingleton<CreateHousingCompany>(
       () => CreateHousingCompany(housingCompanyRepository: serviceLocator()));
   serviceLocator.registerLazySingleton<UpdateHousingCompanyInfo>(() =>

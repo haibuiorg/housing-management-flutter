@@ -4,6 +4,8 @@ import '../../base/result.dart';
 
 abstract class HousingCompanyRepository {
   Future<Result<List<HousingCompany>>> getHousingCompanies();
+  Future<Result<HousingCompany>> getHousingCompany(
+      {required String housingCompanyId});
   Future<Result<HousingCompany>> updateHousingCompanyInfo({
     String? name,
     required String housingCompanyId,

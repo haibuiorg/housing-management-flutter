@@ -27,14 +27,14 @@ class HousingCompany extends Equatable {
           HousingCompanyModel housingCompanyModel) =>
       HousingCompany(
           id: housingCompanyModel.id,
-          streetAddress1: housingCompanyModel.streetAddress1,
-          streetAddress2: housingCompanyModel.streetAddress2,
-          postalCode: housingCompanyModel.postalCode,
-          city: housingCompanyModel.city,
-          countryCode: housingCompanyModel.countryCode,
-          lat: housingCompanyModel.lat,
-          lng: housingCompanyModel.lng,
-          name: housingCompanyModel.name);
+          streetAddress1: housingCompanyModel.streetAddress1 ?? '',
+          streetAddress2: housingCompanyModel.streetAddress2 ?? '',
+          postalCode: housingCompanyModel.postalCode ?? '',
+          city: housingCompanyModel.city ?? '',
+          countryCode: housingCompanyModel.countryCode ?? '',
+          lat: housingCompanyModel.lat ?? 0.0,
+          lng: housingCompanyModel.lng ?? 0.0,
+          name: housingCompanyModel.name ?? '');
 
   @override
   List<Object?> get props => [

@@ -8,7 +8,9 @@ abstract class ApartmentRepository {
     required String building,
     List<String>? houseCodes,
   });
-  Future<Result<List<Apartment>>> getUserApartments();
+  Future<Result<List<Apartment>>> getUserApartments({
+    required String housingCompanyId,
+  });
   Future<Result<ApartmentInvitation>> sendInvitationToApartment(
       {required String apartmentId,
       required String housingCompanyId,

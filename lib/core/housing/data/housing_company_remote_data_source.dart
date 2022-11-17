@@ -27,8 +27,7 @@ class HousingCompanyRemoteDataSource implements HousingCompanyDataSource {
   Future<List<HousingCompanyModel>> getUserHousingCompanies() async {
     try {
       final result = await client.get('$_path/all');
-
-      return (result.data as List<Map<String, dynamic>>)
+      return (result.data as List<dynamic>)
           .map((json) => HousingCompanyModel.fromJson(json))
           .toList();
     } catch (error) {
@@ -77,6 +76,21 @@ class HousingCompanyRemoteDataSource implements HousingCompanyDataSource {
     try {
       final result = await client.put(_path, data: data);
       return HousingCompanyModel.fromJson(result.data as Map<String, dynamic>);
+    } catch (error) {
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<HousingCompanyModel> getHousingCompany(
+      {required String housingCompanyId}) async {
+    try {
+      final Map<String, dynamic> data = {
+        'housing_company_id': housingCompanyId,
+      };
+      final result = await client.get(_path, queryParameters: data);
+
+      return HousingCompanyModel.fromJson(result.data);
     } catch (error) {
       throw ServerException();
     }

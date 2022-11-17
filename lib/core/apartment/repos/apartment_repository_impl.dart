@@ -29,9 +29,12 @@ class ApartmentRepositoryImpl implements ApartmentRepository {
   }
 
   @override
-  Future<Result<List<Apartment>>> getUserApartments() async {
+  Future<Result<List<Apartment>>> getUserApartments({
+    required String housingCompanyId,
+  }) async {
     try {
-      final apartmentModels = await apartmentDataSource.getUserApartments();
+      final apartmentModels = await apartmentDataSource.getUserApartments(
+          housingCompanyId: housingCompanyId);
       return ResultSuccess(
           apartmentModels.map((e) => Apartment.modelToEntity(e)).toList());
     } on ServerException {

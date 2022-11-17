@@ -27,7 +27,7 @@ class ApartmentRemoteDataSource implements ApartmentDataSource {
       }
       final result = await client.post(_path, data: data);
 
-      return (result.data as List<Map<String, dynamic>>)
+      return (result.data as List<dynamic>)
           .map((json) => ApartmentModel.fromJson(json))
           .toList();
     } catch (error) {
@@ -36,10 +36,15 @@ class ApartmentRemoteDataSource implements ApartmentDataSource {
   }
 
   @override
-  Future<List<ApartmentModel>> getUserApartments() async {
+  Future<List<ApartmentModel>> getUserApartments({
+    required String housingCompanyId,
+  }) async {
     try {
-      final result = await client.get(_path);
-      return (result.data as List<Map<String, dynamic>>)
+      final Map<String, dynamic> data = {
+        "housing_company_id": housingCompanyId,
+      };
+      final result = await client.get(_path, queryParameters: data);
+      return (result.data as List<dynamic>)
           .map((json) => ApartmentModel.fromJson(json))
           .toList();
     } catch (error) {
@@ -57,14 +62,16 @@ class ApartmentRemoteDataSource implements ApartmentDataSource {
       final Map<String, dynamic> data = {
         "housing_company_id": housingCompanyId,
         "apartment_id": apartmentId,
-        "number_of_tenants": numberOfTenants
+        "number_of_tenants": numberOfTenants,
       };
       if (emails != null) {
         data["emails"] = emails;
       }
+      print(data);
       final result = await client.post('$_path/invite', data: data);
       return ApartmentInvitationModel.fromJson(result.data);
     } catch (error) {
+      print(error);
       throw ServerException();
     }
   }

@@ -29,6 +29,7 @@ class HousingCompanyRepositoryImpl extends HousingCompanyRepository {
     try {
       final housingCompanyListModel =
           await housingCompanyDataSource.getUserHousingCompanies();
+
       return ResultSuccess(housingCompanyListModel
           .map((e) => HousingCompany.modelToEntity(e))
           .toList());
@@ -60,6 +61,18 @@ class HousingCompanyRepositoryImpl extends HousingCompanyRepository {
               lng: lng,
               city: city,
               countryCode: countryCode);
+      return ResultSuccess(HousingCompany.modelToEntity(housingCompanyModel));
+    } on ServerException {
+      return ResultFailure(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Result<HousingCompany>> getHousingCompany(
+      {required String housingCompanyId}) async {
+    try {
+      final housingCompanyModel = await housingCompanyDataSource
+          .getHousingCompany(housingCompanyId: housingCompanyId);
       return ResultSuccess(HousingCompany.modelToEntity(housingCompanyModel));
     } on ServerException {
       return ResultFailure(ServerFailure());

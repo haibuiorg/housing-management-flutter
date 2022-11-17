@@ -9,14 +9,14 @@ part of 'housing_company_model.dart';
 HousingCompanyModel _$HousingCompanyModelFromJson(Map<String, dynamic> json) =>
     HousingCompanyModel(
       json['id'] as String,
-      json['street_address_1'] as String,
-      json['street_address_2'] as String,
-      json['postal_code'] as String,
-      json['city'] as String,
-      json['country_code'] as String,
-      (json['lat'] as num).toDouble(),
-      (json['lng'] as num).toDouble(),
-      json['name'] as String,
+      json['street_address_1'] as String?,
+      json['street_address_2'] as String?,
+      json['postal_code'] as String?,
+      json['city'] as String?,
+      json['country_code'] as String?,
+      (json['lat'] as num?)?.toDouble(),
+      (json['lng'] as num?)?.toDouble(),
+      json['name'] as String?,
     );
 
 Map<String, dynamic> _$HousingCompanyModelToJson(

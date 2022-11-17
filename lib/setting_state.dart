@@ -7,14 +7,20 @@ class SettingState extends Equatable {
   final String languageCode;
 
   const SettingState(this.brightness, this.languageCode);
-  const SettingState.initializing() : this(Brightness.dark, 'en');
+  const SettingState.initializing()
+      : this(
+          Brightness.dark,
+          'en',
+        );
 
   SettingState copyWith({
     Brightness? brightness,
     String? languageCode,
   }) {
     return SettingState(
-        brightness ?? this.brightness, languageCode ?? this.languageCode);
+      brightness ?? this.brightness,
+      languageCode ?? this.languageCode,
+    );
   }
 
   @override

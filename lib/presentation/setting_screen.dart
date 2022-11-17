@@ -23,7 +23,7 @@ class SettingScreen extends StatelessWidget {
             },
           ),
           BlocBuilder<SettingCubit, SettingState>(builder: (context, state) {
-            return Switch.adaptive(
+            return Switch(
                 value: state.brightness == Brightness.dark,
                 onChanged: (onChanged) {
                   BlocProvider.of<SettingCubit>(context).switchTheme(onChanged);

@@ -13,4 +13,6 @@ abstract class HousingCompanyDataSource {
       String? city,
       String? countryCode});
   Future<List<HousingCompanyModel>> getUserHousingCompanies();
+  Future<HousingCompanyModel> getHousingCompany(
+      {required String housingCompanyId});
 }

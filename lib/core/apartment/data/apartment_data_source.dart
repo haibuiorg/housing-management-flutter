@@ -7,7 +7,9 @@ abstract class ApartmentDataSource {
     required String building,
     List<String>? houseCodes,
   });
-  Future<List<ApartmentModel>> getUserApartments();
+  Future<List<ApartmentModel>> getUserApartments({
+    required String housingCompanyId,
+  });
   Future<ApartmentInvitationModel> sendInvitationToApartment(
       {required String apartmentId,
       required String housingCompanyId,
