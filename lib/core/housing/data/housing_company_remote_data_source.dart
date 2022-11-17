@@ -89,7 +89,6 @@ class HousingCompanyRemoteDataSource implements HousingCompanyDataSource {
         'housing_company_id': housingCompanyId,
       };
       final result = await client.get(_path, queryParameters: data);
-
       return HousingCompanyModel.fromJson(result.data);
     } catch (error) {
       throw ServerException();
