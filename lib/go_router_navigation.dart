@@ -9,6 +9,7 @@ import 'package:priorli/presentation/home/main_screen.dart';
 import 'package:priorli/presentation/send_invitation/invite_tenant_screen.dart';
 import 'package:priorli/presentation/setting_screen.dart';
 import 'package:priorli/presentation/water_consumption_management/water_consumption_management_screen.dart';
+import 'presentation/apartments/apartment_screen.dart';
 import 'presentation/register/register_screen.dart';
 
 final appRouter = GoRouter(
@@ -75,6 +76,14 @@ final appRouter = GoRouter(
               return const WaterConsumptionManagementScreen();
             },
           ),
+          GoRoute(
+            path: '$apartmentScreenPath/:apartmentId',
+            builder: (BuildContext context, GoRouterState state) {
+              return ApartmentScreen(
+                apartmentId: state.params['apartmentId'] ?? '',
+              );
+            },
+          )
         ]),
     GoRoute(
       path: settingPath,

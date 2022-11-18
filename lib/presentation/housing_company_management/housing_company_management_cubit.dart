@@ -22,9 +22,13 @@ class HousingCompanyManagementCubit
         GetHousingCompanyParams(housingCompanyId: housingCompanyId));
 
     if (companyResult is ResultSuccess<HousingCompany>) {
-      emit(state.copyWith(
-          housingCompany: companyResult.data,
-          pendingUpdateHousingCompany: companyResult.data));
+      try {
+        emit(state.copyWith(
+            housingCompany: companyResult.data,
+            pendingUpdateHousingCompany: companyResult.data));
+      } catch (err) {
+        print(err);
+      }
     }
     return state;
   }

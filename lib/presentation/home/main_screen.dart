@@ -9,14 +9,26 @@ import 'package:priorli/service_locator.dart';
 
 const mainPath = '/main';
 
-class MainScreen extends StatelessWidget {
+class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
+
+  @override
+  State<MainScreen> createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
+  final cubit = serviceLocator<MainCubit>();
+  @override
+  void didChangeDependencies() {
+    cubit.getUserHousingCompanies();
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: BlocProvider<MainCubit>(
-      create: (_) => serviceLocator<MainCubit>()..getUserHousingCompanies(),
+      create: (_) => cubit,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

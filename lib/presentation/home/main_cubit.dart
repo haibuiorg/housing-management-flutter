@@ -12,9 +12,7 @@ class MainCubit extends Cubit<MainState> {
   final GetSetting _getSetting;
   final SaveSetting _saveSetting;
   MainCubit(this._getHousingCompanies, this._getSetting, this._saveSetting)
-      : super(MainState.init()) {
-    getUserHousingCompanies();
-  }
+      : super(MainState.init());
 
   Future<void> getUserHousingCompanies() async {
     final housingCompanyResult = await _getHousingCompanies(NoParams());

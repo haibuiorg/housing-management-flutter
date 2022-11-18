@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:priorli/presentation/housing_company/housing_company_cubit.dart';
 import 'package:priorli/presentation/shared/custom_form_field.dart';
 import 'package:priorli/service_locator.dart';
 import 'package:flutter_emoji/flutter_emoji.dart';
@@ -41,17 +42,29 @@ class _HousingCompanyManagementScreenState
   }
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    try {
+      final housingCompanyId =
+          Uri.parse(GoRouter.of(context).location).pathSegments[1];
+      cubit.init(housingCompanyId).then((state) {
+        _companyName.text = state.housingCompany?.name ?? '';
+        _streetAddress1.text = state.housingCompany?.streetAddress1 ?? '';
+        _streetAddress2.text = state.housingCompany?.streetAddress2 ?? '';
+        _postalCode.text = state.housingCompany?.postalCode ?? '';
+        _city.text = state.housingCompany?.city ?? '';
+        _businessId.text = state.housingCompany?.businessId ?? '';
+      });
+    } catch (error) {}
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final housingCompanyId =
-        Uri.parse(GoRouter.of(context).location).pathSegments[1];
-    cubit.init(housingCompanyId).then((state) {
-      _companyName.text = state.housingCompany?.name ?? '';
-      _streetAddress1.text = state.housingCompany?.streetAddress1 ?? '';
-      _streetAddress2.text = state.housingCompany?.streetAddress2 ?? '';
-      _postalCode.text = state.housingCompany?.postalCode ?? '';
-      _city.text = state.housingCompany?.city ?? '';
-      _businessId.text = state.housingCompany?.businessId ?? '';
-    });
     return BlocProvider<HousingCompanyManagementCubit>(
       create: (_) => cubit,
       child: BlocBuilder<HousingCompanyManagementCubit,

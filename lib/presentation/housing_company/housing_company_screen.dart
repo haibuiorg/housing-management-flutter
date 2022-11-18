@@ -9,19 +9,25 @@ import 'package:priorli/service_locator.dart';
 import 'package:priorli/setting_cubit.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
+import '../apartments/apartment_screen.dart';
 import '../housing_company_management/housing_company_management_screen.dart';
 import '../water_consumption_management/water_consumption_management_screen.dart';
 
 const housingCompanyScreenPath = '/housing_company';
 
-class HousingCompanyScreen extends StatelessWidget {
+class HousingCompanyScreen extends StatefulWidget {
   const HousingCompanyScreen({super.key, required this.housingCompanyId});
   final String housingCompanyId;
 
   @override
+  State<HousingCompanyScreen> createState() => _HousingCompanyScreenState();
+}
+
+class _HousingCompanyScreenState extends State<HousingCompanyScreen> {
+  final cubit = serviceLocator<HousingCompanyCubit>();
+  @override
   Widget build(BuildContext context) {
-    final cubit = serviceLocator<HousingCompanyCubit>();
-    cubit.init(housingCompanyId);
+    cubit.init(widget.housingCompanyId);
     return BlocProvider<HousingCompanyCubit>(
       create: (_) => cubit,
       child: BlocBuilder<HousingCompanyCubit, HousingCompanyState>(
@@ -132,7 +138,10 @@ class HousingCompanyScreen extends StatelessWidget {
                   delegate: SliverChildBuilderDelegate((context, index) {
                     return InkWell(
                       borderRadius: BorderRadius.circular(8),
-                      onTap: () {},
+                      onTap: () {
+                        context.push(
+                            '${GoRouter.of(context).location}/$apartmentScreenPath/${state.apartmentList?[index].id}');
+                      },
                       child: Container(
                         margin: const EdgeInsets.all(16),
                         decoration: BoxDecoration(

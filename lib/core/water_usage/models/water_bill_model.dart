@@ -9,12 +9,14 @@ class WaterBillModel extends Equatable {
   final int period;
   final int year;
   final String url;
+  final String consumption;
   @JsonKey(name: 'created_on')
   final int createdOn;
 
   const WaterBillModel(
       {required this.id,
       required this.period,
+      required this.consumption,
       required this.year,
       required this.url,
       required this.createdOn});
