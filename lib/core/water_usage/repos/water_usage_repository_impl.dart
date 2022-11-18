@@ -181,4 +181,34 @@ class WaterUsageRepositoryImpl implements WaterUsageRepository {
       return ResultFailure(ServerFailure());
     }
   }
+
+  @override
+  Future<Result<List<WaterPrice>>> getWaterPriceHistory(
+      {required String housingCompanyId}) async {
+    try {
+      final waterPriceModels = await waterUsageDataSource.getWaterPriceHistory(
+        housingCompanyId: housingCompanyId,
+      );
+      return ResultSuccess(waterPriceModels
+          .map((model) => WaterPrice.modelToEntity(model))
+          .toList());
+    } on ServerException {
+      return ResultFailure(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Result<List<WaterConsumption>>> getYearlyWaterConsumption(
+      {required String housingCompanyId, required int year}) async {
+    try {
+      final waterConsumptionModels =
+          await waterUsageDataSource.getYearlyWaterConsumption(
+              housingCompanyId: housingCompanyId, year: year);
+      return ResultSuccess(waterConsumptionModels
+          .map((model) => WaterConsumption.modelToEntity(model))
+          .toList());
+    } on ServerException {
+      return ResultFailure(ServerFailure());
+    }
+  }
 }

@@ -16,7 +16,7 @@ class MainScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         body: BlocProvider<MainCubit>(
-      create: (_) => serviceLocator<MainCubit>(),
+      create: (_) => serviceLocator<MainCubit>()..getUserHousingCompanies(),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

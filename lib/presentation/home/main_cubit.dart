@@ -13,10 +13,10 @@ class MainCubit extends Cubit<MainState> {
   final SaveSetting _saveSetting;
   MainCubit(this._getHousingCompanies, this._getSetting, this._saveSetting)
       : super(MainState.init()) {
-    _getUserHousingCompanies();
+    getUserHousingCompanies();
   }
 
-  Future<void> _getUserHousingCompanies() async {
+  Future<void> getUserHousingCompanies() async {
     final housingCompanyResult = await _getHousingCompanies(NoParams());
     if (housingCompanyResult is ResultSuccess<List<HousingCompany>>) {
       emit(state.copyWith(housingCompanies: housingCompanyResult.data));

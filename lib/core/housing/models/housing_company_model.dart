@@ -1,11 +1,13 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
+import 'ui_model.dart';
+
 part 'housing_company_model.g.dart';
 
 @JsonSerializable()
 class HousingCompanyModel extends Equatable {
-  final String id;
+  final String? id;
   @JsonKey(name: 'street_address_1')
   final String? streetAddress1;
   @JsonKey(name: 'street_address_2')
@@ -15,9 +17,16 @@ class HousingCompanyModel extends Equatable {
   final String? city;
   @JsonKey(name: 'country_code')
   final String? countryCode;
+  @JsonKey(name: 'currency_code')
+  final String? currencyCode;
   final double? lat;
   final double? lng;
   final String? name;
+  @JsonKey(name: 'apartment_count')
+  final int? apartmentCount;
+  @JsonKey(name: 'business_id')
+  final String? businessId;
+  final UIModel? ui;
 
   const HousingCompanyModel(
       this.id,
@@ -28,7 +37,11 @@ class HousingCompanyModel extends Equatable {
       this.countryCode,
       this.lat,
       this.lng,
-      this.name);
+      this.name,
+      this.apartmentCount,
+      this.currencyCode,
+      this.businessId,
+      this.ui);
 
   factory HousingCompanyModel.fromJson(Map<String, dynamic> json) =>
       _$HousingCompanyModelFromJson(json);
@@ -43,6 +56,10 @@ class HousingCompanyModel extends Equatable {
         countryCode,
         lat,
         lng,
-        name
+        name,
+        apartmentCount,
+        currencyCode,
+        businessId,
+        ui
       ];
 }

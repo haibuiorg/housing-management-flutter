@@ -1,5 +1,7 @@
 import 'package:priorli/core/housing/models/housing_company_model.dart';
 
+import '../entities/ui.dart';
+
 abstract class HousingCompanyDataSource {
   Future<HousingCompanyModel> createHousingCompany({required String name});
   Future<HousingCompanyModel> updateHousingCompanyInfo(
@@ -11,6 +13,7 @@ abstract class HousingCompanyDataSource {
       double? lat,
       double? lng,
       String? city,
+      UI? ui,
       String? countryCode});
   Future<List<HousingCompanyModel>> getUserHousingCompanies();
   Future<HousingCompanyModel> getHousingCompany(

@@ -40,7 +40,7 @@ class WaterUsageRemoteDataSource implements WaterUsageDataSource {
 
       return ConsumptionValueModel.fromJson(result.data);
     } catch (error) {
-      throw ServerException();
+      throw ServerException(error: error);
     }
   }
 
@@ -58,7 +58,7 @@ class WaterUsageRemoteDataSource implements WaterUsageDataSource {
       final result = await client.post(_pathPrice, data: data);
       return WaterPriceModel.fromJson(result.data);
     } catch (error) {
-      throw ServerException();
+      throw ServerException(error: error);
     }
   }
 
@@ -73,7 +73,7 @@ class WaterUsageRemoteDataSource implements WaterUsageDataSource {
       final result = await client.delete(_pathPrice, data: data);
       return WaterPriceModel.fromJson(result.data);
     } catch (error) {
-      throw ServerException();
+      throw ServerException(error: error);
     }
   }
 
@@ -87,7 +87,7 @@ class WaterUsageRemoteDataSource implements WaterUsageDataSource {
       final result = await client.get(_pathPrice, queryParameters: data);
       return WaterPriceModel.fromJson(result.data);
     } catch (error) {
-      throw ServerException();
+      throw ServerException(error: error);
     }
   }
 
@@ -101,7 +101,7 @@ class WaterUsageRemoteDataSource implements WaterUsageDataSource {
       final result = await client.get('$_path/latest', queryParameters: data);
       return WaterConsumptionModel.fromJson(result.data);
     } catch (error) {
-      throw ServerException();
+      throw ServerException(error: error);
     }
   }
 
@@ -115,7 +115,7 @@ class WaterUsageRemoteDataSource implements WaterUsageDataSource {
       final result = await client.get('$_path/previous', queryParameters: data);
       return WaterConsumptionModel.fromJson(result.data);
     } catch (error) {
-      throw ServerException();
+      throw ServerException(error: error);
     }
   }
 
@@ -135,7 +135,7 @@ class WaterUsageRemoteDataSource implements WaterUsageDataSource {
           .map((json) => WaterBillModel.fromJson(json))
           .toList();
     } catch (error) {
-      throw ServerException();
+      throw ServerException(error: error);
     }
   }
 
@@ -153,11 +153,11 @@ class WaterUsageRemoteDataSource implements WaterUsageDataSource {
         "apartment_id": apartmentId
       };
       final result = await client.get(_pathBill, queryParameters: data);
-      return (result.data as List<Map<String, dynamic>>)
+      return (result.data as List<dynamic>)
           .map((json) => WaterBillModel.fromJson(json))
           .toList();
     } catch (error) {
-      throw ServerException();
+      throw ServerException(error: error);
     }
   }
 
@@ -175,7 +175,7 @@ class WaterUsageRemoteDataSource implements WaterUsageDataSource {
       final result = await client.get(_path, queryParameters: data);
       return WaterConsumptionModel.fromJson(result.data);
     } catch (error) {
-      throw ServerException();
+      throw ServerException(error: error);
     }
   }
 
@@ -190,7 +190,41 @@ class WaterUsageRemoteDataSource implements WaterUsageDataSource {
       final result = await client.post(_path, data: data);
       return WaterConsumptionModel.fromJson(result.data);
     } catch (error) {
-      throw ServerException();
+      throw ServerException(error: error);
+    }
+  }
+
+  @override
+  Future<List<WaterPriceModel>> getWaterPriceHistory(
+      {required String housingCompanyId}) async {
+    try {
+      final Map<String, dynamic> data = {
+        "housing_company_id": housingCompanyId,
+        "is_history": true,
+      };
+      final result = await client.get(_pathPrice, queryParameters: data);
+      return (result.data as List<dynamic>)
+          .map((json) => WaterPriceModel.fromJson(json))
+          .toList();
+    } catch (error) {
+      throw ServerException(error: error);
+    }
+  }
+
+  @override
+  Future<List<WaterConsumptionModel>> getYearlyWaterConsumption(
+      {required String housingCompanyId, required int year}) async {
+    try {
+      final Map<String, dynamic> data = {
+        "housing_company_id": housingCompanyId,
+        "year": year
+      };
+      final result = await client.get('$_path/yearly', queryParameters: data);
+      return (result.data as List<dynamic>)
+          .map((json) => WaterConsumptionModel.fromJson(json))
+          .toList();
+    } catch (error) {
+      throw ServerException(error: error);
     }
   }
 }

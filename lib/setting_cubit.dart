@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:priorli/core/housing/entities/ui.dart';
 import 'package:priorli/setting_state.dart';
 import 'package:priorli/core/base/result.dart';
 
@@ -33,5 +34,9 @@ class SettingCubit extends Cubit<SettingState> {
     emit(state.copyWith(
       brightness: (saveSuccess && isDark) ? Brightness.dark : Brightness.light,
     ));
+  }
+
+  Future<void> updateUIFromCompany(UI? ui) async {
+    emit(state.copyWith(ui: ui));
   }
 }

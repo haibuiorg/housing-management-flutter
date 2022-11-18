@@ -1,7 +1,11 @@
+import 'dart:math';
+
 import 'package:dio/dio.dart';
 import 'package:priorli/core/housing/models/housing_company_model.dart';
+import 'package:priorli/core/housing/models/ui_model.dart';
 
 import '../../base/exceptions.dart';
+import '../entities/ui.dart';
 import './housing_company_data_source.dart';
 
 class HousingCompanyRemoteDataSource implements HousingCompanyDataSource {
@@ -31,7 +35,7 @@ class HousingCompanyRemoteDataSource implements HousingCompanyDataSource {
           .map((json) => HousingCompanyModel.fromJson(json))
           .toList();
     } catch (error) {
-      throw ServerException();
+      throw ServerException(error: error);
     }
   }
 
@@ -44,6 +48,7 @@ class HousingCompanyRemoteDataSource implements HousingCompanyDataSource {
       String? postalCode,
       double? lat,
       double? lng,
+      UI? ui,
       String? countryCode,
       String? city}) async {
     final Map<String, dynamic> data = {
@@ -73,11 +78,14 @@ class HousingCompanyRemoteDataSource implements HousingCompanyDataSource {
     if (countryCode != null) {
       data['country_code'] = countryCode;
     }
+    if (ui != null) {
+      data['ui'] = {'seed_color': ui.seedColor};
+    }
     try {
       final result = await client.put(_path, data: data);
       return HousingCompanyModel.fromJson(result.data as Map<String, dynamic>);
     } catch (error) {
-      throw ServerException();
+      throw ServerException(error: error);
     }
   }
 
@@ -91,7 +99,7 @@ class HousingCompanyRemoteDataSource implements HousingCompanyDataSource {
       final result = await client.get(_path, queryParameters: data);
       return HousingCompanyModel.fromJson(result.data);
     } catch (error) {
-      throw ServerException();
+      throw ServerException(error: error);
     }
   }
 }

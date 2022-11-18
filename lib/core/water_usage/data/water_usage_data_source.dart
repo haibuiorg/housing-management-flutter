@@ -16,6 +16,9 @@ abstract class WaterUsageDataSource {
   Future<WaterPriceModel> getActiveWaterPrice({
     required String housingCompanyId,
   });
+  Future<List<WaterPriceModel>> getWaterPriceHistory({
+    required String housingCompanyId,
+  });
   Future<WaterConsumptionModel> startNewWaterConsumptionPeriod({
     required String housingCompanyId,
     required double totalReading,
@@ -27,6 +30,8 @@ abstract class WaterUsageDataSource {
   Future<WaterConsumptionModel> getLatestWaterConsumption({
     required String housingCompanyId,
   });
+  Future<List<WaterConsumptionModel>> getYearlyWaterConsumption(
+      {required String housingCompanyId, required int year});
   Future<WaterConsumptionModel> getPreviousWaterConsumption({
     required String housingCompanyId,
   });

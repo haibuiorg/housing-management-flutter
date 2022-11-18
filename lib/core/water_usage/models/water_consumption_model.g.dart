@@ -10,7 +10,7 @@ WaterConsumptionModel _$WaterConsumptionModelFromJson(
         Map<String, dynamic> json) =>
     WaterConsumptionModel(
       id: json['id'] as String,
-      basicFee: (json['basice_fee'] as num).toDouble(),
+      basicFee: (json['basic_fee'] as num).toDouble(),
       period: json['period'] as int,
       priceId: json['price_id'] as String,
       pricePerCube: (json['price_per_cube'] as num).toDouble(),
@@ -26,7 +26,7 @@ Map<String, dynamic> _$WaterConsumptionModelToJson(
         WaterConsumptionModel instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'basice_fee': instance.basicFee,
+      'basic_fee': instance.basicFee,
       'period': instance.period,
       'price_id': instance.priceId,
       'price_per_cube': instance.pricePerCube,

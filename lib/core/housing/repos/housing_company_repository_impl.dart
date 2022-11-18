@@ -5,6 +5,7 @@ import 'package:priorli/core/housing/repos/housing_company_repository.dart';
 
 import '../../base/exceptions.dart';
 import '../../base/failure.dart';
+import '../entities/ui.dart';
 
 class HousingCompanyRepositoryImpl extends HousingCompanyRepository {
   final HousingCompanyDataSource housingCompanyDataSource;
@@ -48,6 +49,7 @@ class HousingCompanyRepositoryImpl extends HousingCompanyRepository {
       double? lat,
       double? lng,
       String? city,
+      UI? ui,
       String? countryCode}) async {
     try {
       final housingCompanyModel =
@@ -59,6 +61,7 @@ class HousingCompanyRepositoryImpl extends HousingCompanyRepository {
               postalCode: postalCode,
               lat: lat,
               lng: lng,
+              ui: ui,
               city: city,
               countryCode: countryCode);
       return ResultSuccess(HousingCompany.modelToEntity(housingCompanyModel));

@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 import '../../base/result.dart';
 import '../../base/usecase.dart';
 import '../entities/housing_company.dart';
+import '../entities/ui.dart';
 import '../repos/housing_company_repository.dart';
 
 class UpdateHousingCompanyInfo
@@ -22,6 +23,7 @@ class UpdateHousingCompanyInfo
         city: params.city,
         countryCode: params.countryCode,
         lat: params.lat,
+        ui: params.ui,
         lng: params.lng);
   }
 }
@@ -36,6 +38,7 @@ class UpdateHousingCompanyInfoParams extends Equatable {
   final double? lat;
   final double? lng;
   final String? countryCode;
+  final UI? ui;
 
   const UpdateHousingCompanyInfoParams(
       {this.streetAddress1,
@@ -46,6 +49,7 @@ class UpdateHousingCompanyInfoParams extends Equatable {
       this.lng,
       this.countryCode,
       this.name,
+      this.ui,
       required this.housingCompanyId});
   @override
   List<Object?> get props => [name];

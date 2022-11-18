@@ -3,15 +3,21 @@ import 'package:go_router/go_router.dart';
 import 'package:priorli/presentation/add_apartment/add_apartment_screen.dart';
 import 'package:priorli/presentation/create_housing_company/create_housing_company_screen.dart';
 import 'package:priorli/presentation/housing_company/housing_company_screen.dart';
+import 'package:priorli/presentation/housing_company_management/housing_company_management_screen.dart';
 import 'package:priorli/presentation/login/login_screen.dart';
 import 'package:priorli/presentation/home/main_screen.dart';
 import 'package:priorli/presentation/send_invitation/invite_tenant_screen.dart';
 import 'package:priorli/presentation/setting_screen.dart';
+import 'package:priorli/presentation/water_consumption_management/water_consumption_management_screen.dart';
 import 'presentation/register/register_screen.dart';
 
 final appRouter = GoRouter(
   initialLocation: mainPath,
   routes: <GoRoute>[
+    GoRoute(
+      path: '/',
+      redirect: (context, state) => mainPath,
+    ),
     GoRoute(
       path: mainPath,
       builder: (BuildContext context, GoRouterState state) {
@@ -51,9 +57,22 @@ final appRouter = GoRouter(
             },
           ),
           GoRoute(
-            path: inviteTenantPath,
+              path: housingCompanyManageScreenPath,
+              builder: (BuildContext context, GoRouterState state) {
+                return const HousingCompanyManagementScreen();
+              },
+              routes: [
+                GoRoute(
+                  path: inviteTenantPath,
+                  builder: (BuildContext context, GoRouterState state) {
+                    return const InviteTenantScreen();
+                  },
+                ),
+              ]),
+          GoRoute(
+            path: waterConsumptionManagementScreenPath,
             builder: (BuildContext context, GoRouterState state) {
-              return const InviteTenantScreen();
+              return const WaterConsumptionManagementScreen();
             },
           ),
         ]),

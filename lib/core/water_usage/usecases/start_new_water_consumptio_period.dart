@@ -23,7 +23,7 @@ class StartNewWaterConsumptionPeriodParams extends Equatable {
   final double totalReading;
 
   const StartNewWaterConsumptionPeriodParams(
-      this.housingCompanyId, this.totalReading);
+      {required this.housingCompanyId, required this.totalReading});
   @override
   List<Object?> get props => [housingCompanyId, totalReading];
 }

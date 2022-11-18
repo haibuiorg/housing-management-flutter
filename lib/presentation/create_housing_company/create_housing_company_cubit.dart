@@ -16,8 +16,7 @@ class CreateHousingCompanyCubit extends Cubit<CreateHousingCompanyState> {
     final companyResult = await _createHousingCompany(
         CreateHousingCompanyParams(name: state.companyName!));
     if (companyResult is ResultSuccess<HousingCompany>) {
-      emit(state.copyWith(
-          errorText: (companyResult as ResultFailure).failure.toString()));
+      emit(state.copyWith(newCompanyId: companyResult.data.id));
     } else {
       emit(state.copyWith(
           errorText: (companyResult as ResultFailure).failure.toString()));

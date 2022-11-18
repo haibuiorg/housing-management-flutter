@@ -8,7 +8,7 @@ part of 'housing_company_model.dart';
 
 HousingCompanyModel _$HousingCompanyModelFromJson(Map<String, dynamic> json) =>
     HousingCompanyModel(
-      json['id'] as String,
+      json['id'] as String?,
       json['street_address_1'] as String?,
       json['street_address_2'] as String?,
       json['postal_code'] as String?,
@@ -17,6 +17,12 @@ HousingCompanyModel _$HousingCompanyModelFromJson(Map<String, dynamic> json) =>
       (json['lat'] as num?)?.toDouble(),
       (json['lng'] as num?)?.toDouble(),
       json['name'] as String?,
+      json['apartment_count'] as int?,
+      json['currency_code'] as String?,
+      json['business_id'] as String?,
+      json['ui'] == null
+          ? null
+          : UIModel.fromJson(json['ui'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$HousingCompanyModelToJson(
@@ -28,7 +34,11 @@ Map<String, dynamic> _$HousingCompanyModelToJson(
       'postal_code': instance.postalCode,
       'city': instance.city,
       'country_code': instance.countryCode,
+      'currency_code': instance.currencyCode,
       'lat': instance.lat,
       'lng': instance.lng,
       'name': instance.name,
+      'apartment_count': instance.apartmentCount,
+      'business_id': instance.businessId,
+      'ui': instance.ui,
     };

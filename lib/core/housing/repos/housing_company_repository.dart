@@ -1,6 +1,7 @@
 import 'package:priorli/core/housing/entities/housing_company.dart';
 
 import '../../base/result.dart';
+import '../entities/ui.dart';
 
 abstract class HousingCompanyRepository {
   Future<Result<List<HousingCompany>>> getHousingCompanies();
@@ -16,6 +17,7 @@ abstract class HousingCompanyRepository {
     double? lng,
     String? city,
     String? countryCode,
+    UI? ui,
   });
   Future<Result<HousingCompany>> createHousingCompany({required String name});
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:priorli/core/utils/constant.dart';
 import 'package:priorli/setting_cubit.dart';
 import 'package:priorli/setting_state.dart';
 import 'package:priorli/auth_state.dart';
@@ -8,16 +9,18 @@ import 'package:priorli/presentation/home/main_screen.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 
 import 'auth_cubit.dart';
+import 'core/utils/color_extension.dart';
 import 'go_router_navigation.dart';
 import 'service_locator.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
-  static final _defaultLightColorScheme =
-      ColorScheme.fromSwatch(primarySwatch: Colors.amber);
+  _defaultLightColorScheme(String? colorValue) => ColorScheme.fromSeed(
+      seedColor: HexColor.fromHex(colorValue ?? appSeedColor));
 
-  static final _defaultDarkColorScheme = ColorScheme.fromSwatch(
-      primarySwatch: Colors.amber, brightness: Brightness.dark);
+  _defaultDarkColorScheme(String? colorValue) => ColorScheme.fromSeed(
+      seedColor: HexColor.fromHex(colorValue ?? appSeedColor),
+      brightness: Brightness.dark);
 
   // This widget is the root of your application.
   @override
@@ -44,11 +47,13 @@ class App extends StatelessWidget {
               debugShowCheckedModeBanner: false,
               routerConfig: appRouter,
               theme: ThemeData(
-                colorScheme: lightColorScheme ?? _defaultLightColorScheme,
+                colorScheme: lightColorScheme ??
+                    _defaultLightColorScheme(state.ui.seedColor),
                 useMaterial3: true,
               ),
               darkTheme: ThemeData(
-                colorScheme: darkColorScheme ?? _defaultDarkColorScheme,
+                colorScheme: darkColorScheme ??
+                    _defaultDarkColorScheme(state.ui.seedColor),
                 useMaterial3: true,
               ),
               themeMode: state.brightness == Brightness.dark
