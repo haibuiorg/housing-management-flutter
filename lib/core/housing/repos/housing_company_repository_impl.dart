@@ -81,4 +81,16 @@ class HousingCompanyRepositoryImpl extends HousingCompanyRepository {
       return ResultFailure(ServerFailure());
     }
   }
+
+  @override
+  Future<Result<HousingCompany>> deleteHousingCompany(
+      {required String housingCompanyId}) async {
+    try {
+      final housingCompanyModel = await housingCompanyDataSource
+          .deleteHousingCompany(housingCompanyId: housingCompanyId);
+      return ResultSuccess(HousingCompany.modelToEntity(housingCompanyModel));
+    } on ServerException {
+      return ResultFailure(ServerFailure());
+    }
+  }
 }

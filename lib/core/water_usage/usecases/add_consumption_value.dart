@@ -2,15 +2,16 @@ import 'package:equatable/equatable.dart';
 import 'package:priorli/core/base/result.dart';
 import 'package:priorli/core/base/usecase.dart';
 import 'package:priorli/core/water_usage/entities/consumption_value.dart';
+import 'package:priorli/core/water_usage/entities/water_bill.dart';
 import 'package:priorli/core/water_usage/repos/water_usage_repository.dart';
 
 class AddConsumptionValue
-    extends UseCase<ConsumptionValue, AddConsumptionValueParams> {
+    extends UseCase<WaterBill, AddConsumptionValueParams> {
   final WaterUsageRepository waterUsageRepository;
 
   AddConsumptionValue({required this.waterUsageRepository});
   @override
-  Future<Result<ConsumptionValue>> call(AddConsumptionValueParams params) {
+  Future<Result<WaterBill>> call(AddConsumptionValueParams params) {
     return waterUsageRepository.addConsumptionValue(
       housingCompanyId: params.housingCompanyId,
       waterConsumptionId: params.waterConsumptionId,

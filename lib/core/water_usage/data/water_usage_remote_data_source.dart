@@ -3,7 +3,6 @@ import 'package:priorli/core/water_usage/data/water_usage_data_source.dart';
 import 'package:priorli/core/water_usage/models/water_price_model.dart';
 import 'package:priorli/core/water_usage/models/water_consumption_model.dart';
 import 'package:priorli/core/water_usage/models/water_bill_model.dart';
-import 'package:priorli/core/water_usage/models/consumption_value_model.dart';
 
 import '../../base/exceptions.dart';
 
@@ -12,11 +11,12 @@ class WaterUsageRemoteDataSource implements WaterUsageDataSource {
   final _path = '/water_consumption';
   final _pathPrice = '/water_price';
   final _pathBill = '/water_bill';
+  final _pathBillLink = '/water_bill_link';
 
   WaterUsageRemoteDataSource({required this.client});
 
   @override
-  Future<ConsumptionValueModel> addConsumptionValue(
+  Future<WaterBillModel> addConsumptionValue(
       {required String housingCompanyId,
       required String waterConsumptionId,
       required double consumption,
@@ -37,8 +37,7 @@ class WaterUsageRemoteDataSource implements WaterUsageDataSource {
         data["house_code"] = houseCode;
       }
       final result = await client.post('$_path/new_value', data: data);
-
-      return ConsumptionValueModel.fromJson(result.data);
+      return WaterBillModel.fromJson(result.data);
     } catch (error) {
       throw ServerException(error: error);
     }
@@ -99,6 +98,7 @@ class WaterUsageRemoteDataSource implements WaterUsageDataSource {
         "housing_company_id": housingCompanyId,
       };
       final result = await client.get('$_path/latest', queryParameters: data);
+      print(result.data);
       return WaterConsumptionModel.fromJson(result.data);
     } catch (error) {
       throw ServerException(error: error);
@@ -131,7 +131,8 @@ class WaterUsageRemoteDataSource implements WaterUsageDataSource {
       };
       final result =
           await client.get('$_pathBill/$year', queryParameters: data);
-      return (result.data as List<Map<String, dynamic>>)
+      print(result.data);
+      return (result.data as List<dynamic>)
           .map((json) => WaterBillModel.fromJson(json))
           .toList();
     } catch (error) {
@@ -223,6 +224,19 @@ class WaterUsageRemoteDataSource implements WaterUsageDataSource {
       return (result.data as List<dynamic>)
           .map((json) => WaterConsumptionModel.fromJson(json))
           .toList();
+    } catch (error) {
+      throw ServerException(error: error);
+    }
+  }
+
+  @override
+  Future<String> getWaterBillLink({required String waterBillId}) async {
+    final Map<String, dynamic> data = {
+      "water_bill_id": waterBillId,
+    };
+    try {
+      final result = await client.post(_path, queryParameters: data);
+      return (result.data as Map<String, String>)['link'] ?? '';
     } catch (error) {
       throw ServerException(error: error);
     }

@@ -35,7 +35,7 @@ abstract class WaterUsageDataSource {
   Future<WaterConsumptionModel> getPreviousWaterConsumption({
     required String housingCompanyId,
   });
-  Future<ConsumptionValueModel> addConsumptionValue({
+  Future<WaterBillModel> addConsumptionValue({
     required String housingCompanyId,
     required String waterConsumptionId,
     required double consumption,
@@ -53,5 +53,8 @@ abstract class WaterUsageDataSource {
     required String housingCompanyId,
     required String apartmentId,
     required int year,
+  });
+  Future<String> getWaterBillLink({
+    required String waterBillId,
   });
 }

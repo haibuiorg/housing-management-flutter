@@ -8,6 +8,7 @@ import 'package:priorli/service_locator.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:liquid_progress_indicator/liquid_progress_indicator.dart';
 
+import '../../core/utils/string_extension.dart';
 import 'water_consumption_management_cubit.dart';
 
 const waterConsumptionManagementScreenPath = 'water_consumption_management';
@@ -68,9 +69,9 @@ class WaterConsumptionManagementScreen extends StatelessWidget {
                           children: [
                             const Text('Current water price:'),
                             Text(
-                                'Per cube: ${state.activeWaterPrice?.pricePerCube ?? 'Not available'}'),
+                                'Per cube: ${formatCurrency(state.activeWaterPrice?.pricePerCube, state.housingCompany?.currencyCode)}'),
                             Text(
-                                'Basic fee: ${state.activeWaterPrice?.basicFee ?? 'Not available'}'),
+                                'Basic fee: ${formatCurrency(state.activeWaterPrice?.basicFee, state.housingCompany?.currencyCode)}'),
                           ],
                         ),
                         OutlinedButton(
@@ -102,9 +103,9 @@ class WaterConsumptionManagementScreen extends StatelessWidget {
                     Text(
                         'Total reading: ${state.latestWaterConsumption?.totalReading ?? 'Unknown'}'),
                     Text(
-                        'Basic fee: ${state.latestWaterConsumption?.basicFee ?? 'Unknown'}'),
+                        'Total basic fee: ${formatCurrency(state.latestWaterConsumption?.basicFee, state.housingCompany?.currencyCode)}'),
                     Text(
-                        'Price per cub: ${state.latestWaterConsumption?.pricePerCube ?? 'Unknown'}'),
+                        'Price per cub: ${formatCurrency(state.latestWaterConsumption?.pricePerCube, state.housingCompany?.currencyCode)}'),
                     Text(
                         'Period: ${state.latestWaterConsumption?.period ?? 'Unknown'}'),
                     Text(
@@ -122,7 +123,7 @@ class WaterConsumptionManagementScreen extends StatelessWidget {
                             child: LiquidCircularProgressIndicator(
                               value: (state.latestWaterConsumption
                                           ?.consumptionValues?.length ??
-                                      3) /
+                                      0) /
                                   (state.housingCompany?.apartmentCount ??
                                       1), // Defaults to 0.5.
                               valueColor: AlwaysStoppedAnimation(

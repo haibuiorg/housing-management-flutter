@@ -18,14 +18,10 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   final cubit = serviceLocator<MainCubit>();
-  @override
-  void didChangeDependencies() {
-    cubit.getUserHousingCompanies();
-    super.didChangeDependencies();
-  }
 
   @override
   Widget build(BuildContext context) {
+    cubit.getUserHousingCompanies();
     return Scaffold(
         body: BlocProvider<MainCubit>(
       create: (_) => cubit,

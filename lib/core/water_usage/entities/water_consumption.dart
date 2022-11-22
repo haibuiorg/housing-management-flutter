@@ -25,13 +25,16 @@ class WaterConsumption extends Equatable {
 
   factory WaterConsumption.modelToEntity(WaterConsumptionModel model) =>
       WaterConsumption(
-          id: model.id,
-          basicFee: model.basicFee,
-          period: model.period,
-          priceId: model.priceId,
-          pricePerCube: model.pricePerCube,
-          totalReading: model.totalReading,
-          year: model.year);
+          id: model.id ?? '',
+          basicFee: model.basicFee ?? 0,
+          period: model.period ?? 1,
+          priceId: model.priceId ?? '',
+          pricePerCube: model.pricePerCube ?? 0,
+          totalReading: model.totalReading ?? 0,
+          year: model.year ?? DateTime.now().year,
+          consumptionValues: model.consumptionValues
+              ?.map((e) => ConsumptionValue.modelToEntity(e))
+              .toList());
   @override
   List<Object?> get props => [
         id,

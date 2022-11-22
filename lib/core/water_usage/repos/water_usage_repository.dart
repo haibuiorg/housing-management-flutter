@@ -37,7 +37,7 @@ abstract class WaterUsageRepository {
   });
   Future<Result<List<WaterConsumption>>> getYearlyWaterConsumption(
       {required String housingCompanyId, required int year});
-  Future<Result<ConsumptionValue>> addConsumptionValue({
+  Future<Result<WaterBill>> addConsumptionValue({
     required String housingCompanyId,
     required String waterConsumptionId,
     required double consumption,
@@ -55,5 +55,8 @@ abstract class WaterUsageRepository {
     required String housingCompanyId,
     required String apartmentId,
     required int year,
+  });
+  Future<Result<String>> getWaterBillLink({
+    required String waterBillId,
   });
 }

@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:dio/dio.dart';
 import 'package:priorli/core/apartment/data/apartment_data_source.dart';
 import 'package:priorli/core/apartment/model/apartment_invitation_model.dart';
@@ -26,12 +24,12 @@ class ApartmentRemoteDataSource implements ApartmentDataSource {
         data["house_codes"] = houseCodes;
       }
       final result = await client.post(_path, data: data);
-
+      print(result);
       return (result.data as List<dynamic>)
           .map((json) => ApartmentModel.fromJson(json))
           .toList();
     } catch (error) {
-      throw ServerException();
+      throw ServerException(error: error);
     }
   }
 
@@ -69,6 +67,61 @@ class ApartmentRemoteDataSource implements ApartmentDataSource {
       }
       final result = await client.post('$_path/invite', data: data);
       return ApartmentInvitationModel.fromJson(result.data);
+    } catch (error) {
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<ApartmentModel> getUserApartment(
+      {required String housingCompanyId, required String apartmentId}) async {
+    try {
+      final Map<String, dynamic> data = {
+        "housing_company_id": housingCompanyId,
+        "apartment_id": apartmentId,
+      };
+      final result = await client.get('/apartment', queryParameters: data);
+      return ApartmentModel.fromJson(result.data);
+    } catch (error) {
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<ApartmentModel> deleteApartment(
+      {required String housingCompanyId, required String apartmentId}) async {
+    try {
+      final Map<String, dynamic> data = {
+        "housing_company_id": housingCompanyId,
+        "apartment_id": apartmentId,
+        "is_deleted": true
+      };
+      final result = await client.put('/apartment', data: data);
+      return ApartmentModel.fromJson(result.data);
+    } catch (error) {
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<ApartmentModel> editApartmentInfo(
+      {required String housingCompanyId,
+      required String apartmentId,
+      String? building,
+      String? houseCode}) async {
+    try {
+      final Map<String, dynamic> data = {
+        "housing_company_id": housingCompanyId,
+        "apartment_id": apartmentId,
+      };
+      if (building != null) {
+        data['building'] = building;
+      }
+      if (houseCode != null) {
+        data['house_code'] = houseCode;
+      }
+      final result = await client.put('/apartment', data: data);
+      return ApartmentModel.fromJson(result.data);
     } catch (error) {
       throw ServerException();
     }

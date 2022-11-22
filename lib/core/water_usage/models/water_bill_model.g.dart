@@ -8,11 +8,14 @@ part of 'water_bill_model.dart';
 
 WaterBillModel _$WaterBillModelFromJson(Map<String, dynamic> json) =>
     WaterBillModel(
-      id: json['id'] as String,
-      period: json['period'] as int,
-      year: json['year'] as int,
-      url: json['url'] as String,
-      createdOn: json['created_on'] as int,
+      id: json['id'] as String?,
+      period: json['period'] as int?,
+      consumption: (json['consumption'] as num?)?.toDouble(),
+      year: json['year'] as int?,
+      url: json['url'] as String?,
+      createdOn: json['created_on'] as int?,
+      invoiceValue: (json['invoice_value'] as num?)?.toDouble(),
+      currencyCode: json['currency_code'] as String?,
     );
 
 Map<String, dynamic> _$WaterBillModelToJson(WaterBillModel instance) =>
@@ -21,5 +24,8 @@ Map<String, dynamic> _$WaterBillModelToJson(WaterBillModel instance) =>
       'period': instance.period,
       'year': instance.year,
       'url': instance.url,
+      'consumption': instance.consumption,
       'created_on': instance.createdOn,
+      'currency_code': instance.currencyCode,
+      'invoice_value': instance.invoiceValue,
     };

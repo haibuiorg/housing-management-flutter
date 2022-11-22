@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:priorli/presentation/housing_company/housing_company_cubit.dart';
+import 'package:priorli/presentation/home/main_screen.dart';
 import 'package:priorli/presentation/shared/custom_form_field.dart';
 import 'package:priorli/service_locator.dart';
 import 'package:flutter_emoji/flutter_emoji.dart';
 import '../send_invitation/invite_tenant_screen.dart';
+import '../shared/setting_button.dart';
 import 'housing_company_management_cubit.dart';
 import 'housing_company_management_state.dart';
 
-const housingCompanyManageScreenPath = 'manage';
+const manageScreenPath = 'manage';
 
 class HousingCompanyManagementScreen extends StatefulWidget {
   const HousingCompanyManagementScreen({super.key});
@@ -44,11 +45,7 @@ class _HousingCompanyManagementScreenState
   @override
   void initState() {
     super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    try {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       final housingCompanyId =
           Uri.parse(GoRouter.of(context).location).pathSegments[1];
       cubit.init(housingCompanyId).then((state) {
@@ -59,8 +56,7 @@ class _HousingCompanyManagementScreenState
         _city.text = state.housingCompany?.city ?? '';
         _businessId.text = state.housingCompany?.businessId ?? '';
       });
-    } catch (error) {}
-    super.didChangeDependencies();
+    });
   }
 
   @override
@@ -160,48 +156,39 @@ class _HousingCompanyManagementScreenState
                   ),
                   SettingButton(
                     onPressed: () {},
-                    label: 'Edit location',
+                    label: Text(
+                      'Edit location',
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
                   ),
                   SettingButton(
                     onPressed: () {
                       context.push(
                           '${GoRouter.of(context).location}/$inviteTenantPath');
                     },
-                    label: 'Send invitation to an apartment',
+                    label: Text(
+                      'Send invitation to an apartment',
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                  ),
+                  SettingButton(
+                    onPressed: () async {
+                      final result = await cubit.deleteThisHousingCompany();
+                      if (result) {
+                        if (!context.mounted) return;
+                        context.go(mainPath);
+                      }
+                    },
+                    label: Text(
+                      'Delete this company',
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          color: Theme.of(context).colorScheme.error),
+                    ),
                   ),
                 ],
               ),
             ));
       }),
-    );
-  }
-}
-
-class SettingButton extends StatelessWidget {
-  final Function()? onPressed;
-  final String? label;
-  const SettingButton({super.key, this.onPressed, this.label});
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onPressed,
-      child: Padding(
-        padding: const EdgeInsets.only(left: 8, right: 8),
-        child: Container(
-          height: 56,
-          decoration: BoxDecoration(
-              border: Border(
-                  bottom: BorderSide(
-                      color: Theme.of(context).colorScheme.onSurface))),
-          child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(label ?? ''),
-                const Icon(Icons.chevron_right_outlined)
-              ]),
-        ),
-      ),
     );
   }
 }

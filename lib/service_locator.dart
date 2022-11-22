@@ -1,8 +1,12 @@
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
+import 'package:priorli/core/apartment/usecases/delete_apartment.dart';
+import 'package:priorli/core/housing/usecases/delete_housing_company.dart';
+import 'package:priorli/core/water_usage/usecases/get_water_bill_link.dart';
 import 'package:priorli/core/water_usage/usecases/get_yearly_water_consumption.dart';
 import 'package:priorli/presentation/add_apartment/add_apart_cubit.dart';
+import 'package:priorli/presentation/apartments/apartment_cubit.dart';
 import 'package:priorli/presentation/create_housing_company/create_housing_company_cubit.dart';
 import 'package:priorli/presentation/home/main_cubit.dart';
 import 'package:priorli/presentation/housing_company/housing_company_cubit.dart';
@@ -13,6 +17,8 @@ import 'core/apartment/data/apartment_remote_data_source.dart';
 import 'core/apartment/repos/apartment_repository.dart';
 import 'core/apartment/repos/apartment_repository_impl.dart';
 import 'core/apartment/usecases/add_apartments.dart';
+import 'core/apartment/usecases/edit_apartment.dart';
+import 'core/apartment/usecases/get_apartment.dart';
 import 'core/apartment/usecases/get_apartments.dart';
 import 'core/apartment/usecases/send_invitation_to_apartment.dart';
 import 'core/auth/data/authentication_data_source.dart';
@@ -64,6 +70,7 @@ import 'core/water_usage/usecases/get_water_bill_by_year.dart';
 import 'core/water_usage/usecases/get_water_consumption.dart';
 import 'core/water_usage/usecases/get_water_price_history.dart';
 import 'core/water_usage/usecases/start_new_water_consumptio_period.dart';
+import 'presentation/apartment_management/apartment_management_cubit.dart';
 import 'presentation/housing_company_management/housing_company_management_cubit.dart';
 import 'presentation/send_invitation/invite_tenant_cubit.dart';
 import 'presentation/water_consumption_management/water_consumption_management_cubit.dart';
@@ -98,8 +105,12 @@ Future<void> init() async {
       serviceLocator(),
       serviceLocator(),
       serviceLocator()));
-  serviceLocator.registerFactory(
-      () => HousingCompanyManagementCubit(serviceLocator(), serviceLocator()));
+  serviceLocator.registerFactory(() => HousingCompanyManagementCubit(
+      serviceLocator(), serviceLocator(), serviceLocator()));
+  serviceLocator.registerFactory(() => ApartmentCubit(serviceLocator(),
+      serviceLocator(), serviceLocator(), serviceLocator(), serviceLocator()));
+  serviceLocator.registerFactory(() => ApartmentManagementCubit(
+      serviceLocator(), serviceLocator(), serviceLocator()));
   /** usecases */
   // Auth
   serviceLocator.registerLazySingleton<IsAuthenticated>(
@@ -145,12 +156,20 @@ Future<void> init() async {
       () => CreateHousingCompany(housingCompanyRepository: serviceLocator()));
   serviceLocator.registerLazySingleton<UpdateHousingCompanyInfo>(() =>
       UpdateHousingCompanyInfo(housingCompanyRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<DeleteHousingCompany>(
+      () => DeleteHousingCompany(housingCompanyRepository: serviceLocator()));
 
   // apartment
   serviceLocator.registerLazySingleton<AddApartments>(
       () => AddApartments(apartmentRepository: serviceLocator()));
   serviceLocator.registerLazySingleton<GetApartments>(
       () => GetApartments(apartmentRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<GetApartment>(
+      () => GetApartment(apartmentRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<DeleteApartment>(
+      () => DeleteApartment(apartmentRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<EditApartment>(
+      () => EditApartment(apartmentRepository: serviceLocator()));
   serviceLocator.registerLazySingleton<SendInvitationToApartment>(
       () => SendInvitationToApartment(apartmentRepository: serviceLocator()));
 
@@ -179,6 +198,8 @@ Future<void> init() async {
       StartNewWaterConsumptionPeriod(waterUsageRepository: serviceLocator()));
   serviceLocator.registerLazySingleton<GetYearlyWaterConsumption>(
       () => GetYearlyWaterConsumption(waterUsageRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<GetWaterBillLink>(
+      () => GetWaterBillLink(waterUsageRepository: serviceLocator()));
 
   /** repos */
   serviceLocator.registerLazySingleton<AuthenticationRepository>(() =>

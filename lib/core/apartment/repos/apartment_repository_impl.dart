@@ -60,4 +60,46 @@ class ApartmentRepositoryImpl implements ApartmentRepository {
       return ResultFailure(ServerFailure());
     }
   }
+
+  @override
+  Future<Result<Apartment>> getUserApartment(
+      {required String housingCompanyId, required String apartmentId}) async {
+    try {
+      final apartmentModel = await apartmentDataSource.getUserApartment(
+          housingCompanyId: housingCompanyId, apartmentId: apartmentId);
+      return ResultSuccess(Apartment.modelToEntity(apartmentModel));
+    } on ServerException {
+      return ResultFailure(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Result<Apartment>> deleteUserApartment(
+      {required String housingCompanyId, required String apartmentId}) async {
+    try {
+      final apartmentModel = await apartmentDataSource.deleteApartment(
+          housingCompanyId: housingCompanyId, apartmentId: apartmentId);
+      return ResultSuccess(Apartment.modelToEntity(apartmentModel));
+    } on ServerException {
+      return ResultFailure(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Result<Apartment>> editApartmentInfo(
+      {required String housingCompanyId,
+      required String apartmentId,
+      String? building,
+      String? houseCode}) async {
+    try {
+      final apartmentModel = await apartmentDataSource.editApartmentInfo(
+          housingCompanyId: housingCompanyId,
+          apartmentId: apartmentId,
+          building: building,
+          houseCode: houseCode);
+      return ResultSuccess(Apartment.modelToEntity(apartmentModel));
+    } on ServerException {
+      return ResultFailure(ServerFailure());
+    }
+  }
 }

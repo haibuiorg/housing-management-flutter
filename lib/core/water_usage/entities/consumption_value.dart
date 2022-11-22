@@ -16,10 +16,10 @@ class ConsumptionValue extends Equatable {
 
   factory ConsumptionValue.modelToEntity(ConsumptionValueModel model) =>
       ConsumptionValue(
-          apartmentId: model.apartmentId,
-          buiding: model.buiding,
-          consumption: model.consumption,
-          updatedOn: model.updatedOn);
+          apartmentId: model.apartmentId ?? '',
+          buiding: model.buiding ?? '',
+          consumption: model.consumption ?? 0,
+          updatedOn: model.updatedOn ?? 0);
 
   @override
   List<Object?> get props => [apartmentId, buiding, consumption, updatedOn];

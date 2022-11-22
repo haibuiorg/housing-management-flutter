@@ -18,4 +18,6 @@ abstract class HousingCompanyDataSource {
   Future<List<HousingCompanyModel>> getUserHousingCompanies();
   Future<HousingCompanyModel> getHousingCompany(
       {required String housingCompanyId});
+  Future<HousingCompanyModel> deleteHousingCompany(
+      {required String housingCompanyId});
 }

@@ -6,17 +6,17 @@ part 'water_consumption_model.g.dart';
 
 @JsonSerializable()
 class WaterConsumptionModel extends Equatable {
-  final String id;
+  final String? id;
   @JsonKey(name: 'basic_fee')
-  final double basicFee;
-  final int period;
+  final double? basicFee;
+  final int? period;
   @JsonKey(name: 'price_id')
-  final String priceId;
+  final String? priceId;
   @JsonKey(name: 'price_per_cube')
-  final double pricePerCube;
+  final double? pricePerCube;
   @JsonKey(name: 'total_reading')
-  final double totalReading;
-  final int year;
+  final double? totalReading;
+  final int? year;
   @JsonKey(name: 'consumption_values')
   final List<ConsumptionValueModel>? consumptionValues;
 

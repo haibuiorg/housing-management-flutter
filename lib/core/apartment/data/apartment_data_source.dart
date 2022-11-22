@@ -10,6 +10,20 @@ abstract class ApartmentDataSource {
   Future<List<ApartmentModel>> getUserApartments({
     required String housingCompanyId,
   });
+  Future<ApartmentModel> getUserApartment({
+    required String housingCompanyId,
+    required String apartmentId,
+  });
+  Future<ApartmentModel> editApartmentInfo({
+    required String housingCompanyId,
+    required String apartmentId,
+    String? building,
+    String? houseCode,
+  });
+  Future<ApartmentModel> deleteApartment({
+    required String housingCompanyId,
+    required String apartmentId,
+  });
   Future<ApartmentInvitationModel> sendInvitationToApartment(
       {required String apartmentId,
       required String housingCompanyId,

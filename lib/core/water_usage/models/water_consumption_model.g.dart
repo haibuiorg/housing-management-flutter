@@ -9,13 +9,13 @@ part of 'water_consumption_model.dart';
 WaterConsumptionModel _$WaterConsumptionModelFromJson(
         Map<String, dynamic> json) =>
     WaterConsumptionModel(
-      id: json['id'] as String,
-      basicFee: (json['basic_fee'] as num).toDouble(),
-      period: json['period'] as int,
-      priceId: json['price_id'] as String,
-      pricePerCube: (json['price_per_cube'] as num).toDouble(),
-      totalReading: (json['total_reading'] as num).toDouble(),
-      year: json['year'] as int,
+      id: json['id'] as String?,
+      basicFee: (json['basic_fee'] as num?)?.toDouble(),
+      period: json['period'] as int?,
+      priceId: json['price_id'] as String?,
+      pricePerCube: (json['price_per_cube'] as num?)?.toDouble(),
+      totalReading: (json['total_reading'] as num?)?.toDouble(),
+      year: json['year'] as int?,
       consumptionValues: (json['consumption_values'] as List<dynamic>?)
           ?.map(
               (e) => ConsumptionValueModel.fromJson(e as Map<String, dynamic>))

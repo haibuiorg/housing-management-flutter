@@ -3,6 +3,7 @@ import 'package:priorli/core/apartment/entities/apartment.dart';
 import 'package:priorli/core/apartment/usecases/get_apartments.dart';
 import 'package:priorli/core/base/result.dart';
 import 'package:priorli/core/housing/entities/housing_company.dart';
+import 'package:priorli/core/housing/usecases/delete_housing_company.dart';
 import 'package:priorli/core/housing/usecases/get_housing_company.dart';
 import 'package:priorli/core/housing/usecases/update_housing_company_info.dart';
 
@@ -12,8 +13,10 @@ class HousingCompanyManagementCubit
     extends Cubit<HousingCompanyManagementState> {
   final GetHousingCompany _getHousingCompany;
   final UpdateHousingCompanyInfo _updateHousingCompanyInfo;
+  final DeleteHousingCompany _deleteHousingCompany;
   HousingCompanyManagementCubit(
     this._updateHousingCompanyInfo,
+    this._deleteHousingCompany,
     this._getHousingCompany,
   ) : super(const HousingCompanyManagementState());
 
@@ -66,6 +69,12 @@ class HousingCompanyManagementCubit
     final pending =
         state.pendingUpdateHousingCompany?.copyWith(businessId: newValue);
     emit(state.copyWith(pendingUpdateHousingCompany: pending));
+  }
+
+  Future<bool> deleteThisHousingCompany() async {
+    final deleteResult = await _deleteHousingCompany(GetHousingCompanyParams(
+        housingCompanyId: state.housingCompany?.id ?? ''));
+    return deleteResult is ResultSuccess<HousingCompany>;
   }
 
   Future<void> saveNewCompanyDetail() async {

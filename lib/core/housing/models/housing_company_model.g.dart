@@ -20,6 +20,8 @@ HousingCompanyModel _$HousingCompanyModelFromJson(Map<String, dynamic> json) =>
       json['apartment_count'] as int?,
       json['currency_code'] as String?,
       json['business_id'] as String?,
+      json['is_deleted'] as bool?,
+      (json['vat'] as num?)?.toDouble(),
       json['ui'] == null
           ? null
           : UIModel.fromJson(json['ui'] as Map<String, dynamic>),
@@ -41,4 +43,6 @@ Map<String, dynamic> _$HousingCompanyModelToJson(
       'apartment_count': instance.apartmentCount,
       'business_id': instance.businessId,
       'ui': instance.ui,
+      'is_deleted': instance.isDeleted,
+      'vat': instance.vat,
     };

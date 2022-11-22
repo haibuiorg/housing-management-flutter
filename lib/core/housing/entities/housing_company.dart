@@ -18,6 +18,8 @@ class HousingCompany extends Equatable {
   final String name;
   final String businessId;
   final UI ui;
+  final bool isDeleted;
+  final double vat;
 
   const HousingCompany(
       {required this.id,
@@ -30,8 +32,10 @@ class HousingCompany extends Equatable {
       required this.lat,
       required this.lng,
       required this.name,
+      required this.isDeleted,
       required this.currencyCode,
       required this.ui,
+      required this.vat,
       required this.apartmentCount});
 
   factory HousingCompany.modelToEntity(
@@ -40,6 +44,7 @@ class HousingCompany extends Equatable {
           ui: UI.modelToEntity(
               housingCompanyModel.ui ?? const UIModel(appSeedColor)),
           businessId: housingCompanyModel.businessId ?? '',
+          isDeleted: housingCompanyModel.isDeleted ?? false,
           currencyCode: housingCompanyModel.currencyCode ?? 'eur',
           apartmentCount: housingCompanyModel.apartmentCount ?? 0,
           id: housingCompanyModel.id ?? '',
@@ -50,7 +55,8 @@ class HousingCompany extends Equatable {
           countryCode: housingCompanyModel.countryCode ?? 'fi',
           lat: housingCompanyModel.lat ?? 0.0,
           lng: housingCompanyModel.lng ?? 0.0,
-          name: housingCompanyModel.name ?? '');
+          name: housingCompanyModel.name ?? '',
+          vat: housingCompanyModel.vat ?? 0);
   HousingCompany copyWith(
           {String? streetAddress1,
           String? streetAddress2,
@@ -60,8 +66,10 @@ class HousingCompany extends Equatable {
           double? lat,
           double? lng,
           String? businessId,
+          bool? isDeleted,
           UI? ui,
-          String? name}) =>
+          String? name,
+          double? vat}) =>
       HousingCompany(
           id: id,
           ui: ui ?? this.ui,
@@ -74,7 +82,9 @@ class HousingCompany extends Equatable {
           lat: lat ?? this.lat,
           lng: lng ?? this.lng,
           name: name ?? this.name,
+          isDeleted: isDeleted ?? this.isDeleted,
           businessId: businessId ?? this.businessId,
+          vat: vat ?? this.vat,
           apartmentCount: apartmentCount);
 
   @override
@@ -88,6 +98,7 @@ class HousingCompany extends Equatable {
         lat,
         lng,
         name,
-        apartmentCount
+        apartmentCount,
+        isDeleted,
       ];
 }

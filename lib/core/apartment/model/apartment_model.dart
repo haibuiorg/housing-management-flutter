@@ -12,11 +12,14 @@ class ApartmentModel extends Equatable {
   @JsonKey(name: 'house_code')
   final String? houseCode;
   final List<String> tenants;
+  @JsonKey(name: 'is_deleted')
+  final bool? isDeleted;
 
   const ApartmentModel(
       {required this.housingCompanyId,
       required this.id,
       required this.building,
+      this.isDeleted,
       this.houseCode,
       required this.tenants});
 
@@ -25,5 +28,5 @@ class ApartmentModel extends Equatable {
 
   @override
   List<Object?> get props =>
-      [housingCompanyId, id, building, houseCode, tenants];
+      [housingCompanyId, id, building, houseCode, tenants, isDeleted];
 }

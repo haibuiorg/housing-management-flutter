@@ -1,6 +1,5 @@
 import 'package:priorli/core/base/result.dart';
 import 'package:priorli/core/water_usage/data/water_usage_data_source.dart';
-import 'package:priorli/core/water_usage/entities/consumption_value.dart';
 import 'package:priorli/core/water_usage/entities/water_price.dart';
 import 'package:priorli/core/water_usage/entities/water_consumption.dart';
 import 'package:priorli/core/water_usage/entities/water_bill.dart';
@@ -15,7 +14,7 @@ class WaterUsageRepositoryImpl implements WaterUsageRepository {
   WaterUsageRepositoryImpl({required this.waterUsageDataSource});
 
   @override
-  Future<Result<ConsumptionValue>> addConsumptionValue(
+  Future<Result<WaterBill>> addConsumptionValue(
       {required String housingCompanyId,
       required String waterConsumptionId,
       required double consumption,
@@ -31,8 +30,7 @@ class WaterUsageRepositoryImpl implements WaterUsageRepository {
               buiding: buiding,
               apartmentId: apartmentId,
               houseCode: houseCode);
-      return ResultSuccess(
-          ConsumptionValue.modelToEntity(consumptionValueModel));
+      return ResultSuccess(WaterBill.modelToEntity(consumptionValueModel));
     } on ServerException {
       return ResultFailure(ServerFailure());
     }
@@ -207,6 +205,18 @@ class WaterUsageRepositoryImpl implements WaterUsageRepository {
       return ResultSuccess(waterConsumptionModels
           .map((model) => WaterConsumption.modelToEntity(model))
           .toList());
+    } on ServerException {
+      return ResultFailure(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Result<String>> getWaterBillLink({required String waterBillId}) async {
+    try {
+      final link = await waterUsageDataSource.getWaterBillLink(
+        waterBillId: waterBillId,
+      );
+      return ResultSuccess(link);
     } on ServerException {
       return ResultFailure(ServerFailure());
     }

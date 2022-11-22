@@ -27,6 +27,9 @@ class HousingCompanyModel extends Equatable {
   @JsonKey(name: 'business_id')
   final String? businessId;
   final UIModel? ui;
+  @JsonKey(name: 'is_deleted')
+  final bool? isDeleted;
+  final double? vat;
 
   const HousingCompanyModel(
       this.id,
@@ -41,6 +44,8 @@ class HousingCompanyModel extends Equatable {
       this.apartmentCount,
       this.currencyCode,
       this.businessId,
+      this.isDeleted,
+      this.vat,
       this.ui);
 
   factory HousingCompanyModel.fromJson(Map<String, dynamic> json) =>
@@ -60,6 +65,8 @@ class HousingCompanyModel extends Equatable {
         apartmentCount,
         currencyCode,
         businessId,
+        isDeleted,
+        vat,
         ui
       ];
 }

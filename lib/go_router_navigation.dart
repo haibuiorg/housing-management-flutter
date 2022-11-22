@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:priorli/presentation/add_apartment/add_apartment_screen.dart';
+import 'package:priorli/presentation/apartment_management/apartment_management_screen.dart';
 import 'package:priorli/presentation/create_housing_company/create_housing_company_screen.dart';
 import 'package:priorli/presentation/housing_company/housing_company_screen.dart';
 import 'package:priorli/presentation/housing_company_management/housing_company_management_screen.dart';
@@ -58,7 +59,7 @@ final appRouter = GoRouter(
             },
           ),
           GoRoute(
-              path: housingCompanyManageScreenPath,
+              path: manageScreenPath,
               builder: (BuildContext context, GoRouterState state) {
                 return const HousingCompanyManagementScreen();
               },
@@ -77,13 +78,20 @@ final appRouter = GoRouter(
             },
           ),
           GoRoute(
-            path: '$apartmentScreenPath/:apartmentId',
-            builder: (BuildContext context, GoRouterState state) {
-              return ApartmentScreen(
-                apartmentId: state.params['apartmentId'] ?? '',
-              );
-            },
-          )
+              path: '$apartmentScreenPath/:apartmentId',
+              builder: (BuildContext context, GoRouterState state) {
+                return ApartmentScreen(
+                  apartmentId: state.params['apartmentId'] ?? '',
+                );
+              },
+              routes: [
+                GoRoute(
+                  path: manageScreenPath,
+                  builder: (BuildContext context, GoRouterState state) {
+                    return ApartmentManagementScreen();
+                  },
+                )
+              ])
         ]),
     GoRoute(
       path: settingPath,
@@ -92,6 +100,7 @@ final appRouter = GoRouter(
       },
     ),
   ],
+  debugLogDiagnostics: true,
   redirect: (context, state) async {
     return null;
   },

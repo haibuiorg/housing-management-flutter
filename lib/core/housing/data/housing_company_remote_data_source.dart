@@ -1,8 +1,5 @@
-import 'dart:math';
-
 import 'package:dio/dio.dart';
 import 'package:priorli/core/housing/models/housing_company_model.dart';
-import 'package:priorli/core/housing/models/ui_model.dart';
 
 import '../../base/exceptions.dart';
 import '../entities/ui.dart';
@@ -97,6 +94,21 @@ class HousingCompanyRemoteDataSource implements HousingCompanyDataSource {
         'housing_company_id': housingCompanyId,
       };
       final result = await client.get(_path, queryParameters: data);
+      return HousingCompanyModel.fromJson(result.data);
+    } catch (error) {
+      throw ServerException(error: error);
+    }
+  }
+
+  @override
+  Future<HousingCompanyModel> deleteHousingCompany(
+      {required String housingCompanyId}) async {
+    try {
+      final Map<String, dynamic> data = {
+        'housing_company_id': housingCompanyId,
+        'is_deleted': true
+      };
+      final result = await client.put(_path, data: data);
       return HousingCompanyModel.fromJson(result.data);
     } catch (error) {
       throw ServerException(error: error);

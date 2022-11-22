@@ -25,8 +25,10 @@ class HousingCompanyScreen extends StatefulWidget {
 
 class _HousingCompanyScreenState extends State<HousingCompanyScreen> {
   final cubit = serviceLocator<HousingCompanyCubit>();
+
   @override
   Widget build(BuildContext context) {
+    print(GoRouter.of(context).location);
     cubit.init(widget.housingCompanyId);
     return BlocProvider<HousingCompanyCubit>(
       create: (_) => cubit,
@@ -42,7 +44,7 @@ class _HousingCompanyScreenState extends State<HousingCompanyScreen> {
                 TextButton(
                   onPressed: () {
                     context.push(
-                        '${GoRouter.of(context).location}/$housingCompanyManageScreenPath');
+                        '${GoRouter.of(context).location}/$manageScreenPath');
                   },
                   child: const Text('Manage'),
                 )
@@ -50,6 +52,22 @@ class _HousingCompanyScreenState extends State<HousingCompanyScreen> {
               title: Text(state.housingCompany?.name ?? 'Housing company'),
             ),
             body: CustomScrollView(clipBehavior: Clip.none, slivers: [
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Announcement',
+                          style: Theme.of(context).textTheme.displaySmall),
+                      IconButton(
+                        onPressed: () {},
+                        icon: const Icon(Icons.post_add),
+                      )
+                    ],
+                  ),
+                ),
+              ),
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
@@ -136,8 +154,7 @@ class _HousingCompanyScreenState extends State<HousingCompanyScreen> {
                     childAspectRatio: 1.0,
                   ),
                   delegate: SliverChildBuilderDelegate((context, index) {
-                    return InkWell(
-                      borderRadius: BorderRadius.circular(8),
+                    return GestureDetector(
                       onTap: () {
                         context.push(
                             '${GoRouter.of(context).location}/$apartmentScreenPath/${state.apartmentList?[index].id}');

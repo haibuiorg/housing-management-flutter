@@ -9,10 +9,10 @@ part of 'consumption_value_model.dart';
 ConsumptionValueModel _$ConsumptionValueModelFromJson(
         Map<String, dynamic> json) =>
     ConsumptionValueModel(
-      apartmentId: json['apartment_id'] as String,
-      buiding: json['buiding'] as String,
-      consumption: (json['consumption'] as num).toDouble(),
-      updatedOn: json['updated_on'] as int,
+      apartmentId: json['apartment_id'] as String?,
+      buiding: json['buiding'] as String?,
+      consumption: (json['consumption'] as num?)?.toDouble(),
+      updatedOn: json['updated_on'] as int?,
     );
 
 Map<String, dynamic> _$ConsumptionValueModelToJson(

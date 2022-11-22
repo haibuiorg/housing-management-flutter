@@ -5,6 +5,7 @@ import 'package:priorli/presentation/add_apartment/add_apart_state.dart';
 import 'package:priorli/presentation/shared/custom_form_field.dart';
 import 'package:priorli/service_locator.dart';
 
+import '../housing_company/housing_company_screen.dart';
 import 'add_apart_cubit.dart';
 
 const addApartmentPath = 'add_apartment';
@@ -20,8 +21,12 @@ class AddApartmentScreen extends StatelessWidget {
     cubit.init(housingCompanyId);
     return BlocProvider<AddApartmentCubit>(
       create: (_) => cubit,
-      child: BlocBuilder<AddApartmentCubit, AddApartmentState>(
-          builder: (context, state) {
+      child: BlocConsumer<AddApartmentCubit, AddApartmentState>(
+          listener: ((context, state) {
+        if (state.addedApartments != null) {
+          context.go('$housingCompanyScreenPath/$housingCompanyId');
+        }
+      }), builder: (context, state) {
         return Scaffold(
           floatingActionButton: OutlinedButton(
               onPressed: ((state.building?.length ?? 0) == 0 ||

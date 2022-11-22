@@ -11,6 +11,7 @@ ApartmentModel _$ApartmentModelFromJson(Map<String, dynamic> json) =>
       housingCompanyId: json['housing_company_id'] as String,
       id: json['id'] as String,
       building: json['building'] as String,
+      isDeleted: json['is_deleted'] as bool?,
       houseCode: json['house_code'] as String?,
       tenants:
           (json['tenants'] as List<dynamic>).map((e) => e as String).toList(),
@@ -23,4 +24,5 @@ Map<String, dynamic> _$ApartmentModelToJson(ApartmentModel instance) =>
       'building': instance.building,
       'house_code': instance.houseCode,
       'tenants': instance.tenants,
+      'is_deleted': instance.isDeleted,
     };
