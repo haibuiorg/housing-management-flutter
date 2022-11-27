@@ -1,4 +1,3 @@
-import 'package:priorli/core/water_usage/entities/consumption_value.dart';
 import 'package:priorli/core/water_usage/entities/water_bill.dart';
 import 'package:priorli/core/water_usage/entities/water_consumption.dart';
 

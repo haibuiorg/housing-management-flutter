@@ -24,8 +24,12 @@ class WaterConsumptionManagementScreen extends StatelessWidget {
     cubit.init(housingCompanyId);
     return BlocProvider<WaterConsumptionManagementCubit>(
       create: (_) => cubit,
-      child: BlocBuilder<WaterConsumptionManagementCubit,
-          WaterConsumptionManagementState>(builder: (context, state) {
+      child: BlocConsumer<WaterConsumptionManagementCubit,
+          WaterConsumptionManagementState>(listener: (context, state) {
+        if (state.finishManagement == true) {
+          Navigator.pop(context, true);
+        }
+      }, builder: (context, state) {
         return Scaffold(
             appBar: AppBar(
               title: const Text('Water consumption'),
@@ -84,8 +88,6 @@ class WaterConsumptionManagementScreen extends StatelessWidget {
                                             required pricePerCube}) async {
                                           await cubit.addNewWaterPrice(
                                               basicFee, pricePerCube);
-                                          if (!context.mounted) return;
-                                          Navigator.pop(context, true);
                                         },
                                       ));
                             },
@@ -124,12 +126,18 @@ class WaterConsumptionManagementScreen extends StatelessWidget {
                               value: (state.latestWaterConsumption
                                           ?.consumptionValues?.length ??
                                       0) /
-                                  (state.housingCompany?.apartmentCount ??
-                                      1), // Defaults to 0.5.
+                                  ((state.housingCompany?.apartmentCount ?? 0) >
+                                          0
+                                      ? state.housingCompany?.apartmentCount ??
+                                          1
+                                      : 1), // Defaults to 0.5.
                               valueColor: AlwaysStoppedAnimation(
                                   Theme.of(context).colorScheme.primary),
-                              backgroundColor: Colors.white,
-
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.background,
+                              borderColor:
+                                  Theme.of(context).colorScheme.secondary,
+                              borderWidth: 1,
                               direction: Axis.vertical,
                             ),
                           ),
@@ -151,8 +159,6 @@ class WaterConsumptionManagementScreen extends StatelessWidget {
                                           }) async {
                                             await cubit.startNewWaterBillPeriod(
                                                 totalReading);
-                                            if (!context.mounted) return;
-                                            Navigator.pop(context, true);
                                           },
                                         ));
                               },

@@ -9,6 +9,7 @@ import 'package:priorli/service_locator.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../core/utils/string_extension.dart';
+import '../apartment_invoice/apartment_water_invoice_screen.dart';
 import '../housing_company_management/housing_company_management_screen.dart';
 import '../shared/custom_form_field.dart';
 import '../shared/full_width_pair_text.dart';
@@ -45,8 +46,12 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
   Widget build(BuildContext context) {
     return BlocProvider<ApartmentCubit>(
       create: (_) => cubit,
-      child: BlocBuilder<ApartmentCubit, ApartmentState>(
-          builder: (context, state) {
+      child: BlocConsumer<ApartmentCubit, ApartmentState>(
+          listener: (context, state) {
+        if (state.newConsumptionAdded == true) {
+          Navigator.pop(context, true);
+        }
+      }, builder: (context, state) {
         final hasConsumptionValue = state.yearlyWaterBills?.isNotEmpty ==
                 true &&
             state.yearlyWaterBills?.where((element) =>
@@ -95,7 +100,10 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
                     ]),
               ),
               SettingButton(
-                onPressed: () {},
+                onPressed: () {
+                  context.push(
+                      '${GoRouter.of(context).location}/$apartmentWaterInvoice');
+                },
                 label: const Text('Archived invoices'),
               ),
               FullWidthPairText(
@@ -156,7 +164,8 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
                       content: 'Not yet updated',
                     ),
               OutlinedButton(
-                  onPressed: hasConsumptionValue
+                  onPressed: hasConsumptionValue ||
+                          state.latestWaterConsumption == null
                       ? null
                       : () {
                           showDialog(
@@ -168,8 +177,6 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
                                       await cubit.addLatestConsumptionValue(
                                           double.parse(consumption));
                                       await _getInitialData();
-                                      if (!context.mounted) return;
-                                      Navigator.pop(context, true);
                                     },
                                   ));
                         },

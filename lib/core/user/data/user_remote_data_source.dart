@@ -34,7 +34,7 @@ class UserRemoteDataSource implements UserDataSource {
   @override
   Future<UserModel> updateNotificationToken(
       {required String notificationToken}) async {
-    final body = {'notification_tokens': notificationToken};
+    final body = {'notification_token': notificationToken};
     debugPrint(body.toString());
     final response =
         await client.patch('$_path/notification_token', data: body);
@@ -44,8 +44,7 @@ class UserRemoteDataSource implements UserDataSource {
   @override
   Future<bool> deleteNotificationToken(
       {required String notificationToken}) async {
-    final body = {'notification_tokens': notificationToken};
-    debugPrint(body.toString());
+    final body = {'notification_token': notificationToken};
     await client.delete('$_path/notification_token', data: body);
     return true;
   }

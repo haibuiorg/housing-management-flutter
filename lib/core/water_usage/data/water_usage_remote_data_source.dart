@@ -98,7 +98,6 @@ class WaterUsageRemoteDataSource implements WaterUsageDataSource {
         "housing_company_id": housingCompanyId,
       };
       final result = await client.get('$_path/latest', queryParameters: data);
-      print(result.data);
       return WaterConsumptionModel.fromJson(result.data);
     } catch (error) {
       throw ServerException(error: error);
@@ -235,8 +234,8 @@ class WaterUsageRemoteDataSource implements WaterUsageDataSource {
       "water_bill_id": waterBillId,
     };
     try {
-      final result = await client.post(_path, queryParameters: data);
-      return (result.data as Map<String, String>)['link'] ?? '';
+      final result = await client.get(_pathBillLink, queryParameters: data);
+      return (result.data as Map<String, dynamic>)['link'] ?? '';
     } catch (error) {
       throw ServerException(error: error);
     }

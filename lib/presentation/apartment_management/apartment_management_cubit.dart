@@ -35,16 +35,16 @@ class ApartmentManagementCubit extends Cubit<ApartmentManagementState> {
   updateApartmentHousecode(String value) async {
     emit(state.copyWith(
         pendingApartment: state.pendingApartment?.copyWith(houseCode: value)));
-    print(state.pendingApartment);
   }
 
-  Future<bool> deleteThisApartment() async {
+  Future<void> deleteThisApartment() async {
     final deleteApartmentResult = await _deleteApartment(
         GetApartmentSingleParams(
             housingCompanyId: state.apartment?.housingCompanyId ?? '',
             apartmentId: state.apartment?.id ?? ''));
-    return deleteApartmentResult is ResultSuccess<Apartment> &&
-        deleteApartmentResult.data.isDeleted;
+    emit(state.copyWith(
+        deleted: deleteApartmentResult is ResultSuccess<Apartment> &&
+            deleteApartmentResult.data.isDeleted));
   }
 
   Future<void> saveNewApartmentInfo() async {
@@ -54,9 +54,10 @@ class ApartmentManagementCubit extends Cubit<ApartmentManagementState> {
         housingCompanyId: state.apartment?.housingCompanyId ?? '',
         apartmentId: state.apartment?.id ?? ''));
     if (saveNewInfo is ResultSuccess<Apartment>) {
-      print(saveNewInfo.data);
       emit(state.copyWith(
-          apartment: saveNewInfo.data, pendingApartment: saveNewInfo.data));
+        apartment: saveNewInfo.data,
+        pendingApartment: saveNewInfo.data,
+      ));
     }
   }
 }

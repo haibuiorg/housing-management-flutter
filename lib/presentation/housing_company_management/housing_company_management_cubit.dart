@@ -25,13 +25,9 @@ class HousingCompanyManagementCubit
         GetHousingCompanyParams(housingCompanyId: housingCompanyId));
 
     if (companyResult is ResultSuccess<HousingCompany>) {
-      try {
-        emit(state.copyWith(
-            housingCompany: companyResult.data,
-            pendingUpdateHousingCompany: companyResult.data));
-      } catch (err) {
-        print(err);
-      }
+      emit(state.copyWith(
+          housingCompany: companyResult.data,
+          pendingUpdateHousingCompany: companyResult.data));
     }
     return state;
   }
@@ -71,10 +67,11 @@ class HousingCompanyManagementCubit
     emit(state.copyWith(pendingUpdateHousingCompany: pending));
   }
 
-  Future<bool> deleteThisHousingCompany() async {
+  Future<void> deleteThisHousingCompany() async {
     final deleteResult = await _deleteHousingCompany(GetHousingCompanyParams(
         housingCompanyId: state.housingCompany?.id ?? ''));
-    return deleteResult is ResultSuccess<HousingCompany>;
+    emit(state.copyWith(
+        housingCompanyDeleted: deleteResult is ResultSuccess<HousingCompany>));
   }
 
   Future<void> saveNewCompanyDetail() async {

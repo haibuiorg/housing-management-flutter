@@ -1,3 +1,4 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:priorli/core/utils/constant.dart';
@@ -11,16 +12,34 @@ import 'package:dynamic_color/dynamic_color.dart';
 import 'auth_cubit.dart';
 import 'core/utils/color_extension.dart';
 import 'go_router_navigation.dart';
+import 'notification_controller.dart';
 import 'service_locator.dart';
 
-class App extends StatelessWidget {
+class App extends StatefulWidget {
   const App({super.key});
+
+  @override
+  State<App> createState() => _AppState();
+}
+
+class _AppState extends State<App> {
   _defaultLightColorScheme(String? colorValue) => ColorScheme.fromSeed(
       seedColor: HexColor.fromHex(colorValue ?? appSeedColor));
 
   _defaultDarkColorScheme(String? colorValue) => ColorScheme.fromSeed(
       seedColor: HexColor.fromHex(colorValue ?? appSeedColor),
       brightness: Brightness.dark);
+
+  @override
+  void initState() {
+    super.initState();
+    _checkNotificationAction();
+  }
+
+  _checkNotificationAction() {
+    AwesomeNotifications().setListeners(
+        onActionReceivedMethod: NotificationController.onActionReceivedMethod);
+  }
 
   // This widget is the root of your application.
   @override

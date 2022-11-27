@@ -72,7 +72,8 @@ class WaterConsumptionManagementCubit
       newHistory.add(addNewWaterPriceResult.data);
       emit(state.copyWith(
           activeWaterPrice: addNewWaterPriceResult.data,
-          waterPriceHistory: newHistory));
+          waterPriceHistory: newHistory,
+          finishManagement: true));
     }
   }
 
@@ -83,7 +84,8 @@ class WaterConsumptionManagementCubit
             housingCompanyId: state.housingCompanyId ?? ''));
     if (newWaterBillPeriodResult is ResultSuccess<WaterConsumption>) {
       emit(state.copyWith(
-          latestWaterConsumption: newWaterBillPeriodResult.data));
+          latestWaterConsumption: newWaterBillPeriodResult.data,
+          finishManagement: true));
     }
   }
 }

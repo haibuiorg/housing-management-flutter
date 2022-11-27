@@ -1,6 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:json_annotation/json_annotation.dart';
-import 'package:priorli/core/water_usage/models/water_bill_model.dart';
 import 'package:priorli/core/water_usage/models/water_price_model.dart';
 
 class WaterPrice extends Equatable {

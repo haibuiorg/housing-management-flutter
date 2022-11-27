@@ -5,6 +5,7 @@ import 'package:priorli/presentation/home/main_screen.dart';
 import 'package:priorli/presentation/shared/custom_form_field.dart';
 import 'package:priorli/service_locator.dart';
 import 'package:flutter_emoji/flutter_emoji.dart';
+import '../housing_company_payment/housing_company_payment_screen.dart';
 import '../send_invitation/invite_tenant_screen.dart';
 import '../shared/setting_button.dart';
 import 'housing_company_management_cubit.dart';
@@ -63,8 +64,12 @@ class _HousingCompanyManagementScreenState
   Widget build(BuildContext context) {
     return BlocProvider<HousingCompanyManagementCubit>(
       create: (_) => cubit,
-      child: BlocBuilder<HousingCompanyManagementCubit,
-          HousingCompanyManagementState>(builder: (context, state) {
+      child: BlocConsumer<HousingCompanyManagementCubit,
+          HousingCompanyManagementState>(listener: (context, state) {
+        if (state.housingCompanyDeleted == true) {
+          Navigator.of(context).popUntil(ModalRoute.withName(mainPath));
+        }
+      }, builder: (context, state) {
         return Scaffold(
             appBar: AppBar(
               actions: [
@@ -136,11 +141,15 @@ class _HousingCompanyManagementScreenState
                                 'Country: ',
                                 style: Theme.of(context).textTheme.bodyLarge,
                               ),
-                              Text(
-                                EmojiParser().emojify(
-                                    ':flag-${state.housingCompany?.countryCode}:'),
-                                style: Theme.of(context).textTheme.displaySmall,
-                              )
+                              state.housingCompany?.countryCode != null
+                                  ? Text(
+                                      EmojiParser().emojify(
+                                          ':flag-${state.housingCompany?.countryCode}:'),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .displaySmall,
+                                    )
+                                  : const Text('No data')
                             ],
                           ),
                         ),
@@ -155,9 +164,19 @@ class _HousingCompanyManagementScreenState
                     ),
                   ),
                   SettingButton(
-                    onPressed: () {},
+                    onPressed: null,
                     label: Text(
                       'Edit location',
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                  ),
+                  SettingButton(
+                    onPressed: () {
+                      context.push(
+                          '${GoRouter.of(context).location}/$housingCompanyPaymentPath');
+                    },
+                    label: Text(
+                      'Payment and bank account detail',
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
                   ),
@@ -173,11 +192,7 @@ class _HousingCompanyManagementScreenState
                   ),
                   SettingButton(
                     onPressed: () async {
-                      final result = await cubit.deleteThisHousingCompany();
-                      if (result) {
-                        if (!context.mounted) return;
-                        context.go(mainPath);
-                      }
+                      await cubit.deleteThisHousingCompany();
                     },
                     label: Text(
                       'Delete this company',

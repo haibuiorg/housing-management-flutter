@@ -1,0 +1,189 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:priorli/presentation/announcement/announcement_cubit.dart';
+import 'package:priorli/presentation/announcement/announcement_state.dart';
+import 'package:priorli/service_locator.dart';
+
+import '../shared/announcement_item.dart';
+
+const announcementPath = 'announcements';
+
+class AnnouncementScreen extends StatefulWidget {
+  const AnnouncementScreen({super.key});
+
+  @override
+  State<AnnouncementScreen> createState() => _AnnouncementScreenState();
+}
+
+class _AnnouncementScreenState extends State<AnnouncementScreen> {
+  final cubit = serviceLocator<AnnouncementCubit>();
+  late final ScrollController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _getInitialData();
+    });
+    _controller = ScrollController()
+      ..addListener(() {
+        print(_controller.position.extentAfter);
+        if (_controller.position.extentAfter < 300) {
+          cubit.loadMore();
+        }
+      });
+  }
+
+  _getInitialData() async {
+    final housingCompanyId =
+        Uri.parse(GoRouter.of(context).location).pathSegments[1];
+    await cubit.init(housingCompanyId);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final housingCompanyId =
+        Uri.parse(GoRouter.of(context).location).pathSegments[1];
+    return BlocProvider<AnnouncementCubit>(
+      create: (_) => cubit,
+      child: Scaffold(
+        floatingActionButton: FloatingActionButton.small(
+          child: const Icon(Icons.add),
+          onPressed: () {
+            showModalBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                builder: (context) {
+                  return MakeAnnouncementDialog(
+                    onSubmit: (
+                        {required String body,
+                        required String subtitle,
+                        required String title}) {
+                      cubit.addAnnouncement(
+                          title: title, subtitle: subtitle, body: body);
+                      Navigator.pop(context, true);
+                    },
+                  );
+                });
+          },
+        ),
+        appBar: AppBar(
+          title: const Text('Announcement'),
+        ),
+        body: BlocBuilder<AnnouncementCubit, AnnouncementState>(
+            builder: (context, state) {
+          return RefreshIndicator(
+            onRefresh: () => cubit.init(housingCompanyId),
+            child: ListView.builder(
+                controller: _controller,
+                itemCount: state.announcementList?.length ?? 0,
+                itemBuilder: (context, index) {
+                  final announcement = state.announcementList?[index];
+                  return Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                    child: announcement != null
+                        ? AnnouncementItem(
+                            announcement: announcement,
+                            initialExpand: true,
+                          )
+                        : const SizedBox.shrink(),
+                  );
+                }),
+          );
+        }),
+      ),
+    );
+  }
+}
+
+class MakeAnnouncementDialog extends StatefulWidget {
+  const MakeAnnouncementDialog({super.key, required this.onSubmit});
+  final Function(
+      {required String title,
+      required String subtitle,
+      required String body}) onSubmit;
+
+  @override
+  State<MakeAnnouncementDialog> createState() => _MakeAnnouncementDialogState();
+}
+
+class _MakeAnnouncementDialogState extends State<MakeAnnouncementDialog> {
+  final _titleController = TextEditingController();
+  final _subtitleController = TextEditingController();
+  final _bodyController = TextEditingController();
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _subtitleController.dispose();
+    _bodyController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FractionallySizedBox(
+      heightFactor: 0.9,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(mainAxisSize: MainAxisSize.min, children: [
+          Align(
+            alignment: Alignment.centerRight,
+            child: IconButton(
+              icon: const Icon(Icons.close),
+              onPressed: () {
+                Navigator.pop(context, true);
+              },
+            ),
+          ),
+          Text(
+            'Make announcement to housing company',
+            style: Theme.of(context).textTheme.titleLarge,
+            textAlign: TextAlign.center,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8.0),
+            child: TextFormField(
+              controller: _titleController,
+              maxLines: 1,
+              autofocus: true,
+              decoration: const InputDecoration(
+                hintText: 'Title',
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 16.0),
+            child: TextFormField(
+              controller: _subtitleController,
+              maxLines: 1,
+              decoration: const InputDecoration(
+                hintText: 'Subtitle',
+              ),
+            ),
+          ),
+          TextFormField(
+            controller: _bodyController,
+            minLines: 5,
+            maxLines: 10,
+            keyboardType: TextInputType.multiline,
+            decoration: const InputDecoration(
+              hintText: 'Content',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(16.0)),
+              ),
+            ),
+          ),
+          OutlinedButton(
+              onPressed: () {
+                widget.onSubmit(
+                    body: _bodyController.text,
+                    subtitle: _subtitleController.text,
+                    title: _titleController.text);
+              },
+              child: const Text('Submit'))
+        ]),
+      ),
+    );
+  }
+}

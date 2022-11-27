@@ -1,1 +1,1 @@
-const appSeedColor = '#00B9CA';
+const appSeedColor = '#FFCB73';

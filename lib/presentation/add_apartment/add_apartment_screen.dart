@@ -24,7 +24,8 @@ class AddApartmentScreen extends StatelessWidget {
       child: BlocConsumer<AddApartmentCubit, AddApartmentState>(
           listener: ((context, state) {
         if (state.addedApartments != null) {
-          context.go('$housingCompanyScreenPath/$housingCompanyId');
+          Navigator.of(context)
+              .popUntil(ModalRoute.withName(housingCompanyScreenPath));
         }
       }), builder: (context, state) {
         return Scaffold(

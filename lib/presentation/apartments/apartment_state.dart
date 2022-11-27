@@ -9,19 +9,23 @@ class ApartmentState extends Equatable {
   final WaterConsumption? latestWaterConsumption;
   final List<WaterBill>? yearlyWaterBills;
   final HousingCompany? housingCompany;
+  final bool? newConsumptionAdded;
 
   const ApartmentState(
       {this.housingCompany,
       this.apartment,
       this.yearlyWaterBills,
-      this.latestWaterConsumption});
+      this.latestWaterConsumption,
+      this.newConsumptionAdded});
 
   ApartmentState copyWith(
           {Apartment? apartment,
           HousingCompany? housingCompany,
           List<WaterBill>? yearlyWaterBills,
+          bool? newConsumptionAdded,
           WaterConsumption? latestWaterConsumption}) =>
       ApartmentState(
+          newConsumptionAdded: newConsumptionAdded ?? this.newConsumptionAdded,
           apartment: apartment ?? this.apartment,
           housingCompany: housingCompany ?? this.housingCompany,
           latestWaterConsumption:
@@ -29,6 +33,11 @@ class ApartmentState extends Equatable {
           yearlyWaterBills: yearlyWaterBills ?? this.yearlyWaterBills);
 
   @override
-  List<Object?> get props =>
-      [apartment, yearlyWaterBills, latestWaterConsumption, housingCompany];
+  List<Object?> get props => [
+        apartment,
+        yearlyWaterBills,
+        latestWaterConsumption,
+        housingCompany,
+        newConsumptionAdded
+      ];
 }

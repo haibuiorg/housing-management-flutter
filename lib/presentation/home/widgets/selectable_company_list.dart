@@ -14,22 +14,20 @@ class SelectableCompanyList extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<MainCubit, MainState>(
       builder: (context, state) {
-        return Expanded(
-          child: RefreshIndicator(
-            onRefresh: () =>
-                BlocProvider.of<MainCubit>(context).getUserHousingCompanies(),
-            child: ListView.builder(
-              itemBuilder: ((context, index) {
-                return InkWell(
-                  onTap: () => GoRouter.of(context).push(
-                      '$housingCompanyScreenPath/${state.housingCompanies?[index].id}'),
-                  child: HousingCompanyTile(
-                    housingCompany: state.housingCompanies?[index],
-                  ),
-                );
-              }),
-              itemCount: state.housingCompanies?.length ?? 0,
-            ),
+        return RefreshIndicator(
+          onRefresh: () =>
+              BlocProvider.of<MainCubit>(context).getUserHousingCompanies(),
+          child: ListView.builder(
+            itemBuilder: ((context, index) {
+              return InkWell(
+                onTap: () => GoRouter.of(context).push(
+                    '$housingCompanyScreenPath/${state.housingCompanies?[index].id}'),
+                child: HousingCompanyTile(
+                  housingCompany: state.housingCompanies?[index],
+                ),
+              );
+            }),
+            itemCount: state.housingCompanies?.length ?? 0,
           ),
         );
       },

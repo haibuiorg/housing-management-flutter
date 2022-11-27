@@ -1,6 +1,9 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:priorli/core/base/result.dart';
 import 'package:priorli/core/base/usecase.dart';
+import 'package:priorli/core/user/usecases/delete_user_notification_token.dart';
+import 'package:priorli/core/user/usecases/update_user_notification_token.dart';
 
 import 'auth_state.dart';
 import 'core/auth/usecases/is_email_verified.dart';
@@ -16,6 +19,8 @@ class AuthCubit extends Cubit<AuthState> {
   final LogOut _logOut;
   final CreateUser _createUser;
   final IsEmailVerified _emailVerified;
+  final UpdateUserNotificationToken _updateUserNotificationToken;
+  final DeleteUserNotificationToken _deleteUserNotificationToken;
 
   AuthCubit(
     this._isLoggedIn,
@@ -23,8 +28,11 @@ class AuthCubit extends Cubit<AuthState> {
     this._logOut,
     this._createUser,
     this._emailVerified,
+    this._updateUserNotificationToken,
+    this._deleteUserNotificationToken,
   ) : super(const AuthState.initializing()) {
     _checkAppData();
+    _checkNotificationToken();
   }
 
   Future<bool> _checkLoggedInData() async {
@@ -53,18 +61,29 @@ class AuthCubit extends Cubit<AuthState> {
     final loginResult = await _loginEmailPassword(
         LoginEmailPasswordParams(email: email, password: password));
     final isLoggedIn = (loginResult is ResultSuccess<bool>) && loginResult.data;
+    if (isLoggedIn) {
+      _checkNotificationToken();
+    }
     emit(state.copyWith(
       isLoggedIn: isLoggedIn,
     ));
   }
 
   Future<void> logOut() async {
+    await deleteNotificationToken();
     final logOutResult = await _logOut(NoParams());
     final isLoggedIn =
         !((logOutResult is ResultSuccess<bool>) && logOutResult.data);
     emit(state.copyWith(
       isLoggedIn: isLoggedIn,
     ));
+  }
+
+  Future<void> deleteNotificationToken() async {
+    final token = await FirebaseMessaging.instance.getToken();
+    await _deleteUserNotificationToken(
+        UpdateUserNotificationTokenParams(notificationToken: token ?? ''));
+    await FirebaseMessaging.instance.deleteToken();
   }
 
   Future<void> createUser(
@@ -82,5 +101,18 @@ class AuthCubit extends Cubit<AuthState> {
     if (createUserResult is ResultSuccess<User>) {
       await logIn(email: createUserResult.data.email, password: password);
     }
+  }
+
+  Future<void> _checkNotificationToken() async {
+    String? token = await FirebaseMessaging.instance.getToken();
+    if (token == null || token.isEmpty) {
+      return;
+    }
+    _updateUserNotificationToken(
+        UpdateUserNotificationTokenParams(notificationToken: token));
+    FirebaseMessaging.instance.onTokenRefresh.listen((newToken) => {
+          _updateUserNotificationToken(
+              UpdateUserNotificationTokenParams(notificationToken: newToken))
+        });
   }
 }

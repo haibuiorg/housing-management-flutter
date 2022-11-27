@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:priorli/core/base/result.dart';
 import 'package:priorli/core/base/usecase.dart';
-import 'package:priorli/core/water_usage/entities/consumption_value.dart';
 import 'package:priorli/core/water_usage/entities/water_bill.dart';
 import 'package:priorli/core/water_usage/repos/water_usage_repository.dart';
 

@@ -20,6 +20,8 @@ class HousingCompany extends Equatable {
   final UI ui;
   final bool isDeleted;
   final double vat;
+  final String logoUrl;
+  final String coverImageUrl;
 
   const HousingCompany(
       {required this.id,
@@ -36,6 +38,8 @@ class HousingCompany extends Equatable {
       required this.currencyCode,
       required this.ui,
       required this.vat,
+      required this.logoUrl,
+      required this.coverImageUrl,
       required this.apartmentCount});
 
   factory HousingCompany.modelToEntity(
@@ -56,6 +60,8 @@ class HousingCompany extends Equatable {
           lat: housingCompanyModel.lat ?? 0.0,
           lng: housingCompanyModel.lng ?? 0.0,
           name: housingCompanyModel.name ?? '',
+          logoUrl: housingCompanyModel.logoUrl ?? '',
+          coverImageUrl: housingCompanyModel.coverImageUrl ?? '',
           vat: housingCompanyModel.vat ?? 0);
   HousingCompany copyWith(
           {String? streetAddress1,
@@ -69,6 +75,8 @@ class HousingCompany extends Equatable {
           bool? isDeleted,
           UI? ui,
           String? name,
+          String? logoUrl,
+          String? coverImageUrl,
           double? vat}) =>
       HousingCompany(
           id: id,
@@ -85,6 +93,8 @@ class HousingCompany extends Equatable {
           isDeleted: isDeleted ?? this.isDeleted,
           businessId: businessId ?? this.businessId,
           vat: vat ?? this.vat,
+          coverImageUrl: coverImageUrl ?? this.coverImageUrl,
+          logoUrl: logoUrl ?? this.logoUrl,
           apartmentCount: apartmentCount);
 
   @override

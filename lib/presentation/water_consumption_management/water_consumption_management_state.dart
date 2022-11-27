@@ -10,13 +10,15 @@ class WaterConsumptionManagementState extends Equatable {
   final WaterPrice? activeWaterPrice;
   final List<WaterPrice>? waterPriceHistory;
   final WaterConsumption? latestWaterConsumption;
+  final bool? finishManagement;
   const WaterConsumptionManagementState(
       {this.errorText,
       this.housingCompanyId,
       this.housingCompany,
       this.activeWaterPrice,
       this.latestWaterConsumption,
-      this.waterPriceHistory});
+      this.waterPriceHistory,
+      this.finishManagement});
 
   WaterConsumptionManagementState copyWith(
           {String? housingCompanyId,
@@ -24,8 +26,10 @@ class WaterConsumptionManagementState extends Equatable {
           HousingCompany? housingCompany,
           List<WaterPrice>? waterPriceHistory,
           WaterConsumption? latestWaterConsumption,
-          WaterPrice? activeWaterPrice}) =>
+          WaterPrice? activeWaterPrice,
+          bool? finishManagement}) =>
       WaterConsumptionManagementState(
+          finishManagement: finishManagement ?? this.finishManagement,
           latestWaterConsumption:
               latestWaterConsumption ?? this.latestWaterConsumption,
           housingCompanyId: housingCompanyId ?? this.housingCompanyId,
@@ -40,6 +44,7 @@ class WaterConsumptionManagementState extends Equatable {
         errorText,
         housingCompany,
         activeWaterPrice,
-        waterPriceHistory
+        waterPriceHistory,
+        finishManagement
       ];
 }

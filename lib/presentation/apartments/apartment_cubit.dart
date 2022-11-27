@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:priorli/core/apartment/entities/apartment.dart';
 import 'package:priorli/core/apartment/usecases/get_apartment.dart';
@@ -69,5 +67,7 @@ class ApartmentCubit extends Cubit<ApartmentState> {
             apartmentId: state.apartment?.id,
             consumption: consumption,
             buiding: state.apartment?.building ?? ''));
+    emit(state.copyWith(
+        newConsumptionAdded: addConsumptionResult is ResultSuccess<WaterBill>));
   }
 }

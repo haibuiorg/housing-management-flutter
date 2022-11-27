@@ -3,15 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:priorli/presentation/apartment_management/apartment_management_cubit.dart';
 import 'package:priorli/presentation/apartment_management/apartment_management_state.dart';
-import 'package:priorli/presentation/home/main_screen.dart';
 import 'package:priorli/presentation/shared/custom_form_field.dart';
 import 'package:priorli/service_locator.dart';
-import 'package:flutter_emoji/flutter_emoji.dart';
 import '../housing_company/housing_company_screen.dart';
-import '../send_invitation/invite_tenant_screen.dart';
 import '../shared/setting_button.dart';
-
-const housingCompanyManageScreenPath = 'manage';
 
 class ApartmentManagementScreen extends StatefulWidget {
   const ApartmentManagementScreen({super.key});
@@ -57,8 +52,13 @@ class _ApartmentManagementScreenState extends State<ApartmentManagementScreen> {
   Widget build(BuildContext context) {
     return BlocProvider<ApartmentManagementCubit>(
       create: (_) => cubit,
-      child: BlocBuilder<ApartmentManagementCubit, ApartmentManagementState>(
-          builder: (context, state) {
+      child: BlocConsumer<ApartmentManagementCubit, ApartmentManagementState>(
+          listener: (context, state) {
+        if (state.deleted == true) {
+          Navigator.of(context)
+              .popUntil(ModalRoute.withName(housingCompanyScreenPath));
+        }
+      }, builder: (context, state) {
         return Scaffold(
             appBar: AppBar(
               actions: [
@@ -71,7 +71,6 @@ class _ApartmentManagementScreenState extends State<ApartmentManagementScreen> {
                   child: const Text('Save'),
                 )
               ],
-              title: const Text('Manage'),
             ),
             body: Padding(
               padding: EdgeInsets.only(
@@ -92,7 +91,7 @@ class _ApartmentManagementScreenState extends State<ApartmentManagementScreen> {
                           keyboardType: TextInputType.name,
                         ),
                         CustomFormField(
-                          hintText: 'House code',
+                          hintText: 'Number',
                           textEditingController: _houseCode,
                           autofocus: false,
                           onChanged: (value) =>
@@ -104,12 +103,7 @@ class _ApartmentManagementScreenState extends State<ApartmentManagementScreen> {
                   ),
                   SettingButton(
                     onPressed: () async {
-                      final result = await cubit.deleteThisApartment();
-                      if (result) {
-                        if (!context.mounted) return;
-                        context.go(
-                            '$housingCompanyScreenPath/${state.apartment?.housingCompanyId}');
-                      }
+                      await cubit.deleteThisApartment();
                     },
                     label: Text(
                       'Delete this apartment',

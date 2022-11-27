@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 class SettingButton extends StatelessWidget {
   final Function()? onPressed;
   final Widget? label;
-  const SettingButton({super.key, this.onPressed, this.label});
+  final Widget? icon;
+  const SettingButton({super.key, this.onPressed, this.label, this.icon});
 
   @override
   Widget build(BuildContext context) {
@@ -17,12 +18,11 @@ class SettingButton extends StatelessWidget {
               border: Border(
                   bottom: BorderSide(
                       color: Theme.of(context).colorScheme.onSurface))),
-          child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                label ?? const SizedBox.shrink(),
-                const Icon(Icons.chevron_right_outlined)
-              ]),
+          child:
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            label ?? const SizedBox.shrink(),
+            icon ?? const Icon(Icons.chevron_right_outlined)
+          ]),
         ),
       ),
     );

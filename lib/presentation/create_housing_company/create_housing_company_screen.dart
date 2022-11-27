@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:priorli/presentation/create_housing_company/create_housing_company_cubit.dart';
 import 'package:priorli/presentation/create_housing_company/create_housing_company_state.dart';
+import 'package:priorli/presentation/home/main_screen.dart';
 import 'package:priorli/presentation/shared/custom_form_field.dart';
 import 'package:priorli/service_locator.dart';
+
+import '../housing_company/housing_company_screen.dart';
 
 const createCompanyPath = '/create_company';
 
@@ -16,8 +20,15 @@ class CreateHousingCompanyScreen extends StatelessWidget {
       body: BlocProvider<CreateHousingCompanyCubit>(
         create: (_) => serviceLocator<CreateHousingCompanyCubit>(),
         child:
-            BlocBuilder<CreateHousingCompanyCubit, CreateHousingCompanyState>(
-                builder: (context, state) {
+            BlocConsumer<CreateHousingCompanyCubit, CreateHousingCompanyState>(
+                listener: (context, state) {
+          if (state.newCompanyId != null &&
+              state.newCompanyId?.isNotEmpty == true) {
+            Navigator.of(context).popUntil(ModalRoute.withName(mainPath));
+            GoRouter.of(context)
+                .push('$housingCompanyScreenPath/${state.newCompanyId}');
+          }
+        }, builder: (context, state) {
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child:

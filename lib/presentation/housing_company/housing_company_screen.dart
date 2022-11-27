@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:priorli/core/apartment/entities/apartment.dart';
 import 'package:priorli/core/water_usage/entities/water_consumption.dart';
 import 'package:priorli/presentation/add_apartment/add_apartment_screen.dart';
 import 'package:priorli/presentation/housing_company/housing_company_cubit.dart';
@@ -9,8 +10,10 @@ import 'package:priorli/service_locator.dart';
 import 'package:priorli/setting_cubit.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
+import '../announcement/announcement_screen.dart';
 import '../apartments/apartment_screen.dart';
 import '../housing_company_management/housing_company_management_screen.dart';
+import '../shared/announcement_item.dart';
 import '../water_consumption_management/water_consumption_management_screen.dart';
 
 const housingCompanyScreenPath = '/housing_company';
@@ -28,7 +31,6 @@ class _HousingCompanyScreenState extends State<HousingCompanyScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print(GoRouter.of(context).location);
     cubit.init(widget.housingCompanyId);
     return BlocProvider<HousingCompanyCubit>(
       create: (_) => cubit,
@@ -60,36 +62,60 @@ class _HousingCompanyScreenState extends State<HousingCompanyScreen> {
                     children: [
                       Text('Announcement',
                           style: Theme.of(context).textTheme.displaySmall),
-                      IconButton(
-                        onPressed: () {},
-                        icon: const Icon(Icons.post_add),
-                      )
                     ],
+                  ),
+                ),
+              ),
+              SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                (BuildContext context, int index) {
+                  final announcement = state.announcementList?[index];
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: announcement != null
+                        ? AnnouncementItem(
+                            announcement: announcement,
+                          )
+                        : const SizedBox.shrink(),
+                  );
+                },
+                childCount: (state.announcementList?.length ?? 0),
+              )),
+              SliverToBoxAdapter(
+                  child: TextButton(
+                      onPressed: () {
+                        context.push(
+                            '${GoRouter.of(context).location}/$announcementPath');
+                      },
+                      child: const Text('More'))),
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: FittedBox(
+                    fit: BoxFit.fitWidth,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(right: 16.0),
+                          child: Text('Water consumption',
+                              style: Theme.of(context).textTheme.displaySmall),
+                        ),
+                        OutlinedButton.icon(
+                            icon: const Icon(Icons.water_damage_outlined),
+                            onPressed: () {
+                              context.push(
+                                  '${GoRouter.of(context).location}/$waterConsumptionManagementScreenPath');
+                            },
+                            label: const Text('Detail'))
+                      ],
+                    ),
                   ),
                 ),
               ),
               SliverToBoxAdapter(
                 child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('Water consumption',
-                          style: Theme.of(context).textTheme.displaySmall),
-                      IconButton(
-                        onPressed: () {
-                          context.push(
-                              '${GoRouter.of(context).location}/$waterConsumptionManagementScreenPath');
-                        },
-                        icon: const Icon(Icons.more_horiz_rounded),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.fromLTRB(16.0, 8, 16, 8),
                   child: SfCartesianChart(
                       // Initialize category axis
                       primaryXAxis: CategoryAxis(),
@@ -135,12 +161,13 @@ class _HousingCompanyScreenState extends State<HousingCompanyScreen> {
                     children: [
                       Text('Apartments',
                           style: Theme.of(context).textTheme.displaySmall),
-                      IconButton(
+                      OutlinedButton.icon(
                         onPressed: () {
                           context.push(
                               '${GoRouter.of(context).location}/$addApartmentPath');
                         },
                         icon: const Icon(Icons.add_home),
+                        label: const Text('Add'),
                       )
                     ],
                   ),
@@ -154,24 +181,33 @@ class _HousingCompanyScreenState extends State<HousingCompanyScreen> {
                     childAspectRatio: 1.0,
                   ),
                   delegate: SliverChildBuilderDelegate((context, index) {
-                    return GestureDetector(
-                      onTap: () {
-                        context.push(
-                            '${GoRouter.of(context).location}/$apartmentScreenPath/${state.apartmentList?[index].id}');
-                      },
-                      child: Container(
-                        margin: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                            color: Theme.of(context).cardColor,
-                            borderRadius: BorderRadius.circular(8)),
-                        child: Center(
-                            child: Text(
-                                state.apartmentList?[index].building ?? '')),
-                      ),
-                    );
-                  }, childCount: state.apartmentList?.length)),
+                    return InkWell(
+                        onTap: () {
+                          context.push(
+                              '${GoRouter.of(context).location}/$apartmentScreenPath/${state.apartmentList?[index].id}');
+                        },
+                        child: ApartmentTile(
+                          apartment: state.apartmentList![index],
+                        ));
+                  }, childCount: state.apartmentList?.length ?? 0)),
             ]));
       }),
+    );
+  }
+}
+
+class ApartmentTile extends StatefulWidget {
+  const ApartmentTile({super.key, required this.apartment});
+  final Apartment apartment;
+  @override
+  State<ApartmentTile> createState() => _ApartmentTileState();
+}
+
+class _ApartmentTileState extends State<ApartmentTile> {
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Center(child: Text(widget.apartment.building)),
     );
   }
 }

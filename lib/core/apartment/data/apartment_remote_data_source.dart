@@ -24,7 +24,6 @@ class ApartmentRemoteDataSource implements ApartmentDataSource {
         data["house_codes"] = houseCodes;
       }
       final result = await client.post(_path, data: data);
-      print(result);
       return (result.data as List<dynamic>)
           .map((json) => ApartmentModel.fromJson(json))
           .toList();

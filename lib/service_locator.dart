@@ -1,15 +1,43 @@
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
+import 'package:priorli/core/announcement/data/announcement_data_source.dart';
+import 'package:priorli/core/announcement/data/announcement_remote_data_source.dart';
+import 'package:priorli/core/announcement/repos/announcement_repository.dart';
+import 'package:priorli/core/announcement/repos/announcement_repository_impl.dart';
+import 'package:priorli/core/announcement/usecases/edit_announcement.dart';
+import 'package:priorli/core/announcement/usecases/get_announcement.dart';
+import 'package:priorli/core/announcement/usecases/get_announcement_list.dart';
+import 'package:priorli/core/announcement/usecases/make_annoucement.dart';
 import 'package:priorli/core/apartment/usecases/delete_apartment.dart';
 import 'package:priorli/core/housing/usecases/delete_housing_company.dart';
+import 'package:priorli/core/notification/data/notification_message_data_source.dart';
+import 'package:priorli/core/notification/data/notification_message_remote_data_source.dart';
+import 'package:priorli/core/notification/repos/notification_message_repository.dart';
+import 'package:priorli/core/notification/repos/notification_message_repository_impl.dart';
+import 'package:priorli/core/notification/usescases/create_notification_channel.dart';
+import 'package:priorli/core/notification/usescases/delete_notification_channel.dart';
+import 'package:priorli/core/notification/usescases/get_notification_channels.dart';
+import 'package:priorli/core/notification/usescases/get_notification_messages.dart';
+import 'package:priorli/core/notification/usescases/set_notification_message_seen.dart';
+import 'package:priorli/core/notification/usescases/subscribe_notification_channels.dart';
+import 'package:priorli/core/payment/data/payment_data_source.dart';
+import 'package:priorli/core/payment/data/payment_remote_data_source.dart';
+import 'package:priorli/core/payment/repos/payment_repository.dart';
+import 'package:priorli/core/payment/repos/payment_repository_impl.dart';
+import 'package:priorli/core/payment/usecases/get_all_bank_accounts.dart';
+import 'package:priorli/core/payment/usecases/remove_bank_account.dart';
 import 'package:priorli/core/water_usage/usecases/get_water_bill_link.dart';
 import 'package:priorli/core/water_usage/usecases/get_yearly_water_consumption.dart';
 import 'package:priorli/presentation/add_apartment/add_apart_cubit.dart';
+import 'package:priorli/presentation/announcement/announcement_cubit.dart';
+import 'package:priorli/presentation/apartment_invoice/apartment_water_invoice_cubit.dart';
 import 'package:priorli/presentation/apartments/apartment_cubit.dart';
 import 'package:priorli/presentation/create_housing_company/create_housing_company_cubit.dart';
 import 'package:priorli/presentation/home/main_cubit.dart';
 import 'package:priorli/presentation/housing_company/housing_company_cubit.dart';
+import 'package:priorli/presentation/housing_company_payment/housing_company_payment_cubit.dart';
+import 'package:priorli/presentation/notification_center/notification_center_cubit.dart';
 
 import 'auth_cubit.dart';
 import 'core/apartment/data/apartment_data_source.dart';
@@ -40,6 +68,7 @@ import 'core/housing/usecases/create_housing_company.dart';
 import 'core/housing/usecases/get_housing_companies.dart';
 import 'core/housing/usecases/get_housing_company.dart';
 import 'core/housing/usecases/update_housing_company_info.dart';
+import 'core/payment/usecases/add_bank_account.dart';
 import 'core/settings/data/setting_data_source.dart';
 import 'core/settings/data/setting_local_data_source.dart';
 import 'core/settings/repo/setting_repository.dart';
@@ -86,14 +115,20 @@ Future<void> init() async {
         serviceLocator(),
       ));
 
-  serviceLocator.registerFactory(() => AuthCubit(serviceLocator(),
-      serviceLocator(), serviceLocator(), serviceLocator(), serviceLocator()));
+  serviceLocator.registerFactory(() => AuthCubit(
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator()));
   serviceLocator.registerFactory(
       () => MainCubit(serviceLocator(), serviceLocator(), serviceLocator()));
   serviceLocator
       .registerFactory(() => CreateHousingCompanyCubit(serviceLocator()));
   serviceLocator.registerFactory(() => HousingCompanyCubit(
-      serviceLocator(), serviceLocator(), serviceLocator()));
+      serviceLocator(), serviceLocator(), serviceLocator(), serviceLocator()));
   serviceLocator.registerFactory(
       () => AddApartmentCubit(serviceLocator(), serviceLocator()));
   serviceLocator.registerFactory(() =>
@@ -111,7 +146,45 @@ Future<void> init() async {
       serviceLocator(), serviceLocator(), serviceLocator(), serviceLocator()));
   serviceLocator.registerFactory(() => ApartmentManagementCubit(
       serviceLocator(), serviceLocator(), serviceLocator()));
+  serviceLocator.registerFactory(() => ApartmentWaterInvoiceCubit(
+      serviceLocator(), serviceLocator(), serviceLocator()));
+  serviceLocator.registerFactory(() => HousingCompanyPaymentCubit(
+      serviceLocator(), serviceLocator(), serviceLocator()));
+  serviceLocator
+      .registerFactory(() => NotificationCenterCubit(serviceLocator()));
+  serviceLocator.registerFactory(() => AnnouncementCubit(
+      serviceLocator(), serviceLocator(), serviceLocator(), serviceLocator()));
+
   /** usecases */
+
+  // Announcement
+  serviceLocator.registerLazySingleton<EditAnnouncement>(
+      () => EditAnnouncement(announcementRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<GetAnnouncementList>(
+      () => GetAnnouncementList(announcementRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<GetAnnouncement>(
+      () => GetAnnouncement(announcementRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<MakeAnnouncement>(
+      () => MakeAnnouncement(announcementRepository: serviceLocator()));
+
+  // Notification messages
+  serviceLocator.registerLazySingleton<CreateNotificationChannel>(() =>
+      CreateNotificationChannel(
+          notificationMessageRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<DeleteNotificationChannel>(() =>
+      DeleteNotificationChannel(
+          notificationMessageRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<GetNotificationChannel>(() =>
+      GetNotificationChannel(notificationMessageRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<GetNotificationMessages>(() =>
+      GetNotificationMessages(notificationMessageRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<SetNotificationMessageSeen>(() =>
+      SetNotificationMessageSeen(
+          notificationMessageRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<SubscribeNotificationChannels>(() =>
+      SubscribeNotificationChannels(
+          notificationMessageRepository: serviceLocator()));
+
   // Auth
   serviceLocator.registerLazySingleton<IsAuthenticated>(
       () => IsAuthenticated(authenticationRepository: serviceLocator()));
@@ -158,6 +231,14 @@ Future<void> init() async {
       UpdateHousingCompanyInfo(housingCompanyRepository: serviceLocator()));
   serviceLocator.registerLazySingleton<DeleteHousingCompany>(
       () => DeleteHousingCompany(housingCompanyRepository: serviceLocator()));
+
+  // payment
+  serviceLocator.registerLazySingleton<AddBankAccount>(
+      () => AddBankAccount(paymentRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<RemoveBankAccount>(
+      () => RemoveBankAccount(paymentRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<GetAllBankAccounts>(
+      () => GetAllBankAccounts(paymentRepository: serviceLocator()));
 
   // apartment
   serviceLocator.registerLazySingleton<AddApartments>(
@@ -214,6 +295,13 @@ Future<void> init() async {
       () => ApartmentRepositoryImpl(apartmentDataSource: serviceLocator()));
   serviceLocator.registerLazySingleton<WaterUsageRepository>(
       () => WaterUsageRepositoryImpl(waterUsageDataSource: serviceLocator()));
+  serviceLocator.registerLazySingleton<PaymentRepository>(
+      () => PaymentRepositoryImpl(paymentRemoteDataSource: serviceLocator()));
+  serviceLocator.registerLazySingleton<AnnouncementRepository>(() =>
+      AnnouncementRepositoryImpl(announcementDataSource: serviceLocator()));
+  serviceLocator.registerLazySingleton<NotificationMessageRepository>(() =>
+      NotificationMessageRepositoryImpl(
+          notificationMessageDataSource: serviceLocator()));
 
   /** datasource*/
   serviceLocator.registerLazySingleton<AuthenticationDataSource>(() =>
@@ -230,6 +318,12 @@ Future<void> init() async {
       () => ApartmentRemoteDataSource(serviceLocator<Dio>()));
   serviceLocator.registerLazySingleton<WaterUsageDataSource>(
       () => WaterUsageRemoteDataSource(client: serviceLocator<Dio>()));
+  serviceLocator.registerLazySingleton<PaymentDataSource>(
+      () => PaymentRemoteDataSource(client: serviceLocator()));
+  serviceLocator.registerLazySingleton<AnnouncementDataSource>(
+      () => AnnouncementRemoteDataSource(client: serviceLocator()));
+  serviceLocator.registerLazySingleton<NotificationMessageDataSource>(
+      () => NotificationMessageRemoteDataSource(client: serviceLocator()));
 
   /** network */
   serviceLocator.registerLazySingleton<Dio>(
