@@ -13,7 +13,7 @@ class SettingCubit extends Cubit<SettingState> {
   final SaveSetting _saveSetting;
 
   SettingCubit(this._getSetting, this._saveSetting)
-      : super(const SettingState.initializing()) {
+      : super(SettingState.initializing()) {
     _checkAppData();
   }
 
@@ -21,9 +21,16 @@ class SettingCubit extends Cubit<SettingState> {
     final isDarkThemeResult =
         await _getSetting(const GetSettingParams(key: darkModeKey));
     final isDarkTheme =
-        (isDarkThemeResult is ResultSuccess<bool>) && isDarkThemeResult.data;
+        (isDarkThemeResult is ResultSuccess) && isDarkThemeResult.data;
+    final languageCodeResult =
+        await _getSetting(const GetSettingParams(key: languageCode));
+    final languageCodeData =
+        (languageCodeResult is ResultSuccess && languageCodeResult.data != null)
+            ? languageCodeResult.data.toString()
+            : 'fi';
     emit(state.copyWith(
-        brightness: isDarkTheme ? Brightness.dark : Brightness.light));
+        brightness: isDarkTheme ? Brightness.dark : Brightness.light,
+        languageCode: languageCodeData));
   }
 
   Future<void> switchTheme(bool isDark) async {
@@ -38,5 +45,15 @@ class SettingCubit extends Cubit<SettingState> {
 
   Future<void> updateUIFromCompany(UI? ui) async {
     emit(state.copyWith(ui: ui));
+  }
+
+  void switchLanguage(String? value) async {
+    final settingResult =
+        await _saveSetting(SaveSettingParams(key: languageCode, value: value));
+    final saveSuccess =
+        (settingResult is ResultSuccess<bool>) && settingResult.data;
+    if (saveSuccess) {
+      emit(state.copyWith(languageCode: value));
+    }
   }
 }

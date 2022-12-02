@@ -60,7 +60,7 @@ class AnnouncementRemoteDataSource implements AnnouncementDataSource {
       final Map<String, dynamic> data = {
         "housing_company_id": housingCompanyId,
         "total": total,
-        "last_announcement_tine": lastAnnouncementTime
+        "last_announcement_time": lastAnnouncementTime
       };
       final result = await client.get(_path, queryParameters: data);
       return (result.data as List<dynamic>)

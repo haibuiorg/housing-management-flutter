@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:bloc/bloc.dart';
 import 'package:priorli/core/announcement/entities/announcement.dart';
 import 'package:priorli/core/announcement/usecases/edit_announcement.dart';
@@ -62,9 +60,9 @@ class AnnouncementCubit extends Cubit<AnnouncementState> {
     if (getAnnouncementListResult is ResultSuccess<List<Announcement>>) {
       final List<Announcement> currentList =
           List.from(state.announcementList ?? []);
-      currentList.insertAll(0, getAnnouncementListResult.data);
+      currentList.addAll(getAnnouncementListResult.data);
       emit(state.copyWith(
-        announcementList: getAnnouncementListResult.data,
+        announcementList: currentList,
       ));
     }
   }

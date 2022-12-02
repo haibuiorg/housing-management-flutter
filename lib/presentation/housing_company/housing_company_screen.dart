@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:priorli/core/apartment/entities/apartment.dart';
@@ -6,6 +7,7 @@ import 'package:priorli/core/water_usage/entities/water_consumption.dart';
 import 'package:priorli/presentation/add_apartment/add_apartment_screen.dart';
 import 'package:priorli/presentation/housing_company/housing_company_cubit.dart';
 import 'package:priorli/presentation/housing_company/housing_company_state.dart';
+import 'package:priorli/presentation/shared/custom_form_field.dart';
 import 'package:priorli/service_locator.dart';
 import 'package:priorli/setting_cubit.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -13,10 +15,12 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import '../announcement/announcement_screen.dart';
 import '../apartments/apartment_screen.dart';
 import '../housing_company_management/housing_company_management_screen.dart';
-import '../shared/announcement_item.dart';
+import '../announcement/announcement_item.dart';
+import '../message/message_screen.dart';
+import '../shared/conversation_item.dart';
 import '../water_consumption_management/water_consumption_management_screen.dart';
 
-const housingCompanyScreenPath = '/housing_company';
+const housingCompanyScreenPath = 'housing_company';
 
 class HousingCompanyScreen extends StatefulWidget {
   const HousingCompanyScreen({super.key, required this.housingCompanyId});
@@ -27,7 +31,32 @@ class HousingCompanyScreen extends StatefulWidget {
 }
 
 class _HousingCompanyScreenState extends State<HousingCompanyScreen> {
-  final cubit = serviceLocator<HousingCompanyCubit>();
+  late final HousingCompanyCubit cubit;
+
+  @override
+  void initState() {
+    cubit = serviceLocator<HousingCompanyCubit>();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    cubit.close();
+    super.dispose();
+  }
+
+  _showNewChannelCreationDialog() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return CreateNewChannelDialog(
+            onConfirmed: (channelName) {
+              cubit.startNewChannel(channelName);
+              Navigator.pop(context, true);
+            },
+          );
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,13 +86,8 @@ class _HousingCompanyScreenState extends State<HousingCompanyScreen> {
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('Announcement',
-                          style: Theme.of(context).textTheme.displaySmall),
-                    ],
-                  ),
+                  child: Text('Announcement',
+                      style: Theme.of(context).textTheme.displaySmall),
                 ),
               ),
               SliverList(
@@ -91,25 +115,52 @@ class _HousingCompanyScreenState extends State<HousingCompanyScreen> {
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
-                  child: FittedBox(
-                    fit: BoxFit.fitWidth,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(right: 16.0),
-                          child: Text('Water consumption',
-                              style: Theme.of(context).textTheme.displaySmall),
-                        ),
-                        OutlinedButton.icon(
-                            icon: const Icon(Icons.water_damage_outlined),
-                            onPressed: () {
-                              context.push(
-                                  '${GoRouter.of(context).location}/$waterConsumptionManagementScreenPath');
-                            },
-                            label: const Text('Detail'))
-                      ],
-                    ),
+                  child: Text('Company message channels',
+                      style: Theme.of(context).textTheme.displaySmall),
+                ),
+              ),
+              SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                (BuildContext context, int index) {
+                  final conversation = state.conversationList?[index];
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: conversation != null
+                        ? ConversationItem(
+                            onPressed: () => GoRouter.of(context).push(
+                                '$messagePath/${conversation.type}/${conversation.channelId}/${conversation.id}'),
+                            conversation: conversation,
+                          )
+                        : const SizedBox.shrink(),
+                  );
+                },
+                childCount: state.conversationList?.length ?? 0,
+              )),
+              SliverToBoxAdapter(
+                  child: TextButton(
+                      onPressed: () {
+                        _showNewChannelCreationDialog();
+                      },
+                      child: const Text('Start new channels'))),
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      FittedBox(
+                        fit: BoxFit.cover,
+                        child: Text('Water consumption',
+                            style: Theme.of(context).textTheme.titleLarge),
+                      ),
+                      OutlinedButton.icon(
+                          icon: const Icon(Icons.water_damage_outlined),
+                          onPressed: () {
+                            context.push(
+                                '${GoRouter.of(context).location}/$waterConsumptionManagementScreenPath');
+                          },
+                          label: const Text('Detail'))
+                    ],
                   ),
                 ),
               ),
@@ -192,6 +243,48 @@ class _HousingCompanyScreenState extends State<HousingCompanyScreen> {
                   }, childCount: state.apartmentList?.length ?? 0)),
             ]));
       }),
+    );
+  }
+}
+
+class CreateNewChannelDialog extends StatefulWidget {
+  const CreateNewChannelDialog({super.key, required this.onConfirmed});
+  final Function(String channelName) onConfirmed;
+
+  @override
+  State<CreateNewChannelDialog> createState() => _CreateNewChannelDialogState();
+}
+
+class _CreateNewChannelDialogState extends State<CreateNewChannelDialog> {
+  late final TextEditingController _channelName;
+
+  @override
+  void initState() {
+    _channelName = TextEditingController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _channelName.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Create new channel'),
+      content: CustomFormField(
+        textEditingController: _channelName,
+        hintText: 'Channel name',
+      ),
+      actions: [
+        OutlinedButton(
+            onPressed: () {
+              widget.onConfirmed(_channelName.text);
+            },
+            child: const Text('Confirm'))
+      ],
     );
   }
 }

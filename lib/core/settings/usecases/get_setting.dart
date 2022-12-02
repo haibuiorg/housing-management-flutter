@@ -4,12 +4,12 @@ import '../../base/result.dart';
 import '../../base/usecase.dart';
 import '../repo/setting_repository.dart';
 
-class GetSetting extends UseCase<bool, GetSettingParams> {
+class GetSetting extends UseCase<Object?, GetSettingParams> {
   final SettingRepository settingRepository;
 
   GetSetting({required this.settingRepository});
   @override
-  Future<Result<bool>> call(GetSettingParams params) {
+  Future<Result<Object?>> call(GetSettingParams params) {
     return settingRepository.getSetting(
       params.key,
     );

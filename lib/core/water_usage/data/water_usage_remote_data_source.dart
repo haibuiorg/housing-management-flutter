@@ -130,7 +130,7 @@ class WaterUsageRemoteDataSource implements WaterUsageDataSource {
       };
       final result =
           await client.get('$_pathBill/$year', queryParameters: data);
-      print(result.data);
+
       return (result.data as List<dynamic>)
           .map((json) => WaterBillModel.fromJson(json))
           .toList();

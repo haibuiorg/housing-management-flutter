@@ -20,7 +20,7 @@ class HousingCompanyRemoteDataSource implements HousingCompanyDataSource {
       final result = await client.post(_path, data: data);
       return HousingCompanyModel.fromJson(result.data as Map<String, dynamic>);
     } catch (error) {
-      throw ServerException();
+      throw ServerException(error: error);
     }
   }
 

@@ -1,12 +1,12 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:priorli/core/utils/constant.dart';
+import 'package:priorli/core/utils/constants.dart';
 import 'package:priorli/setting_cubit.dart';
 import 'package:priorli/setting_state.dart';
 import 'package:priorli/auth_state.dart';
 import 'package:priorli/presentation/login/login_screen.dart';
-import 'package:priorli/presentation/home/main_screen.dart';
+import 'package:priorli/presentation/main/main_screen.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 
 import 'auth_cubit.dart';
@@ -67,12 +67,14 @@ class _AppState extends State<App> {
               routerConfig: appRouter,
               theme: ThemeData(
                 colorScheme: lightColorScheme ??
-                    _defaultLightColorScheme(state.ui.seedColor),
+                    _defaultLightColorScheme(
+                        state.ui?.seedColor ?? appSeedColor),
                 useMaterial3: true,
               ),
               darkTheme: ThemeData(
                 colorScheme: darkColorScheme ??
-                    _defaultDarkColorScheme(state.ui.seedColor),
+                    _defaultDarkColorScheme(
+                        state.ui?.seedColor ?? appSeedColor),
                 useMaterial3: true,
               ),
               themeMode: state.brightness == Brightness.dark

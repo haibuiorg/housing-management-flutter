@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
@@ -11,6 +12,18 @@ import 'package:priorli/core/announcement/usecases/get_announcement_list.dart';
 import 'package:priorli/core/announcement/usecases/make_annoucement.dart';
 import 'package:priorli/core/apartment/usecases/delete_apartment.dart';
 import 'package:priorli/core/housing/usecases/delete_housing_company.dart';
+import 'package:priorli/core/messaging/data/messaging_remote_data_source.dart';
+import 'package:priorli/core/messaging/repos/messaging_repository.dart';
+import 'package:priorli/core/messaging/repos/messaging_repository_impl.dart';
+import 'package:priorli/core/messaging/usecases/get_community_messages.dart';
+import 'package:priorli/core/messaging/usecases/get_company_conversation_lists.dart';
+import 'package:priorli/core/messaging/usecases/get_conversation_detail.dart';
+import 'package:priorli/core/messaging/usecases/get_conversation_lists.dart';
+import 'package:priorli/core/messaging/usecases/get_support_messages.dart';
+import 'package:priorli/core/messaging/usecases/join_conversation.dart';
+import 'package:priorli/core/messaging/usecases/send_message.dart';
+import 'package:priorli/core/messaging/usecases/set_conversation_seen.dart';
+import 'package:priorli/core/messaging/usecases/start_conversation.dart';
 import 'package:priorli/core/notification/data/notification_message_data_source.dart';
 import 'package:priorli/core/notification/data/notification_message_remote_data_source.dart';
 import 'package:priorli/core/notification/repos/notification_message_repository.dart';
@@ -29,15 +42,19 @@ import 'package:priorli/core/payment/usecases/get_all_bank_accounts.dart';
 import 'package:priorli/core/payment/usecases/remove_bank_account.dart';
 import 'package:priorli/core/water_usage/usecases/get_water_bill_link.dart';
 import 'package:priorli/core/water_usage/usecases/get_yearly_water_consumption.dart';
+import 'package:priorli/presentation/account/account_cubit.dart';
 import 'package:priorli/presentation/add_apartment/add_apart_cubit.dart';
 import 'package:priorli/presentation/announcement/announcement_cubit.dart';
 import 'package:priorli/presentation/apartment_invoice/apartment_water_invoice_cubit.dart';
 import 'package:priorli/presentation/apartments/apartment_cubit.dart';
+import 'package:priorli/presentation/conversation_list/conversation_list_cubit.dart';
 import 'package:priorli/presentation/create_housing_company/create_housing_company_cubit.dart';
-import 'package:priorli/presentation/home/main_cubit.dart';
+import 'package:priorli/presentation/home/home_cubit.dart';
 import 'package:priorli/presentation/housing_company/housing_company_cubit.dart';
 import 'package:priorli/presentation/housing_company_payment/housing_company_payment_cubit.dart';
+import 'package:priorli/presentation/message/message_cubit.dart';
 import 'package:priorli/presentation/notification_center/notification_center_cubit.dart';
+import 'package:priorli/presentation/profile/profile_screen_cubit.dart';
 
 import 'auth_cubit.dart';
 import 'core/apartment/data/apartment_data_source.dart';
@@ -68,6 +85,7 @@ import 'core/housing/usecases/create_housing_company.dart';
 import 'core/housing/usecases/get_housing_companies.dart';
 import 'core/housing/usecases/get_housing_company.dart';
 import 'core/housing/usecases/update_housing_company_info.dart';
+import 'core/messaging/data/messaging_data_source.dart';
 import 'core/payment/usecases/add_bank_account.dart';
 import 'core/settings/data/setting_data_source.dart';
 import 'core/settings/data/setting_local_data_source.dart';
@@ -122,13 +140,20 @@ Future<void> init() async {
       serviceLocator(),
       serviceLocator(),
       serviceLocator(),
+      serviceLocator(),
       serviceLocator()));
   serviceLocator.registerFactory(
-      () => MainCubit(serviceLocator(), serviceLocator(), serviceLocator()));
+      () => HomeCubit(serviceLocator(), serviceLocator(), serviceLocator()));
   serviceLocator
       .registerFactory(() => CreateHousingCompanyCubit(serviceLocator()));
   serviceLocator.registerFactory(() => HousingCompanyCubit(
-      serviceLocator(), serviceLocator(), serviceLocator(), serviceLocator()));
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator()));
   serviceLocator.registerFactory(
       () => AddApartmentCubit(serviceLocator(), serviceLocator()));
   serviceLocator.registerFactory(() =>
@@ -154,6 +179,21 @@ Future<void> init() async {
       .registerFactory(() => NotificationCenterCubit(serviceLocator()));
   serviceLocator.registerFactory(() => AnnouncementCubit(
       serviceLocator(), serviceLocator(), serviceLocator(), serviceLocator()));
+  serviceLocator.registerFactory(() => MessageCubit(
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator()));
+  serviceLocator.registerFactory(
+      () => ConversationListCubit(serviceLocator(), serviceLocator()));
+  serviceLocator.registerFactory(() => ProfileScreenCubit(
+        serviceLocator(),
+      ));
+  serviceLocator
+      .registerFactory(() => AccountCubit(serviceLocator(), serviceLocator()));
 
   /** usecases */
 
@@ -282,6 +322,26 @@ Future<void> init() async {
   serviceLocator.registerLazySingleton<GetWaterBillLink>(
       () => GetWaterBillLink(waterUsageRepository: serviceLocator()));
 
+  // messages
+  serviceLocator.registerLazySingleton<GetCommunityMessages>(
+      () => GetCommunityMessages(messagingRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<SendMessage>(
+      () => SendMessage(messagingRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<GetSupportMessages>(
+      () => GetSupportMessages(messagingRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<GetConversationList>(
+      () => GetConversationList(messagingRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<GetCompanyConversationList>(
+      () => GetCompanyConversationList(messagingRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<StartConversation>(
+      () => StartConversation(messagingRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<JoinConversation>(
+      () => JoinConversation(messagingRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<SetConversationSeen>(
+      () => SetConversationSeen(messagingRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<GetConversationDetail>(
+      () => GetConversationDetail(messagingRepository: serviceLocator()));
+
   /** repos */
   serviceLocator.registerLazySingleton<AuthenticationRepository>(() =>
       AuthenticationRepositoryImpl(authenticationDataSource: serviceLocator()));
@@ -302,6 +362,8 @@ Future<void> init() async {
   serviceLocator.registerLazySingleton<NotificationMessageRepository>(() =>
       NotificationMessageRepositoryImpl(
           notificationMessageDataSource: serviceLocator()));
+  serviceLocator.registerLazySingleton<MessagingRepository>(
+      () => MessagingRepositoryImpl(messagingDataSource: serviceLocator()));
 
   /** datasource*/
   serviceLocator.registerLazySingleton<AuthenticationDataSource>(() =>
@@ -324,9 +386,14 @@ Future<void> init() async {
       () => AnnouncementRemoteDataSource(client: serviceLocator()));
   serviceLocator.registerLazySingleton<NotificationMessageDataSource>(
       () => NotificationMessageRemoteDataSource(client: serviceLocator()));
+  serviceLocator.registerLazySingleton<MessagingDataSource>(() =>
+      MessagingRemoteDataSource(
+          firestore: serviceLocator(), client: serviceLocator()));
 
   /** network */
   serviceLocator.registerLazySingleton<Dio>(
       () => DioModule(firebaseAuth: serviceLocator()).dio);
   serviceLocator.registerSingleton<FirebaseAuth>(FirebaseAuth.instance);
+  serviceLocator
+      .registerSingleton<FirebaseFirestore>(FirebaseFirestore.instance);
 }

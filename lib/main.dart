@@ -8,6 +8,7 @@ import 'package:firebase_core/firebase_core.dart';
 import './service_locator.dart' as di;
 import 'app.dart';
 import 'firebase_options.dart';
+import 'package:flutter_web_plugins/url_strategy.dart' show usePathUrlStrategy;
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -60,5 +61,6 @@ Future<void> main() async {
   if (!kIsWeb && !Platform.isIOS) {
     FirebaseMessaging.onMessage.listen(showLocalFlutterNotification);
   }
+  usePathUrlStrategy();
   runApp(const App());
 }

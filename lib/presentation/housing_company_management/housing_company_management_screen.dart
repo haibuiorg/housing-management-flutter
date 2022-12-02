@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:priorli/presentation/home/main_screen.dart';
+import 'package:priorli/presentation/main/main_screen.dart';
 import 'package:priorli/presentation/shared/custom_form_field.dart';
 import 'package:priorli/service_locator.dart';
 import 'package:flutter_emoji/flutter_emoji.dart';
@@ -40,6 +40,7 @@ class _HousingCompanyManagementScreenState
     _postalCode.dispose();
     _city.dispose();
     _businessId.dispose();
+    cubit.close();
     super.dispose();
   }
 

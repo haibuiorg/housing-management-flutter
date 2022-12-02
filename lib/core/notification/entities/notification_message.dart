@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:priorli/core/notification/models/notification_message_model.dart';
 
-import '../../utils/constant.dart';
+import '../../utils/constants.dart';
 
 class NotificationMessage extends Equatable {
   final String id;

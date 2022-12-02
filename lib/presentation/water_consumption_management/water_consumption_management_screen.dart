@@ -26,9 +26,7 @@ class WaterConsumptionManagementScreen extends StatelessWidget {
       create: (_) => cubit,
       child: BlocConsumer<WaterConsumptionManagementCubit,
           WaterConsumptionManagementState>(listener: (context, state) {
-        if (state.finishManagement == true) {
-          Navigator.pop(context, true);
-        }
+        if (state.finishManagement == true) {}
       }, builder: (context, state) {
         return Scaffold(
             appBar: AppBar(
@@ -212,6 +210,7 @@ class _WaterConsumptionDialogState extends State<WaterConsumptionDialog> {
               widget.onSubmit(
                 totalReading: double.parse(_totalReadingController.text),
               );
+              Navigator.pop(context, true);
             },
             child: const Text('Start'))
       ],
@@ -260,6 +259,7 @@ class _WaterPriceDialogState extends State<WaterPriceDialog> {
               widget.onSubmit(
                   basicFee: _basicFeeController.text,
                   pricePerCube: _perCubeController.text);
+              Navigator.pop(context, true);
             },
             child: const Text('Submit'))
       ],

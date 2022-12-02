@@ -5,14 +5,15 @@ import 'package:priorli/core/housing/entities/housing_company.dart';
 import 'package:priorli/core/housing/usecases/get_housing_companies.dart';
 import 'package:priorli/core/settings/usecases/get_setting.dart';
 import 'package:priorli/core/settings/usecases/save_setting.dart';
-import 'package:priorli/presentation/home/main_state.dart';
 
-class MainCubit extends Cubit<MainState> {
+import 'home_state.dart';
+
+class HomeCubit extends Cubit<HomeState> {
   final GetHousingCompanies _getHousingCompanies;
   final GetSetting _getSetting;
   final SaveSetting _saveSetting;
-  MainCubit(this._getHousingCompanies, this._getSetting, this._saveSetting)
-      : super(MainState.init());
+  HomeCubit(this._getHousingCompanies, this._getSetting, this._saveSetting)
+      : super(HomeState.init());
 
   Future<void> getUserHousingCompanies() async {
     final housingCompanyResult = await _getHousingCompanies(NoParams());

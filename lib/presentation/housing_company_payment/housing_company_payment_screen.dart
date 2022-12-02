@@ -32,6 +32,12 @@ class _HousingCompanyPaymentScreenState
     });
   }
 
+  @override
+  void dispose() {
+    cubit.close();
+    super.dispose();
+  }
+
   _getInitialData() async {
     final housingCompanyId =
         Uri.parse(GoRouter.of(context).location).pathSegments[1];

@@ -1,5 +1,6 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:priorli/core/auth/usecases/change_password.dart';
 import 'package:priorli/core/base/result.dart';
 import 'package:priorli/core/base/usecase.dart';
 import 'package:priorli/core/user/usecases/delete_user_notification_token.dart';
@@ -19,18 +20,20 @@ class AuthCubit extends Cubit<AuthState> {
   final LogOut _logOut;
   final CreateUser _createUser;
   final IsEmailVerified _emailVerified;
+  final ChangePassword _changePassword;
   final UpdateUserNotificationToken _updateUserNotificationToken;
   final DeleteUserNotificationToken _deleteUserNotificationToken;
 
   AuthCubit(
-    this._isLoggedIn,
-    this._loginEmailPassword,
-    this._logOut,
-    this._createUser,
-    this._emailVerified,
-    this._updateUserNotificationToken,
-    this._deleteUserNotificationToken,
-  ) : super(const AuthState.initializing()) {
+      this._isLoggedIn,
+      this._loginEmailPassword,
+      this._logOut,
+      this._createUser,
+      this._emailVerified,
+      this._updateUserNotificationToken,
+      this._deleteUserNotificationToken,
+      this._changePassword)
+      : super(const AuthState.initializing()) {
     _checkAppData();
     _checkNotificationToken();
   }
@@ -114,5 +117,20 @@ class AuthCubit extends Cubit<AuthState> {
           _updateUserNotificationToken(
               UpdateUserNotificationTokenParams(notificationToken: newToken))
         });
+  }
+
+  Future<void> changePassword(
+      {required String oldPassword,
+      required String newPassword,
+      required Null Function() onError,
+      required Null Function() onSuccessful}) async {
+    final changePasswordResult = await _changePassword(ChangePasswordParams(
+        oldPassword: oldPassword, newPassword: newPassword));
+    if (changePasswordResult is ResultSuccess<bool> &&
+        changePasswordResult.data) {
+      onSuccessful();
+      return;
+    }
+    onError();
   }
 }

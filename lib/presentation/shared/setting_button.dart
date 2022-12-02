@@ -4,7 +4,13 @@ class SettingButton extends StatelessWidget {
   final Function()? onPressed;
   final Widget? label;
   final Widget? icon;
-  const SettingButton({super.key, this.onPressed, this.label, this.icon});
+  final bool? showUnderline;
+  const SettingButton(
+      {super.key,
+      this.onPressed,
+      this.label,
+      this.icon,
+      this.showUnderline = true});
 
   @override
   Widget build(BuildContext context) {
@@ -14,10 +20,12 @@ class SettingButton extends StatelessWidget {
         padding: const EdgeInsets.only(left: 8, right: 8),
         child: Container(
           height: 56,
-          decoration: BoxDecoration(
-              border: Border(
-                  bottom: BorderSide(
-                      color: Theme.of(context).colorScheme.onSurface))),
+          decoration: showUnderline == true
+              ? BoxDecoration(
+                  border: Border(
+                      bottom: BorderSide(
+                          color: Theme.of(context).colorScheme.onSurface)))
+              : null,
           child:
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             label ?? const SizedBox.shrink(),

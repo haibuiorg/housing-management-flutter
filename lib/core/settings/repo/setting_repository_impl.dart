@@ -10,7 +10,7 @@ class SettingRepositoryImpl implements SettingRepository {
   SettingRepositoryImpl({required this.settingRemoteDataSource});
 
   @override
-  Future<Result<bool>> getSetting(String key) async {
+  Future<Result<Object?>> getSetting(String key) async {
     try {
       final setting = await settingRemoteDataSource.getSetting(key);
       return ResultSuccess(setting);
@@ -20,7 +20,7 @@ class SettingRepositoryImpl implements SettingRepository {
   }
 
   @override
-  Future<Result<bool>> saveSetting(String key, bool value) async {
+  Future<Result<bool>> saveSetting(String key, Object? value) async {
     try {
       final setting = await settingRemoteDataSource.saveSetting(key, value);
       return ResultSuccess(setting);

@@ -25,14 +25,21 @@ class ApartmentScreen extends StatefulWidget {
 }
 
 class _ApartmentScreenState extends State<ApartmentScreen> {
-  final ApartmentCubit cubit = serviceLocator<ApartmentCubit>();
+  late final ApartmentCubit cubit;
 
   @override
   void initState() {
     super.initState();
+    cubit = serviceLocator<ApartmentCubit>();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _getInitialData();
     });
+  }
+
+  @override
+  void dispose() {
+    cubit.close();
+    super.dispose();
   }
 
   _getInitialData() async {
@@ -48,16 +55,18 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
       create: (_) => cubit,
       child: BlocConsumer<ApartmentCubit, ApartmentState>(
           listener: (context, state) {
-        if (state.newConsumptionAdded == true) {
-          Navigator.pop(context, true);
-        }
+        if (state.newConsumptionAdded == true) {}
       }, builder: (context, state) {
-        final hasConsumptionValue = state.yearlyWaterBills?.isNotEmpty ==
-                true &&
-            state.yearlyWaterBills?.where((element) =>
-                    element.period == state.latestWaterConsumption?.period &&
-                    element.year == state.latestWaterConsumption?.year) !=
-                null;
+        final hasConsumptionValue =
+            state.yearlyWaterBills?.isNotEmpty == true &&
+                state.yearlyWaterBills
+                        ?.where((element) =>
+                            element.period ==
+                                state.latestWaterConsumption?.period &&
+                            element.year == state.latestWaterConsumption?.year)
+                        .isNotEmpty ==
+                    true;
+
         return Scaffold(
           appBar: AppBar(
             actions: [
@@ -224,6 +233,7 @@ class _ConsumptionValueDialogState extends State<ConsumptionValueDialog> {
               widget.onSubmit(
                 consumption: _consumptionController.text,
               );
+              Navigator.pop(context, true);
             },
             child: const Text('Submit'))
       ],

@@ -5,7 +5,7 @@ import 'package:priorli/presentation/announcement/announcement_cubit.dart';
 import 'package:priorli/presentation/announcement/announcement_state.dart';
 import 'package:priorli/service_locator.dart';
 
-import '../shared/announcement_item.dart';
+import 'announcement_item.dart';
 
 const announcementPath = 'announcements';
 
@@ -28,11 +28,17 @@ class _AnnouncementScreenState extends State<AnnouncementScreen> {
     });
     _controller = ScrollController()
       ..addListener(() {
-        print(_controller.position.extentAfter);
-        if (_controller.position.extentAfter < 300) {
+        if (_controller.position.extentAfter < (cubit.state.total ?? 10)) {
           cubit.loadMore();
         }
       });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
+    cubit.close();
   }
 
   _getInitialData() async {

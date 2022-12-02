@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:priorli/presentation/notification_center/notification_center_cubit.dart';
 import 'package:priorli/presentation/notification_center/notification_center_state.dart';
 import 'package:priorli/service_locator.dart';
 
-import '../../core/utils/time_utils.dart';
+import 'widget/notification_center_item.dart';
 
 const notificationCenterPath = '/notification_center';
 
@@ -25,11 +26,17 @@ class _NotificationCenterScreenState extends State<NotificationCenterScreen> {
     super.initState();
     _controller = ScrollController()
       ..addListener(() {
-        print(_controller.position.extentAfter);
-        if (_controller.position.extentAfter < 300) {
+        if (_controller.position.extentAfter < (cubit.state.total ?? 10)) {
           cubit.loadMore();
         }
       });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    cubit.close();
+    super.dispose();
   }
 
   @override
@@ -46,14 +53,19 @@ class _NotificationCenterScreenState extends State<NotificationCenterScreen> {
             onRefresh: () => cubit.init(),
             child: ListView.builder(
                 controller: _controller,
-                itemCount: (state.notificationMessageList?.length ?? 0) + 1,
+                itemCount: (state.notificationMessageList?.length ?? 0),
                 itemBuilder: (context, index) {
-                  return index < (state.notificationMessageList?.length ?? 0)
-                      ? Text(getFormattedDateTime(
-                          state.notificationMessageList?[index].createdOn ?? 0))
-                      : OutlinedButton(
-                          onPressed: () => cubit.loadMore(),
-                          child: const Text('Load More'));
+                  final notificationMessage =
+                      state.notificationMessageList?[index];
+                  return notificationMessage == null
+                      ? const SizedBox.shrink()
+                      : NotificationCenterItem(
+                          onPress: () {
+                            GoRouter.of(context)
+                                .push(notificationMessage.appRouteLocation);
+                          },
+                          notificationMessage: notificationMessage,
+                        );
                 }),
           );
         }),

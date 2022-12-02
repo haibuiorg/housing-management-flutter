@@ -21,8 +21,8 @@ class NotificationCenterCubit extends Cubit<NotificationCenterState> {
 
     if (messageResult is ResultSuccess<List<NotificationMessage>>) {
       emit(state.copyWith(
-        notificationMessageList: messageResult.data,
-      ));
+          notificationMessageList: messageResult.data,
+          total: messageResult.data.length));
     }
   }
 
@@ -31,7 +31,7 @@ class NotificationCenterCubit extends Cubit<NotificationCenterState> {
       GetNotificationMessagesParams(
           lastMessageTime: state.notificationMessageList?.last.createdOn ??
               DateTime.now().millisecondsSinceEpoch,
-          total: state.total ?? 0),
+          total: state.total ?? 10),
     );
 
     if (messageResult is ResultSuccess<List<NotificationMessage>>) {

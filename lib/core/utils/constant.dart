@@ -1,1 +1,0 @@
-const appSeedColor = '#FFCB73';

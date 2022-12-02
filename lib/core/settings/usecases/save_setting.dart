@@ -4,19 +4,19 @@ import '../../base/result.dart';
 import '../../base/usecase.dart';
 import '../repo/setting_repository.dart';
 
-class SaveSetting extends UseCase<bool, SaveSettingParams> {
+class SaveSetting extends UseCase<Object, SaveSettingParams> {
   final SettingRepository settingRepository;
 
   SaveSetting({required this.settingRepository});
   @override
-  Future<Result<bool>> call(SaveSettingParams params) {
+  Future<Result<Object>> call(SaveSettingParams params) {
     return settingRepository.saveSetting(params.key, params.value);
   }
 }
 
 class SaveSettingParams extends Equatable {
   final String key;
-  final bool value;
+  final Object? value;
 
   const SaveSettingParams({required this.key, required this.value});
 

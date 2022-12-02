@@ -1,4 +1,4 @@
 abstract class SettingDataSource {
-  Future<bool> saveSetting(String key, bool value);
-  Future<bool> getSetting(String key);
+  Future<bool> saveSetting(String key, Object? value);
+  Future<Object?> getSetting(String key);
 }

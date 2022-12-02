@@ -1,4 +1,3 @@
-
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 import 'package:universal_io/io.dart' as universal_platform;
@@ -9,7 +8,7 @@ extension ExtString on String {
     return emailRegExp.hasMatch(this);
   }
 
-  bool get isValidPassword{
+  bool get isValidPassword {
     return length > 6;
   }
 
@@ -18,11 +17,15 @@ extension ExtString on String {
     return reg.hasMatch(toUpperCase());
   }
 
-  bool get isValidPhone{
-    final phoneRegExp = RegExp(r'(^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$)');
+  bool get isValidPhone {
+    final phoneRegExp =
+        RegExp(r'(^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$)');
     return phoneRegExp.hasMatch(this);
   }
 
+  String capitalize() {
+    return "${this[0].toUpperCase()}${substring(1).toLowerCase()}";
+  }
 }
 
 String formatCurrency(double? amount, String? currencyCode) {
@@ -30,11 +33,12 @@ String formatCurrency(double? amount, String? currencyCode) {
     return '';
   }
   try {
-    return NumberFormat.simpleCurrency(locale: universal_platform.Platform.localeName ,name: currencyCode.toUpperCase()).format(amount);
+    return NumberFormat.simpleCurrency(
+            locale: universal_platform.Platform.localeName,
+            name: currencyCode.toUpperCase())
+        .format(amount);
   } catch (error) {
     debugPrint(error.toString());
     return '';
   }
-
-
 }

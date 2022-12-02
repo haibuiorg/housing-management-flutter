@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:priorli/core/housing/entities/ui.dart';
 import 'package:priorli/core/housing/models/housing_company_model.dart';
 import 'package:priorli/core/housing/models/ui_model.dart';
-import 'package:priorli/core/utils/constant.dart';
+import 'package:priorli/core/utils/constants.dart';
 
 class HousingCompany extends Equatable {
   final String id;
