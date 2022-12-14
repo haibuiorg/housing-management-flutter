@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:priorli/core/notification/entities/notification_message.dart';
+import 'package:priorli/presentation/shared/tap_card.dart';
 
 import '../../../core/utils/time_utils.dart';
 
@@ -11,17 +12,12 @@ class NotificationCenterItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-          backgroundBlendMode: BlendMode.multiply,
-          color: Theme.of(context).colorScheme.primaryContainer,
-          borderRadius: BorderRadius.circular(8)),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(8),
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: TapCard(
         onTap: onPress,
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

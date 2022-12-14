@@ -66,6 +66,8 @@ class InviteTenantCubit extends Cubit<InviteTenantState> {
             numberOfTenants: state.numberOfInvitations,
             emails: state.emails));
 
-    if (sendInvitationResult is ResultSuccess<ApartmentInvitation>) {}
+    if (sendInvitationResult is ResultSuccess<ApartmentInvitation>) {
+      emit(state.copyWith(popNow: true));
+    }
   }
 }

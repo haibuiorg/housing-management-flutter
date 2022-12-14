@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:priorli/presentation/file_selector/file_selector.dart';
 import 'package:priorli/presentation/notification_center/notification_center_screen.dart';
 import 'package:priorli/presentation/profile/profile_screen_state.dart';
 import 'package:priorli/presentation/shared/setting_button.dart';
 import 'package:priorli/service_locator.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 import '../account/account_screen.dart';
 import '../help/help_screen.dart';
@@ -32,19 +34,50 @@ class SettingScreen extends StatelessWidget {
               const Spacer(),
               BlocBuilder<ProfileScreenCubit, ProfileScreenState>(
                   builder: (context, state) {
-                return CircleAvatar(
-                  radius: 56,
-                  child: state.user?.avatarUrl?.isNotEmpty == true
-                      ? Image.network(state.user?.avatarUrl ?? '')
-                      : Text(
-                          (state.user?.firstName.characters.first
-                                      .toUpperCase() ??
-                                  '') +
-                              (state.user?.lastName.characters.first
-                                      .toUpperCase() ??
-                                  ''),
-                          style: Theme.of(context).textTheme.displaySmall,
-                        ),
+                return InkWell(
+                  customBorder: const CircleBorder(),
+                  onTap: () {
+                    showModalBottomSheet(
+                        context: context,
+                        builder: (_) => Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 32.0, right: 32, bottom: 32),
+                              child: FileSelector(
+                                isSingleFile: true,
+                                isImageOnly: true,
+                                previewUrl: state.user?.avatarUrl,
+                                onCompleteUploaded: (tempUploadedFiles) {
+                                  BlocProvider.of<ProfileScreenCubit>(context)
+                                      .updateUserAvatar(tempUploadedFiles)
+                                      .then((value) =>
+                                          Navigator.pop(context, true));
+                                },
+                              ),
+                            ));
+                  },
+                  child: CircleAvatar(
+                    radius: 56,
+                    backgroundImage: state.user?.avatarUrl?.isNotEmpty == true
+                        ? CachedNetworkImageProvider(
+                            state.user?.avatarUrl ?? '',
+                          )
+                        : null,
+                    child: state.user?.avatarUrl?.isNotEmpty == true
+                        ? null
+                        : Text(
+                            (state.user?.firstName.isNotEmpty == true
+                                    ? state.user?.firstName.characters.first
+                                            .toUpperCase() ??
+                                        ''
+                                    : '') +
+                                (state.user?.lastName.isNotEmpty == true
+                                    ? state.user?.lastName.characters.first
+                                            .toUpperCase() ??
+                                        ''
+                                    : ''),
+                            style: Theme.of(context).textTheme.displaySmall,
+                          ),
+                  ),
                 );
               }),
               const Spacer(),
@@ -56,8 +89,7 @@ class SettingScreen extends StatelessWidget {
               ),
               SettingButton(
                 onPressed: () {
-                  GoRouter.of(context).push(
-                      '${GoRouter.of(context).location}/$notificationCenterPath');
+                  GoRouter.of(context).push(notificationCenterPath);
                 },
                 label: const Text('Notification Center'),
               ),

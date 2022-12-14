@@ -1,6 +1,7 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:priorli/core/auth/usecases/change_password.dart';
+import 'package:priorli/core/auth/usecases/reset_password.dart';
 import 'package:priorli/core/base/result.dart';
 import 'package:priorli/core/base/usecase.dart';
 import 'package:priorli/core/user/usecases/delete_user_notification_token.dart';
@@ -13,6 +14,7 @@ import 'core/auth/usecases/log_out.dart';
 import 'core/auth/usecases/login_email_password.dart';
 import 'core/user/entities/user.dart';
 import 'core/user/usecases/create_user.dart';
+import 'core/user/usecases/register_with_code.dart';
 
 class AuthCubit extends Cubit<AuthState> {
   final IsLoggedIn _isLoggedIn;
@@ -21,19 +23,21 @@ class AuthCubit extends Cubit<AuthState> {
   final CreateUser _createUser;
   final IsEmailVerified _emailVerified;
   final ChangePassword _changePassword;
+  final RegisterWithCode _registerWithCode;
   final UpdateUserNotificationToken _updateUserNotificationToken;
   final DeleteUserNotificationToken _deleteUserNotificationToken;
 
   AuthCubit(
-      this._isLoggedIn,
-      this._loginEmailPassword,
-      this._logOut,
-      this._createUser,
-      this._emailVerified,
-      this._updateUserNotificationToken,
-      this._deleteUserNotificationToken,
-      this._changePassword)
-      : super(const AuthState.initializing()) {
+    this._isLoggedIn,
+    this._loginEmailPassword,
+    this._logOut,
+    this._createUser,
+    this._emailVerified,
+    this._updateUserNotificationToken,
+    this._deleteUserNotificationToken,
+    this._changePassword,
+    this._registerWithCode,
+  ) : super(const AuthState.initializing()) {
     _checkAppData();
     _checkNotificationToken();
   }
@@ -132,5 +136,22 @@ class AuthCubit extends Cubit<AuthState> {
       return;
     }
     onError();
+  }
+
+  Future<void> registerWithCode(
+      {String? email,
+      String? companyId,
+      String? code,
+      String? password}) async {
+    final registerWithCodeResult = await _registerWithCode(
+        RegisterWithCodeParams(
+            code: code ?? '',
+            companyId: companyId ?? '',
+            email: email ?? '',
+            password: password ?? ''));
+    if (registerWithCodeResult is ResultSuccess<User>) {
+      await logIn(
+          email: registerWithCodeResult.data.email, password: password ?? '');
+    }
   }
 }

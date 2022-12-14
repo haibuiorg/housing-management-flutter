@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:bloc/bloc.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:priorli/core/base/result.dart';
 import 'package:priorli/core/base/usecase.dart';
 import 'package:priorli/core/messaging/entities/conversation.dart';
@@ -10,6 +12,7 @@ import 'package:priorli/core/messaging/usecases/get_support_messages.dart';
 import 'package:priorli/core/messaging/usecases/join_conversation.dart';
 import 'package:priorli/core/messaging/usecases/send_message.dart';
 import 'package:priorli/core/messaging/usecases/set_conversation_seen.dart';
+import 'package:priorli/core/storage/entities/storage_item.dart';
 import 'package:priorli/core/user/entities/user.dart';
 import 'package:priorli/core/user/usecases/get_user_info.dart';
 import 'package:priorli/presentation/message/message_state.dart';
@@ -71,23 +74,48 @@ class MessageCubit extends Cubit<MessageState> {
   }
 
   Future<void> sendMessage(String message) async {
-    await _sendMessage(SendMessageParams(
-        message: message,
+    if (message.isEmpty) {
+      return;
+    }
+    final sendMessageResult = await _sendMessage(SendMessageParams(
+        message: message.trim(),
         senderId: state.user?.userId ?? '',
         messageType: state.messageType ?? messageTypeSupport,
         channelId: state.conversation?.channelId ?? '',
-        conversationId: state.conversation?.id ?? ''));
+        conversationId: state.conversation?.id ?? '',
+        storageItems: state.pendingStorageItems));
+    if (sendMessageResult is ResultSuccess<Message>) {
+      emit(state.copyWith(pendingStorageItems: List.empty()));
+    }
   }
 
-  _messageListener(List<Message> messageList) {
+  updatePendingStorageItem(List<String> items) {
+    emit(state.copyWith(pendingStorageItems: items));
+  }
+
+  _messageListener(List<Message> messageList) async {
     final List<Message> newList = List.from(state.messageList ?? []);
-    final idList = messageList.map((e) => e.id);
-    newList.removeWhere(
+    final List<Message> modifiedList = [];
+    final idList = newList.map((e) => e.id);
+    messageList.removeWhere(
       (element) {
         return idList.contains(element.id);
       },
     );
-    newList.addAll(messageList);
+    for (var message in messageList) {
+      final List<StorageItem> storageItems = [];
+      await Future.forEach(message.storageItems ?? [], (storageItem) async {
+        // TOOO, maybe move this to usecase
+        final downloadLink = await FirebaseStorage.instance
+            .ref()
+            .child(storageItem.storageLink)
+            .getDownloadURL();
+        storageItems.add(storageItem.copyWith(presignedUrl: downloadLink));
+      });
+      modifiedList.add(message.copyWith(storageItems: storageItems));
+    }
+
+    newList.addAll(modifiedList);
     newList.sort(
       (a, b) => b.createdOn - a.createdOn,
     );

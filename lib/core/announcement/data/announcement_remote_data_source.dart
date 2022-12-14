@@ -42,9 +42,9 @@ class AnnouncementRemoteDataSource implements AnnouncementDataSource {
     try {
       final Map<String, dynamic> data = {
         "housing_company_id": housingCompanyId,
-        "announcement_id": announcementId,
       };
-      final result = await client.get(_path, queryParameters: data);
+      final result =
+          await client.get('$_path/$announcementId', queryParameters: data);
       return AnnouncementModel.fromJson(result.data as Map<String, dynamic>);
     } catch (error) {
       throw ServerException(error: error);
@@ -75,6 +75,8 @@ class AnnouncementRemoteDataSource implements AnnouncementDataSource {
   Future<AnnouncementModel> makeAnnouncement(
       {required String housingCompanyId,
       required String title,
+      List<String>? storageItems,
+      required bool sendEmail,
       String? subtitle,
       required String body}) async {
     try {
@@ -83,6 +85,8 @@ class AnnouncementRemoteDataSource implements AnnouncementDataSource {
         "title": title,
         "subtitle": subtitle,
         "body": body,
+        'send_email': sendEmail,
+        'storage_items': storageItems
       };
       final result = await client.post(_path, data: data);
       return AnnouncementModel.fromJson(result.data as Map<String, dynamic>);

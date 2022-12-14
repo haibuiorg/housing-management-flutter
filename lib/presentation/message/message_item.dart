@@ -1,5 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:priorli/core/messaging/entities/message.dart';
+import 'package:priorli/presentation/shared/app_gallery.dart';
+import 'package:priorli/presentation/shared/app_lottie_animation.dart';
 
 import '../../core/utils/time_utils.dart';
 
@@ -34,7 +38,7 @@ class _MessageItemState extends State<MessageItem> {
                 : Alignment.centerLeft,
             child: Container(
               margin: const EdgeInsetsDirectional.symmetric(
-                  horizontal: 8, vertical: 8),
+                  horizontal: 16, vertical: 8),
               decoration: BoxDecoration(
                   backgroundBlendMode: BlendMode.srcOver,
                   color: widget.isMyMessage
@@ -60,6 +64,76 @@ class _MessageItemState extends State<MessageItem> {
                         getFormattedDateTime(widget.message.createdOn),
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
+                      widget.message.storageItems?.isNotEmpty == true
+                          ? SizedBox(
+                              height: 100,
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                reverse: widget.isMyMessage,
+                                scrollDirection: Axis.horizontal,
+                                itemCount:
+                                    widget.message.storageItems?.length ?? 0,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8.0),
+                                    child: CachedNetworkImage(
+                                        errorWidget: (context, url, error) {
+                                          return SizedBox(
+                                            width: 100,
+                                            height: 100,
+                                            child: InkWell(
+                                              onTap: () {
+                                                showBottomSheet(
+                                                    context: context,
+                                                    builder: (builder) =>
+                                                        AppGallery(
+                                                            galleryItems: widget
+                                                                    .message
+                                                                    .storageItems ??
+                                                                []));
+                                              },
+                                              child: const AppLottieAnimation(
+                                                loadingResource: 'documents',
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        imageBuilder: (context, imageProvider) {
+                                          return InkWell(
+                                            onTap: () {
+                                              showBottomSheet(
+                                                  context: context,
+                                                  builder: (builder) =>
+                                                      AppGallery(
+                                                          galleryItems: widget
+                                                                  .message
+                                                                  .storageItems ??
+                                                              []));
+                                            },
+                                            child: Container(
+                                              width: 100,
+                                              height: 100,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                                image: DecorationImage(
+                                                    fit: BoxFit.cover,
+                                                    image: imageProvider),
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        imageUrl: widget
+                                                .message
+                                                .storageItems?[index]
+                                                .presignedUrl ??
+                                            ''),
+                                  );
+                                },
+                              ),
+                            )
+                          : const SizedBox.shrink(),
                       _expanded
                           ? Text(
                               widget.message.senderName,

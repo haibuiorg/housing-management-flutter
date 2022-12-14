@@ -28,7 +28,7 @@ class SettingButton extends StatelessWidget {
               : null,
           child:
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            label ?? const SizedBox.shrink(),
+            Expanded(child: label ?? const SizedBox.shrink()),
             icon ?? const Icon(Icons.chevron_right_outlined)
           ]),
         ),

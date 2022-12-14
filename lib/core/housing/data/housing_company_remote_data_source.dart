@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:priorli/core/housing/models/housing_company_model.dart';
 
 import '../../base/exceptions.dart';
+import '../../storage/models/storage_item_model.dart';
 import '../entities/ui.dart';
 import './housing_company_data_source.dart';
 
@@ -12,9 +13,10 @@ class HousingCompanyRemoteDataSource implements HousingCompanyDataSource {
   HousingCompanyRemoteDataSource(this.client);
   @override
   Future<HousingCompanyModel> createHousingCompany(
-      {required String name}) async {
+      {required String name, required String countryCode}) async {
     final Map<String, dynamic> data = {
-      "name": name,
+      'name': name,
+      'country_code': countryCode,
     };
     try {
       final result = await client.post(_path, data: data);
@@ -43,6 +45,8 @@ class HousingCompanyRemoteDataSource implements HousingCompanyDataSource {
       String? streetAddress1,
       String? streetAddress2,
       String? postalCode,
+      String? coverImageStorageLink,
+      String? logoStorageLink,
       double? lat,
       double? lng,
       UI? ui,
@@ -78,6 +82,12 @@ class HousingCompanyRemoteDataSource implements HousingCompanyDataSource {
     if (ui != null) {
       data['ui'] = {'seed_color': ui.seedColor};
     }
+    if (coverImageStorageLink != null) {
+      data['cover_image_storage_link'] = coverImageStorageLink;
+    }
+    if (logoStorageLink != null) {
+      data['logo_storage_link'] = logoStorageLink;
+    }
     try {
       final result = await client.put(_path, data: data);
       return HousingCompanyModel.fromJson(result.data as Map<String, dynamic>);
@@ -110,6 +120,79 @@ class HousingCompanyRemoteDataSource implements HousingCompanyDataSource {
       };
       final result = await client.put(_path, data: data);
       return HousingCompanyModel.fromJson(result.data);
+    } catch (error) {
+      throw ServerException(error: error);
+    }
+  }
+
+  @override
+  Future<List<StorageItemModel>> addCompanyDocuments(
+      {required List<String> storageItems,
+      required String housingCompanyId,
+      String? type}) async {
+    try {
+      final data = {
+        'housing_company_id': housingCompanyId,
+        'storage_items': storageItems,
+        'type': type
+      };
+      final result =
+          await client.post('/housing_company/documents', data: data);
+      return (result.data as List<dynamic>)
+          .map((e) => StorageItemModel.fromJson(e))
+          .toList();
+    } catch (error) {
+      throw ServerException(error: error);
+    }
+  }
+
+  @override
+  Future<StorageItemModel> getCompanyDocument(
+      {required String documentId, required String housingCompanyId}) async {
+    try {
+      final result = await client.get(
+        '/housing_company/$housingCompanyId/document/$documentId',
+      );
+      return StorageItemModel.fromJson(result.data);
+    } catch (error) {
+      throw ServerException(error: error);
+    }
+  }
+
+  @override
+  Future<List<StorageItemModel>> getCompanyDocuments(
+      {required String housingCompanyId, String? type}) async {
+    try {
+      final data = {'housing_company_id': housingCompanyId, 'type': type};
+      final result =
+          await client.get('/housing_company/documents', queryParameters: data);
+      return (result.data as List<dynamic>)
+          .map((e) => StorageItemModel.fromJson(e))
+          .toList();
+    } catch (error) {
+      throw ServerException(error: error);
+    }
+  }
+
+  @override
+  Future<StorageItemModel> updateCompanyDocument(
+      {required String documentId,
+      required String housingCompanyId,
+      bool? isDeleted,
+      String? name}) async {
+    try {
+      final Map<String, dynamic> data = {
+        'housing_company_id': housingCompanyId,
+      };
+      if (isDeleted != null) {
+        data['is_deleted'] = isDeleted;
+      }
+      if (name != null) {
+        data['name'] = name;
+      }
+      final result =
+          await client.put('/housing_company/document/$documentId', data: data);
+      return StorageItemModel.fromJson(result.data);
     } catch (error) {
       throw ServerException(error: error);
     }

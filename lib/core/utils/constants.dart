@@ -6,6 +6,7 @@ const userIds = 'user_ids';
 const type = 'type';
 const messages = 'messages';
 const createdOn = 'created_on';
+const updatedOn = 'updated_on';
 const appWebsite = 'https://priorli.com';
 const messageTypeSupport = 'support';
 const messageTypeCommunity = 'community';

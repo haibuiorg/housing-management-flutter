@@ -4,9 +4,10 @@ import '../entities/user.dart';
 abstract class UserRepository {
   Future<Result<User>> getUserInfo();
   Future<Result<User>> updateUserInfo(
-      {required String fistName,
-      required String lastName,
-      required String phone});
+      {String? fistName,
+      String? lastName,
+      String? phone,
+      String? avatarStorageLocation});
   Future<Result<User>> updateUserNotificationToken(
       {required String notificationToken});
   Future<Result<bool>> deleteNotificationToken(
@@ -17,5 +18,11 @@ abstract class UserRepository {
     required String phone,
     required String firstName,
     required String lastName,
+  });
+  Future<Result<User>> registerWithCode({
+    required String email,
+    required String password,
+    required String code,
+    required String companyId,
   });
 }

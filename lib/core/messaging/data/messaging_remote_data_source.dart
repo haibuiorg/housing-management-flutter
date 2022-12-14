@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:priorli/core/messaging/data/messaging_data_source.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:priorli/core/messaging/models/conversation_model.dart';
@@ -11,12 +11,14 @@ import '../models/message_model.dart';
 
 class MessagingRemoteDataSource implements MessagingDataSource {
   final FirebaseFirestore firestore;
+  final FirebaseStorage firebaseStorage;
   final String _messagePath = '/message';
   final Dio client;
 
   MessagingRemoteDataSource({
     required this.firestore,
     required this.client,
+    required this.firebaseStorage,
   });
 
   @override
@@ -118,7 +120,7 @@ class MessagingRemoteDataSource implements MessagingDataSource {
           .collectionGroup(conversations)
           .where(userIds, arrayContains: userId)
           //.where(type, isEqualTo: messageType)
-          //.orderBy(createdOn, descending: true)
+          .orderBy(updatedOn, descending: true)
           .snapshots()
           .map((it) {
         final newList =
@@ -137,13 +139,15 @@ class MessagingRemoteDataSource implements MessagingDataSource {
       {required String channelId,
       required String conversationId,
       required String messageType,
-      required String message}) async {
+      required String message,
+      List<String>? storageItems}) async {
     try {
       final Map<String, dynamic> data = {
         "channel_id": channelId,
         "conversation_id": conversationId,
         "type": messageType,
-        "message": message
+        "message": message,
+        "storage_items": storageItems
       };
       try {
         final result = await client.post(_messagePath, data: data);
@@ -166,6 +170,7 @@ class MessagingRemoteDataSource implements MessagingDataSource {
           .collection(housingCompanies)
           .doc(companyId)
           .collection(conversations)
+          .orderBy(updatedOn, descending: true)
           .snapshots()
           .map((it) {
         final newList =

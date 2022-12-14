@@ -22,8 +22,12 @@ class InviteTenantScreen extends StatelessWidget {
     cubit.init(housingCompanyId);
     return BlocProvider(
       create: (context) => cubit,
-      child: BlocBuilder<InviteTenantCubit, InviteTenantState>(
-          builder: (context, state) {
+      child: BlocConsumer<InviteTenantCubit, InviteTenantState>(
+          listener: (context, state) {
+        if (state.popNow == true) {
+          Navigator.pop(context, true);
+        }
+      }, builder: (context, state) {
         return Scaffold(
           floatingActionButton: OutlinedButton(
               onPressed: state.emails?.isNotEmpty == true &&

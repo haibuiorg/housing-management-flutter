@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:priorli/go_router_navigation.dart';
+import 'package:priorli/presentation/home/home_screen.dart';
 import 'package:priorli/presentation/main/main_screen.dart';
 import 'package:priorli/presentation/shared/custom_form_field.dart';
 import 'package:priorli/service_locator.dart';
 import 'package:flutter_emoji/flutter_emoji.dart';
+import '../documents/document_list_screen.dart';
 import '../housing_company_payment/housing_company_payment_screen.dart';
 import '../send_invitation/invite_tenant_screen.dart';
 import '../shared/setting_button.dart';
@@ -68,7 +71,7 @@ class _HousingCompanyManagementScreenState
       child: BlocConsumer<HousingCompanyManagementCubit,
           HousingCompanyManagementState>(listener: (context, state) {
         if (state.housingCompanyDeleted == true) {
-          Navigator.of(context).popUntil(ModalRoute.withName(mainPath));
+          Navigator.of(context).popUntil(ModalRoute.withName(mainPathName));
         }
       }, builder: (context, state) {
         return Scaffold(
@@ -162,13 +165,6 @@ class _HousingCompanyManagementScreenState
                           keyboardType: TextInputType.text,
                         ),
                       ]),
-                    ),
-                  ),
-                  SettingButton(
-                    onPressed: null,
-                    label: Text(
-                      'Edit location',
-                      style: Theme.of(context).textTheme.bodyLarge,
                     ),
                   ),
                   SettingButton(

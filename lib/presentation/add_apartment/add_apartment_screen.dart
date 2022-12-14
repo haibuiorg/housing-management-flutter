@@ -5,6 +5,7 @@ import 'package:priorli/presentation/add_apartment/add_apart_state.dart';
 import 'package:priorli/presentation/shared/custom_form_field.dart';
 import 'package:priorli/service_locator.dart';
 
+import '../../go_router_navigation.dart';
 import '../housing_company/housing_company_screen.dart';
 import 'add_apart_cubit.dart';
 
@@ -25,7 +26,7 @@ class AddApartmentScreen extends StatelessWidget {
           listener: ((context, state) {
         if (state.addedApartments != null) {
           Navigator.of(context)
-              .popUntil(ModalRoute.withName(housingCompanyScreenPath));
+              .popUntil(ModalRoute.withName(housingCompanyScreenPathName));
         }
       }), builder: (context, state) {
         return Scaffold(
@@ -42,6 +43,7 @@ class AddApartmentScreen extends StatelessWidget {
           ),
           body: Column(children: [
             CustomFormField(
+              textCapitalization: TextCapitalization.sentences,
               hintText: 'Building name',
               onChanged: (value) => cubit.updateBuilding(value),
             ),

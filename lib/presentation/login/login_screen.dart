@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:priorli/auth_cubit.dart';
 import 'package:priorli/core/utils/string_extension.dart';
+import 'package:priorli/presentation/code_register/code_register_screen.dart';
+import 'package:priorli/presentation/forgot_password/forgot_password_screen.dart';
 import 'package:priorli/presentation/register/register_screen.dart';
 
 import '../shared/custom_form_field.dart';
@@ -19,7 +21,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-
+  bool _isObscured = true;
   _login(BuildContext context) {
     BlocProvider.of<AuthCubit>(context).logIn(
         email: _emailController.text, password: _passwordController.text);
@@ -63,7 +65,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       CustomFormField(
                         autoValidate: true,
                         hintText: 'Password',
-                        obscureText: true,
+                        obscureText: _isObscured,
                         onSubmitted: (_) => _login,
                         textInputAction: TextInputAction.send,
                         icon: const Icon(
@@ -75,6 +77,17 @@ class _LoginScreenState extends State<LoginScreen> {
                               ? 'Enter valid password'
                               : null;
                         },
+                        onChanged: (_) => setState(() {}),
+                        decoration: InputDecoration(
+                            suffixIcon: IconButton(
+                                icon: Icon(_isObscured
+                                    ? Icons.visibility_rounded
+                                    : Icons.visibility_off_rounded),
+                                onPressed: () {
+                                  setState(() {
+                                    _isObscured = !_isObscured;
+                                  });
+                                })),
                       ),
                       ElevatedButton(
                           style: ElevatedButton.styleFrom(
@@ -85,7 +98,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           style: OutlinedButton.styleFrom(
                               minimumSize: const Size.fromHeight(40)),
                           onPressed: () {
-                            GoRouter.of(context).push(registerPath);
+                            GoRouter.of(context).push(codeRegisterPath);
                           },
                           child: const Text('Join with Invitation Code')),
                     ],
@@ -100,6 +113,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   GoRouter.of(context).push(registerPath);
                 },
                 child: const Text('Register')),
+            TextButton(
+                style: OutlinedButton.styleFrom(
+                    minimumSize: const Size.fromHeight(40)),
+                onPressed: () {
+                  GoRouter.of(context).push(forgotPasswordPath);
+                },
+                child: const Text('Forgot password')),
           ],
         ),
       ),

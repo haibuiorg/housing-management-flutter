@@ -1,5 +1,7 @@
 import 'package:priorli/core/apartment/model/apartment_invitation_model.dart';
 import 'package:priorli/core/apartment/model/apartment_model.dart';
+import 'package:priorli/core/storage/entities/storage_item.dart';
+import 'package:priorli/core/storage/models/storage_item_model.dart';
 
 abstract class ApartmentDataSource {
   Future<List<ApartmentModel>> addApartments({
@@ -29,4 +31,29 @@ abstract class ApartmentDataSource {
       required String housingCompanyId,
       required int numberOfTenants,
       List<String>? emails});
+  Future<ApartmentModel> joinApartment({
+    required String invitationCode,
+    required String housingCompanyId,
+  });
+
+  Future<List<StorageItemModel>> addApartmentDocuments(
+      {required List<String> storageItems,
+      required String housingCompanyId,
+      required String apartmentId,
+      String? type});
+  Future<List<StorageItemModel>> getApartmentDocuments(
+      {required String housingCompanyId,
+      required String apartmentId,
+      String? type});
+  Future<StorageItemModel> updateApartmentDocument(
+      {required String documentId,
+      required String housingCompanyId,
+      required String apartmentId,
+      bool? isDeleted,
+      String? name});
+  Future<StorageItemModel> getApartmentDocument({
+    required String documentId,
+    required String housingCompanyId,
+    required String apartmentId,
+  });
 }

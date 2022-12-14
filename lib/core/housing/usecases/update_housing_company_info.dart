@@ -24,6 +24,8 @@ class UpdateHousingCompanyInfo
         countryCode: params.countryCode,
         lat: params.lat,
         ui: params.ui,
+        logoStorageLink: params.logoStorageLink,
+        coverImageStorageLink: params.coverImageStorageLink,
         lng: params.lng);
   }
 }
@@ -38,11 +40,15 @@ class UpdateHousingCompanyInfoParams extends Equatable {
   final double? lat;
   final double? lng;
   final String? countryCode;
+  final String? coverImageStorageLink;
+  final String? logoStorageLink;
   final UI? ui;
 
   const UpdateHousingCompanyInfoParams(
       {this.streetAddress1,
       this.streetAddress2,
+      this.coverImageStorageLink,
+      this.logoStorageLink,
       this.postalCode,
       this.city,
       this.lat,
@@ -52,5 +58,18 @@ class UpdateHousingCompanyInfoParams extends Equatable {
       this.ui,
       required this.housingCompanyId});
   @override
-  List<Object?> get props => [name];
+  List<Object?> get props => [
+        name,
+        streetAddress1,
+        streetAddress2,
+        coverImageStorageLink,
+        logoStorageLink,
+        postalCode,
+        city,
+        lat,
+        lng,
+        countryCode,
+        ui,
+        housingCompanyId,
+      ];
 }

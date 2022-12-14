@@ -31,7 +31,7 @@ class _PdfViewerState extends State<PdfViewer> {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Align(
-            alignment: Alignment.centerRight,
+            alignment: Alignment.centerLeft,
             child: OutlinedButton.icon(
                 onPressed: () async {
                   await launchUrl(Uri.parse(widget.link));

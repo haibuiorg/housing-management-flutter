@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:priorli/presentation/announcement/announcement_cubit.dart';
 import 'package:priorli/presentation/announcement/announcement_state.dart';
+import 'package:priorli/presentation/file_selector/file_selector.dart';
 import 'package:priorli/service_locator.dart';
 
 import 'announcement_item.dart';
@@ -54,7 +55,7 @@ class _AnnouncementScreenState extends State<AnnouncementScreen> {
     return BlocProvider<AnnouncementCubit>(
       create: (_) => cubit,
       child: Scaffold(
-        floatingActionButton: FloatingActionButton.small(
+        floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.add),
           onPressed: () {
             showModalBottomSheet(
@@ -63,11 +64,17 @@ class _AnnouncementScreenState extends State<AnnouncementScreen> {
                 builder: (context) {
                   return MakeAnnouncementDialog(
                     onSubmit: (
-                        {required String body,
-                        required String subtitle,
-                        required String title}) {
+                        {required body,
+                        required subtitle,
+                        required title,
+                        required sendEmail,
+                        uploadedDocuments}) {
                       cubit.addAnnouncement(
-                          title: title, subtitle: subtitle, body: body);
+                          sendEmail: sendEmail,
+                          storageItems: uploadedDocuments,
+                          title: title,
+                          subtitle: subtitle,
+                          body: body);
                       Navigator.pop(context, true);
                     },
                   );
@@ -90,6 +97,7 @@ class _AnnouncementScreenState extends State<AnnouncementScreen> {
                     padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
                     child: announcement != null
                         ? AnnouncementItem(
+                            companyId: housingCompanyId,
                             announcement: announcement,
                             initialExpand: true,
                           )
@@ -108,7 +116,9 @@ class MakeAnnouncementDialog extends StatefulWidget {
   final Function(
       {required String title,
       required String subtitle,
-      required String body}) onSubmit;
+      required String body,
+      required bool sendEmail,
+      List<String>? uploadedDocuments}) onSubmit;
 
   @override
   State<MakeAnnouncementDialog> createState() => _MakeAnnouncementDialogState();
@@ -118,6 +128,8 @@ class _MakeAnnouncementDialogState extends State<MakeAnnouncementDialog> {
   final _titleController = TextEditingController();
   final _subtitleController = TextEditingController();
   final _bodyController = TextEditingController();
+  bool _sendEmail = false;
+  List<String> _uploadedDocuments = [];
   @override
   void dispose() {
     _titleController.dispose();
@@ -129,66 +141,91 @@ class _MakeAnnouncementDialogState extends State<MakeAnnouncementDialog> {
   @override
   Widget build(BuildContext context) {
     return FractionallySizedBox(
-      heightFactor: 0.9,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(mainAxisSize: MainAxisSize.min, children: [
-          Align(
-            alignment: Alignment.centerRight,
-            child: IconButton(
-              icon: const Icon(Icons.close),
-              onPressed: () {
-                Navigator.pop(context, true);
-              },
+      heightFactor: 0.95,
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(mainAxisSize: MainAxisSize.min, children: [
+            Align(
+              alignment: Alignment.centerRight,
+              child: IconButton(
+                icon: const Icon(Icons.close),
+                onPressed: () {
+                  Navigator.pop(context, true);
+                },
+              ),
             ),
-          ),
-          Text(
-            'Make announcement to housing company',
-            style: Theme.of(context).textTheme.titleLarge,
-            textAlign: TextAlign.center,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 8.0),
-            child: TextFormField(
-              controller: _titleController,
-              maxLines: 1,
-              autofocus: true,
+            Text(
+              'Make announcement to housing company',
+              style: Theme.of(context).textTheme.titleLarge,
+              textAlign: TextAlign.center,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: TextFormField(
+                controller: _titleController,
+                maxLines: 1,
+                autofocus: true,
+                decoration: const InputDecoration(
+                  hintText: 'Title',
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 16.0),
+              child: TextFormField(
+                controller: _subtitleController,
+                maxLines: 1,
+                decoration: const InputDecoration(
+                  hintText: 'Subtitle',
+                ),
+              ),
+            ),
+            TextFormField(
+              controller: _bodyController,
+              minLines: 5,
+              maxLines: 10,
+              keyboardType: TextInputType.multiline,
               decoration: const InputDecoration(
-                hintText: 'Title',
+                hintText: 'Content',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                ),
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 16.0),
-            child: TextFormField(
-              controller: _subtitleController,
-              maxLines: 1,
-              decoration: const InputDecoration(
-                hintText: 'Subtitle',
-              ),
-            ),
-          ),
-          TextFormField(
-            controller: _bodyController,
-            minLines: 5,
-            maxLines: 10,
-            keyboardType: TextInputType.multiline,
-            decoration: const InputDecoration(
-              hintText: 'Content',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(16.0)),
-              ),
-            ),
-          ),
-          OutlinedButton(
-              onPressed: () {
-                widget.onSubmit(
-                    body: _bodyController.text,
-                    subtitle: _subtitleController.text,
-                    title: _titleController.text);
+            FileSelector(
+              onCompleteUploaded: (onCompleteUploaded) {
+                setState(() {
+                  _uploadedDocuments = onCompleteUploaded;
+                });
               },
-              child: const Text('Submit'))
-        ]),
+              autoUpload: true,
+            ),
+            Row(
+              children: [
+                Checkbox(
+                    value: _sendEmail,
+                    onChanged: (onChanged) {
+                      setState(() {
+                        _sendEmail = !_sendEmail;
+                      });
+                    }),
+                const Text('Also send email'),
+                const Spacer(),
+                OutlinedButton(
+                    onPressed: () {
+                      widget.onSubmit(
+                          sendEmail: _sendEmail,
+                          body: _bodyController.text,
+                          subtitle: _subtitleController.text,
+                          title: _titleController.text,
+                          uploadedDocuments: _uploadedDocuments);
+                    },
+                    child: const Text('Submit'))
+              ],
+            ),
+          ]),
+        ),
       ),
     );
   }

@@ -1,3 +1,5 @@
+import 'package:priorli/core/storage/entities/storage_item.dart';
+
 import '../../base/exceptions.dart';
 import '../../base/failure.dart';
 import '../../base/result.dart';
@@ -98,6 +100,93 @@ class ApartmentRepositoryImpl implements ApartmentRepository {
           building: building,
           houseCode: houseCode);
       return ResultSuccess(Apartment.modelToEntity(apartmentModel));
+    } on ServerException {
+      return ResultFailure(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Result<Apartment>> joinApartment(
+      {required String invitationCode,
+      required String housingCompanyId}) async {
+    try {
+      final apartmentModel = await apartmentDataSource.joinApartment(
+        housingCompanyId: housingCompanyId,
+        invitationCode: invitationCode,
+      );
+      return ResultSuccess(Apartment.modelToEntity(apartmentModel));
+    } on ServerException {
+      return ResultFailure(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Result<List<StorageItem>>> addApartmentDocuments(
+      {required List<String> storageItems,
+      required String housingCompanyId,
+      required String apartmentId,
+      String? type}) async {
+    try {
+      final documentListModel = await apartmentDataSource.addApartmentDocuments(
+          storageItems: storageItems,
+          housingCompanyId: housingCompanyId,
+          apartmentId: apartmentId,
+          type: type);
+      return ResultSuccess(
+          documentListModel.map((e) => StorageItem.modelToEntity(e)).toList());
+    } on ServerException {
+      return ResultFailure(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Result<StorageItem>> getApartmentDocument(
+      {required String documentId,
+      required String housingCompanyId,
+      required String apartmentId}) async {
+    try {
+      final documentModel = await apartmentDataSource.getApartmentDocument(
+        documentId: documentId,
+        housingCompanyId: housingCompanyId,
+        apartmentId: apartmentId,
+      );
+      return ResultSuccess(StorageItem.modelToEntity(documentModel));
+    } on ServerException {
+      return ResultFailure(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Result<List<StorageItem>>> getApartmentDocuments(
+      {required String housingCompanyId,
+      required String apartmentId,
+      String? type}) async {
+    try {
+      final documentListModel = await apartmentDataSource.getApartmentDocuments(
+          housingCompanyId: housingCompanyId,
+          apartmentId: apartmentId,
+          type: type);
+      return ResultSuccess(
+          documentListModel.map((e) => StorageItem.modelToEntity(e)).toList());
+    } on ServerException {
+      return ResultFailure(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Result<StorageItem>> updateApartmentDocument(
+      {required String documentId,
+      required String housingCompanyId,
+      required String apartmentId,
+      bool? isDeleted,
+      String? name}) async {
+    try {
+      final documentModel = await apartmentDataSource.getApartmentDocument(
+        documentId: documentId,
+        housingCompanyId: housingCompanyId,
+        apartmentId: apartmentId,
+      );
+      return ResultSuccess(StorageItem.modelToEntity(documentModel));
     } on ServerException {
       return ResultFailure(ServerFailure());
     }

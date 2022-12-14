@@ -2,6 +2,7 @@ import 'package:priorli/core/housing/data/housing_company_data_source.dart';
 import 'package:priorli/core/housing/entities/housing_company.dart';
 import 'package:priorli/core/base/result.dart';
 import 'package:priorli/core/housing/repos/housing_company_repository.dart';
+import 'package:priorli/core/storage/entities/storage_item.dart';
 
 import '../../base/exceptions.dart';
 import '../../base/failure.dart';
@@ -15,10 +16,10 @@ class HousingCompanyRepositoryImpl extends HousingCompanyRepository {
   });
   @override
   Future<Result<HousingCompany>> createHousingCompany(
-      {required String name}) async {
+      {required String name, required String countryCode}) async {
     try {
-      final housingCompanyModel =
-          await housingCompanyDataSource.createHousingCompany(name: name);
+      final housingCompanyModel = await housingCompanyDataSource
+          .createHousingCompany(name: name, countryCode: countryCode);
       return ResultSuccess(HousingCompany.modelToEntity(housingCompanyModel));
     } on ServerException {
       return ResultFailure(ServerFailure());
@@ -50,6 +51,8 @@ class HousingCompanyRepositoryImpl extends HousingCompanyRepository {
       double? lng,
       String? city,
       UI? ui,
+      String? coverImageStorageLink,
+      String? logoStorageLink,
       String? countryCode}) async {
     try {
       final housingCompanyModel =
@@ -62,6 +65,8 @@ class HousingCompanyRepositoryImpl extends HousingCompanyRepository {
               lat: lat,
               lng: lng,
               ui: ui,
+              coverImageStorageLink: coverImageStorageLink,
+              logoStorageLink: logoStorageLink,
               city: city,
               countryCode: countryCode);
       return ResultSuccess(HousingCompany.modelToEntity(housingCompanyModel));
@@ -89,6 +94,68 @@ class HousingCompanyRepositoryImpl extends HousingCompanyRepository {
       final housingCompanyModel = await housingCompanyDataSource
           .deleteHousingCompany(housingCompanyId: housingCompanyId);
       return ResultSuccess(HousingCompany.modelToEntity(housingCompanyModel));
+    } on ServerException {
+      return ResultFailure(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Result<List<StorageItem>>> addCompanyDocuments(
+      {required List<String> storageItems,
+      required String housingCompanyId,
+      String? type}) async {
+    try {
+      final documentListModel =
+          await housingCompanyDataSource.addCompanyDocuments(
+              storageItems: storageItems,
+              housingCompanyId: housingCompanyId,
+              type: type);
+      return ResultSuccess(
+          documentListModel.map((e) => StorageItem.modelToEntity(e)).toList());
+    } on ServerException {
+      return ResultFailure(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Result<StorageItem>> getCompanyDocument(
+      {required String documentId, required String housingCompanyId}) async {
+    try {
+      final documentModel = await housingCompanyDataSource.getCompanyDocument(
+          housingCompanyId: housingCompanyId, documentId: documentId);
+      return ResultSuccess(StorageItem.modelToEntity(documentModel));
+    } on ServerException {
+      return ResultFailure(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Result<List<StorageItem>>> getCompanyDocuments(
+      {required String housingCompanyId, String? type}) async {
+    try {
+      final documentListModel = await housingCompanyDataSource
+          .getCompanyDocuments(housingCompanyId: housingCompanyId, type: type);
+      return ResultSuccess(
+          documentListModel.map((e) => StorageItem.modelToEntity(e)).toList());
+    } on ServerException {
+      return ResultFailure(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Result<StorageItem>> updateCompanyDocument(
+      {required String documentId,
+      required String housingCompanyId,
+      bool? isDeleted,
+      String? name}) async {
+    try {
+      final documentModel =
+          await housingCompanyDataSource.updateCompanyDocument(
+              housingCompanyId: housingCompanyId,
+              documentId: documentId,
+              isDeleted: isDeleted,
+              name: name);
+      return ResultSuccess(StorageItem.modelToEntity(documentModel));
     } on ServerException {
       return ResultFailure(ServerFailure());
     }

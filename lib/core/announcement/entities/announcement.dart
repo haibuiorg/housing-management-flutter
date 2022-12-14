@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:priorli/core/announcement/models/announcement_model.dart';
+import 'package:priorli/core/storage/entities/storage_item.dart';
 
 class Announcement extends Equatable {
   final String id;
@@ -12,9 +13,11 @@ class Announcement extends Equatable {
   final int? updatedOn;
   final String displayName;
   final bool isDeleted;
+  final List<StorageItem>? storageItems;
 
   const Announcement(
       {required this.id,
+      this.storageItems,
       required this.title,
       required this.subtitle,
       required this.body,
@@ -35,6 +38,9 @@ class Announcement extends Equatable {
       updatedBy: model.updated_by,
       updatedOn: model.updated_on,
       displayName: model.display_name ?? '',
+      storageItems: model.storage_items
+          ?.map((e) => StorageItem.modelToEntity(e))
+          .toList(),
       isDeleted: model.is_deleted ?? model.id != null);
 
   @override
@@ -48,6 +54,7 @@ class Announcement extends Equatable {
         updatedBy,
         updatedOn,
         displayName,
-        isDeleted
+        isDeleted,
+        storageItems
       ];
 }

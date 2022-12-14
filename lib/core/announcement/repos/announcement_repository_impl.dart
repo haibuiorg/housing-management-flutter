@@ -73,12 +73,16 @@ class AnnouncementRepositoryImpl implements AnnouncementRepository {
       {required String housingCompanyId,
       required String title,
       String? subtitle,
+      List<String>? storageItems,
+      required bool sendEmail,
       required String body}) async {
     try {
       final announcementModel = await announcementDataSource.makeAnnouncement(
           housingCompanyId: housingCompanyId,
           title: title,
           subtitle: subtitle,
+          sendEmail: sendEmail,
+          storageItems: storageItems,
           body: body);
       return ResultSuccess(Announcement.modelToEntity(announcementModel));
     } on ServerException {

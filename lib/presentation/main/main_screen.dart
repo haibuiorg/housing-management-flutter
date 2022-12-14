@@ -1,12 +1,10 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:priorli/presentation/home/home_screen.dart';
 import 'package:priorli/presentation/profile/profile_screen.dart';
 import '../conversation_list/conversation_list_screen.dart';
-import '../notification_center/notification_center_screen.dart';
 
-const mainPath = '/';
+const mainPath = '/main';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});

@@ -2,6 +2,7 @@
 
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:priorli/core/storage/models/storage_item_model.dart';
 
 part 'announcement_model.g.dart';
 
@@ -17,6 +18,7 @@ class AnnouncementModel extends Equatable {
   final int? updated_on;
   final String? display_name;
   final bool? is_deleted;
+  final List<StorageItemModel>? storage_items;
 
   const AnnouncementModel(
       this.id,
@@ -27,6 +29,7 @@ class AnnouncementModel extends Equatable {
       this.created_by,
       this.updated_by,
       this.updated_on,
+      this.storage_items,
       this.display_name,
       this.is_deleted);
 
@@ -42,6 +45,7 @@ class AnnouncementModel extends Equatable {
         created_by,
         created_on,
         updated_by,
+        storage_items,
         updated_on,
         display_name,
         is_deleted

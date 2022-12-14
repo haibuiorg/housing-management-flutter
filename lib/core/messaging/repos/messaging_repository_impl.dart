@@ -40,12 +40,14 @@ class MessagingRepositoryImpl implements MessagingRepository {
       required String conversationId,
       required String message,
       required String senderId,
-      required String messageType}) async {
+      required String messageType,
+      List<String>? storageItems}) async {
     try {
       final messageModel = await messagingDataSource.sendMessage(
           conversationId: conversationId,
           channelId: channelId,
           messageType: messageType,
+          storageItems: storageItems,
           message: message);
       return ResultSuccess(Message.modelToEntity(messageModel));
     } on ServerException {

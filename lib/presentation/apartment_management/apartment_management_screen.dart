@@ -5,7 +5,7 @@ import 'package:priorli/presentation/apartment_management/apartment_management_c
 import 'package:priorli/presentation/apartment_management/apartment_management_state.dart';
 import 'package:priorli/presentation/shared/custom_form_field.dart';
 import 'package:priorli/service_locator.dart';
-import '../housing_company/housing_company_screen.dart';
+import '../../go_router_navigation.dart';
 import '../shared/setting_button.dart';
 
 class ApartmentManagementScreen extends StatefulWidget {
@@ -17,8 +17,7 @@ class ApartmentManagementScreen extends StatefulWidget {
 }
 
 class _ApartmentManagementScreenState extends State<ApartmentManagementScreen> {
-  final ApartmentManagementCubit cubit =
-      serviceLocator<ApartmentManagementCubit>();
+  late final ApartmentManagementCubit cubit;
   final _apartmentName = TextEditingController();
   final _houseCode = TextEditingController();
 
@@ -26,13 +25,14 @@ class _ApartmentManagementScreenState extends State<ApartmentManagementScreen> {
   void dispose() {
     _apartmentName.dispose();
     _houseCode.dispose();
-
+    cubit.close();
     super.dispose();
   }
 
   @override
   void initState() {
     super.initState();
+    cubit = serviceLocator<ApartmentManagementCubit>();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _getInitialData();
     });
@@ -56,7 +56,7 @@ class _ApartmentManagementScreenState extends State<ApartmentManagementScreen> {
           listener: (context, state) {
         if (state.deleted == true) {
           Navigator.of(context)
-              .popUntil(ModalRoute.withName(housingCompanyScreenPath));
+              .popUntil(ModalRoute.withName(housingCompanyScreenPathName));
         }
       }, builder: (context, state) {
         return Scaffold(

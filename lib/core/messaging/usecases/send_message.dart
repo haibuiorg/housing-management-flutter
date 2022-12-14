@@ -16,6 +16,7 @@ class SendMessage extends UseCase<Message, SendMessageParams> {
         conversationId: params.conversationId,
         message: params.message,
         senderId: params.senderId,
+        storageItems: params.storageItems,
         messageType: params.messageType);
   }
 }
@@ -26,15 +27,17 @@ class SendMessageParams extends Equatable {
   final String messageType;
   final String conversationId;
   final String channelId;
+  final List<String>? storageItems;
 
   const SendMessageParams(
       {required this.message,
       required this.senderId,
       required this.messageType,
       required this.conversationId,
+      this.storageItems,
       required this.channelId});
 
   @override
   List<Object?> get props =>
-      [message, senderId, messageType, channelId, conversationId];
+      [message, senderId, messageType, channelId, conversationId, storageItems];
 }

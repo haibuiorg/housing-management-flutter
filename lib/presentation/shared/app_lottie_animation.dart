@@ -17,7 +17,7 @@ class AppLottieAnimation extends StatelessWidget {
           child: Lottie.asset(
             loadingResource != null
                 ? 'assets/$loadingResource.json'
-                : 'assets/loading_bottle.json',
+                : 'assets/graphing.json',
           ),
         ),
       );

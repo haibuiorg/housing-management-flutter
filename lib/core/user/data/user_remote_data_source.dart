@@ -19,13 +19,15 @@ class UserRemoteDataSource implements UserDataSource {
 
   @override
   Future<UserModel> updateUserInfo(
-      {required String fistName,
-      required String lastName,
-      required String phone}) async {
+      {String? fistName,
+      String? lastName,
+      String? phone,
+      String? avatarStorageLocation}) async {
     final body = {
       'first_name': fistName,
       'last_name': lastName,
       'phone': phone,
+      'avatar_storage_location': avatarStorageLocation
     };
     final response = await client.patch(_path, data: body);
     return UserModel.fromJson(response.data as Map<String, dynamic>);
@@ -69,6 +71,26 @@ class UserRemoteDataSource implements UserDataSource {
       return UserModel.fromJson(result.data as Map<String, dynamic>);
     } catch (error) {
       throw ServerException();
+    }
+  }
+
+  @override
+  Future<UserModel> registerWithCode(
+      {required String email,
+      required String password,
+      required String code,
+      required String companyId}) async {
+    final Map<String, dynamic> data = {
+      "email": email,
+      "password": password,
+      "invitation_code": code,
+      "housing_company_id": companyId,
+    };
+    try {
+      final result = await client.post('/code_register', data: data);
+      return UserModel.fromJson(result.data as Map<String, dynamic>);
+    } catch (error) {
+      throw ServerException(error: error);
     }
   }
 }

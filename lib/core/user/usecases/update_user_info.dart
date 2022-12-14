@@ -15,18 +15,21 @@ class UpdateUserInfo extends UseCase<User, UpdateUserInfoParams> {
     return userRepository.updateUserInfo(
         fistName: params.firstName,
         lastName: params.lastName,
+        avatarStorageLocation: params.avatarStorageLocation,
         phone: params.phone);
   }
 }
 
 class UpdateUserInfoParams extends Equatable {
-  final String phone;
-  final String lastName;
-  final String firstName;
+  final String? phone;
+  final String? lastName;
+  final String? firstName;
+  final String? avatarStorageLocation;
 
   const UpdateUserInfoParams(
-      {required this.phone, required this.lastName, required this.firstName});
+      {this.phone, this.lastName, this.firstName, this.avatarStorageLocation});
 
   @override
-  List<Object?> get props => [phone, lastName, firstName];
+  List<Object?> get props =>
+      [phone, lastName, firstName, avatarStorageLocation];
 }

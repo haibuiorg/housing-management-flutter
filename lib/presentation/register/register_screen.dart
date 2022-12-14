@@ -20,6 +20,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
   final _phoneController = TextEditingController();
+  bool _isObscured = true;
 
   _register(BuildContext context) {
     BlocProvider.of<AuthCubit>(context).createUser(
@@ -53,67 +54,71 @@ class _RegisterScreenState extends State<RegisterScreen> {
           child: const Icon(Icons.chevron_right_outlined)),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Expanded(
-          child: Center(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  CustomFormField(
-                    textEditingController: _emailController,
-                    hintText: 'Email',
-                    autoValidate: true,
-                    keyboardType: TextInputType.emailAddress,
-                    icon: const Icon(
-                      Icons.mail_outline_rounded,
-                    ),
-                    textInputAction: TextInputAction.next,
-                    validator: (val) {
-                      return (!val!.isValidEmail) ? 'Enter valid email' : null;
-                    },
-                  ),
-                  CustomFormField(
-                    autoValidate: true,
-                    hintText: 'Password',
-                    obscureText: false,
-                    textInputAction: TextInputAction.next,
-                    icon: const Icon(
-                      Icons.lock_outline_rounded,
-                    ),
-                    textEditingController: _passwordController,
-                    validator: (val) {
-                      return !val!.isValidPassword
-                          ? 'Enter valid password'
-                          : null;
-                    },
-                  ),
-                  CustomFormField(
-                    hintText: 'First name',
-                    textInputAction: TextInputAction.next,
-                    icon: const Icon(
-                      Icons.badge_outlined,
-                    ),
-                    textEditingController: _firstNameController,
-                  ),
-                  CustomFormField(
-                    hintText: 'Last name',
-                    textInputAction: TextInputAction.next,
-                    icon: const Icon(
-                      Icons.badge_outlined,
-                    ),
-                    textEditingController: _lastNameController,
-                  ),
-                  CustomFormField(
-                    hintText: 'Phone number',
-                    textInputAction: TextInputAction.go,
-                    icon: const Icon(
-                      Icons.phone_iphone_outlined,
-                    ),
-                    textEditingController: _phoneController,
-                  ),
-                ],
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            CustomFormField(
+              textEditingController: _emailController,
+              hintText: 'Email',
+              autoValidate: true,
+              keyboardType: TextInputType.emailAddress,
+              icon: const Icon(
+                Icons.mail_outline_rounded,
               ),
+              textInputAction: TextInputAction.next,
+              validator: (val) {
+                return (!val!.isValidEmail) ? 'Enter valid email' : null;
+              },
             ),
-          ),
+            CustomFormField(
+              autoValidate: true,
+              hintText: 'Password',
+              obscureText: _isObscured,
+              textInputAction: TextInputAction.next,
+              icon: const Icon(
+                Icons.lock_outline_rounded,
+              ),
+              textEditingController: _passwordController,
+              validator: (val) {
+                return !val!.isValidPassword ? 'Enter valid password' : null;
+              },
+              onChanged: (_) => setState(() {}),
+              decoration: InputDecoration(
+                  suffixIcon: IconButton(
+                      icon: Icon(_isObscured
+                          ? Icons.visibility_rounded
+                          : Icons.visibility_off_rounded),
+                      onPressed: () {
+                        setState(() {
+                          _isObscured = !_isObscured;
+                        });
+                      })),
+            ),
+            CustomFormField(
+              hintText: 'First name',
+              textInputAction: TextInputAction.next,
+              icon: const Icon(
+                Icons.badge_outlined,
+              ),
+              textEditingController: _firstNameController,
+            ),
+            CustomFormField(
+              hintText: 'Last name',
+              textInputAction: TextInputAction.next,
+              icon: const Icon(
+                Icons.badge_outlined,
+              ),
+              textEditingController: _lastNameController,
+            ),
+            CustomFormField(
+              hintText: 'Phone number',
+              textInputAction: TextInputAction.go,
+              icon: const Icon(
+                Icons.phone_iphone_outlined,
+              ),
+              textEditingController: _phoneController,
+            ),
+          ],
         ),
       ),
     );

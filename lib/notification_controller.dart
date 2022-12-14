@@ -1,6 +1,7 @@
-
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:go_router/go_router.dart';
 import 'package:priorli/go_router_navigation.dart';
+import 'package:priorli/service_locator.dart';
 
 class NotificationController {
   /// Use this method to detect when a new notification or a schedule is created
@@ -32,8 +33,8 @@ class NotificationController {
     final appRouteLocation =
         receivedAction.payload?['app_route_location'] ?? '';
     // Your code goes here
-    if (appRouter.location != appRouteLocation) {
-      appRouter.push(appRouteLocation);
+    if (serviceLocator<GoRouter>().location != appRouteLocation) {
+      serviceLocator<GoRouter>().push(appRouteLocation);
     }
   }
 }

@@ -14,6 +14,8 @@ class MakeAnnouncement extends UseCase<Announcement, MakeAnnouncementParams> {
     return announcementRepository.makeAnnouncement(
         housingCompanyId: params.housingCompanyId,
         title: params.title,
+        sendEmail: params.sendEmail,
+        storageItems: params.storageItems,
         body: params.body,
         subtitle: params.subtitle);
   }
@@ -24,13 +26,18 @@ class MakeAnnouncementParams extends Equatable {
   final String title;
   final String? subtitle;
   final String body;
+  final List<String>? storageItems;
+  final bool sendEmail;
 
   const MakeAnnouncementParams(
       {required this.housingCompanyId,
       required this.title,
+      required this.sendEmail,
       this.subtitle,
+      this.storageItems,
       required this.body});
 
   @override
-  List<Object?> get props => [housingCompanyId, title, subtitle, body];
+  List<Object?> get props =>
+      [housingCompanyId, title, subtitle, body, storageItems, sendEmail];
 }

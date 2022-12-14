@@ -10,6 +10,7 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../core/utils/string_extension.dart';
 import '../apartment_invoice/apartment_water_invoice_screen.dart';
+import '../documents/document_list_screen.dart';
 import '../housing_company_management/housing_company_management_screen.dart';
 import '../shared/custom_form_field.dart';
 import '../shared/full_width_pair_text.dart';
@@ -85,9 +86,13 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
             child: Column(children: [
               Padding(
                 padding: const EdgeInsets.all(16),
-                child: Text(
-                  'Water consumption',
-                  style: Theme.of(context).textTheme.displaySmall,
+                child: Row(
+                  children: [
+                    Text(
+                      'Water consumption',
+                      style: Theme.of(context).textTheme.displaySmall,
+                    ),
+                  ],
                 ),
               ),
               Padding(
@@ -189,7 +194,27 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
                                     },
                                   ));
                         },
-                  child: const Text('Add water consumption for this period'))
+                  child: const Text('Add water consumption for this period')),
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Documents',
+                      style: Theme.of(context).textTheme.displaySmall,
+                    ),
+                    OutlinedButton.icon(
+                      onPressed: () {
+                        context.push(
+                            '${GoRouter.of(context).location}/$documentListScreenPath');
+                      },
+                      icon: const Icon(Icons.document_scanner_rounded),
+                      label: const Text('More'),
+                    )
+                  ],
+                ),
+              ),
             ]),
           ),
         );

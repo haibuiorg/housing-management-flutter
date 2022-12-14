@@ -1,4 +1,5 @@
 import '../../base/result.dart';
+import '../../storage/entities/storage_item.dart';
 import '../entities/apartment.dart';
 import '../entities/apartment_invitation.dart';
 
@@ -25,4 +26,28 @@ abstract class ApartmentRepository {
       required String housingCompanyId,
       required int numberOfTenants,
       List<String>? emails});
+  Future<Result<Apartment>> joinApartment({
+    required String invitationCode,
+    required String housingCompanyId,
+  });
+  Future<Result<List<StorageItem>>> addApartmentDocuments(
+      {required List<String> storageItems,
+      required String housingCompanyId,
+      required String apartmentId,
+      String? type});
+  Future<Result<List<StorageItem>>> getApartmentDocuments(
+      {required String housingCompanyId,
+      required String apartmentId,
+      String? type});
+  Future<Result<StorageItem>> updateApartmentDocument(
+      {required String documentId,
+      required String housingCompanyId,
+      required String apartmentId,
+      bool? isDeleted,
+      String? name});
+  Future<Result<StorageItem>> getApartmentDocument({
+    required String documentId,
+    required String housingCompanyId,
+    required String apartmentId,
+  });
 }

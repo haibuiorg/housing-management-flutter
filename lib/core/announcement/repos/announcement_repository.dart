@@ -21,6 +21,8 @@ abstract class AnnouncementRepository {
   Future<Result<Announcement>> makeAnnouncement(
       {required String housingCompanyId,
       required String title,
+      List<String>? storageItems,
+      required bool sendEmail,
       String? subtitle,
       required String body});
 }

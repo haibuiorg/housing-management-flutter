@@ -11,6 +11,7 @@ class InviteTenantState extends Equatable {
   final String? housingCompanyId;
   final String? errorText;
   final int numberOfInvitations;
+  final bool? popNow;
 
   const InviteTenantState(
       {this.housingCompany,
@@ -19,6 +20,7 @@ class InviteTenantState extends Equatable {
       this.emails,
       this.errorText,
       this.housingCompanyId,
+      this.popNow,
       this.numberOfInvitations = 1});
 
   InviteTenantState copyWith(
@@ -28,8 +30,10 @@ class InviteTenantState extends Equatable {
           List<String>? emails,
           String? errorText,
           int? numberOfInvitations,
+          bool? popNow,
           String? housingCompanyId}) =>
       InviteTenantState(
+          popNow: popNow ?? this.popNow,
           housingCompanyId: housingCompanyId ?? this.housingCompanyId,
           errorText: errorText ?? this.errorText,
           housingCompany: housingCompany ?? this.housingCompany,
@@ -46,6 +50,7 @@ class InviteTenantState extends Equatable {
         emails,
         numberOfInvitations,
         errorText,
-        housingCompanyId
+        housingCompanyId,
+        popNow
       ];
 }

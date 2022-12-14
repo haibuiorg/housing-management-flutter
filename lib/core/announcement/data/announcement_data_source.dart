@@ -21,5 +21,7 @@ abstract class AnnouncementDataSource {
       {required String housingCompanyId,
       required String title,
       String? subtitle,
+      List<String>? storageItems,
+      required bool sendEmail,
       required String body});
 }

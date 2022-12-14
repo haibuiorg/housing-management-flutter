@@ -22,12 +22,16 @@ class UserRepositoryImpl implements UserRepository {
 
   @override
   Future<Result<User>> updateUserInfo(
-      {required String fistName,
-      required String lastName,
-      required String phone}) async {
+      {String? fistName,
+      String? lastName,
+      String? phone,
+      String? avatarStorageLocation}) async {
     try {
       final userModel = await userRemoteDataSource.updateUserInfo(
-          fistName: fistName, lastName: lastName, phone: phone);
+          fistName: fistName,
+          lastName: lastName,
+          phone: phone,
+          avatarStorageLocation: avatarStorageLocation);
       return ResultSuccess(User.modelToEntity(userModel));
     } on ServerException {
       return ResultFailure(ServerFailure());
@@ -73,6 +77,25 @@ class UserRepositoryImpl implements UserRepository {
         phone: phone,
         firstName: firstName,
         lastName: lastName,
+      );
+      return ResultSuccess(User.modelToEntity(userModel));
+    } on ServerException {
+      return ResultFailure(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Result<User>> registerWithCode(
+      {required String email,
+      required String password,
+      required String code,
+      required String companyId}) async {
+    try {
+      final userModel = await userRemoteDataSource.registerWithCode(
+        email: email,
+        password: password,
+        code: code,
+        companyId: companyId,
       );
       return ResultSuccess(User.modelToEntity(userModel));
     } on ServerException {

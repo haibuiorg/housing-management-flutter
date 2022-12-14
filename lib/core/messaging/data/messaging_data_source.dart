@@ -25,7 +25,8 @@ abstract class MessagingDataSource {
       {required String channelId,
       required String conversationId,
       required String messageType,
-      required String message});
+      required String message,
+      List<String>? storageItems});
   Future<ConversationModel> startConversation({
     required String messageType,
     required String channelId,

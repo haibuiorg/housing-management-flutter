@@ -16,6 +16,9 @@ AnnouncementModel _$AnnouncementModelFromJson(Map<String, dynamic> json) =>
       json['created_by'] as String?,
       json['updated_by'] as String?,
       json['updated_on'] as int?,
+      (json['storage_items'] as List<dynamic>?)
+          ?.map((e) => StorageItemModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
       json['display_name'] as String?,
       json['is_deleted'] as bool?,
     );
@@ -32,4 +35,5 @@ Map<String, dynamic> _$AnnouncementModelToJson(AnnouncementModel instance) =>
       'updated_on': instance.updated_on,
       'display_name': instance.display_name,
       'is_deleted': instance.is_deleted,
+      'storage_items': instance.storage_items,
     };

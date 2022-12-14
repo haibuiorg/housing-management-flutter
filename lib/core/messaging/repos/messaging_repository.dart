@@ -16,7 +16,8 @@ abstract class MessagingRepository {
       required String conversationId,
       required String message,
       required String senderId,
-      required String messageType});
+      required String messageType,
+      List<String>? storageItems});
   Stream<List<Conversation>> getConversationLists({
     required String messageType,
     required String userId,

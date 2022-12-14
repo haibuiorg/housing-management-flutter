@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_it/get_it.dart';
+import 'package:go_router/go_router.dart';
 import 'package:priorli/core/announcement/data/announcement_data_source.dart';
 import 'package:priorli/core/announcement/data/announcement_remote_data_source.dart';
 import 'package:priorli/core/announcement/repos/announcement_repository.dart';
@@ -10,8 +12,22 @@ import 'package:priorli/core/announcement/usecases/edit_announcement.dart';
 import 'package:priorli/core/announcement/usecases/get_announcement.dart';
 import 'package:priorli/core/announcement/usecases/get_announcement_list.dart';
 import 'package:priorli/core/announcement/usecases/make_annoucement.dart';
+import 'package:priorli/core/apartment/usecases/add_apartment_documents.dart';
 import 'package:priorli/core/apartment/usecases/delete_apartment.dart';
+import 'package:priorli/core/apartment/usecases/get_apartment_document.dart';
+import 'package:priorli/core/apartment/usecases/get_apartment_document_list.dart';
+import 'package:priorli/core/apartment/usecases/join_apartment.dart';
+import 'package:priorli/core/country/data/country_data_source.dart';
+import 'package:priorli/core/country/data/country_remote_data_source.dart';
+import 'package:priorli/core/country/repos/country_repository.dart';
+import 'package:priorli/core/country/repos/country_repository_impl.dart';
+import 'package:priorli/core/country/usecases/get_country_data.dart';
+import 'package:priorli/core/country/usecases/get_support_countries.dart';
+import 'package:priorli/core/housing/usecases/add_company_documents.dart';
 import 'package:priorli/core/housing/usecases/delete_housing_company.dart';
+import 'package:priorli/core/housing/usecases/get_company_document.dart';
+import 'package:priorli/core/housing/usecases/get_company_document_list.dart';
+import 'package:priorli/core/housing/usecases/update_company_document.dart';
 import 'package:priorli/core/messaging/data/messaging_remote_data_source.dart';
 import 'package:priorli/core/messaging/repos/messaging_repository.dart';
 import 'package:priorli/core/messaging/repos/messaging_repository_impl.dart';
@@ -40,18 +56,31 @@ import 'package:priorli/core/payment/repos/payment_repository.dart';
 import 'package:priorli/core/payment/repos/payment_repository_impl.dart';
 import 'package:priorli/core/payment/usecases/get_all_bank_accounts.dart';
 import 'package:priorli/core/payment/usecases/remove_bank_account.dart';
+import 'package:priorli/core/storage/data/storage_data_source.dart';
+import 'package:priorli/core/storage/data/storage_remote_data_source.dart';
+import 'package:priorli/core/storage/repos/storage_repository.dart';
+import 'package:priorli/core/storage/repos/storage_repository_impl.dart';
+import 'package:priorli/core/storage/usecases/upload_file.dart';
+import 'package:priorli/core/user/usecases/register_with_code.dart';
 import 'package:priorli/core/water_usage/usecases/get_water_bill_link.dart';
 import 'package:priorli/core/water_usage/usecases/get_yearly_water_consumption.dart';
+import 'package:priorli/go_router_navigation.dart';
 import 'package:priorli/presentation/account/account_cubit.dart';
 import 'package:priorli/presentation/add_apartment/add_apart_cubit.dart';
 import 'package:priorli/presentation/announcement/announcement_cubit.dart';
+import 'package:priorli/presentation/announcement/announcement_item_cubit.dart';
 import 'package:priorli/presentation/apartment_invoice/apartment_water_invoice_cubit.dart';
 import 'package:priorli/presentation/apartments/apartment_cubit.dart';
+import 'package:priorli/presentation/code_register/code_register_cubit.dart';
 import 'package:priorli/presentation/conversation_list/conversation_list_cubit.dart';
 import 'package:priorli/presentation/create_housing_company/create_housing_company_cubit.dart';
+import 'package:priorli/presentation/documents/document_list_screen_cubit.dart';
+import 'package:priorli/presentation/file_selector/file_selector_cubit.dart';
+import 'package:priorli/presentation/forgot_password/forgot_password_cubit.dart';
 import 'package:priorli/presentation/home/home_cubit.dart';
 import 'package:priorli/presentation/housing_company/housing_company_cubit.dart';
 import 'package:priorli/presentation/housing_company_payment/housing_company_payment_cubit.dart';
+import 'package:priorli/presentation/join_apartment/join_apartment_cubit.dart';
 import 'package:priorli/presentation/message/message_cubit.dart';
 import 'package:priorli/presentation/notification_center/notification_center_cubit.dart';
 import 'package:priorli/presentation/profile/profile_screen_cubit.dart';
@@ -66,6 +95,7 @@ import 'core/apartment/usecases/edit_apartment.dart';
 import 'core/apartment/usecases/get_apartment.dart';
 import 'core/apartment/usecases/get_apartments.dart';
 import 'core/apartment/usecases/send_invitation_to_apartment.dart';
+import 'core/apartment/usecases/update_apartment_document.dart';
 import 'core/auth/data/authentication_data_source.dart';
 import 'core/auth/data/authentication_remote_data_source.dart';
 import 'core/auth/repos/authentication_repository.dart';
@@ -118,6 +148,7 @@ import 'core/water_usage/usecases/get_water_consumption.dart';
 import 'core/water_usage/usecases/get_water_price_history.dart';
 import 'core/water_usage/usecases/start_new_water_consumptio_period.dart';
 import 'presentation/apartment_management/apartment_management_cubit.dart';
+import 'presentation/documents/document_screen_cubit.dart';
 import 'presentation/housing_company_management/housing_company_management_cubit.dart';
 import 'presentation/send_invitation/invite_tenant_cubit.dart';
 import 'presentation/water_consumption_management/water_consumption_management_cubit.dart';
@@ -127,6 +158,9 @@ import 'core/base/network.dart';
 final serviceLocator = GetIt.instance;
 
 Future<void> init() async {
+  // App router
+  serviceLocator.registerSingleton<GoRouter>(createAppRouter());
+
   // Cubits
   serviceLocator.registerFactory(() => SettingCubit(
         serviceLocator(),
@@ -141,11 +175,12 @@ Future<void> init() async {
       serviceLocator(),
       serviceLocator(),
       serviceLocator(),
+      serviceLocator(),
       serviceLocator()));
   serviceLocator.registerFactory(
       () => HomeCubit(serviceLocator(), serviceLocator(), serviceLocator()));
-  serviceLocator
-      .registerFactory(() => CreateHousingCompanyCubit(serviceLocator()));
+  serviceLocator.registerFactory(
+      () => CreateHousingCompanyCubit(serviceLocator(), serviceLocator()));
   serviceLocator.registerFactory(() => HousingCompanyCubit(
       serviceLocator(),
       serviceLocator(),
@@ -177,8 +212,8 @@ Future<void> init() async {
       serviceLocator(), serviceLocator(), serviceLocator()));
   serviceLocator
       .registerFactory(() => NotificationCenterCubit(serviceLocator()));
-  serviceLocator.registerFactory(() => AnnouncementCubit(
-      serviceLocator(), serviceLocator(), serviceLocator(), serviceLocator()));
+  serviceLocator.registerFactory(
+      () => AnnouncementCubit(serviceLocator(), serviceLocator()));
   serviceLocator.registerFactory(() => MessageCubit(
       serviceLocator(),
       serviceLocator(),
@@ -189,11 +224,26 @@ Future<void> init() async {
       serviceLocator()));
   serviceLocator.registerFactory(
       () => ConversationListCubit(serviceLocator(), serviceLocator()));
-  serviceLocator.registerFactory(() => ProfileScreenCubit(
-        serviceLocator(),
-      ));
+  serviceLocator.registerFactory(
+      () => ProfileScreenCubit(serviceLocator(), serviceLocator()));
   serviceLocator
       .registerFactory(() => AccountCubit(serviceLocator(), serviceLocator()));
+  serviceLocator.registerFactory(() => CodeRegisterCubit());
+  serviceLocator.registerFactory(() => JoinApartmentCubit(serviceLocator()));
+  serviceLocator.registerFactory(() => ForgotPasswordCubit(serviceLocator()));
+  serviceLocator.registerFactory(
+      () => FileSelectorCubit(serviceLocator(), serviceLocator()));
+  serviceLocator.registerFactory(() => DocumentListScreenCubit(
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator()));
+  serviceLocator.registerFactory(
+      () => DocumentScreenCubit(serviceLocator(), serviceLocator()));
+  serviceLocator.registerFactory(
+      () => AnnouncementItemCubit(serviceLocator(), serviceLocator()));
 
   /** usecases */
 
@@ -242,6 +292,8 @@ Future<void> init() async {
       () => ChangePassword(authenticationRepository: serviceLocator()));
 
   // user
+  serviceLocator.registerLazySingleton<RegisterWithCode>(
+      () => RegisterWithCode(userRepository: serviceLocator()));
   serviceLocator.registerLazySingleton<CreateUser>(
       () => CreateUser(userRepository: serviceLocator()));
   serviceLocator.registerLazySingleton<GetUserInfo>(
@@ -293,6 +345,8 @@ Future<void> init() async {
       () => EditApartment(apartmentRepository: serviceLocator()));
   serviceLocator.registerLazySingleton<SendInvitationToApartment>(
       () => SendInvitationToApartment(apartmentRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<JoinApartment>(
+      () => JoinApartment(apartmentRepository: serviceLocator()));
 
   // water consumption
   serviceLocator.registerLazySingleton<AddConsumptionValue>(
@@ -341,6 +395,31 @@ Future<void> init() async {
       () => SetConversationSeen(messagingRepository: serviceLocator()));
   serviceLocator.registerLazySingleton<GetConversationDetail>(
       () => GetConversationDetail(messagingRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<UploadFile>(
+      () => UploadFile(storageRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<GetSupportCountries>(
+      () => GetSupportCountries(countryRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<GetCountryData>(
+      () => GetCountryData(countryRepository: serviceLocator()));
+
+  // documents
+  serviceLocator.registerLazySingleton<AddApartmentDocuments>(
+      () => AddApartmentDocuments(apartmentRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<GetApartmentDocumentList>(
+      () => GetApartmentDocumentList(apartmentRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<GetApartmentDocument>(
+      () => GetApartmentDocument(apartmentRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<UpdateApartmentDocument>(
+      () => UpdateApartmentDocument(apartmentRepository: serviceLocator()));
+
+  serviceLocator.registerLazySingleton<AddCompanyDocuments>(
+      () => AddCompanyDocuments(housingCompanyRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<GetCompanyDocumentList>(
+      () => GetCompanyDocumentList(housingCompanyRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<GetCompanyDocument>(
+      () => GetCompanyDocument(housingCompanyRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<UpdateCompanyDocument>(
+      () => UpdateCompanyDocument(housingCompanyRepository: serviceLocator()));
 
   /** repos */
   serviceLocator.registerLazySingleton<AuthenticationRepository>(() =>
@@ -364,6 +443,10 @@ Future<void> init() async {
           notificationMessageDataSource: serviceLocator()));
   serviceLocator.registerLazySingleton<MessagingRepository>(
       () => MessagingRepositoryImpl(messagingDataSource: serviceLocator()));
+  serviceLocator.registerLazySingleton<StorageRepository>(
+      () => StorageRepositoryImpl(storageDataSource: serviceLocator()));
+  serviceLocator.registerLazySingleton<CountryRepository>(
+      () => CountryRepositoryImpl(countryDataSource: serviceLocator()));
 
   /** datasource*/
   serviceLocator.registerLazySingleton<AuthenticationDataSource>(() =>
@@ -388,7 +471,13 @@ Future<void> init() async {
       () => NotificationMessageRemoteDataSource(client: serviceLocator()));
   serviceLocator.registerLazySingleton<MessagingDataSource>(() =>
       MessagingRemoteDataSource(
-          firestore: serviceLocator(), client: serviceLocator()));
+          firebaseStorage: serviceLocator(),
+          firestore: serviceLocator(),
+          client: serviceLocator()));
+  serviceLocator.registerLazySingleton<StorageDataSource>(
+      () => StorageRemoteDataSource(storage: serviceLocator()));
+  serviceLocator.registerLazySingleton<CountryDataSource>(
+      () => CountryRemoteDataSource(client: serviceLocator()));
 
   /** network */
   serviceLocator.registerLazySingleton<Dio>(
@@ -396,4 +485,5 @@ Future<void> init() async {
   serviceLocator.registerSingleton<FirebaseAuth>(FirebaseAuth.instance);
   serviceLocator
       .registerSingleton<FirebaseFirestore>(FirebaseFirestore.instance);
+  serviceLocator.registerSingleton<FirebaseStorage>(FirebaseStorage.instance);
 }
