@@ -28,7 +28,8 @@ class Conversation extends Equatable {
       [id, status, name, channelId, userIds, type, joined];
 
   factory Conversation.modelToEntity(
-          {required ConversationModel conversationModel, String userId = ''}) =>
+          {required ConversationModel conversationModel,
+          String? userId = ''}) =>
       Conversation(
           type: conversationModel.type ?? messageTypeSupport,
           id: conversationModel.id ?? '',

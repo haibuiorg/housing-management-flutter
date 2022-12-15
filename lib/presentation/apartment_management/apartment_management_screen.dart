@@ -29,6 +29,25 @@ class _ApartmentManagementScreenState extends State<ApartmentManagementScreen> {
     super.dispose();
   }
 
+  _showConfirmDeleteDialog(Function() onDismiss) async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Confirm"),
+          content: const Text("Are you sure you wish to delete this apartment"),
+          actions: [
+            OutlinedButton(onPressed: onDismiss, child: const Text("Delete")),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: const Text("Cancel"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -102,8 +121,9 @@ class _ApartmentManagementScreenState extends State<ApartmentManagementScreen> {
                     ),
                   ),
                   SettingButton(
-                    onPressed: () async {
-                      await cubit.deleteThisApartment();
+                    onPressed: () {
+                      _showConfirmDeleteDialog(
+                          () => cubit.deleteThisApartment());
                     },
                     label: Text(
                       'Delete this apartment',

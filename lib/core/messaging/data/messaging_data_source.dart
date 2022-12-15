@@ -32,6 +32,11 @@ abstract class MessagingDataSource {
     required String channelId,
     required String name,
   });
+  Future<ConversationModel> startSupportConversation({
+    required String countryCode,
+    required String languageCode,
+    required String name,
+  });
   Future<ConversationModel> joinConversation({
     required String messageType,
     required String channelId,

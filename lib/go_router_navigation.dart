@@ -15,6 +15,7 @@ import 'package:priorli/presentation/help/help_screen.dart';
 import 'package:priorli/presentation/home/home_screen.dart';
 import 'package:priorli/presentation/housing_company/housing_company_screen.dart';
 import 'package:priorli/presentation/housing_company_management/housing_company_management_screen.dart';
+import 'package:priorli/presentation/housing_company_ui/housing_company_ui_screen.dart';
 import 'package:priorli/presentation/login/login_screen.dart';
 import 'package:priorli/presentation/main/main_screen.dart';
 import 'package:priorli/presentation/notification_center/notification_center_screen.dart';
@@ -93,6 +94,12 @@ GoRouter createAppRouter() {
                           path: housingCompanyPaymentPath,
                           builder: (BuildContext context, GoRouterState state) {
                             return const HousingCompanyPaymentScreen();
+                          },
+                        ),
+                        GoRoute(
+                          path: housingCompanyUiScreenPath,
+                          builder: (BuildContext context, GoRouterState state) {
+                            return const HousingCompanyUiScreen();
                           },
                         ),
                       ]),

@@ -17,7 +17,7 @@ class HousingCompany extends Equatable {
   final int apartmentCount;
   final String name;
   final String businessId;
-  final UI ui;
+  final UI? ui;
   final bool isDeleted;
   final double vat;
   final String logoUrl;
@@ -36,7 +36,7 @@ class HousingCompany extends Equatable {
       required this.name,
       required this.isDeleted,
       required this.currencyCode,
-      required this.ui,
+      this.ui,
       required this.vat,
       required this.logoUrl,
       required this.coverImageUrl,
@@ -45,8 +45,7 @@ class HousingCompany extends Equatable {
   factory HousingCompany.modelToEntity(
           HousingCompanyModel housingCompanyModel) =>
       HousingCompany(
-          ui: UI.modelToEntity(
-              housingCompanyModel.ui ?? const UIModel(appSeedColor)),
+          ui: UI.modelToEntity(housingCompanyModel.ui),
           businessId: housingCompanyModel.businessId ?? '',
           isDeleted: housingCompanyModel.isDeleted ?? false,
           currencyCode: housingCompanyModel.currencyCode ?? 'eur',
@@ -110,5 +109,11 @@ class HousingCompany extends Equatable {
         name,
         apartmentCount,
         isDeleted,
+        logoUrl,
+        coverImageUrl,
+        vat,
+        ui,
+        businessId,
+        currencyCode,
       ];
 }

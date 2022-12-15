@@ -2,8 +2,6 @@ import 'package:priorli/core/base/result.dart';
 import 'package:priorli/core/messaging/entities/message.dart';
 import 'package:priorli/core/messaging/data/messaging_data_source.dart';
 import 'package:priorli/core/messaging/entities/conversation.dart';
-import 'package:priorli/core/utils/constants.dart';
-
 import '../../base/exceptions.dart';
 import '../../base/failure.dart';
 import 'messaging_repository.dart';
@@ -145,6 +143,23 @@ class MessagingRepositoryImpl implements MessagingRepository {
           channelId: channelId,
           messageType: messageType,
           conversationId: conversationId);
+      return ResultSuccess(Conversation.modelToEntity(
+          conversationModel: conversationModel, userId: userId));
+    } on ServerException {
+      return ResultFailure(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Result<Conversation>> startSupportConversation(
+      {required String countryCode,
+      String? userId,
+      required String languageCode,
+      required String name}) async {
+    try {
+      final conversationModel =
+          await messagingDataSource.startSupportConversation(
+              languageCode: languageCode, countryCode: countryCode, name: name);
       return ResultSuccess(Conversation.modelToEntity(
           conversationModel: conversationModel, userId: userId));
     } on ServerException {

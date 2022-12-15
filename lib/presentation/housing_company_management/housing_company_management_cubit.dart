@@ -1,6 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:priorli/core/apartment/entities/apartment.dart';
-import 'package:priorli/core/apartment/usecases/get_apartments.dart';
 import 'package:priorli/core/base/result.dart';
 import 'package:priorli/core/housing/entities/housing_company.dart';
 import 'package:priorli/core/housing/usecases/delete_housing_company.dart';

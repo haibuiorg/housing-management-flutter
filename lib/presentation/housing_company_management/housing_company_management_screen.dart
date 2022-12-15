@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:priorli/go_router_navigation.dart';
-import 'package:priorli/presentation/home/home_screen.dart';
-import 'package:priorli/presentation/main/main_screen.dart';
 import 'package:priorli/presentation/shared/custom_form_field.dart';
 import 'package:priorli/service_locator.dart';
 import 'package:flutter_emoji/flutter_emoji.dart';
-import '../documents/document_list_screen.dart';
 import '../housing_company_payment/housing_company_payment_screen.dart';
+import '../housing_company_ui/housing_company_ui_screen.dart';
 import '../send_invitation/invite_tenant_screen.dart';
 import '../shared/setting_button.dart';
 import 'housing_company_management_cubit.dart';
@@ -45,6 +43,26 @@ class _HousingCompanyManagementScreenState
     _businessId.dispose();
     cubit.close();
     super.dispose();
+  }
+
+  _showConfirmDeleteDialog(Function() onDismiss) async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Confirm"),
+          content: const Text(
+              "Are you sure you wish to delete this housing company?"),
+          actions: [
+            OutlinedButton(onPressed: onDismiss, child: const Text("Delete")),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: const Text("Cancel"),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -170,6 +188,16 @@ class _HousingCompanyManagementScreenState
                   SettingButton(
                     onPressed: () {
                       context.push(
+                          '${GoRouter.of(context).location}/$housingCompanyUiScreenPath');
+                    },
+                    label: Text(
+                      'Appearance',
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                  ),
+                  SettingButton(
+                    onPressed: () {
+                      context.push(
                           '${GoRouter.of(context).location}/$housingCompanyPaymentPath');
                     },
                     label: Text(
@@ -189,7 +217,9 @@ class _HousingCompanyManagementScreenState
                   ),
                   SettingButton(
                     onPressed: () async {
-                      await cubit.deleteThisHousingCompany();
+                      _showConfirmDeleteDialog(() {
+                        cubit.deleteThisHousingCompany();
+                      });
                     },
                     label: Text(
                       'Delete this company',

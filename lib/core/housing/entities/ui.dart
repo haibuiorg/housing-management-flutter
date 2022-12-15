@@ -6,7 +6,11 @@ class UI extends Equatable {
 
   const UI({this.seedColor});
 
-  factory UI.modelToEntity(UIModel uiModel) => UI(seedColor: uiModel.seedColor);
+  factory UI.modelToEntity(UIModel? uiModel) =>
+      UI(seedColor: uiModel?.seedColor);
+
+  UI copyWith({String? seedColor}) =>
+      UI(seedColor: seedColor ?? this.seedColor);
 
   @override
   List<Object?> get props => [seedColor];

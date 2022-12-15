@@ -48,6 +48,7 @@ class _FileSelectorState extends State<FileSelector> {
   @override
   void dispose() {
     super.dispose();
+    _cubit.close();
   }
 
   @override
@@ -57,7 +58,6 @@ class _FileSelectorState extends State<FileSelector> {
       child: BlocConsumer<FileSelectorCubit, FileSelectorState>(
           listener: (context, state) {
         if (state.uploadedLocations?.isNotEmpty == true || widget.autoUpload) {
-          print(state);
           widget.onCompleteUploaded(state.uploadedLocations ?? []);
         }
       }, builder: (context, state) {
@@ -76,7 +76,7 @@ class _FileSelectorState extends State<FileSelector> {
                   (state.selectedFiles?.isNotEmpty == true ||
                           widget.previewUrl?.isNotEmpty == true)
                       ? CarouselSlider.builder(
-                          itemCount: state.selectedFiles?.length ?? 0,
+                          itemCount: state.selectedFiles?.length ?? 1,
                           options: CarouselOptions(
                               height: MediaQuery.of(context).size.width / 2,
                               viewportFraction: 0.5,
@@ -260,7 +260,8 @@ class _FileSelectorState extends State<FileSelector> {
                               },
                       ),
                       !widget.autoUpload
-                          ? Expanded(
+                          ? Padding(
+                              padding: const EdgeInsets.all(8.0),
                               child: OutlinedButton.icon(
                                 icon: const Icon(Icons.upload_file_rounded),
                                 label: const Text('Upload'),

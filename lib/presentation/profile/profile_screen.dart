@@ -39,20 +39,16 @@ class SettingScreen extends StatelessWidget {
                   onTap: () {
                     showModalBottomSheet(
                         context: context,
-                        builder: (_) => Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 32.0, right: 32, bottom: 32),
-                              child: FileSelector(
-                                isSingleFile: true,
-                                isImageOnly: true,
-                                previewUrl: state.user?.avatarUrl,
-                                onCompleteUploaded: (tempUploadedFiles) {
-                                  BlocProvider.of<ProfileScreenCubit>(context)
-                                      .updateUserAvatar(tempUploadedFiles)
-                                      .then((value) =>
-                                          Navigator.pop(context, true));
-                                },
-                              ),
+                        builder: (_) => FileSelector(
+                              isSingleFile: true,
+                              isImageOnly: true,
+                              previewUrl: state.user?.avatarUrl,
+                              onCompleteUploaded: (tempUploadedFiles) {
+                                BlocProvider.of<ProfileScreenCubit>(context)
+                                    .updateUserAvatar(tempUploadedFiles)
+                                    .then((value) =>
+                                        Navigator.pop(context, true));
+                              },
                             ));
                   },
                   child: CircleAvatar(

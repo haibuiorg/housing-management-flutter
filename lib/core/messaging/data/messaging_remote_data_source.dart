@@ -271,4 +271,27 @@ class MessagingRemoteDataSource implements MessagingDataSource {
       throw ServerException(error: error);
     }
   }
+
+  @override
+  Future<ConversationModel> startSupportConversation(
+      {required String countryCode,
+      required String languageCode,
+      required String name}) async {
+    try {
+      final Map<String, dynamic> data = {
+        "language_code": languageCode,
+        "name": name,
+        "country_code": countryCode,
+        "type": messageTypeSupport,
+      };
+      try {
+        final result = await client.post('/start_conversation', data: data);
+        return ConversationModel.fromJson(result.data);
+      } catch (error) {
+        throw ServerException();
+      }
+    } catch (error) {
+      throw ServerException(error: error);
+    }
+  }
 }

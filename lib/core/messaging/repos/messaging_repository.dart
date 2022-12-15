@@ -32,6 +32,12 @@ abstract class MessagingRepository {
     required String channelId,
     required String name,
   });
+  Future<Result<Conversation>> startSupportConversation({
+    String? userId,
+    required String countryCode,
+    required String languageCode,
+    required String name,
+  });
   Future<Result<Conversation>> joinConversation({
     required String messageType,
     required String userId,

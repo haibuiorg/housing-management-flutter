@@ -6,15 +6,22 @@ class Country extends Equatable {
   final String countryCode;
   final String currencyCode;
   final String id;
+  final List<String> supportLanguages;
+  final String supportPhoneNumber;
 
   const Country(
       {required this.countryCode,
+      required this.supportLanguages,
       required this.currencyCode,
+      required this.supportPhoneNumber,
       required this.id});
   factory Country.modelToEntity(CountryModel model) => Country(
       countryCode: model.country_code,
       currencyCode: model.currency_code,
+      supportPhoneNumber: model.support_phone_number,
+      supportLanguages: model.support_languages,
       id: model.id);
   @override
-  List<Object?> get props => [countryCode, currencyCode, id];
+  List<Object?> get props =>
+      [countryCode, currencyCode, id, supportLanguages, supportPhoneNumber];
 }

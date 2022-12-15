@@ -10,15 +10,25 @@ class CountryModel extends Equatable {
   final String country_code;
   final String id;
   final String currency_code;
+  final List<String> support_languages;
+  final String support_phone_number;
 
   const CountryModel(
       {required this.country_code,
+      required this.support_languages,
       required this.id,
+      required this.support_phone_number,
       required this.currency_code});
 
   factory CountryModel.fromJson(Map<String, dynamic> json) =>
       _$CountryModelFromJson(json);
 
   @override
-  List<Object?> get props => [country_code, currency_code, id];
+  List<Object?> get props => [
+        country_code,
+        currency_code,
+        support_languages,
+        id,
+        support_phone_number
+      ];
 }

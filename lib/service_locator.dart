@@ -40,6 +40,7 @@ import 'package:priorli/core/messaging/usecases/join_conversation.dart';
 import 'package:priorli/core/messaging/usecases/send_message.dart';
 import 'package:priorli/core/messaging/usecases/set_conversation_seen.dart';
 import 'package:priorli/core/messaging/usecases/start_conversation.dart';
+import 'package:priorli/core/messaging/usecases/start_support_conversation.dart';
 import 'package:priorli/core/notification/data/notification_message_data_source.dart';
 import 'package:priorli/core/notification/data/notification_message_remote_data_source.dart';
 import 'package:priorli/core/notification/repos/notification_message_repository.dart';
@@ -77,6 +78,7 @@ import 'package:priorli/presentation/create_housing_company/create_housing_compa
 import 'package:priorli/presentation/documents/document_list_screen_cubit.dart';
 import 'package:priorli/presentation/file_selector/file_selector_cubit.dart';
 import 'package:priorli/presentation/forgot_password/forgot_password_cubit.dart';
+import 'package:priorli/presentation/help/help_cubit.dart';
 import 'package:priorli/presentation/home/home_cubit.dart';
 import 'package:priorli/presentation/housing_company/housing_company_cubit.dart';
 import 'package:priorli/presentation/housing_company_payment/housing_company_payment_cubit.dart';
@@ -150,6 +152,7 @@ import 'core/water_usage/usecases/start_new_water_consumptio_period.dart';
 import 'presentation/apartment_management/apartment_management_cubit.dart';
 import 'presentation/documents/document_screen_cubit.dart';
 import 'presentation/housing_company_management/housing_company_management_cubit.dart';
+import 'presentation/housing_company_ui/housing_company_ui_screen_cubit.dart';
 import 'presentation/send_invitation/invite_tenant_cubit.dart';
 import 'presentation/water_consumption_management/water_consumption_management_cubit.dart';
 import 'setting_cubit.dart';
@@ -244,6 +247,10 @@ Future<void> init() async {
       () => DocumentScreenCubit(serviceLocator(), serviceLocator()));
   serviceLocator.registerFactory(
       () => AnnouncementItemCubit(serviceLocator(), serviceLocator()));
+  serviceLocator.registerFactory(
+      () => HousingCompanyUiScreenCubit(serviceLocator(), serviceLocator()));
+  serviceLocator
+      .registerFactory(() => HelpCubit(serviceLocator(), serviceLocator()));
 
   /** usecases */
 
@@ -397,6 +404,10 @@ Future<void> init() async {
       () => GetConversationDetail(messagingRepository: serviceLocator()));
   serviceLocator.registerLazySingleton<UploadFile>(
       () => UploadFile(storageRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<StartSupportConversation>(
+      () => StartSupportConversation(messagingRepository: serviceLocator()));
+
+  // country
   serviceLocator.registerLazySingleton<GetSupportCountries>(
       () => GetSupportCountries(countryRepository: serviceLocator()));
   serviceLocator.registerLazySingleton<GetCountryData>(

@@ -36,7 +36,13 @@ class ConversationListCubit extends Cubit<ConversationListState> {
   }
 
   _messageListener(List<Conversation> conversationList) {
-    emit(state.copyWith(conversationList: conversationList));
+    emit(state.copyWith(
+        conversationList: conversationList
+            .where((element) => element.type == messageTypeCommunity)
+            .toList(),
+        supportConversationList: conversationList
+            .where((element) => element.type == messageTypeSupport)
+            .toList()));
   }
 
   @override
