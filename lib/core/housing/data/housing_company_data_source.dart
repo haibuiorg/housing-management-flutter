@@ -1,4 +1,5 @@
 import 'package:priorli/core/housing/models/housing_company_model.dart';
+import 'package:priorli/core/user/models/user_model.dart';
 
 import '../../storage/models/storage_item_model.dart';
 import '../entities/ui.dart';
@@ -29,8 +30,12 @@ abstract class HousingCompanyDataSource {
       {required List<String> storageItems,
       required String housingCompanyId,
       String? type});
-  Future<List<StorageItemModel>> getCompanyDocuments(
-      {required String housingCompanyId, String? type});
+  Future<List<StorageItemModel>> getCompanyDocuments({
+    required String housingCompanyId,
+    String? type,
+    int? limit,
+    int? lastCreatedOn,
+  });
   Future<StorageItemModel> updateCompanyDocument(
       {required String documentId,
       required String housingCompanyId,
@@ -38,6 +43,10 @@ abstract class HousingCompanyDataSource {
       String? name});
   Future<StorageItemModel> getCompanyDocument({
     required String documentId,
+    required String housingCompanyId,
+  });
+
+  Future<List<UserModel>> getCompanyUsers({
     required String housingCompanyId,
   });
 }

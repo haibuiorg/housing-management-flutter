@@ -5,7 +5,6 @@ import 'package:priorli/presentation/create_housing_company/create_housing_compa
 import 'package:priorli/presentation/join_apartment/join_apartment_screen.dart';
 
 import '../../service_locator.dart';
-import '../code_register/code_register_screen.dart';
 import 'home_cubit.dart';
 import 'widgets/selectable_company_list.dart';
 
@@ -25,6 +24,9 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     cubit = serviceLocator<HomeCubit>();
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      cubit.getUserHousingCompanies();
+    });
   }
 
   @override
@@ -72,7 +74,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    cubit.getUserHousingCompanies();
     return Scaffold(
         floatingActionButton: FloatingActionButton.small(
           onPressed: _showMoreDialog,

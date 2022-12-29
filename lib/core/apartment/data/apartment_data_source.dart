@@ -1,6 +1,5 @@
 import 'package:priorli/core/apartment/model/apartment_invitation_model.dart';
 import 'package:priorli/core/apartment/model/apartment_model.dart';
-import 'package:priorli/core/storage/entities/storage_item.dart';
 import 'package:priorli/core/storage/models/storage_item_model.dart';
 
 abstract class ApartmentDataSource {
@@ -43,6 +42,8 @@ abstract class ApartmentDataSource {
       String? type});
   Future<List<StorageItemModel>> getApartmentDocuments(
       {required String housingCompanyId,
+      int? limit,
+      int? lastCreatedOn,
       required String apartmentId,
       String? type});
   Future<StorageItemModel> updateApartmentDocument(

@@ -1,4 +1,4 @@
-const appSeedColor = '#FFCB73';
+const appSeedColor = '#A594F9';
 const housingCompanies = 'housing_companies';
 const supportChannels = 'support_channels';
 const conversations = 'conversations';

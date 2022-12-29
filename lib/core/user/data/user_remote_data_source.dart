@@ -13,8 +13,12 @@ class UserRemoteDataSource implements UserDataSource {
 
   @override
   Future<UserModel> getUserInfo() async {
-    final response = await client.get(_path);
-    return UserModel.fromJson(response.data as Map<String, dynamic>);
+    try {
+      final response = await client.get(_path);
+      return UserModel.fromJson(response.data);
+    } catch (error) {
+      throw ServerException(error: error);
+    }
   }
 
   @override
@@ -23,24 +27,31 @@ class UserRemoteDataSource implements UserDataSource {
       String? lastName,
       String? phone,
       String? avatarStorageLocation}) async {
-    final body = {
-      'first_name': fistName,
-      'last_name': lastName,
-      'phone': phone,
-      'avatar_storage_location': avatarStorageLocation
-    };
-    final response = await client.patch(_path, data: body);
-    return UserModel.fromJson(response.data as Map<String, dynamic>);
+    try {
+      final body = {
+        'first_name': fistName,
+        'last_name': lastName,
+        'phone': phone,
+        'avatar_storage_location': avatarStorageLocation
+      };
+      final response = await client.patch(_path, data: body);
+      return UserModel.fromJson(response.data as Map<String, dynamic>);
+    } catch (error) {
+      throw ServerException(error: error);
+    }
   }
 
   @override
   Future<UserModel> updateNotificationToken(
       {required String notificationToken}) async {
-    final body = {'notification_token': notificationToken};
-    debugPrint(body.toString());
-    final response =
-        await client.patch('$_path/notification_token', data: body);
-    return UserModel.fromJson(response.data as Map<String, dynamic>);
+    try {
+      final body = {'notification_token': notificationToken};
+      final response =
+          await client.patch('$_path/notification_token', data: body);
+      return UserModel.fromJson(response.data as Map<String, dynamic>);
+    } catch (error) {
+      throw ServerException(error: error);
+    }
   }
 
   @override
@@ -70,7 +81,7 @@ class UserRemoteDataSource implements UserDataSource {
       final result = await client.post(_registerPath, data: data);
       return UserModel.fromJson(result.data as Map<String, dynamic>);
     } catch (error) {
-      throw ServerException();
+      throw ServerException(error: error);
     }
   }
 

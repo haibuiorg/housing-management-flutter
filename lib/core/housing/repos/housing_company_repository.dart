@@ -1,4 +1,5 @@
 import 'package:priorli/core/housing/entities/housing_company.dart';
+import 'package:priorli/core/user/entities/user.dart';
 
 import '../../base/result.dart';
 import '../../storage/entities/storage_item.dart';
@@ -30,8 +31,12 @@ abstract class HousingCompanyRepository {
       {required List<String> storageItems,
       required String housingCompanyId,
       String? type});
-  Future<Result<List<StorageItem>>> getCompanyDocuments(
-      {required String housingCompanyId, String? type});
+  Future<Result<List<StorageItem>>> getCompanyDocuments({
+    required String housingCompanyId,
+    String? type,
+    int? limit,
+    int? lastCreatedOn,
+  });
   Future<Result<StorageItem>> updateCompanyDocument(
       {required String documentId,
       required String housingCompanyId,
@@ -39,6 +44,10 @@ abstract class HousingCompanyRepository {
       String? name});
   Future<Result<StorageItem>> getCompanyDocument({
     required String documentId,
+    required String housingCompanyId,
+  });
+
+  Future<Result<List<User>>> getCompanyUsers({
     required String housingCompanyId,
   });
 }

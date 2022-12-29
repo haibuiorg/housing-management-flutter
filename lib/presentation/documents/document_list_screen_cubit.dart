@@ -93,4 +93,30 @@ class DocumentListScreenCubit extends Cubit<DocumentListScreenState> {
     }
     return null;
   }
+
+  Future<void> loadMore() async {
+    if (state.apartmentId != null && state.companyId != null) {
+      final documentListResult = await _getApartmentDocumentList(
+          GetApartmentDocumentListParams(
+              lastCreatedOn: state.documentList?.last.createdOn,
+              housingCompanyId: state.companyId!,
+              apartmentId: state.apartmentId!));
+      if (documentListResult is ResultSuccess<List<StorageItem>>) {
+        final List<StorageItem> list = List.from(state.documentList ?? []);
+        list.addAll(documentListResult.data);
+        emit(state.copyWith(documentList: list));
+      }
+    } else if (state.companyId != null) {
+      final documentListResult =
+          await _getCompanyDocumentList(GetCompanyDocumentListParams(
+        lastCreatedOn: state.documentList?.last.createdOn,
+        housingCompanyId: state.companyId!,
+      ));
+      if (documentListResult is ResultSuccess<List<StorageItem>>) {
+        final List<StorageItem> list = List.from(state.documentList ?? []);
+        list.addAll(documentListResult.data);
+        emit(state.copyWith(documentList: list));
+      }
+    }
+  }
 }

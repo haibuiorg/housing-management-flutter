@@ -38,6 +38,8 @@ abstract class ApartmentRepository {
   Future<Result<List<StorageItem>>> getApartmentDocuments(
       {required String housingCompanyId,
       required String apartmentId,
+      int? limit,
+      int? lastCreatedOn,
       String? type});
   Future<Result<StorageItem>> updateApartmentDocument(
       {required String documentId,

@@ -1,6 +1,5 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:go_router/go_router.dart';
-import 'package:priorli/go_router_navigation.dart';
 import 'package:priorli/service_locator.dart';
 
 class NotificationController {

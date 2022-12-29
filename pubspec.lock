@@ -233,6 +233,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.3.0"
+  collapsible_sidebar:
+    dependency: "direct main"
+    description:
+      name: collapsible_sidebar
+      sha256: "93ef2892999258391873fad5f83c06bfd28efa520fb543853bf887d02b586ea9"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.3+2"
   collection:
     dependency: transitive
     description:
@@ -249,14 +257,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.1"
-  convex_bottom_bar:
-    dependency: "direct main"
-    description:
-      name: convex_bottom_bar
-      sha256: "6c9d23fa309b2cf2cb4804a6318e34694f4714c29fac79621ff88b71266fbe57"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.1.0+1"
   cross_file:
     dependency: transitive
     description:
@@ -289,6 +289,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.5"
+  curved_navigation_bar:
+    dependency: "direct main"
+    description:
+      name: curved_navigation_bar
+      sha256: ea6412d00c5d83501bbf1cf9d1ac2ff11a20fbaf910c103c95ace7de82910334
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.3"
   dart_style:
     dependency: transitive
     description:
@@ -633,10 +641,10 @@ packages:
     dependency: "direct main"
     description:
       name: go_router
-      sha256: b96c2527b7f488b54d076e662bdb65192890571aba32e1f740faff474bddd70c
+      sha256: "788a89932142b0059c319e3153e73308e0fc8bbab78e9a66b0128423090c4e01"
       url: "https://pub.dev"
     source: hosted
-    version: "5.2.0"
+    version: "6.0.0"
   google_fonts:
     dependency: "direct main"
     description:
@@ -881,10 +889,10 @@ packages:
     dependency: transitive
     description:
       name: matcher
-      sha256: "16db949ceee371e9b99d22f88fa3a73c4e59fd0afed0bd25fc336eb76c198b72"
+      sha256: c94db23593b89766cda57aab9ac311e3616cf87c6fa4e9749df032f66f30dcb8
       url: "https://pub.dev"
     source: hosted
-    version: "0.12.13"
+    version: "0.12.14"
   material_color_utilities:
     dependency: transitive
     description:
@@ -1093,6 +1101,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.1"
+  responsive_framework:
+    dependency: "direct main"
+    description:
+      name: responsive_framework
+      sha256: e083346029b008335b008274c4d3fac5b9e0ca8796f201ed20884f579101d584
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.0"
   rxdart:
     dependency: transitive
     description:
@@ -1266,6 +1282,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
+  syncfusion_flutter_calendar:
+    dependency: "direct main"
+    description:
+      name: syncfusion_flutter_calendar
+      sha256: b1a7c3ece87082fd22dedee3bac20f7d782e2049096c7241fef1e5a03ee31f96
+      url: "https://pub.dev"
+    source: hosted
+    version: "20.4.38"
   syncfusion_flutter_charts:
     dependency: "direct main"
     description:
@@ -1278,10 +1302,18 @@ packages:
     dependency: transitive
     description:
       name: syncfusion_flutter_core
-      sha256: "123b79b4855c00c120a1fce972a3b5442077cab54ce4adb59942bf093259de2d"
+      sha256: "0d027bd2137ecba3ad058a0ce07353f6e1ce051d03bc569b6cfee99f206fdaa6"
       url: "https://pub.dev"
     source: hosted
-    version: "20.3.58"
+    version: "20.4.38"
+  syncfusion_flutter_datepicker:
+    dependency: transitive
+    description:
+      name: syncfusion_flutter_datepicker
+      sha256: "33df5919045160ea22adf2683d2da856d7234cf2c4e56e1ed90f6fa26c481cc7"
+      url: "https://pub.dev"
+    source: hosted
+    version: "20.4.38"
   syncfusion_flutter_pdf:
     dependency: transitive
     description:
@@ -1350,10 +1382,18 @@ packages:
     dependency: transitive
     description:
       name: test_api
-      sha256: ad540f65f92caa91bf21dfc8ffb8c589d6e4dc0c2267818b4cc2792857706206
+      sha256: c9282698e2982b6c3817037554e52f99d4daba493e8028f8112a83d68ccd0b12
       url: "https://pub.dev"
     source: hosted
-    version: "0.4.16"
+    version: "0.4.17"
+  timezone:
+    dependency: transitive
+    description:
+      name: timezone
+      sha256: "2e59efc48e9f684c327c0498ac0b81411aee18b10c82f2db2c08f7f052493569"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.9.0"
   timing:
     dependency: transitive
     description:

@@ -26,6 +26,13 @@ extension ExtString on String {
   String capitalize() {
     return "${this[0].toUpperCase()}${substring(1).toLowerCase()}";
   }
+
+  String camelCaseToUnderScore() {
+    RegExp exp = RegExp(r'(?<=[a-z])[A-Z]');
+    String result =
+        replaceAllMapped(exp, (Match m) => ('_${m.group(0)}')).toLowerCase();
+    return result;
+  }
 }
 
 String formatCurrency(double? amount, String? currencyCode) {

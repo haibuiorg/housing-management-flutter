@@ -7,13 +7,19 @@
         {
             "name": "priorli",
             "request": "launch",
-            "type": "dart"
+            "type": "dart",
+            "args": [
+                "--dart-define=API_URL=http://192.168.50.208:8080/api/v1",
+              ]
         },
         {
             "name": "priorli (profile mode)",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "profile"
+            "flutterMode": "profile",
+            "args": [
+                "--dart-define=API_URL=https://priorli.oa.r.appspot.com/api/v1",
+              ]
         },
         {
             "name": "priorli (release mode)",

@@ -9,7 +9,7 @@ import 'package:firebase_core/firebase_core.dart';
 import './service_locator.dart' as di;
 import 'app.dart';
 import 'firebase_options.dart';
-import 'package:flutter_web_plugins/url_strategy.dart' show usePathUrlStrategy;
+import 'notification_service.dart';
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -22,23 +22,18 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 }
 
 Future<void> setupFlutterNotifications() async {
-  AwesomeNotifications().initialize(
-      // TODO redo this
-      // set the icon to null if you want to use the default app icon
-      // 'resource://drawable/notification_icon',
-      null,
-      [
-        NotificationChannel(
-            channelKey: 'default',
-            channelName: 'default',
-            channelDescription: 'Default',
-            importance: NotificationImportance.High)
-      ]);
-}
-
-void showLocalFlutterNotification(RemoteMessage message) {
-  debugPrint(message.data.toString());
-  AwesomeNotifications().createNotificationFromJsonData(message.data);
+  AwesomeNotifications().initialize('resource://drawable/ic_notification', [
+    NotificationChannel(
+        channelKey: 'default',
+        channelName: 'default',
+        channelDescription: 'Default',
+        importance: NotificationImportance.High),
+    NotificationChannel(
+        channelKey: 'event',
+        channelName: 'event',
+        channelDescription: 'Notification for event',
+        importance: NotificationImportance.High)
+  ]);
 }
 
 Future<void> main() async {
@@ -62,9 +57,12 @@ Future<void> main() async {
   if (!kIsWeb && !Platform.isIOS) {
     FirebaseMessaging.onMessage.listen(showLocalFlutterNotification);
   }
-  usePathUrlStrategy();
   // Get any initial links
-  final PendingDynamicLinkData? initialLink =
-      await FirebaseDynamicLinks.instance.getInitialLink();
-  runApp(App(initialLink: initialLink));
+  if (!kIsWeb) {
+    final PendingDynamicLinkData? initialLink =
+        await FirebaseDynamicLinks.instance.getInitialLink();
+    runApp(App(initialLink: initialLink));
+  } else {
+    runApp(const App());
+  }
 }

@@ -1,9 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.priorli.priorli">
-
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
     <application
-        android:label="priorli"
-        android:name="${applicationName}"
+        android:label="Priorli"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

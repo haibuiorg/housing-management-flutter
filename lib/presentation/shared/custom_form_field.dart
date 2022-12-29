@@ -2,26 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class CustomFormField extends StatelessWidget {
-  const CustomFormField({
-    Key? key,
-    required this.hintText,
-    this.inputFormatters,
-    this.validator,
-    this.textEditingController,
-    this.autoValidate = false,
-    this.icon,
-    this.onSubmitted,
-    this.obscureText = false,
-    this.keyboardType,
-    this.helperText,
-    this.onChanged,
-    this.textInputAction,
-    this.initialValue,
-    this.focusNode,
-    this.autofocus,
-    this.textCapitalization,
-    this.decoration,
-  }) : super(key: key);
+  const CustomFormField(
+      {Key? key,
+      required this.hintText,
+      this.inputFormatters,
+      this.validator,
+      this.textEditingController,
+      this.autoValidate = false,
+      this.icon,
+      this.onSubmitted,
+      this.obscureText = false,
+      this.keyboardType,
+      this.helperText,
+      this.onChanged,
+      this.textInputAction,
+      this.initialValue,
+      this.focusNode,
+      this.autofocus,
+      this.textCapitalization,
+      this.decoration,
+      this.enabled})
+      : super(key: key);
   final String hintText;
   final String? helperText;
   final bool obscureText;
@@ -39,6 +40,7 @@ class CustomFormField extends StatelessWidget {
   final ValueChanged<String>? onSubmitted;
   final TextCapitalization? textCapitalization;
   final InputDecoration? decoration;
+  final bool? enabled;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -54,6 +56,7 @@ class CustomFormField extends StatelessWidget {
         onChanged: onChanged,
         obscureText: obscureText,
         keyboardType: keyboardType,
+        enabled: enabled,
         initialValue: initialValue,
         focusNode: focusNode,
         autofocus: autofocus ?? true,

@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -34,6 +36,8 @@ class HousingCompanyModel extends Equatable {
   final String? logoUrl;
   @JsonKey(name: 'cover_image_url')
   final String? coverImageUrl;
+  final bool? is_user_owner;
+  final bool? is_user_manager;
 
   const HousingCompanyModel(
       this.id,
@@ -52,6 +56,8 @@ class HousingCompanyModel extends Equatable {
       this.vat,
       this.logoUrl,
       this.coverImageUrl,
+      this.is_user_manager,
+      this.is_user_owner,
       this.ui);
 
   factory HousingCompanyModel.fromJson(Map<String, dynamic> json) =>
@@ -74,6 +80,8 @@ class HousingCompanyModel extends Equatable {
         isDeleted,
         vat,
         ui,
+        is_user_manager,
+        is_user_owner,
         logoUrl,
         coverImageUrl
       ];

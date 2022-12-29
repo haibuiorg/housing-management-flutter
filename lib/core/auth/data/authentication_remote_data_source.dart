@@ -14,14 +14,16 @@ class AuthenticationRemoteDataSource implements AuthenticationDataSource {
 
   @override
   Future<bool> isAuthenticated() async {
-    var firebaseUser = FirebaseAuth.instance.currentUser;
-    firebaseUser ??= await FirebaseAuth.instance.idTokenChanges().first;
+    var firebaseUser = await firebaseAuth.authStateChanges().first;
+    firebaseUser ??= await firebaseAuth.idTokenChanges().first;
     return firebaseUser != null;
   }
 
   @override
   Future<bool> isLoggedIn() async {
-    return !firebaseAuth.currentUser!.isAnonymous;
+    var firebaseUser = await firebaseAuth.authStateChanges().first;
+    firebaseUser ??= await firebaseAuth.idTokenChanges().first;
+    return firebaseUser != null;
   }
 
   @override

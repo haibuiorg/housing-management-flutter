@@ -1,8 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:priorli/core/housing/entities/ui.dart';
 import 'package:priorli/core/housing/models/housing_company_model.dart';
-import 'package:priorli/core/housing/models/ui_model.dart';
-import 'package:priorli/core/utils/constants.dart';
 
 class HousingCompany extends Equatable {
   final String id;
@@ -22,6 +20,8 @@ class HousingCompany extends Equatable {
   final double vat;
   final String logoUrl;
   final String coverImageUrl;
+  final bool isUserOwner;
+  final bool isUserManager;
 
   const HousingCompany(
       {required this.id,
@@ -36,6 +36,8 @@ class HousingCompany extends Equatable {
       required this.name,
       required this.isDeleted,
       required this.currencyCode,
+      required this.isUserManager,
+      required this.isUserOwner,
       this.ui,
       required this.vat,
       required this.logoUrl,
@@ -60,6 +62,8 @@ class HousingCompany extends Equatable {
           lng: housingCompanyModel.lng ?? 0.0,
           name: housingCompanyModel.name ?? '',
           logoUrl: housingCompanyModel.logoUrl ?? '',
+          isUserManager: housingCompanyModel.is_user_manager == true,
+          isUserOwner: housingCompanyModel.is_user_owner == true,
           coverImageUrl: housingCompanyModel.coverImageUrl ?? '',
           vat: housingCompanyModel.vat ?? 0);
   HousingCompany copyWith(
@@ -72,6 +76,8 @@ class HousingCompany extends Equatable {
           double? lng,
           String? businessId,
           bool? isDeleted,
+          bool? isUserOwner,
+          bool? isUserManager,
           UI? ui,
           String? name,
           String? logoUrl,
@@ -79,6 +85,8 @@ class HousingCompany extends Equatable {
           double? vat}) =>
       HousingCompany(
           id: id,
+          isUserManager: isUserManager ?? this.isUserManager,
+          isUserOwner: isUserOwner ?? this.isUserOwner,
           ui: ui ?? this.ui,
           streetAddress1: streetAddress1 ?? this.streetAddress1,
           streetAddress2: streetAddress2 ?? this.streetAddress2,
@@ -105,6 +113,8 @@ class HousingCompany extends Equatable {
         city,
         countryCode,
         lat,
+        isUserManager,
+        isUserOwner,
         lng,
         name,
         apartmentCount,

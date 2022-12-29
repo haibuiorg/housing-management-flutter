@@ -4,9 +4,10 @@ import 'package:flutter/foundation.dart';
 class ServerException extends Equatable implements Exception {
   final String? serverMessage;
   final String? code;
-  final Object? error;
+  final dynamic error;
 
   ServerException({this.serverMessage, this.code, this.error}) {
+    debugPrint((error as Error).stackTrace.toString());
     debugPrint('$serverMessage/$code/$error/');
   }
   @override

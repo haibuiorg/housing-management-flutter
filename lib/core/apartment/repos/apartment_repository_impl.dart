@@ -160,11 +160,15 @@ class ApartmentRepositoryImpl implements ApartmentRepository {
   Future<Result<List<StorageItem>>> getApartmentDocuments(
       {required String housingCompanyId,
       required String apartmentId,
+      int? limit,
+      int? lastCreatedOn,
       String? type}) async {
     try {
       final documentListModel = await apartmentDataSource.getApartmentDocuments(
           housingCompanyId: housingCompanyId,
           apartmentId: apartmentId,
+          lastCreatedOn: lastCreatedOn,
+          limit: limit,
           type: type);
       return ResultSuccess(
           documentListModel.map((e) => StorageItem.modelToEntity(e)).toList());

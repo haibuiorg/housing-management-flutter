@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:priorli/core/housing/models/housing_company_model.dart';
+import 'package:priorli/core/user/models/user_model.dart';
 
 import '../../base/exceptions.dart';
 import '../../storage/models/storage_item_model.dart';
@@ -160,10 +161,24 @@ class HousingCompanyRemoteDataSource implements HousingCompanyDataSource {
   }
 
   @override
-  Future<List<StorageItemModel>> getCompanyDocuments(
-      {required String housingCompanyId, String? type}) async {
+  Future<List<StorageItemModel>> getCompanyDocuments({
+    required String housingCompanyId,
+    String? type,
+    int? limit,
+    int? lastCreatedOn,
+  }) async {
     try {
-      final data = {'housing_company_id': housingCompanyId, 'type': type};
+      final data = {
+        'housing_company_id': housingCompanyId,
+        'type': type,
+        'last_created_on': lastCreatedOn
+      };
+      if (limit != null) {
+        data['limit'] = limit;
+      }
+      if (lastCreatedOn != null) {
+        data['last_created_on'] = lastCreatedOn;
+      }
       final result =
           await client.get('/housing_company/documents', queryParameters: data);
       return (result.data as List<dynamic>)
@@ -193,6 +208,21 @@ class HousingCompanyRemoteDataSource implements HousingCompanyDataSource {
       final result =
           await client.put('/housing_company/document/$documentId', data: data);
       return StorageItemModel.fromJson(result.data);
+    } catch (error) {
+      throw ServerException(error: error);
+    }
+  }
+
+  @override
+  Future<List<UserModel>> getCompanyUsers(
+      {required String housingCompanyId}) async {
+    try {
+      final result = await client.get(
+        '/housing_company/$housingCompanyId/users',
+      );
+      return (result.data as List<dynamic>)
+          .map((e) => UserModel.fromJson(e))
+          .toList();
     } catch (error) {
       throw ServerException(error: error);
     }

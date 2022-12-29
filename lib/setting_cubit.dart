@@ -21,14 +21,19 @@ class SettingCubit extends Cubit<SettingState> {
     final isDarkThemeResult =
         await _getSetting(const GetSettingParams(key: darkModeKey));
     final isDarkTheme =
-        (isDarkThemeResult is ResultSuccess) && isDarkThemeResult.data;
+        (isDarkThemeResult is ResultSuccess) && isDarkThemeResult.data == true;
     final languageCodeResult =
         await _getSetting(const GetSettingParams(key: languageCode));
+    final useSystemColorResult =
+        await _getSetting(const GetSettingParams(key: systemColor));
+    final useSystemColor = (useSystemColorResult is ResultSuccess) &&
+        useSystemColorResult.data == true;
     final languageCodeData =
         (languageCodeResult is ResultSuccess && languageCodeResult.data != null)
             ? languageCodeResult.data.toString()
             : 'fi';
     emit(state.copyWith(
+        useSystemColor: useSystemColor,
         brightness: isDarkTheme ? Brightness.dark : Brightness.light,
         languageCode: languageCodeData));
   }

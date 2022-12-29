@@ -10,10 +10,10 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
       json['user_id'] as String,
       json['phone'] as String,
       json['email'] as String,
-      (json['roles'] as List<dynamic>).map((e) => e as String).toList(),
+      json['roles'] as List<dynamic>?,
       json['first_name'] as String,
       json['last_name'] as String,
-      json['avatar_url'] as String?,
+      json['avatar_url'],
       json['email_verified'] as bool?,
     );
 

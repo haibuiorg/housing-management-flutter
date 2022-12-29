@@ -24,6 +24,8 @@ HousingCompanyModel _$HousingCompanyModelFromJson(Map<String, dynamic> json) =>
       (json['vat'] as num?)?.toDouble(),
       json['logo_url'] as String?,
       json['cover_image_url'] as String?,
+      json['is_user_manager'] as bool?,
+      json['is_user_owner'] as bool?,
       json['ui'] == null
           ? null
           : UIModel.fromJson(json['ui'] as Map<String, dynamic>),
@@ -49,4 +51,6 @@ Map<String, dynamic> _$HousingCompanyModelToJson(
       'vat': instance.vat,
       'logo_url': instance.logoUrl,
       'cover_image_url': instance.coverImageUrl,
+      'is_user_owner': instance.is_user_owner,
+      'is_user_manager': instance.is_user_manager,
     };

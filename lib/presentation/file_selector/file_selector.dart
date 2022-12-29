@@ -151,41 +151,37 @@ class _FileSelectorState extends State<FileSelector> {
                                       ],
                                     )
                                   : widget.previewUrl?.isNotEmpty == true
-                                      ? Container(
-                                          margin: const EdgeInsets.symmetric(
-                                              vertical: 16.0),
-                                          child: CachedNetworkImage(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width /
-                                                2,
-                                            height: MediaQuery.of(context)
-                                                    .size
-                                                    .width /
-                                                2,
-                                            imageUrl: widget.previewUrl ?? '',
-                                            imageBuilder:
-                                                (context, imageProvider) =>
-                                                    Container(
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(16),
-                                                image: DecorationImage(
-                                                  image: imageProvider,
-                                                  fit: BoxFit.cover,
-                                                ),
+                                      ? CachedNetworkImage(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width /
+                                              2,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .width /
+                                              2,
+                                          imageUrl: widget.previewUrl ?? '',
+                                          imageBuilder:
+                                              (context, imageProvider) =>
+                                                  Container(
+                                            padding: const EdgeInsets.all(16),
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(16),
+                                              image: DecorationImage(
+                                                image: imageProvider,
+                                                fit: BoxFit.cover,
                                               ),
                                             ),
-                                            placeholder: (context, url) =>
-                                                const SizedBox(
-                                                    height: 20,
-                                                    width: 20,
-                                                    child:
-                                                        CircularProgressIndicator()),
-                                            errorWidget:
-                                                (context, url, error) =>
-                                                    const Icon(Icons.error),
                                           ),
+                                          placeholder: (context, url) =>
+                                              const SizedBox(
+                                                  height: 20,
+                                                  width: 20,
+                                                  child:
+                                                      CircularProgressIndicator()),
+                                          errorWidget: (context, url, error) =>
+                                              const Icon(Icons.error),
                                         )
                                       : const SizedBox.shrink(),
                         )

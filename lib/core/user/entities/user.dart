@@ -27,9 +27,9 @@ class User extends Equatable {
         userId: userModel.userId,
         email: userModel.email,
         phone: userModel.phone,
-        firstName: userModel.firstName,
-        lastName: userModel.lastName,
-        roles: userModel.roles,
+        firstName: userModel.firstName ?? '',
+        lastName: userModel.lastName ?? '',
+        roles: userModel.roles?.map((e) => e.toString()).toList() ?? [],
         avatarUrl: userModel.avatarUrl,
         emailVerified: userModel.emailVerified);
   }
@@ -63,6 +63,7 @@ class User extends Equatable {
         firstName,
         lastName,
         roles,
+        roles.length,
         avatarUrl,
         emailVerified
       ];

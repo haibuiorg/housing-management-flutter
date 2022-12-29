@@ -1,7 +1,6 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:priorli/core/auth/usecases/change_password.dart';
-import 'package:priorli/core/auth/usecases/reset_password.dart';
 import 'package:priorli/core/base/result.dart';
 import 'package:priorli/core/base/usecase.dart';
 import 'package:priorli/core/user/usecases/delete_user_notification_token.dart';
@@ -111,16 +110,18 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   Future<void> _checkNotificationToken() async {
-    String? token = await FirebaseMessaging.instance.getToken();
-    if (token == null || token.isEmpty) {
-      return;
-    }
-    _updateUserNotificationToken(
-        UpdateUserNotificationTokenParams(notificationToken: token));
-    FirebaseMessaging.instance.onTokenRefresh.listen((newToken) => {
-          _updateUserNotificationToken(
-              UpdateUserNotificationTokenParams(notificationToken: newToken))
-        });
+    try {
+      String? token = await FirebaseMessaging.instance.getToken();
+      if (token == null || token.isEmpty) {
+        return;
+      }
+      _updateUserNotificationToken(
+          UpdateUserNotificationTokenParams(notificationToken: token));
+      FirebaseMessaging.instance.onTokenRefresh.listen((newToken) => {
+            _updateUserNotificationToken(
+                UpdateUserNotificationTokenParams(notificationToken: newToken))
+          });
+    } catch (error) {}
   }
 
   Future<void> changePassword(

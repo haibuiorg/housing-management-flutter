@@ -3,9 +3,8 @@ import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:priorli/core/auth/usecases/is_logged_in.dart';
 import 'package:priorli/core/utils/constants.dart';
-import 'package:priorli/main.dart';
+import 'package:priorli/presentation/code_register/code_register_screen.dart';
 import 'package:priorli/presentation/join_apartment/join_apartment_screen.dart';
 import 'package:priorli/presentation/register/register_screen.dart';
 import 'package:priorli/setting_cubit.dart';
@@ -14,10 +13,11 @@ import 'package:priorli/auth_state.dart';
 import 'package:priorli/presentation/login/login_screen.dart';
 import 'package:priorli/presentation/main/main_screen.dart';
 import 'package:dynamic_color/dynamic_color.dart';
+import 'package:priorli/user_cubit.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 import 'auth_cubit.dart';
 import 'core/utils/color_extension.dart';
-import 'go_router_navigation.dart';
 import 'notification_controller.dart';
 import 'service_locator.dart';
 
@@ -93,6 +93,8 @@ class _AppState extends State<App> {
             create: (context) => serviceLocator<SettingCubit>()),
         BlocProvider<AuthCubit>(
             create: (context) => serviceLocator<AuthCubit>()),
+        BlocProvider<UserCubit>(
+            create: (context) => serviceLocator<UserCubit>()),
       ],
       child: BlocConsumer<AuthCubit, AuthState>(listener: (context, state) {
         if (!state.isLoggedIn) {
@@ -103,7 +105,11 @@ class _AppState extends State<App> {
                 registerPath);
           }
         } else {
-          appRouter.go(mainPath);
+          if (appRouter.location == loginPath ||
+              appRouter.location == registerPath ||
+              appRouter.location == codeRegisterPath) {
+            appRouter.go(mainPath);
+          }
           if (widget.initialLink != null && widget.initialLink?.link != null) {
             appRouter.push(_getAppScreenPathFromAppLinkPath(
                     widget.initialLink?.link.path) ??
@@ -119,20 +125,31 @@ class _AppState extends State<App> {
               debugShowCheckedModeBanner: false,
               routerConfig: appRouter,
               theme: ThemeData(
-                colorScheme: lightColorScheme ??
-                    _defaultLightColorScheme(
+                colorScheme: state.useSystemColor
+                    ? lightColorScheme
+                    : _defaultLightColorScheme(
                         state.ui?.seedColor ?? appSeedColor),
                 useMaterial3: true,
               ),
               darkTheme: ThemeData(
-                colorScheme: darkColorScheme ??
-                    _defaultDarkColorScheme(
+                colorScheme: state.useSystemColor
+                    ? lightColorScheme
+                    : _defaultDarkColorScheme(
                         state.ui?.seedColor ?? appSeedColor),
                 useMaterial3: true,
               ),
               themeMode: state.brightness == Brightness.dark
                   ? ThemeMode.dark
                   : ThemeMode.light,
+              builder: (context, child) => ResponsiveWrapper.builder(
+                child,
+                defaultScale: true,
+                breakpoints: const [
+                  ResponsiveBreakpoint.resize(480, name: MOBILE),
+                  ResponsiveBreakpoint.autoScale(800, name: TABLET),
+                  ResponsiveBreakpoint.resize(1000, name: DESKTOP),
+                ],
+              ),
             );
           });
         });

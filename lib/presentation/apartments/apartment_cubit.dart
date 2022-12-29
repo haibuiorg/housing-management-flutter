@@ -1,6 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:priorli/core/apartment/entities/apartment.dart';
 import 'package:priorli/core/apartment/usecases/get_apartment.dart';
+import 'package:priorli/core/apartment/usecases/get_apartment_document.dart';
+import 'package:priorli/core/apartment/usecases/get_apartment_document_list.dart';
 import 'package:priorli/core/base/result.dart';
 import 'package:priorli/core/housing/entities/housing_company.dart';
 import 'package:priorli/core/housing/usecases/get_housing_company.dart';
@@ -12,6 +14,7 @@ import 'package:priorli/core/water_usage/usecases/get_water_bill.dart';
 import 'package:priorli/core/water_usage/usecases/get_water_bill_by_year.dart';
 import 'package:priorli/presentation/apartments/apartment_state.dart';
 
+import '../../core/storage/entities/storage_item.dart';
 import '../../core/water_usage/usecases/get_water_consumption.dart';
 
 class ApartmentCubit extends Cubit<ApartmentState> {
@@ -19,6 +22,8 @@ class ApartmentCubit extends Cubit<ApartmentState> {
   final GetApartment _getApartment;
   final GetWaterBillByYear _getWaterBillByYear;
   final GetHousingCompany _getHousingCompany;
+  final GetApartmentDocument _getApartmentDocument;
+  final GetApartmentDocumentList _getApartmentDocumentList;
   final GetLatestWaterConsumption _getLatestWaterConsumption;
 
   ApartmentCubit(
@@ -26,7 +31,9 @@ class ApartmentCubit extends Cubit<ApartmentState> {
       this._getApartment,
       this._getWaterBillByYear,
       this._getLatestWaterConsumption,
-      this._getHousingCompany)
+      this._getHousingCompany,
+      this._getApartmentDocument,
+      this._getApartmentDocumentList)
       : super(const ApartmentState());
 
   Future<void> init(String housingCompanyId, String apartmentId) async {
@@ -56,6 +63,13 @@ class ApartmentCubit extends Cubit<ApartmentState> {
       pendingState =
           pendingState.copyWith(housingCompany: getHousingCompanyResult.data);
     }
+    final apartmentDocumentResult = await _getApartmentDocumentList(
+        GetApartmentDocumentListParams(
+            housingCompanyId: housingCompanyId, apartmentId: apartmentId));
+    if (apartmentDocumentResult is ResultSuccess<List<StorageItem>>) {
+      pendingState =
+          (pendingState.copyWith(documentList: apartmentDocumentResult.data));
+    }
     emit(pendingState);
   }
 
@@ -69,5 +83,17 @@ class ApartmentCubit extends Cubit<ApartmentState> {
             buiding: state.apartment?.building ?? ''));
     emit(state.copyWith(
         newConsumptionAdded: addConsumptionResult is ResultSuccess<WaterBill>));
+  }
+
+  Future<StorageItem?> getDocument(String id) async {
+    final getCompanyDocumentResult = await _getApartmentDocument(
+        GetApartmentDocumentParams(
+            housingCompanyId: state.housingCompany?.id ?? '',
+            documentId: id,
+            apartmentId: state.apartment?.id ?? ''));
+    if (getCompanyDocumentResult is ResultSuccess<StorageItem>) {
+      return getCompanyDocumentResult.data;
+    }
+    return null;
   }
 }

@@ -3,10 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:priorli/presentation/add_apartment/add_apart_state.dart';
 import 'package:priorli/presentation/shared/custom_form_field.dart';
+import 'package:priorli/presentation/shared/full_width_title.dart';
 import 'package:priorli/service_locator.dart';
 
 import '../../go_router_navigation.dart';
-import '../housing_company/housing_company_screen.dart';
 import 'add_apart_cubit.dart';
 
 const addApartmentPath = 'add_apartment';
@@ -52,18 +52,14 @@ class AddApartmentScreen extends StatelessWidget {
               keyboardType: const TextInputType.numberWithOptions(),
               onChanged: (value) => cubit.updateHouseCode(int.parse(
                 value,
-                onError: (_) => 1,
               )),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                const Text('Automatically fill apartment/house with numbers'),
-                Switch(
-                    value: state.automaticHouseCodeInput != false,
-                    onChanged: (onChanged) =>
-                        cubit.updateAutomaticFillApartmentNumber(onChanged)),
-              ],
+            FullWidthTitle(
+              title: 'Autofill apartment numebers',
+              action: Switch(
+                  value: state.automaticHouseCodeInput != false,
+                  onChanged: (onChanged) =>
+                      cubit.updateAutomaticFillApartmentNumber(onChanged)),
             ),
             Expanded(
                 child: ListView.builder(

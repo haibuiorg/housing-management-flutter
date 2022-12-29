@@ -7,10 +7,17 @@ import 'package:priorli/core/apartment/entities/apartment.dart';
 import 'package:priorli/core/apartment/usecases/get_apartments.dart';
 import 'package:priorli/core/base/result.dart';
 import 'package:priorli/core/base/usecase.dart';
+import 'package:priorli/core/event/entities/event.dart';
+import 'package:priorli/core/event/entities/event_type.dart';
+import 'package:priorli/core/event/usecases/get_event_list.dart';
 import 'package:priorli/core/housing/entities/housing_company.dart';
+import 'package:priorli/core/housing/usecases/get_company_document.dart';
+import 'package:priorli/core/housing/usecases/get_company_document_list.dart';
 import 'package:priorli/core/housing/usecases/get_housing_company.dart';
 import 'package:priorli/core/messaging/usecases/get_company_conversation_lists.dart';
 import 'package:priorli/core/messaging/usecases/start_conversation.dart';
+import 'package:priorli/core/poll/usecases/get_poll_list.dart';
+import 'package:priorli/core/storage/entities/storage_item.dart';
 import 'package:priorli/core/user/entities/user.dart';
 import 'package:priorli/core/user/usecases/get_user_info.dart';
 import 'package:priorli/core/utils/constants.dart';
@@ -19,6 +26,7 @@ import 'package:priorli/core/water_usage/usecases/get_yearly_water_consumption.d
 import 'package:priorli/presentation/housing_company/housing_company_state.dart';
 
 import '../../core/messaging/entities/conversation.dart';
+import '../../core/poll/entities/poll.dart';
 
 class HousingCompanyCubit extends Cubit<HousingCompanyState> {
   final GetApartments _getApartments;
@@ -27,7 +35,12 @@ class HousingCompanyCubit extends Cubit<HousingCompanyState> {
   final GetAnnouncementList _getAnnouncementList;
   final GetCompanyConversationList _getCompanyConversationList;
   final StartConversation _startConversation;
+  final GetCompanyDocumentList _getCompanyDocumentList;
   final GetUserInfo _getUserInfo;
+  final GetCompanyDocument _getCompanyDocument;
+  final GetEventList _getEventList;
+  final GetPollList _getPollList;
+
   StreamSubscription? _conversationSubscription;
   HousingCompanyCubit(
       this._getApartments,
@@ -36,43 +49,120 @@ class HousingCompanyCubit extends Cubit<HousingCompanyState> {
       this._getAnnouncementList,
       this._getCompanyConversationList,
       this._startConversation,
-      this._getUserInfo)
+      this._getCompanyDocumentList,
+      this._getCompanyDocument,
+      this._getUserInfo,
+      this._getEventList,
+      this._getPollList)
       : super(const HousingCompanyState());
-
-  Future<void> init(String housingCompanyId) async {
+  Future<HousingCompany?> getHousingCompanyData(String housingCompanyId) async {
     final companyResult = await _getHousingCompany(
         GetHousingCompanyParams(housingCompanyId: housingCompanyId));
-    final userInfoResult = await _getUserInfo(NoParams());
-    HousingCompanyState pendingState = state.copyWith();
     if (companyResult is ResultSuccess<HousingCompany>) {
-      pendingState =
-          (pendingState.copyWith(housingCompany: companyResult.data));
+      emit(state.copyWith(housingCompany: companyResult.data));
+      return companyResult.data;
     }
+    emit(state.copyWith(housingCompany: null));
+    return null;
+  }
+
+  Future<User?> getUserData() async {
+    final userInfoResult = await _getUserInfo(NoParams());
     if (userInfoResult is ResultSuccess<User>) {
-      pendingState = pendingState.copyWith(user: userInfoResult.data);
+      emit(state.copyWith(user: userInfoResult.data));
+      return userInfoResult.data;
     }
+    emit(state.copyWith(user: null));
+    return null;
+  }
+
+  Future<List<Apartment>> getAparmentList(String housingCompanyId) async {
     final apartResult = await _getApartments(
         GetApartmentParams(housingCompanyId: housingCompanyId));
     if (apartResult is ResultSuccess<List<Apartment>>) {
-      pendingState = (pendingState.copyWith(apartmentList: apartResult.data));
+      emit(state.copyWith(apartmentList: apartResult.data));
+      return apartResult.data;
     }
+    emit(state.copyWith(apartmentList: []));
+    return [];
+  }
+
+  Future<List<WaterConsumption>> getWaterConsumptionData(
+      String housingCompanyId) async {
     final waterConsumptionResult = await _getYearlyWaterConsumption(
         GetYearlyWaterConsumptionParams(
             housingCompanyId: housingCompanyId, year: 2022));
     if (waterConsumptionResult is ResultSuccess<List<WaterConsumption>>) {
-      pendingState = (pendingState.copyWith(
-          yearlyWaterConsumption: waterConsumptionResult.data));
+      emit(state.copyWith(yearlyWaterConsumption: waterConsumptionResult.data));
+      return waterConsumptionResult.data;
     }
+    emit(state.copyWith(yearlyWaterConsumption: []));
+    return [];
+  }
+
+  Future<List<Announcement>> getAnnouncementListData(
+      String housingCompanyId) async {
     final announcementListResult = await _getAnnouncementList(
         GetAnnouncementListParams(
             housingCompanyId: housingCompanyId,
             lastAnnouncementTime: DateTime.now().millisecondsSinceEpoch,
             total: 2));
     if (announcementListResult is ResultSuccess<List<Announcement>>) {
-      pendingState = (pendingState.copyWith(
-          announcementList: announcementListResult.data));
+      emit(state.copyWith(announcementList: announcementListResult.data));
+      return announcementListResult.data;
     }
-    emit(pendingState);
+    emit(state.copyWith(announcementList: []));
+    return [];
+  }
+
+  Future<List<StorageItem>> getCompanyDocumentData(
+      String housingCompanyId) async {
+    final housingCompanyDocumentResult = await _getCompanyDocumentList(
+        GetCompanyDocumentListParams(housingCompanyId: housingCompanyId));
+    if (housingCompanyDocumentResult is ResultSuccess<List<StorageItem>>) {
+      emit(state.copyWith(documentList: housingCompanyDocumentResult.data));
+      return housingCompanyDocumentResult.data;
+    }
+    emit(state.copyWith(documentList: []));
+    return [];
+  }
+
+  Future<List<Event>> getOnGoingEventData(String housingCompanyId) async {
+    final ongoingEventListResult = await _getEventList(GetEventListParams(
+        includePastEvent: false,
+        limit: 5,
+        companyId: housingCompanyId,
+        types: const [EventType.company, EventType.companyInternal]));
+    if (ongoingEventListResult is ResultSuccess<List<Event>>) {
+      emit(state.copyWith(ongoingEventList: ongoingEventListResult.data));
+      return ongoingEventListResult.data;
+    }
+    emit(state.copyWith(ongoingEventList: []));
+    return [];
+  }
+
+  Future<List<Poll>> getOnGoingPoll(String housingCompanyId) async {
+    final ongoingPollListResult = await _getPollList(GetPollListParams(
+        includeEndedPoll: false, limit: 5, companyId: housingCompanyId));
+    if (ongoingPollListResult is ResultSuccess<List<Poll>>) {
+      final newState =
+          (state.copyWith(ongoingPollList: ongoingPollListResult.data));
+      emit(newState);
+      return ongoingPollListResult.data;
+    }
+    emit(state.copyWith(ongoingPollList: []));
+    return [];
+  }
+
+  Future<void> init(String housingCompanyId) async {
+    getUserData();
+    getHousingCompanyData(housingCompanyId);
+    getAparmentList(housingCompanyId);
+    getWaterConsumptionData(housingCompanyId);
+    getAnnouncementListData(housingCompanyId);
+    getCompanyDocumentData(housingCompanyId);
+    getOnGoingEventData(housingCompanyId);
+    getOnGoingPoll(housingCompanyId);
     _conversationSubscription?.cancel();
     _conversationSubscription = _getCompanyConversationList(
             GetCompanyConversationParams(
@@ -96,5 +186,15 @@ class HousingCompanyCubit extends Cubit<HousingCompanyState> {
   Future<void> close() {
     _conversationSubscription?.cancel();
     return super.close();
+  }
+
+  Future<StorageItem?> getDocument(String id) async {
+    final getCompanyDocumentResult = await _getCompanyDocument(
+        GetCompanyDocumentParams(
+            housingCompanyId: state.housingCompany?.id ?? '', documentId: id));
+    if (getCompanyDocumentResult is ResultSuccess<StorageItem>) {
+      return getCompanyDocumentResult.data;
+    }
+    return null;
   }
 }

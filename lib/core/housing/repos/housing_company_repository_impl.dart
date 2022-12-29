@@ -3,6 +3,7 @@ import 'package:priorli/core/housing/entities/housing_company.dart';
 import 'package:priorli/core/base/result.dart';
 import 'package:priorli/core/housing/repos/housing_company_repository.dart';
 import 'package:priorli/core/storage/entities/storage_item.dart';
+import 'package:priorli/core/user/entities/user.dart';
 
 import '../../base/exceptions.dart';
 import '../../base/failure.dart';
@@ -130,11 +131,19 @@ class HousingCompanyRepositoryImpl extends HousingCompanyRepository {
   }
 
   @override
-  Future<Result<List<StorageItem>>> getCompanyDocuments(
-      {required String housingCompanyId, String? type}) async {
+  Future<Result<List<StorageItem>>> getCompanyDocuments({
+    required String housingCompanyId,
+    String? type,
+    int? limit,
+    int? lastCreatedOn,
+  }) async {
     try {
-      final documentListModel = await housingCompanyDataSource
-          .getCompanyDocuments(housingCompanyId: housingCompanyId, type: type);
+      final documentListModel =
+          await housingCompanyDataSource.getCompanyDocuments(
+              housingCompanyId: housingCompanyId,
+              type: type,
+              lastCreatedOn: lastCreatedOn,
+              limit: limit);
       return ResultSuccess(
           documentListModel.map((e) => StorageItem.modelToEntity(e)).toList());
     } on ServerException {
@@ -156,6 +165,20 @@ class HousingCompanyRepositoryImpl extends HousingCompanyRepository {
               isDeleted: isDeleted,
               name: name);
       return ResultSuccess(StorageItem.modelToEntity(documentModel));
+    } on ServerException {
+      return ResultFailure(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Result<List<User>>> getCompanyUsers(
+      {required String housingCompanyId}) async {
+    try {
+      final userModels = await housingCompanyDataSource.getCompanyUsers(
+        housingCompanyId: housingCompanyId,
+      );
+      return ResultSuccess(
+          userModels.map((e) => User.modelToEntity(e)).toList());
     } on ServerException {
       return ResultFailure(ServerFailure());
     }

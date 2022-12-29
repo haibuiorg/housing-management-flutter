@@ -53,6 +53,7 @@ class CreateHousingCompanyScreen extends StatelessWidget {
                     BlocProvider.of<CreateHousingCompanyCubit>(context)
                         .onTypingName(value),
                 hintText: 'Company name',
+                textCapitalization: TextCapitalization.words,
               ),
               Wrap(
                 crossAxisAlignment: WrapCrossAlignment.center,

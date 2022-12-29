@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:priorli/core/messaging/entities/message.dart';
 import 'package:priorli/presentation/shared/app_gallery.dart';

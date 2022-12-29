@@ -24,53 +24,49 @@ class HousingCompanyTile extends StatelessWidget {
         child: TapCard(
           onTap: () => GoRouter.of(context)
               .push('/$housingCompanyScreenPath/${housingCompany?.id}'),
-          child: Hero(
-            tag: housingCompany?.id ?? 0,
-            child: Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  color: housingCompany?.ui?.seedColor != null
-                      ? HexColor.fromHex(
-                          housingCompany?.ui?.seedColor ?? appSeedColor)
-                      : Theme.of(context).colorScheme.primary,
-                  image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: housingCompany?.coverImageUrl != null
-                          ? CachedNetworkImageProvider(
-                              housingCompany?.coverImageUrl ?? '')
-                          : Image.asset('').image)),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      housingCompany?.logoUrl.isNotEmpty == true
-                          ? CircleAvatar(
-                              radius: 36,
-                              backgroundImage: CachedNetworkImageProvider(
-                                  housingCompany?.logoUrl ?? ''),
-                            )
-                          : CircleAvatar(
-                              backgroundColor: Theme.of(context)
-                                  .colorScheme
-                                  .secondaryContainer,
-                              radius: 36,
-                              child: Text(
-                                housingCompany?.name.characters.first
-                                        .toUpperCase() ??
-                                    'H',
-                                style:
-                                    Theme.of(context).textTheme.displayMedium,
-                              ),
+          child: Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                color: housingCompany?.ui?.seedColor != null
+                    ? HexColor.fromHex(
+                        housingCompany?.ui?.seedColor ?? appSeedColor)
+                    : Theme.of(context).colorScheme.primary,
+                image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: housingCompany?.coverImageUrl != null
+                        ? CachedNetworkImageProvider(
+                            housingCompany?.coverImageUrl ?? '')
+                        : Image.asset('').image)),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    housingCompany?.logoUrl.isNotEmpty == true
+                        ? CircleAvatar(
+                            radius: 36,
+                            backgroundImage: CachedNetworkImageProvider(
+                                housingCompany?.logoUrl ?? ''),
+                          )
+                        : CircleAvatar(
+                            backgroundColor: Theme.of(context)
+                                .colorScheme
+                                .secondaryContainer,
+                            radius: 36,
+                            child: Text(
+                              housingCompany?.name.characters.first
+                                      .toUpperCase() ??
+                                  'H',
+                              style: Theme.of(context).textTheme.displayMedium,
                             ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: Text(housingCompany?.name.capitalize() ?? ''),
-                      ),
-                      Text(
-                          '${housingCompany?.streetAddress1} ${housingCompany?.streetAddress2} ${housingCompany?.postalCode} ${housingCompany?.city}')
-                    ]),
-              ),
+                          ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: Text(housingCompany?.name.capitalize() ?? ''),
+                    ),
+                    Text(
+                        '${housingCompany?.streetAddress1} ${housingCompany?.streetAddress2} ${housingCompany?.postalCode} ${housingCompany?.city}')
+                  ]),
             ),
           ),
         ),

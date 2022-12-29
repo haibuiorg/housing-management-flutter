@@ -9,13 +9,13 @@ class UserModel extends Equatable {
   final String userId;
   final String phone;
   final String email;
-  final List<String> roles;
+  final List<dynamic>? roles;
   @JsonKey(name: 'first_name')
   final String firstName;
   @JsonKey(name: 'last_name')
   final String lastName;
   @JsonKey(name: 'avatar_url')
-  final String? avatarUrl;
+  final dynamic avatarUrl;
   @JsonKey(name: 'email_verified')
   final bool? emailVerified;
 

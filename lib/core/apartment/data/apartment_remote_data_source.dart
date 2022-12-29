@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:priorli/core/apartment/data/apartment_data_source.dart';
 import 'package:priorli/core/apartment/model/apartment_invitation_model.dart';
 import 'package:priorli/core/apartment/model/apartment_model.dart';
-import 'package:priorli/core/storage/entities/storage_item.dart';
 import 'package:priorli/core/storage/models/storage_item_model.dart';
 
 import '../../base/exceptions.dart';
@@ -185,13 +184,21 @@ class ApartmentRemoteDataSource implements ApartmentDataSource {
   Future<List<StorageItemModel>> getApartmentDocuments(
       {required String housingCompanyId,
       required String apartmentId,
+      int? limit,
+      int? lastCreatedOn,
       String? type}) async {
     try {
-      final data = {
+      final Map<String, dynamic> data = {
         'housing_company_id': housingCompanyId,
         'apartment_id': apartmentId,
-        'type': type
+        'type': type,
       };
+      if (limit != null) {
+        data['limit'] = limit;
+      }
+      if (lastCreatedOn != null) {
+        data['last_created_on'] = lastCreatedOn;
+      }
       final result =
           await client.get('/apartment/documents', queryParameters: data);
       return (result.data as List<dynamic>)

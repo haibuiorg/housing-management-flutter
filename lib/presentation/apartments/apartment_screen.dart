@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:priorli/core/water_usage/entities/water_bill.dart';
 import 'package:priorli/presentation/apartments/apartment_cubit.dart';
 import 'package:priorli/presentation/apartments/apartment_state.dart';
+import 'package:priorli/presentation/shared/full_width_title.dart';
 import 'package:priorli/presentation/shared/setting_button.dart';
 import 'package:priorli/service_locator.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -12,6 +13,7 @@ import '../../core/utils/string_extension.dart';
 import '../apartment_invoice/apartment_water_invoice_screen.dart';
 import '../documents/document_list_screen.dart';
 import '../housing_company_management/housing_company_management_screen.dart';
+import '../shared/app_gallery.dart';
 import '../shared/custom_form_field.dart';
 import '../shared/full_width_pair_text.dart';
 
@@ -82,140 +84,160 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
             title: Text(
                 '${state.apartment?.building ?? 'Apartment'} ${state.apartment?.houseCode ?? ''}'),
           ),
-          body: SingleChildScrollView(
-            child: Column(children: [
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Row(
-                  children: [
-                    Text(
-                      'Water consumption',
-                      style: Theme.of(context).textTheme.displaySmall,
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: SfCartesianChart(
-                    // Initialize category axis
-                    primaryXAxis: CategoryAxis(),
-                    enableAxisAnimation: true,
-                    series: <CartesianSeries<WaterBill, int>>[
-                      ColumnSeries<WaterBill, int>(
-                          // Bind data source
-                          animationDuration: 1500,
-                          color: Theme.of(context).colorScheme.primary,
-                          dataSource: state.yearlyWaterBills ?? [],
-                          xValueMapper: (WaterBill waterConsumption, _) =>
-                              waterConsumption.period,
-                          yValueMapper: (WaterBill waterConsumption, _) =>
-                              waterConsumption.consumption),
-                    ]),
-              ),
-              SettingButton(
-                onPressed: () {
-                  context.push(
-                      '${GoRouter.of(context).location}/$apartmentWaterInvoice');
-                },
-                label: const Text('Archived invoices'),
-              ),
-              FullWidthPairText(
-                label: 'Period',
-                content: state.latestWaterConsumption?.period.toString() ?? '',
-              ),
-              FullWidthPairText(
-                label: 'Year',
-                content: state.latestWaterConsumption?.year.toString() ?? '',
-              ),
-              FullWidthPairText(
-                label: 'Basic fee',
-                content: formatCurrency(
-                    ((state.latestWaterConsumption?.basicFee ?? 0) /
-                        (state.housingCompany?.apartmentCount ?? 1)),
-                    state.housingCompany?.currencyCode),
-              ),
-              FullWidthPairText(
-                label: 'Price per cube',
-                content: formatCurrency(
-                    state.latestWaterConsumption?.pricePerCube,
-                    state.housingCompany?.currencyCode),
-              ),
-              hasConsumptionValue
-                  ? Column(
-                      children: [
-                        FullWidthPairText(
+          body: CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(
+                child: Column(children: [
+                  const FullWidthTitle(
+                    title: 'Water consumption',
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: SfCartesianChart(
+                        // Initialize category axis
+                        primaryXAxis: CategoryAxis(),
+                        enableAxisAnimation: true,
+                        series: <CartesianSeries<WaterBill, int>>[
+                          ColumnSeries<WaterBill, int>(
+                              // Bind data source
+                              animationDuration: 1500,
+                              color: Theme.of(context).colorScheme.primary,
+                              dataSource: state.yearlyWaterBills ?? [],
+                              xValueMapper: (WaterBill waterConsumption, _) =>
+                                  waterConsumption.period,
+                              yValueMapper: (WaterBill waterConsumption, _) =>
+                                  waterConsumption.consumption),
+                        ]),
+                  ),
+                  SettingButton(
+                    onPressed: () {
+                      context.push(
+                          '${GoRouter.of(context).location}/$apartmentWaterInvoice');
+                    },
+                    label: const Text('Archived invoices'),
+                  ),
+                  FullWidthPairText(
+                    label: 'Period',
+                    content:
+                        state.latestWaterConsumption?.period.toString() ?? '',
+                  ),
+                  FullWidthPairText(
+                    label: 'Year',
+                    content:
+                        state.latestWaterConsumption?.year.toString() ?? '',
+                  ),
+                  FullWidthPairText(
+                    label: 'Basic fee',
+                    content: formatCurrency(
+                        ((state.latestWaterConsumption?.basicFee ?? 0) /
+                            (state.housingCompany?.apartmentCount ?? 1)),
+                        state.housingCompany?.currencyCode),
+                  ),
+                  FullWidthPairText(
+                    label: 'Price per cube',
+                    content: formatCurrency(
+                        state.latestWaterConsumption?.pricePerCube,
+                        state.housingCompany?.currencyCode),
+                  ),
+                  hasConsumptionValue
+                      ? Column(
+                          children: [
+                            FullWidthPairText(
+                              label: 'Your consumption this period',
+                              content: state.yearlyWaterBills
+                                      ?.where((element) =>
+                                          element.period ==
+                                              state.latestWaterConsumption
+                                                  ?.period &&
+                                          element.year ==
+                                              state
+                                                  .latestWaterConsumption?.year)
+                                      .first
+                                      .consumption
+                                      .toStringAsFixed(2) ??
+                                  'Not yet updated',
+                            ),
+                            FullWidthPairText(
+                                label: 'Your invoice this period',
+                                content: formatCurrency(
+                                    state.yearlyWaterBills
+                                        ?.where((element) =>
+                                            element.period ==
+                                                state.latestWaterConsumption
+                                                    ?.period &&
+                                            element.year ==
+                                                state.latestWaterConsumption
+                                                    ?.year)
+                                        .first
+                                        .invoiceValue,
+                                    state.housingCompany?.currencyCode)),
+                          ],
+                        )
+                      : const FullWidthPairText(
                           label: 'Your consumption this period',
-                          content: state.yearlyWaterBills
-                                  ?.where((element) =>
-                                      element.period ==
-                                          state
-                                              .latestWaterConsumption?.period &&
-                                      element.year ==
-                                          state.latestWaterConsumption?.year)
-                                  .first
-                                  .consumption
-                                  .toStringAsFixed(2) ??
-                              'Not yet updated',
+                          content: 'Not yet updated',
                         ),
-                        FullWidthPairText(
-                            label: 'Your invoice this period',
-                            content: formatCurrency(
-                                state.yearlyWaterBills
-                                    ?.where((element) =>
-                                        element.period ==
-                                            state.latestWaterConsumption
-                                                ?.period &&
-                                        element.year ==
-                                            state.latestWaterConsumption?.year)
-                                    .first
-                                    .invoiceValue,
-                                state.housingCompany?.currencyCode)),
-                      ],
-                    )
-                  : const FullWidthPairText(
-                      label: 'Your consumption this period',
-                      content: 'Not yet updated',
-                    ),
-              OutlinedButton(
-                  onPressed: hasConsumptionValue ||
-                          state.latestWaterConsumption == null
-                      ? null
-                      : () {
-                          showDialog(
-                              context: context,
-                              builder: (_) => ConsumptionValueDialog(
-                                    onSubmit: ({
-                                      required consumption,
-                                    }) async {
-                                      await cubit.addLatestConsumptionValue(
-                                          double.parse(consumption));
-                                      await _getInitialData();
-                                    },
-                                  ));
-                        },
-                  child: const Text('Add water consumption for this period')),
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Documents',
-                      style: Theme.of(context).textTheme.displaySmall,
-                    ),
-                    OutlinedButton.icon(
+                  OutlinedButton(
+                      onPressed: hasConsumptionValue ||
+                              state.latestWaterConsumption == null
+                          ? null
+                          : () {
+                              showDialog(
+                                  context: context,
+                                  builder: (_) => ConsumptionValueDialog(
+                                        onSubmit: ({
+                                          required consumption,
+                                        }) async {
+                                          await cubit.addLatestConsumptionValue(
+                                              double.parse(consumption));
+                                          await _getInitialData();
+                                        },
+                                      ));
+                            },
+                      child:
+                          const Text('Add water consumption for this period')),
+                  const FullWidthTitle(
+                    title: 'Documents',
+                  ),
+                ]),
+              ),
+              SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                (BuildContext context, int index) {
+                  final document = state.documentList?[index];
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: document != null
+                        ? SettingButton(
+                            onPressed: () {
+                              cubit
+                                  .getDocument(
+                                      state.documentList?[index].id ?? '')
+                                  .then((value) => showBottomSheet(
+                                      context: context,
+                                      builder: (builder) => AppGallery(
+                                          galleryItems:
+                                              value != null ? [value] : [])));
+                            },
+                            label: Text(
+                              state.documentList?[index].name ?? '',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          )
+                        : const SizedBox.shrink(),
+                  );
+                },
+                childCount: state.documentList?.length ?? 0,
+              )),
+              SliverToBoxAdapter(
+                  child: TextButton(
                       onPressed: () {
-                        context.push(
+                        GoRouter.of(context).push(
                             '${GoRouter.of(context).location}/$documentListScreenPath');
                       },
-                      icon: const Icon(Icons.document_scanner_rounded),
-                      label: const Text('More'),
-                    )
-                  ],
-                ),
-              ),
-            ]),
+                      child: const Text('More'))),
+            ],
           ),
         );
       }),

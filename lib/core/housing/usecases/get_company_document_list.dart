@@ -13,17 +13,25 @@ class GetCompanyDocumentList
   @override
   Future<Result<List<StorageItem>>> call(GetCompanyDocumentListParams params) {
     return housingCompanyRepository.getCompanyDocuments(
-        housingCompanyId: params.housingCompanyId, type: params.type);
+        housingCompanyId: params.housingCompanyId,
+        type: params.type,
+        limit: params.limit,
+        lastCreatedOn: params.lastCreatedOn);
   }
 }
 
 class GetCompanyDocumentListParams extends Equatable {
   final String housingCompanyId;
   final String? type;
+  final int? limit;
+  final int? lastCreatedOn;
 
   const GetCompanyDocumentListParams(
-      {required this.housingCompanyId, this.type});
+      {required this.housingCompanyId,
+      this.type,
+      this.lastCreatedOn,
+      this.limit});
 
   @override
-  List<Object?> get props => [housingCompanyId, type];
+  List<Object?> get props => [housingCompanyId, type, lastCreatedOn, limit];
 }

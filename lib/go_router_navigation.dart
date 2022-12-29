@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:priorli/core/utils/user_utils.dart';
 import 'package:priorli/presentation/account/account_screen.dart';
 import 'package:priorli/presentation/account/change_password_screen.dart';
 import 'package:priorli/presentation/add_apartment/add_apartment_screen.dart';
@@ -10,6 +12,7 @@ import 'package:priorli/presentation/code_register/code_register_screen.dart';
 import 'package:priorli/presentation/conversation_list/conversation_list_screen.dart';
 import 'package:priorli/presentation/create_housing_company/create_housing_company_screen.dart';
 import 'package:priorli/presentation/documents/document_list_screen.dart';
+import 'package:priorli/presentation/events/event_screen.dart';
 import 'package:priorli/presentation/forgot_password/forgot_password_screen.dart';
 import 'package:priorli/presentation/help/help_screen.dart';
 import 'package:priorli/presentation/home/home_screen.dart';
@@ -19,9 +22,12 @@ import 'package:priorli/presentation/housing_company_ui/housing_company_ui_scree
 import 'package:priorli/presentation/login/login_screen.dart';
 import 'package:priorli/presentation/main/main_screen.dart';
 import 'package:priorli/presentation/notification_center/notification_center_screen.dart';
+import 'package:priorli/presentation/polls/poll_screen.dart';
 import 'package:priorli/presentation/send_invitation/invite_tenant_screen.dart';
 import 'package:priorli/presentation/profile/profile_screen.dart';
 import 'package:priorli/presentation/water_consumption_management/water_consumption_management_screen.dart';
+import 'package:priorli/user_cubit.dart';
+import 'package:priorli/user_state.dart';
 import 'presentation/apartment_invoice/apartment_water_invoice_screen.dart';
 import 'presentation/apartments/apartment_screen.dart';
 import 'presentation/housing_company_payment/housing_company_payment_screen.dart';
@@ -47,7 +53,17 @@ GoRouter createAppRouter() {
         name: mainPathName,
         path: mainPath,
         builder: (BuildContext context, GoRouterState state) {
-          return const MainScreen();
+          return BlocBuilder<UserCubit, UserState>(builder: (context, state) {
+            return const MainScreen();
+          });
+        },
+      ),
+      GoRoute(
+        path: '/$eventScreenPath/:eventId',
+        builder: (BuildContext context, GoRouterState state) {
+          return EventScreen(
+            eventId: state.params['eventId'],
+          );
         },
       ),
       GoRoute(
@@ -107,6 +123,34 @@ GoRouter createAppRouter() {
                     path: documentListScreenPath,
                     builder: (BuildContext context, GoRouterState state) {
                       return const DocumentListScreen();
+                    },
+                  ),
+                  GoRoute(
+                    path: '$eventScreenPath/:eventId',
+                    builder: (BuildContext context, GoRouterState state) {
+                      return EventScreen(
+                        eventId: state.params['eventId'],
+                      );
+                    },
+                  ),
+                  GoRoute(
+                    path: eventScreenPath,
+                    builder: (BuildContext context, GoRouterState state) {
+                      return const EventScreen();
+                    },
+                  ),
+                  GoRoute(
+                    path: pollScreenPath,
+                    builder: (BuildContext context, GoRouterState state) {
+                      return const PollScreen();
+                    },
+                  ),
+                  GoRoute(
+                    path: '$pollScreenPath/:pollId',
+                    builder: (BuildContext context, GoRouterState state) {
+                      return PollScreen(
+                        pollId: state.params['pollId'],
+                      );
                     },
                   ),
                   GoRoute(

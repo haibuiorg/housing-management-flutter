@@ -23,6 +23,17 @@ import 'package:priorli/core/country/repos/country_repository.dart';
 import 'package:priorli/core/country/repos/country_repository_impl.dart';
 import 'package:priorli/core/country/usecases/get_country_data.dart';
 import 'package:priorli/core/country/usecases/get_support_countries.dart';
+import 'package:priorli/core/event/data/event_data_source.dart';
+import 'package:priorli/core/event/data/event_remote_data_source.dart';
+import 'package:priorli/core/event/repos/event_repository.dart';
+import 'package:priorli/core/event/repos/event_repository_impl.dart';
+import 'package:priorli/core/event/usecases/create_event.dart';
+import 'package:priorli/core/event/usecases/edit_event.dart';
+import 'package:priorli/core/event/usecases/get_event.dart';
+import 'package:priorli/core/event/usecases/get_event_list.dart';
+import 'package:priorli/core/event/usecases/invite_to_event.dart';
+import 'package:priorli/core/event/usecases/remove_user_from_event.dart';
+import 'package:priorli/core/event/usecases/response_to_event.dart';
 import 'package:priorli/core/housing/usecases/add_company_documents.dart';
 import 'package:priorli/core/housing/usecases/delete_housing_company.dart';
 import 'package:priorli/core/housing/usecases/get_company_document.dart';
@@ -57,6 +68,18 @@ import 'package:priorli/core/payment/repos/payment_repository.dart';
 import 'package:priorli/core/payment/repos/payment_repository_impl.dart';
 import 'package:priorli/core/payment/usecases/get_all_bank_accounts.dart';
 import 'package:priorli/core/payment/usecases/remove_bank_account.dart';
+import 'package:priorli/core/poll/data/poll_data_source.dart';
+import 'package:priorli/core/poll/data/poll_remote_data_source.dart';
+import 'package:priorli/core/poll/repos/poll_repository.dart';
+import 'package:priorli/core/poll/repos/poll_repository_impl.dart';
+import 'package:priorli/core/poll/usecases/add_poll_option.dart';
+import 'package:priorli/core/poll/usecases/create_poll.dart';
+import 'package:priorli/core/poll/usecases/edit_poll.dart';
+import 'package:priorli/core/poll/usecases/get_poll.dart';
+import 'package:priorli/core/poll/usecases/get_poll_list.dart';
+import 'package:priorli/core/poll/usecases/invite_users_to_poll.dart';
+import 'package:priorli/core/poll/usecases/remove_poll_option.dart';
+import 'package:priorli/core/poll/usecases/select_poll_option.dart';
 import 'package:priorli/core/storage/data/storage_data_source.dart';
 import 'package:priorli/core/storage/data/storage_remote_data_source.dart';
 import 'package:priorli/core/storage/repos/storage_repository.dart';
@@ -76,16 +99,22 @@ import 'package:priorli/presentation/code_register/code_register_cubit.dart';
 import 'package:priorli/presentation/conversation_list/conversation_list_cubit.dart';
 import 'package:priorli/presentation/create_housing_company/create_housing_company_cubit.dart';
 import 'package:priorli/presentation/documents/document_list_screen_cubit.dart';
+import 'package:priorli/presentation/events/event_screen.dart';
+import 'package:priorli/presentation/events/event_screen_cubit.dart';
 import 'package:priorli/presentation/file_selector/file_selector_cubit.dart';
 import 'package:priorli/presentation/forgot_password/forgot_password_cubit.dart';
 import 'package:priorli/presentation/help/help_cubit.dart';
 import 'package:priorli/presentation/home/home_cubit.dart';
 import 'package:priorli/presentation/housing_company/housing_company_cubit.dart';
 import 'package:priorli/presentation/housing_company_payment/housing_company_payment_cubit.dart';
+import 'package:priorli/presentation/housing_company_users/guest_invitation_cubit.dart';
 import 'package:priorli/presentation/join_apartment/join_apartment_cubit.dart';
+import 'package:priorli/presentation/main/main_cubit.dart';
 import 'package:priorli/presentation/message/message_cubit.dart';
 import 'package:priorli/presentation/notification_center/notification_center_cubit.dart';
-import 'package:priorli/presentation/profile/profile_screen_cubit.dart';
+import 'package:priorli/presentation/polls/poll_screen.dart';
+import 'package:priorli/presentation/polls/poll_screen_cubit.dart';
+import 'package:priorli/user_cubit.dart';
 
 import 'auth_cubit.dart';
 import 'core/apartment/data/apartment_data_source.dart';
@@ -116,6 +145,7 @@ import 'core/housing/repos/housing_company_repository_impl.dart';
 import 'core/housing/usecases/create_housing_company.dart';
 import 'core/housing/usecases/get_housing_companies.dart';
 import 'core/housing/usecases/get_housing_company.dart';
+import 'core/housing/usecases/get_housing_company_users.dart';
 import 'core/housing/usecases/update_housing_company_info.dart';
 import 'core/messaging/data/messaging_data_source.dart';
 import 'core/payment/usecases/add_bank_account.dart';
@@ -169,6 +199,9 @@ Future<void> init() async {
         serviceLocator(),
         serviceLocator(),
       ));
+  serviceLocator.registerFactory(() => MainCubit(
+        serviceLocator(),
+      ));
 
   serviceLocator.registerFactory(() => AuthCubit(
       serviceLocator(),
@@ -191,6 +224,10 @@ Future<void> init() async {
       serviceLocator(),
       serviceLocator(),
       serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
       serviceLocator()));
   serviceLocator.registerFactory(
       () => AddApartmentCubit(serviceLocator(), serviceLocator()));
@@ -205,8 +242,14 @@ Future<void> init() async {
       serviceLocator()));
   serviceLocator.registerFactory(() => HousingCompanyManagementCubit(
       serviceLocator(), serviceLocator(), serviceLocator()));
-  serviceLocator.registerFactory(() => ApartmentCubit(serviceLocator(),
-      serviceLocator(), serviceLocator(), serviceLocator(), serviceLocator()));
+  serviceLocator.registerFactory(() => ApartmentCubit(
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator()));
   serviceLocator.registerFactory(() => ApartmentManagementCubit(
       serviceLocator(), serviceLocator(), serviceLocator()));
   serviceLocator.registerFactory(() => ApartmentWaterInvoiceCubit(
@@ -227,8 +270,8 @@ Future<void> init() async {
       serviceLocator()));
   serviceLocator.registerFactory(
       () => ConversationListCubit(serviceLocator(), serviceLocator()));
-  serviceLocator.registerFactory(
-      () => ProfileScreenCubit(serviceLocator(), serviceLocator()));
+  serviceLocator
+      .registerFactory(() => UserCubit(serviceLocator(), serviceLocator()));
   serviceLocator
       .registerFactory(() => AccountCubit(serviceLocator(), serviceLocator()));
   serviceLocator.registerFactory(() => CodeRegisterCubit());
@@ -251,6 +294,29 @@ Future<void> init() async {
       () => HousingCompanyUiScreenCubit(serviceLocator(), serviceLocator()));
   serviceLocator
       .registerFactory(() => HelpCubit(serviceLocator(), serviceLocator()));
+  serviceLocator.registerFactory(() => EventScreenCubit(
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator()));
+  serviceLocator.registerFactory(() => PollScreenCubit(
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator()));
+  serviceLocator.registerFactory(() => GuestInvitationCubit(
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator()));
 
   /** usecases */
 
@@ -330,6 +396,8 @@ Future<void> init() async {
       UpdateHousingCompanyInfo(housingCompanyRepository: serviceLocator()));
   serviceLocator.registerLazySingleton<DeleteHousingCompany>(
       () => DeleteHousingCompany(housingCompanyRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<GetHousingCompanyUsers>(
+      () => GetHousingCompanyUsers(housingCompanyRepository: serviceLocator()));
 
   // payment
   serviceLocator.registerLazySingleton<AddBankAccount>(
@@ -432,6 +500,40 @@ Future<void> init() async {
   serviceLocator.registerLazySingleton<UpdateCompanyDocument>(
       () => UpdateCompanyDocument(housingCompanyRepository: serviceLocator()));
 
+  // polls
+  serviceLocator.registerLazySingleton<AddPollOption>(
+      () => AddPollOption(pollRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<CreatePoll>(
+      () => CreatePoll(pollRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<EditPoll>(
+      () => EditPoll(pollRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<GetPollList>(
+      () => GetPollList(pollRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<GetPoll>(
+      () => GetPoll(pollRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<InviteUsersToPoll>(
+      () => InviteUsersToPoll(pollRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<RemovePollOption>(
+      () => RemovePollOption(pollRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<SelectPollOption>(
+      () => SelectPollOption(pollRepository: serviceLocator()));
+
+  // events
+  serviceLocator.registerLazySingleton<CreateEvent>(
+      () => CreateEvent(eventRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<EditEvent>(
+      () => EditEvent(eventRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<GetEventList>(
+      () => GetEventList(eventRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<GetEvent>(
+      () => GetEvent(eventRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<InviteToEvent>(
+      () => InviteToEvent(eventRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<RemoveUserFromEvent>(
+      () => RemoveUserFromEvent(eventRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<ResponseToEvent>(
+      () => ResponseToEvent(eventRepository: serviceLocator()));
+
   /** repos */
   serviceLocator.registerLazySingleton<AuthenticationRepository>(() =>
       AuthenticationRepositoryImpl(authenticationDataSource: serviceLocator()));
@@ -458,6 +560,10 @@ Future<void> init() async {
       () => StorageRepositoryImpl(storageDataSource: serviceLocator()));
   serviceLocator.registerLazySingleton<CountryRepository>(
       () => CountryRepositoryImpl(countryDataSource: serviceLocator()));
+  serviceLocator.registerLazySingleton<EventRepository>(
+      () => EventRepositoryImpl(eventRemoteDataSource: serviceLocator()));
+  serviceLocator.registerLazySingleton<PollRepository>(
+      () => PollRepositoryImpl(pollRemoteDataSource: serviceLocator()));
 
   /** datasource*/
   serviceLocator.registerLazySingleton<AuthenticationDataSource>(() =>
@@ -489,7 +595,10 @@ Future<void> init() async {
       () => StorageRemoteDataSource(storage: serviceLocator()));
   serviceLocator.registerLazySingleton<CountryDataSource>(
       () => CountryRemoteDataSource(client: serviceLocator()));
-
+  serviceLocator.registerLazySingleton<PollDataSource>(
+      () => PollRemoteDataSource(client: serviceLocator()));
+  serviceLocator.registerLazySingleton<EventDataSource>(
+      () => EventRemoteDataSource(client: serviceLocator()));
   /** network */
   serviceLocator.registerLazySingleton<Dio>(
       () => DioModule(firebaseAuth: serviceLocator()).dio);
