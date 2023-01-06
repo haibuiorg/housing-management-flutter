@@ -4,6 +4,5 @@
     <item android:drawable="@color/primary" />
     <item android:gravity="center"
         android:drawable="@drawable/logo_vector"
-        android:width="75.84dp"
-        android:height="48dp"/>
+        />
 </layer-list>
