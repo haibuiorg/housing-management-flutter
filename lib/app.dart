@@ -1,5 +1,6 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -19,6 +20,8 @@ import 'package:responsive_framework/responsive_framework.dart';
 import 'auth_cubit.dart';
 import 'core/utils/color_extension.dart';
 import 'notification_controller.dart';
+import 'presentation/home/home_screen.dart';
+import 'presentation/shared/no_transition_builder.dart';
 import 'service_locator.dart';
 
 class App extends StatefulWidget {
@@ -108,12 +111,12 @@ class _AppState extends State<App> {
           if (appRouter.location == loginPath ||
               appRouter.location == registerPath ||
               appRouter.location == codeRegisterPath) {
-            appRouter.go(mainPath);
+            appRouter.go(homePath);
           }
           if (widget.initialLink != null && widget.initialLink?.link != null) {
             appRouter.push(_getAppScreenPathFromAppLinkPath(
                     widget.initialLink?.link.path) ??
-                mainPath);
+                homePath);
           }
         }
       }, builder: (context, state) {
@@ -125,6 +128,18 @@ class _AppState extends State<App> {
               debugShowCheckedModeBanner: false,
               routerConfig: appRouter,
               theme: ThemeData(
+                pageTransitionsTheme: PageTransitionsTheme(
+                  builders: kIsWeb
+                      ? {
+                          // No animations for every OS if the app running on the web
+                          for (final platform in TargetPlatform.values)
+                            platform: const NoTransitionBuilder(),
+                        }
+                      : const {
+                          TargetPlatform.android: ZoomPageTransitionsBuilder(),
+                          TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+                        },
+                ),
                 colorScheme: state.useSystemColor
                     ? lightColorScheme
                     : _defaultLightColorScheme(
@@ -132,6 +147,18 @@ class _AppState extends State<App> {
                 useMaterial3: true,
               ),
               darkTheme: ThemeData(
+                pageTransitionsTheme: PageTransitionsTheme(
+                  builders: kIsWeb
+                      ? {
+                          // No animations for every OS if the app running on the web
+                          for (final platform in TargetPlatform.values)
+                            platform: const NoTransitionBuilder(),
+                        }
+                      : const {
+                          TargetPlatform.android: ZoomPageTransitionsBuilder(),
+                          TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+                        },
+                ),
                 colorScheme: state.useSystemColor
                     ? lightColorScheme
                     : _defaultDarkColorScheme(

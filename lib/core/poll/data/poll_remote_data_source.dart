@@ -79,6 +79,7 @@ class PollRemoteDataSource implements PollDataSource {
         'last_created_on': lastCreatedOn,
         'limit': limit,
       };
+      data.removeWhere((key, value) => value == null);
       final result = await client.get('/polls', queryParameters: data);
       return (result.data as List<dynamic>)
           .map((e) => PollModel.fromJson(e as Map<String, dynamic>))

@@ -7,12 +7,13 @@ import 'package:priorli/presentation/shared/app_user_circle_avatar.dart';
 import 'package:priorli/presentation/shared/setting_button.dart';
 import 'package:priorli/user_cubit.dart';
 import 'package:priorli/user_state.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 import '../account/account_screen.dart';
 import '../help/help_screen.dart';
 import '../shared/app_preferences.dart';
 
-const profilePath = '/profile';
+const profilePath = '/settings';
 
 class SettingScreen extends StatelessWidget {
   const SettingScreen({super.key});
@@ -27,38 +28,27 @@ class SettingScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const AppPreferences(),
             const Spacer(),
-            BlocBuilder<UserCubit, UserState>(builder: (context, state) {
-              return InkWell(
-                  customBorder: const CircleBorder(),
-                  onTap: () {
-                    showModalBottomSheet(
-                        context: context,
-                        builder: (_) => FileSelector(
-                              isSingleFile: true,
-                              isImageOnly: true,
-                              previewUrl: state.user?.avatarUrl,
-                              onCompleteUploaded: (tempUploadedFiles) {
-                                BlocProvider.of<UserCubit>(context)
-                                    .updateUserAvatar(tempUploadedFiles)
-                                    .then((value) =>
-                                        Navigator.pop(context, true));
-                              },
-                            ));
-                  },
-                  child: AppUserCircleAvatar(
-                    radius: 56,
-                    user: state.user,
-                  ));
-            }),
-            const Spacer(),
-            SettingButton(
-              onPressed: () {
-                GoRouter.of(context).push(accountPath);
-              },
-              label: const Text('Account'),
+            ResponsiveVisibility(
+              visible: false,
+              visibleWhen: const [
+                Condition.smallerThan(name: TABLET, landscapeValue: true),
+              ],
+              child:
+                  BlocBuilder<UserCubit, UserState>(builder: (context, state) {
+                return InkWell(
+                    customBorder: const CircleBorder(),
+                    onTap: () {
+                      GoRouter.of(context).push(accountPath);
+                    },
+                    child: AppUserCircleAvatar(
+                      radius: 56,
+                      user: state.user,
+                    ));
+              }),
             ),
+            const Spacer(),
+            const AppPreferences(),
             SettingButton(
               onPressed: () {
                 GoRouter.of(context).push(notificationCenterPath);

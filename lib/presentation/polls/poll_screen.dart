@@ -12,8 +12,9 @@ import '../shared/app_lottie_animation.dart';
 const pollScreenPath = 'polls';
 
 class PollScreen extends StatefulWidget {
-  const PollScreen({super.key, this.pollId});
+  const PollScreen({super.key, this.pollId, required this.companyId});
   final String? pollId;
+  final String companyId;
 
   @override
   State<PollScreen> createState() => _PollScreenState();
@@ -31,13 +32,11 @@ class _PollScreenState extends State<PollScreen> {
   }
 
   _getInitialData() async {
-    final housingCompanyId =
-        Uri.parse(GoRouter.of(context).location).pathSegments[1];
     if (widget.pollId != null && widget.pollId?.isNotEmpty == true) {
-      await _cubit.init(pollId: widget.pollId, companyId: housingCompanyId);
+      await _cubit.init(pollId: widget.pollId, companyId: widget.companyId);
       return;
     }
-    await _cubit.init(pollId: null, companyId: housingCompanyId);
+    await _cubit.init(pollId: null, companyId: widget.companyId);
   }
 
   @override

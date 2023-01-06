@@ -1,6 +1,4 @@
-import 'dart:io';
-
 abstract class StorageDataSource {
   Future<List<String>> uploadFile(
-      {required List<File> files, required String userId});
+      {required List<dynamic> files, required String userId});
 }

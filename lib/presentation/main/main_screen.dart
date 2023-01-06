@@ -4,6 +4,7 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:priorli/presentation/admin/admin_screen.dart';
 import 'package:priorli/presentation/home/home_screen.dart';
 import 'package:priorli/presentation/main/main_cubit.dart';
@@ -11,14 +12,18 @@ import 'package:priorli/presentation/main/main_state.dart';
 import 'package:priorli/presentation/profile/profile_screen.dart';
 import 'package:priorli/presentation/shared/app_lottie_animation.dart';
 import 'package:priorli/service_locator.dart';
+import 'package:priorli/user_cubit.dart';
+import 'package:priorli/user_state.dart';
 import 'package:responsive_framework/responsive_framework.dart';
+import '../account/account_screen.dart';
 import '../conversation_list/conversation_list_screen.dart';
 import 'package:collapsible_sidebar/collapsible_sidebar.dart';
 
-const mainPath = '/main';
+const mainPath = '/';
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
+  const MainScreen({super.key, required this.child});
+  final Widget child;
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -44,7 +49,7 @@ class _MainScreenState extends State<MainScreen> {
       if (!isAllowed) {
         showDialog(
             context: context,
-            builder: (context) => AlertDialog(
+            builder: (builder) => AlertDialog(
                   content: const Text(
                       'Do you want to receive notification when there are new important announcements or when something require your action?'),
                   actions: [
@@ -52,7 +57,7 @@ class _MainScreenState extends State<MainScreen> {
                         onPressed: () {
                           AwesomeNotifications()
                               .requestPermissionToSendNotifications();
-                          Navigator.pop(context, true);
+                          Navigator.pop(builder, true);
                         },
                         child: const Text('That\'s ok'))
                   ],
@@ -77,111 +82,116 @@ class _MainScreenState extends State<MainScreen> {
                 child: AppLottieAnimation(loadingResource: 'apartment'),
               )
             : state.isAdmin == true
-                ? const AdminUI()
-                : const DefaultUI();
+                ? AdminUI(child: widget.child)
+                : DefaultUI(
+                    child: widget.child,
+                  );
       }),
     );
   }
 }
 
-class AdminUI extends StatefulWidget {
+class AdminUI extends StatelessWidget {
   const AdminUI({
     super.key,
+    required this.child,
   });
+  final Widget child;
 
-  @override
-  State<AdminUI> createState() => _AdminUIState();
-}
+  static int _calculateSelectedIndex(BuildContext context) {
+    final String location = GoRouterState.of(context).location;
 
-class _AdminUIState extends State<AdminUI> {
-  int _selectedIndex = 0;
-  late List<Widget> _adminScreens;
-  late List<CollapsibleItem> _items;
+    if (location == (adminScreenPath)) {
+      return 0;
+    }
 
-  _changePage(int position) {
-    setState(() {
-      _selectedIndex = position;
-    });
+    if (location == (conversationListPath)) {
+      return 2;
+    }
+    if (location == (profilePath)) {
+      return 3;
+    }
+    return 1;
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _items = _generateItems;
-    _adminScreens = _generateScreens;
+  void _onItemTapped(int index, BuildContext context) {
+    switch (index) {
+      case 0:
+        GoRouter.of(context).go(adminScreenPath);
+        break;
+      case 1:
+        GoRouter.of(context).go(homePath);
+        break;
+      case 2:
+        GoRouter.of(context).go(conversationListPath);
+        break;
+      case 3:
+        GoRouter.of(context).go(profilePath);
+        break;
+    }
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  List<Widget> get _generateScreens {
-    return [
-      const AdminScreen(),
-      const HomeScreen(),
-      const ConversationListScreen(),
-      const SettingScreen(),
-    ];
-  }
-
-  List<CollapsibleItem> get _generateItems {
+  List<CollapsibleItem> _generateItems(BuildContext context) {
     return [
       CollapsibleItem(
         icon: (Icons.manage_accounts),
         text: ('Admin'),
-        onPressed: () => _changePage(0),
-        isSelected: _selectedIndex == 0,
+        onPressed: () => _onItemTapped(0, context),
+        isSelected: _calculateSelectedIndex(context) == 0,
       ),
       CollapsibleItem(
         icon: (Icons.home),
         text: ('Housing companies'),
-        onPressed: () => _changePage(1),
-        isSelected: _selectedIndex == 1,
+        onPressed: () => _onItemTapped(1, context),
+        isSelected: _calculateSelectedIndex(context) == 1,
       ),
       CollapsibleItem(
           icon: (Icons.feed),
           text: ('Conversations'),
-          isSelected: _selectedIndex == 2,
-          onPressed: () => _changePage(2)),
+          isSelected: _calculateSelectedIndex(context) == 2,
+          onPressed: () => _onItemTapped(2, context)),
       CollapsibleItem(
           icon: (Icons.settings),
-          text: ('Profile'),
-          isSelected: _selectedIndex == 3,
-          onPressed: () => _changePage(3)),
+          text: ('Settings'),
+          isSelected: _calculateSelectedIndex(context) == 3,
+          onPressed: () => _onItemTapped(3, context)),
     ];
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<MainCubit, MainState>(builder: (context, state) {
+    return BlocBuilder<UserCubit, UserState>(builder: (context, state) {
       return Scaffold(
         bottomNavigationBar: ResponsiveVisibility(
           visible: false,
           visibleWhen: const [
-            Condition.equals(name: MOBILE),
+            Condition.smallerThan(name: TABLET),
           ],
           child: CurvedNavigationBar(
-            backgroundColor: Theme.of(context).canvasColor,
-            color: Theme.of(context).colorScheme.primaryContainer,
-            index: _selectedIndex,
-            items: const [
-              Icon(Icons.manage_accounts, size: 30),
-              Icon(Icons.home, size: 30),
-              Icon(Icons.feed, size: 30),
-              Icon(Icons.settings, size: 30),
-            ],
-            onTap: _changePage,
-          ),
+              backgroundColor: Colors.transparent,
+              color: Theme.of(context).colorScheme.primaryContainer,
+              index: _calculateSelectedIndex(context),
+              items: const [
+                Icon(Icons.manage_accounts, size: 30),
+                Icon(Icons.home, size: 30),
+                Icon(Icons.feed, size: 30),
+                Icon(Icons.settings, size: 30),
+              ],
+              onTap: (index) => _onItemTapped(index, context)),
         ),
         body: Row(
           children: [
             ResponsiveVisibility(
               visible: false,
               visibleWhen: const [
-                Condition.largerThan(name: MOBILE),
+                Condition.largerThan(name: MOBILE, landscapeValue: TABLET),
               ],
               child: CollapsibleSidebar(
+                  titleStyle: Theme.of(context).textTheme.bodyMedium,
+                  toggleTitle: '',
+                  onTitleTap: () {
+                    GoRouter.of(context).push(accountPath);
+                  },
                   backgroundColor: Theme.of(context).colorScheme.surface,
                   isCollapsed: ResponsiveValue(
                         context,
@@ -207,14 +217,16 @@ class _AdminUIState extends State<AdminUI> {
                       Theme.of(context).colorScheme.onPrimaryContainer,
                   selectedIconBox:
                       Theme.of(context).colorScheme.secondaryContainer,
-                  title: '${state.user?.firstName}… ${state.user?.lastName}',
-                  avatarImg:
-                      CachedNetworkImageProvider(state.user?.avatarUrl ?? ''),
-                  items: _items,
+                  title:
+                      '${state.user?.firstName ?? ''} ${state.user?.lastName ?? ''}',
+                  avatarImg: NetworkImage(
+                    state.user?.avatarUrl ?? '',
+                  ),
+                  items: _generateItems(context),
                   sidebarBoxShadow: const [],
                   body: const SizedBox.shrink()),
             ),
-            Expanded(child: _adminScreens[_selectedIndex])
+            Expanded(child: child)
           ],
         ),
       );
@@ -222,70 +234,64 @@ class _AdminUIState extends State<AdminUI> {
   }
 }
 
-class DefaultUI extends StatefulWidget {
+class DefaultUI extends StatelessWidget {
   const DefaultUI({
     super.key,
+    required this.child,
   });
+  final Widget child;
 
-  @override
-  State<DefaultUI> createState() => _DefaultUIState();
-}
+  static int _calculateSelectedIndex(BuildContext context) {
+    final String location = GoRouterState.of(context).location;
 
-class _DefaultUIState extends State<DefaultUI> {
-  int _selectedIndex = 0;
-  late List<Widget> _adminScreens;
-  late List<CollapsibleItem> _items;
+    if (location == (homePath)) {
+      return 0;
+    }
 
-  _changePage(int position) {
-    setState(() {
-      _selectedIndex = position;
-    });
+    if (location == (profilePath)) {
+      return 2;
+    }
+    return 1;
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _items = _generateItems;
-    _adminScreens = _generateScreens;
+  void _onItemTapped(int index, BuildContext context) {
+    switch (index) {
+      case 0:
+        GoRouter.of(context).go(homePath);
+        break;
+      case 1:
+        GoRouter.of(context).go(conversationListPath);
+        break;
+      case 2:
+        GoRouter.of(context).go(profilePath);
+        break;
+    }
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  List<Widget> get _generateScreens {
-    return [
-      const HomeScreen(),
-      const ConversationListScreen(),
-      const SettingScreen(),
-    ];
-  }
-
-  List<CollapsibleItem> get _generateItems {
+  List<CollapsibleItem> _generateItems(BuildContext context) {
     return [
       CollapsibleItem(
         icon: (Icons.home),
         text: ('Housing companies'),
-        onPressed: () => _changePage(0),
-        isSelected: _selectedIndex == 0,
+        onPressed: () => _onItemTapped(0, context),
+        isSelected: _calculateSelectedIndex(context) == 0,
       ),
       CollapsibleItem(
           icon: (Icons.feed),
           text: ('Conversations'),
-          isSelected: _selectedIndex == 1,
-          onPressed: () => _changePage(1)),
+          isSelected: _calculateSelectedIndex(context) == 1,
+          onPressed: () => _onItemTapped(1, context)),
       CollapsibleItem(
           icon: (Icons.settings),
-          text: ('Profile'),
-          isSelected: _selectedIndex == 2,
-          onPressed: () => _changePage(2)),
+          text: ('Settings'),
+          isSelected: _calculateSelectedIndex(context) == 2,
+          onPressed: () => _onItemTapped(2, context)),
     ];
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<MainCubit, MainState>(builder: (context, state) {
+    return BlocBuilder<UserCubit, UserState>(builder: (context, state) {
       return Scaffold(
         bottomNavigationBar: ResponsiveVisibility(
           visible: false,
@@ -295,13 +301,13 @@ class _DefaultUIState extends State<DefaultUI> {
           child: CurvedNavigationBar(
             backgroundColor: Theme.of(context).canvasColor,
             color: Theme.of(context).colorScheme.primaryContainer,
-            index: _selectedIndex,
+            index: _calculateSelectedIndex(context),
             items: const [
               Icon(Icons.home, size: 30),
               Icon(Icons.feed, size: 30),
               Icon(Icons.settings, size: 30),
             ],
-            onTap: _changePage,
+            onTap: (index) => _onItemTapped(index, context),
           ),
         ),
         body: Row(
@@ -312,6 +318,11 @@ class _DefaultUIState extends State<DefaultUI> {
                 Condition.largerThan(name: MOBILE),
               ],
               child: CollapsibleSidebar(
+                  titleStyle: Theme.of(context).textTheme.bodyMedium,
+                  toggleTitle: '',
+                  onTitleTap: () {
+                    GoRouter.of(context).push(accountPath);
+                  },
                   backgroundColor: Theme.of(context).colorScheme.surface,
                   isCollapsed: ResponsiveValue(
                         context,
@@ -338,13 +349,14 @@ class _DefaultUIState extends State<DefaultUI> {
                   selectedIconBox:
                       Theme.of(context).colorScheme.secondaryContainer,
                   title: '${state.user?.firstName}… ${state.user?.lastName}',
-                  avatarImg:
-                      CachedNetworkImageProvider(state.user?.avatarUrl ?? ''),
-                  items: _items,
+                  avatarImg: NetworkImage(
+                    state.user?.avatarUrl ?? '',
+                  ),
+                  items: _generateItems(context),
                   sidebarBoxShadow: const [],
                   body: const SizedBox.shrink()),
             ),
-            Expanded(child: _adminScreens[_selectedIndex])
+            Expanded(child: child)
           ],
         ),
       );

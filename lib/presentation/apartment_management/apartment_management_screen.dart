@@ -9,7 +9,10 @@ import '../../go_router_navigation.dart';
 import '../shared/setting_button.dart';
 
 class ApartmentManagementScreen extends StatefulWidget {
-  const ApartmentManagementScreen({super.key});
+  const ApartmentManagementScreen(
+      {super.key, required this.apartmentId, required this.companyId});
+  final String apartmentId;
+  final String companyId;
 
   @override
   State<ApartmentManagementScreen> createState() =>
@@ -58,11 +61,7 @@ class _ApartmentManagementScreenState extends State<ApartmentManagementScreen> {
   }
 
   _getInitialData() async {
-    final housingCompanyId =
-        Uri.parse(GoRouter.of(context).location).pathSegments[1];
-    final apartmentId =
-        Uri.parse(GoRouter.of(context).location).pathSegments[3];
-    final state = await cubit.init(housingCompanyId, apartmentId);
+    final state = await cubit.init(widget.companyId, widget.apartmentId);
     _apartmentName.text = state.apartment?.building ?? '';
     _houseCode.text = state.apartment?.houseCode ?? '';
   }

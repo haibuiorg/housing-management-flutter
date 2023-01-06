@@ -33,18 +33,19 @@ class WaterConsumptionManagementCubit
   Future<void> init(String housingCompanyId) async {
     final getHousingCompanyResult = await _getHousingCompany(
         GetHousingCompanyParams(housingCompanyId: housingCompanyId));
-    final getActiveWaterPriceResult = await _getActiveWaterPrice(
-        GetActiveWaterPriceParams(housingCompanyId: housingCompanyId));
-    final getWaterPriceHistoryResult = await _getWaterPriceHistory(
-        GetWaterPriceHistoryParams(housingCompanyId: housingCompanyId));
-    final getLatestWaterConsumptionResult = await _getLatestWaterConsumption(
-        GetWaterConsumptionParams(housingCompanyId: housingCompanyId));
     WaterConsumptionManagementState pendingState = state.copyWith();
     if (getHousingCompanyResult is ResultSuccess<HousingCompany>) {
       pendingState = pendingState.copyWith(
           housingCompanyId: housingCompanyId,
           housingCompany: getHousingCompanyResult.data);
     }
+    final getActiveWaterPriceResult = await _getActiveWaterPrice(
+        GetActiveWaterPriceParams(housingCompanyId: housingCompanyId));
+    final getWaterPriceHistoryResult = await _getWaterPriceHistory(
+        GetWaterPriceHistoryParams(housingCompanyId: housingCompanyId));
+    final getLatestWaterConsumptionResult = await _getLatestWaterConsumption(
+        GetWaterConsumptionParams(housingCompanyId: housingCompanyId));
+
     if (getActiveWaterPriceResult is ResultSuccess<WaterPrice>) {
       pendingState = pendingState.copyWith(
           activeWaterPrice: getActiveWaterPriceResult.data);

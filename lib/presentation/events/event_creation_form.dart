@@ -5,7 +5,7 @@ import '../../core/event/entities/event_type.dart';
 import '../../core/event/entities/repeat.dart';
 import '../../core/user/entities/user.dart';
 import '../../core/utils/time_utils.dart';
-import '../housing_company_users/guest_invitation.dart';
+import '../guest_invitation/guest_invitation.dart';
 import '../shared/custom_form_field.dart';
 import '../shared/date_time_selector.dart';
 import '../shared/setting_button.dart';
@@ -16,10 +16,14 @@ class EventCreationForm extends StatefulWidget {
       this.availableEventTypes,
       this.availableRepeatTypes,
       required this.onSubmit,
-      required this.companyId});
+      required this.companyId,
+      this.inititalStartTime,
+      this.initialEndTime});
   final String companyId;
   final List<EventType>? availableEventTypes;
   final List<Repeat>? availableRepeatTypes;
+  final DateTime? inititalStartTime;
+  final DateTime? initialEndTime;
   final Function(
       {required String name,
       required String description,
@@ -51,8 +55,10 @@ class _EventCreationFormState extends State<EventCreationForm> {
   @override
   void initState() {
     super.initState();
-    _startTime = DateTime.now().add(const Duration(days: 1));
-    _endTime = _startTime.add(const Duration(days: 1, hours: 1));
+    _startTime =
+        widget.inititalStartTime ?? DateTime.now().add(const Duration(days: 1));
+    _endTime =
+        widget.initialEndTime ?? _startTime.add(const Duration(hours: 1));
     _type = EventType.company;
     _repeat = null;
     _repeatUntil = null;
@@ -189,7 +195,7 @@ class _EventCreationFormState extends State<EventCreationForm> {
                             .map((e) => '${e.firstName} ${e.lastName}')
                             .toList();
                       });
-                      Navigator.pop(context, true);
+                      Navigator.pop(builder, true);
                     },
                   ),
                 );

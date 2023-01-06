@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:priorli/presentation/documents/document_list_screen_cubit.dart';
 import 'package:priorli/presentation/documents/document_list_screen_state.dart';
 import 'package:priorli/presentation/file_selector/file_selector.dart';
@@ -12,7 +11,10 @@ import '../shared/app_gallery.dart';
 const documentListScreenPath = 'documents';
 
 class DocumentListScreen extends StatefulWidget {
-  const DocumentListScreen({super.key});
+  const DocumentListScreen(
+      {super.key, required this.companyId, this.apartmentId});
+  final String companyId;
+  final String? apartmentId;
 
   @override
   State<DocumentListScreen> createState() => _DocumentListScreenState();
@@ -36,15 +38,11 @@ class _DocumentListScreenState extends State<DocumentListScreen> {
   }
 
   _getInitialData() async {
-    final housingCompanyId =
-        Uri.parse(GoRouter.of(context).location).pathSegments[1];
-    if (Uri.parse(GoRouter.of(context).location).pathSegments.length > 3) {
-      final apartmentId =
-          Uri.parse(GoRouter.of(context).location).pathSegments[3];
-      await _cubit.init(housingCompanyId, apartmentId);
+    if (widget.apartmentId != null) {
+      await _cubit.init(widget.companyId, widget.apartmentId);
       return;
     }
-    await _cubit.init(housingCompanyId, null);
+    await _cubit.init(widget.companyId, null);
   }
 
   @override
@@ -59,22 +57,24 @@ class _DocumentListScreenState extends State<DocumentListScreen> {
                   appBar: AppBar(
                     title: const Text('Documents'),
                   ),
-                  floatingActionButton: FloatingActionButton(
-                    child: const Icon(Icons.add),
-                    onPressed: () {
-                      showModalBottomSheet(
-                          context: context,
-                          builder: (context) => Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 32, left: 32.0, right: 32, bottom: 32),
-                                child: FileSelector(
-                                  onCompleteUploaded: (tempUploadedFiles) {
-                                    _cubit.uploadNewFile(tempUploadedFiles);
-                                  },
-                                ),
-                              ));
-                    },
-                  ),
+                  floatingActionButton: state.addDocument == true
+                      ? FloatingActionButton(
+                          child: const Icon(Icons.add),
+                          onPressed: () {
+                            showDialog(
+                                context: context,
+                                builder: (context) => Dialog(
+                                      child: FileSelector(
+                                        onCompleteUploaded:
+                                            (tempUploadedFiles) {
+                                          _cubit
+                                              .uploadNewFile(tempUploadedFiles);
+                                        },
+                                      ),
+                                    ));
+                          },
+                        )
+                      : null,
                   body: ListView.builder(
                       itemCount: (state.documentList?.length ?? 0) + 1,
                       itemBuilder: (context, index) {

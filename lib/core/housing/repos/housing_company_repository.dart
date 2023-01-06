@@ -50,4 +50,14 @@ abstract class HousingCompanyRepository {
   Future<Result<List<User>>> getCompanyUsers({
     required String housingCompanyId,
   });
+
+  Future<Result<List<User>>> getHousingCompanyManagers({
+    required String companyId,
+  });
+  Future<Result<User>> addHousingCompanyManager(
+      {required String housingCompanyId,
+      required String email,
+      String? firstName,
+      String? lastName,
+      String? phoneNumber});
 }

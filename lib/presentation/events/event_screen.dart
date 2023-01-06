@@ -16,8 +16,17 @@ import 'event_detail.dart';
 const eventScreenPath = 'events';
 
 class EventScreen extends StatefulWidget {
-  const EventScreen({super.key, this.eventId});
+  const EventScreen(
+      {super.key,
+      required this.companyId,
+      this.eventId,
+      this.initialStartTime,
+      this.initialEndTime});
   final String? eventId;
+  final String companyId;
+
+  final String? initialStartTime;
+  final String? initialEndTime;
 
   @override
   State<EventScreen> createState() => _EventScreenState();
@@ -35,13 +44,11 @@ class _EventScreenState extends State<EventScreen> {
   }
 
   _getInitialData() async {
-    final housingCompanyId =
-        Uri.parse(GoRouter.of(context).location).pathSegments[1];
     if (widget.eventId != null && widget.eventId?.isNotEmpty == true) {
-      await _cubit.init(eventId: widget.eventId, companyId: housingCompanyId);
+      await _cubit.init(eventId: widget.eventId, companyId: widget.companyId);
       return;
     }
-    await _cubit.init(eventId: null, companyId: housingCompanyId);
+    await _cubit.init(eventId: null, companyId: widget.companyId);
   }
 
   @override
@@ -160,6 +167,14 @@ class _EventScreenState extends State<EventScreen> {
                         },
                       )
                     : EventCreationForm(
+                        inititalStartTime: widget.initialStartTime != null
+                            ? DateTime.fromMillisecondsSinceEpoch(
+                                int.parse(widget.initialStartTime!))
+                            : null,
+                        initialEndTime: widget.initialEndTime != null
+                            ? DateTime.fromMillisecondsSinceEpoch(
+                                int.parse(widget.initialEndTime!))
+                            : null,
                         companyId: state.companyId ?? '',
                         onSubmit: (
                             {required description,

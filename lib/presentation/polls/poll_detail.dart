@@ -12,7 +12,7 @@ import '../../core/poll/entities/poll.dart';
 import '../../core/user/entities/user.dart';
 import '../../core/utils/time_utils.dart';
 import '../../go_router_navigation.dart';
-import '../housing_company_users/guest_invitation.dart';
+import '../guest_invitation/guest_invitation.dart';
 import '../shared/custom_form_field.dart';
 import '../shared/date_time_selector.dart';
 import '../shared/full_width_pair_text.dart';
@@ -107,28 +107,28 @@ class _PollDetailState extends State<PollDetail> {
   _addVotingOption() {
     showDialog(
         context: context,
-        builder: (_) => AddPollOptionAlerDialog(onSubmit: (description) {
+        builder: (builder) => AddPollOptionAlerDialog(onSubmit: (description) {
               widget.onAddMoreVotingOptions(
                   pollId: widget.poll.id, votingOptions: [description]);
-              Navigator.pop(context, true);
+              Navigator.pop(builder, true);
             }));
   }
 
   _showRemovePoll() {
     showDialog(
         context: context,
-        builder: (context) => AlertDialog(
+        builder: (builder) => AlertDialog(
               content: const Text('Are you sure want to remove this poll'),
               actions: [
                 TextButton(
                     onPressed: () {
-                      Navigator.pop(context, true);
+                      Navigator.pop(builder, true);
                     },
                     child: const Text('Cancel')),
                 OutlinedButton(
                     onPressed: () {
                       widget.onDelete(pollId: widget.poll.id);
-                      Navigator.popUntil(context,
+                      Navigator.popUntil(builder,
                           ModalRoute.withName(housingCompanyScreenPathName));
                     },
                     child: const Text('Ok'))
@@ -141,19 +141,19 @@ class _PollDetailState extends State<PollDetail> {
   ) {
     showDialog(
         context: context,
-        builder: (context) => AlertDialog(
+        builder: (builder) => AlertDialog(
               content: const Text('Are you sure want to remove this option'),
               actions: [
                 TextButton(
                     onPressed: () {
-                      Navigator.pop(context);
+                      Navigator.pop(builder);
                     },
                     child: const Text('Cancel')),
                 OutlinedButton(
                     onPressed: () {
                       widget.onRemoveVotingOption(
                           pollId: widget.poll.id, votingOptionId: id);
-                      Navigator.pop(context, true);
+                      Navigator.pop(builder, true);
                     },
                     child: const Text('Ok'))
               ],
@@ -359,7 +359,7 @@ class _PollDetailState extends State<PollDetail> {
                   pollId: widget.poll.id,
                   companyId: widget.companyId,
                   onUserSelected: ({required List<User> userList}) {
-                    Navigator.pop(context, true);
+                    Navigator.pop(builder, true);
                   },
                 ),
               );

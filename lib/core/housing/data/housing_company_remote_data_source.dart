@@ -171,14 +171,10 @@ class HousingCompanyRemoteDataSource implements HousingCompanyDataSource {
       final data = {
         'housing_company_id': housingCompanyId,
         'type': type,
-        'last_created_on': lastCreatedOn
+        'last_created_on': lastCreatedOn,
+        'limit': limit
       };
-      if (limit != null) {
-        data['limit'] = limit;
-      }
-      if (lastCreatedOn != null) {
-        data['last_created_on'] = lastCreatedOn;
-      }
+      data.removeWhere((key, value) => value == null);
       final result =
           await client.get('/housing_company/documents', queryParameters: data);
       return (result.data as List<dynamic>)
@@ -219,6 +215,45 @@ class HousingCompanyRemoteDataSource implements HousingCompanyDataSource {
     try {
       final result = await client.get(
         '/housing_company/$housingCompanyId/users',
+      );
+      return (result.data as List<dynamic>)
+          .map((e) => UserModel.fromJson(e))
+          .toList();
+    } catch (error) {
+      throw ServerException(error: error);
+    }
+  }
+
+  @override
+  Future<UserModel> addHousingCompanyManager(
+      {required String housingCompanyId,
+      required String email,
+      String? firstName,
+      String? lastName,
+      String? phoneNumber}) async {
+    try {
+      final Map<String, dynamic> data = {
+        'housing_company_id': housingCompanyId,
+        'email': email,
+        'first_name': firstName,
+        'last_name': lastName,
+        'phone': phoneNumber,
+      };
+      data.removeWhere((key, value) => value == null);
+      final result = await client.post('/housing_company_manager', data: data);
+      return UserModel.fromJson(result.data);
+    } catch (error) {
+      throw ServerException(error: error);
+    }
+  }
+
+  @override
+  Future<List<UserModel>> getHousingCompanyManagers({
+    required String companyId,
+  }) async {
+    try {
+      final result = await client.get(
+        '/housing_company_manager/$companyId',
       );
       return (result.data as List<dynamic>)
           .map((e) => UserModel.fromJson(e))

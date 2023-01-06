@@ -1,4 +1,4 @@
-const appSeedColor = '#A594F9';
+const appSeedColor = '#008DB9';
 const housingCompanies = 'housing_companies';
 const supportChannels = 'support_channels';
 const conversations = 'conversations';
@@ -10,3 +10,4 @@ const updatedOn = 'updated_on';
 const appWebsite = 'https://priorli.com';
 const messageTypeSupport = 'support';
 const messageTypeCommunity = 'community';
+const messageTypeFaultReport = 'fault_report';

@@ -4,8 +4,10 @@ import 'package:priorli/core/apartment/usecases/get_apartment.dart';
 import 'package:priorli/core/apartment/usecases/get_apartment_document.dart';
 import 'package:priorli/core/apartment/usecases/get_apartment_document_list.dart';
 import 'package:priorli/core/base/result.dart';
+import 'package:priorli/core/fault_report/usecases/create_fault_report.dart';
 import 'package:priorli/core/housing/entities/housing_company.dart';
 import 'package:priorli/core/housing/usecases/get_housing_company.dart';
+import 'package:priorli/core/messaging/entities/conversation.dart';
 import 'package:priorli/core/water_usage/entities/water_bill.dart';
 import 'package:priorli/core/water_usage/entities/water_consumption.dart';
 import 'package:priorli/core/water_usage/usecases/add_consumption_value.dart';
@@ -25,6 +27,7 @@ class ApartmentCubit extends Cubit<ApartmentState> {
   final GetApartmentDocument _getApartmentDocument;
   final GetApartmentDocumentList _getApartmentDocumentList;
   final GetLatestWaterConsumption _getLatestWaterConsumption;
+  final CreateFaultReport _createFaultReport;
 
   ApartmentCubit(
       this._addConsumptionValue,
@@ -33,44 +36,65 @@ class ApartmentCubit extends Cubit<ApartmentState> {
       this._getLatestWaterConsumption,
       this._getHousingCompany,
       this._getApartmentDocument,
-      this._getApartmentDocumentList)
+      this._getApartmentDocumentList,
+      this._createFaultReport)
       : super(const ApartmentState());
 
   Future<void> init(String housingCompanyId, String apartmentId) async {
-    final apartmentResult = await _getApartment(GetApartmentSingleParams(
-        housingCompanyId: housingCompanyId, apartmentId: apartmentId));
-    final billByYearResult = await _getWaterBillByYear(GetWaterBillParams(
-        year: DateTime.now().year,
-        apartmentId: apartmentId,
-        housingCompanyId: housingCompanyId));
-    final getLatestWaterConsumptionResult = await _getLatestWaterConsumption(
-        GetWaterConsumptionParams(housingCompanyId: housingCompanyId));
+    getApartmentResult(housingCompanyId, apartmentId);
+    getWaterBillByYear(housingCompanyId, apartmentId);
+    getLatestWaterConsumption(housingCompanyId);
+    getCompanyData(housingCompanyId);
+    getApartmentDocument(housingCompanyId, apartmentId);
+  }
+
+  Future<void> getCompanyData(String housingCompanyId) async {
     final getHousingCompanyResult = await _getHousingCompany(
         GetHousingCompanyParams(housingCompanyId: housingCompanyId));
-    ApartmentState pendingState = state.copyWith();
-    if (apartmentResult is ResultSuccess<Apartment>) {
-      pendingState = pendingState.copyWith(apartment: apartmentResult.data);
-    }
-    if (billByYearResult is ResultSuccess<List<WaterBill>>) {
-      pendingState =
-          pendingState.copyWith(yearlyWaterBills: billByYearResult.data);
-    }
-    if (getLatestWaterConsumptionResult is ResultSuccess<WaterConsumption>) {
-      pendingState = pendingState.copyWith(
-          latestWaterConsumption: getLatestWaterConsumptionResult.data);
-    }
     if (getHousingCompanyResult is ResultSuccess<HousingCompany>) {
-      pendingState =
-          pendingState.copyWith(housingCompany: getHousingCompanyResult.data);
+      emit(state.copyWith(housingCompany: getHousingCompanyResult.data));
     }
+  }
+
+  Future<void> getApartmentDocument(
+      String housingCompanyId, String apartmentId) async {
     final apartmentDocumentResult = await _getApartmentDocumentList(
         GetApartmentDocumentListParams(
             housingCompanyId: housingCompanyId, apartmentId: apartmentId));
     if (apartmentDocumentResult is ResultSuccess<List<StorageItem>>) {
-      pendingState =
-          (pendingState.copyWith(documentList: apartmentDocumentResult.data));
+      emit(state.copyWith(documentList: apartmentDocumentResult.data));
     }
-    emit(pendingState);
+  }
+
+  Future<void> getLatestWaterConsumption(
+    String housingCompanyId,
+  ) async {
+    final getLatestWaterConsumptionResult = await _getLatestWaterConsumption(
+        GetWaterConsumptionParams(housingCompanyId: housingCompanyId));
+    if (getLatestWaterConsumptionResult is ResultSuccess<WaterConsumption>) {
+      emit(state.copyWith(
+          latestWaterConsumption: getLatestWaterConsumptionResult.data));
+    }
+  }
+
+  Future<void> getWaterBillByYear(
+      String housingCompanyId, String apartmentId) async {
+    final billByYearResult = await _getWaterBillByYear(GetWaterBillParams(
+        year: DateTime.now().year,
+        apartmentId: apartmentId,
+        housingCompanyId: housingCompanyId));
+    if (billByYearResult is ResultSuccess<List<WaterBill>>) {
+      emit(state.copyWith(yearlyWaterBills: billByYearResult.data));
+    }
+  }
+
+  Future<void> getApartmentResult(
+      String housingCompanyId, String apartmentId) async {
+    final apartmentResult = await _getApartment(GetApartmentSingleParams(
+        housingCompanyId: housingCompanyId, apartmentId: apartmentId));
+    if (apartmentResult is ResultSuccess<Apartment>) {
+      emit(state.copyWith(apartment: apartmentResult.data));
+    }
   }
 
   Future<void> addLatestConsumptionValue(double consumption) async {
@@ -81,8 +105,25 @@ class ApartmentCubit extends Cubit<ApartmentState> {
             apartmentId: state.apartment?.id,
             consumption: consumption,
             buiding: state.apartment?.building ?? ''));
-    emit(state.copyWith(
-        newConsumptionAdded: addConsumptionResult is ResultSuccess<WaterBill>));
+    emit(state.copyWith());
+  }
+
+  Future<void> createNewFaultReport(
+      {required String title,
+      required String description,
+      bool? sendEmail,
+      List<String>? storageItems}) async {
+    final faultReportResult = await _createFaultReport(CreateFaultReportParams(
+        companyId: state.apartment?.housingCompanyId ?? '',
+        title: title,
+        apartmentId: state.apartment?.id ?? '',
+        description: description,
+        storageItems: storageItems,
+        sendEmail: sendEmail));
+
+    if (faultReportResult is ResultSuccess<Conversation>) {
+      emit(state.copyWith(newFaultReport: faultReportResult.data));
+    }
   }
 
   Future<StorageItem?> getDocument(String id) async {

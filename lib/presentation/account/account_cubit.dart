@@ -46,4 +46,8 @@ class AccountCubit extends Cubit<AccountState> {
           user: saveNameUserResult.data, pendingUser: saveNameUserResult.data));
     }
   }
+
+  void updateUser(User? user) {
+    emit(state.copyWith(user: user, pendingUser: user));
+  }
 }

@@ -14,8 +14,11 @@ import 'package:priorli/core/housing/entities/housing_company.dart';
 import 'package:priorli/core/housing/usecases/get_company_document.dart';
 import 'package:priorli/core/housing/usecases/get_company_document_list.dart';
 import 'package:priorli/core/housing/usecases/get_housing_company.dart';
+import 'package:priorli/core/invoice/entities/invoice_group.dart';
+import 'package:priorli/core/invoice/usecases/get_invoice_groups.dart';
 import 'package:priorli/core/messaging/usecases/get_company_conversation_lists.dart';
 import 'package:priorli/core/messaging/usecases/start_conversation.dart';
+import 'package:priorli/core/poll/entities/poll_type.dart';
 import 'package:priorli/core/poll/usecases/get_poll_list.dart';
 import 'package:priorli/core/storage/entities/storage_item.dart';
 import 'package:priorli/core/user/entities/user.dart';
@@ -40,9 +43,11 @@ class HousingCompanyCubit extends Cubit<HousingCompanyState> {
   final GetCompanyDocument _getCompanyDocument;
   final GetEventList _getEventList;
   final GetPollList _getPollList;
+  final GetInvoiceGroups _getInvoiceGroups;
 
   StreamSubscription? _conversationSubscription;
   HousingCompanyCubit(
+      this._getInvoiceGroups,
       this._getApartments,
       this._getHousingCompany,
       this._getYearlyWaterConsumption,
@@ -55,6 +60,33 @@ class HousingCompanyCubit extends Cubit<HousingCompanyState> {
       this._getEventList,
       this._getPollList)
       : super(const HousingCompanyState());
+
+  Future<void> init(String housingCompanyId) async {
+    getUserData();
+    final company = await getHousingCompanyData(housingCompanyId);
+
+    getCompanyInvoiceGroup(
+        housingCompanyId: housingCompanyId,
+        isManager: company?.isUserManager == true);
+    getAparmentList(housingCompanyId);
+    getWaterConsumptionData(housingCompanyId);
+    getAnnouncementListData(housingCompanyId);
+    getCompanyDocumentData(
+        housingCompanyId: housingCompanyId,
+        isManager: company?.isUserManager == true);
+    getOnGoingEventData(
+        housingCompanyId: housingCompanyId,
+        isManager: company?.isUserManager == true);
+    getOnGoingPoll(
+        housingCompanyId: housingCompanyId,
+        isManager: company?.isUserManager == true);
+    _conversationSubscription?.cancel();
+    _conversationSubscription = _getCompanyConversationList(
+            GetCompanyConversationParams(
+                companyId: housingCompanyId, userId: ''))
+        .listen(_messageListener);
+  }
+
   Future<HousingCompany?> getHousingCompanyData(String housingCompanyId) async {
     final companyResult = await _getHousingCompany(
         GetHousingCompanyParams(housingCompanyId: housingCompanyId));
@@ -87,6 +119,18 @@ class HousingCompanyCubit extends Cubit<HousingCompanyState> {
     return [];
   }
 
+  Future<List<InvoiceGroup>> getCompanyInvoiceGroup(
+      {required String housingCompanyId, bool isManager = false}) async {
+    final invoiceGroupResult = await _getInvoiceGroups(
+        GetInvoiceGroupParams(companyId: housingCompanyId));
+    if (invoiceGroupResult is ResultSuccess<List<InvoiceGroup>>) {
+      emit(state.copyWith(invoiceGroupList: invoiceGroupResult.data));
+      return invoiceGroupResult.data;
+    }
+    emit(state.copyWith(invoiceGroupList: []));
+    return [];
+  }
+
   Future<List<WaterConsumption>> getWaterConsumptionData(
       String housingCompanyId) async {
     final waterConsumptionResult = await _getYearlyWaterConsumption(
@@ -116,7 +160,7 @@ class HousingCompanyCubit extends Cubit<HousingCompanyState> {
   }
 
   Future<List<StorageItem>> getCompanyDocumentData(
-      String housingCompanyId) async {
+      {required String housingCompanyId, bool isManager = false}) async {
     final housingCompanyDocumentResult = await _getCompanyDocumentList(
         GetCompanyDocumentListParams(housingCompanyId: housingCompanyId));
     if (housingCompanyDocumentResult is ResultSuccess<List<StorageItem>>) {
@@ -127,7 +171,8 @@ class HousingCompanyCubit extends Cubit<HousingCompanyState> {
     return [];
   }
 
-  Future<List<Event>> getOnGoingEventData(String housingCompanyId) async {
+  Future<List<Event>> getOnGoingEventData(
+      {required String housingCompanyId, bool isManager = false}) async {
     final ongoingEventListResult = await _getEventList(GetEventListParams(
         includePastEvent: false,
         limit: 5,
@@ -141,7 +186,8 @@ class HousingCompanyCubit extends Cubit<HousingCompanyState> {
     return [];
   }
 
-  Future<List<Poll>> getOnGoingPoll(String housingCompanyId) async {
+  Future<List<Poll>> getOnGoingPoll(
+      {required String housingCompanyId, bool isManager = false}) async {
     final ongoingPollListResult = await _getPollList(GetPollListParams(
         includeEndedPoll: false, limit: 5, companyId: housingCompanyId));
     if (ongoingPollListResult is ResultSuccess<List<Poll>>) {
@@ -154,24 +200,14 @@ class HousingCompanyCubit extends Cubit<HousingCompanyState> {
     return [];
   }
 
-  Future<void> init(String housingCompanyId) async {
-    getUserData();
-    getHousingCompanyData(housingCompanyId);
-    getAparmentList(housingCompanyId);
-    getWaterConsumptionData(housingCompanyId);
-    getAnnouncementListData(housingCompanyId);
-    getCompanyDocumentData(housingCompanyId);
-    getOnGoingEventData(housingCompanyId);
-    getOnGoingPoll(housingCompanyId);
-    _conversationSubscription?.cancel();
-    _conversationSubscription = _getCompanyConversationList(
-            GetCompanyConversationParams(
-                companyId: housingCompanyId, userId: ''))
-        .listen(_messageListener);
-  }
-
   _messageListener(List<Conversation> conversationList) {
-    emit(state.copyWith(conversationList: conversationList));
+    emit(state.copyWith(
+        faultReportList: conversationList
+            .where((element) => element.type == messageTypeFaultReport)
+            .toList(),
+        conversationList: conversationList
+            .where((element) => element.type == messageTypeCommunity)
+            .toList()));
   }
 
   Future<void> startNewChannel(String name) async {

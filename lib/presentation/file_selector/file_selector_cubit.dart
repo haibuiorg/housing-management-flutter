@@ -22,8 +22,8 @@ class FileSelectorCubit extends Cubit<FileSelectorState> {
     }
   }
 
-  Future<void> loadFiles(List<File> files) async {
-    final List<File> newFileList = List.from(state.selectedFiles ?? []);
+  Future<void> loadFiles(List<dynamic> files) async {
+    final List<dynamic> newFileList = List.from(state.selectedFiles ?? []);
     if (state.autoUpload == true) {
       emit(state.copyWith(uploading: true));
       await uploadNewFiles(files);
@@ -46,7 +46,7 @@ class FileSelectorCubit extends Cubit<FileSelectorState> {
     emit(state.copyWith(selectedFiles: newFileList));
   }
 
-  Future<void> uploadNewFiles(List<File> files) async {
+  Future<void> uploadNewFiles(List<dynamic> files) async {
     emit(state.copyWith(uploading: true));
     final uploadResult = await _uploadFile(
         UploadFileParams(files: files, userId: state.user?.userId ?? ''));

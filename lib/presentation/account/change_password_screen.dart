@@ -43,7 +43,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
         onError: () {
           showDialog(
               context: context,
-              builder: (context) {
+              builder: (builder) {
                 return AlertDialog(
                   title: const Text('Password did not change'),
                   content: const Text(
@@ -51,7 +51,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   actions: [
                     TextButton(
                         onPressed: () {
-                          Navigator.of(context).pop();
+                          Navigator.of(builder).pop();
                         },
                         child: const Text('OK'))
                   ],
@@ -63,7 +63,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               context: context,
               isDismissible: false,
               useRootNavigator: true,
-              builder: (context) {
+              builder: (builder) {
                 return Padding(
                   padding: const EdgeInsets.all(32),
                   child: SizedBox(
@@ -73,7 +73,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                         const Text('Successfully change password'),
                         TextButton(
                             onPressed: () {
-                              Navigator.pop(context, true);
+                              Navigator.pop(builder);
                               BlocProvider.of<AuthCubit>(context).logOut();
                             },
                             child: const Text('OK'))
@@ -97,7 +97,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 ? () {
                     showDialog(
                         context: context,
-                        builder: (context) {
+                        builder: (builder) {
                           return AlertDialog(
                             title: const Text('Confirm'),
                             content: const Text(
@@ -106,7 +106,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                               TextButton(
                                   onPressed: () {
                                     _submitChangePassword();
-                                    Navigator.pop(context, true);
+                                    Navigator.pop(builder, true);
                                   },
                                   child: const Text('OK'))
                             ],

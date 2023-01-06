@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:priorli/core/apartment/entities/apartment.dart';
 import 'package:priorli/core/housing/entities/housing_company.dart';
+import 'package:priorli/core/messaging/entities/conversation.dart';
 import 'package:priorli/core/water_usage/entities/water_bill.dart';
 import 'package:priorli/core/water_usage/entities/water_consumption.dart';
 
@@ -11,7 +12,7 @@ class ApartmentState extends Equatable {
   final WaterConsumption? latestWaterConsumption;
   final List<WaterBill>? yearlyWaterBills;
   final HousingCompany? housingCompany;
-  final bool? newConsumptionAdded;
+  final Conversation? newFaultReport;
   final List<StorageItem>? documentList;
 
   const ApartmentState(
@@ -20,17 +21,17 @@ class ApartmentState extends Equatable {
       this.documentList,
       this.yearlyWaterBills,
       this.latestWaterConsumption,
-      this.newConsumptionAdded});
+      this.newFaultReport});
 
   ApartmentState copyWith(
           {Apartment? apartment,
           HousingCompany? housingCompany,
           List<WaterBill>? yearlyWaterBills,
-          bool? newConsumptionAdded,
+          Conversation? newFaultReport,
           List<StorageItem>? documentList,
           WaterConsumption? latestWaterConsumption}) =>
       ApartmentState(
-          newConsumptionAdded: newConsumptionAdded ?? this.newConsumptionAdded,
+          newFaultReport: newFaultReport ?? this.newFaultReport,
           apartment: apartment ?? this.apartment,
           housingCompany: housingCompany ?? this.housingCompany,
           documentList: documentList ?? this.documentList,
@@ -44,7 +45,7 @@ class ApartmentState extends Equatable {
         yearlyWaterBills,
         latestWaterConsumption,
         housingCompany,
-        newConsumptionAdded,
+        newFaultReport,
         documentList
       ];
 }

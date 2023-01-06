@@ -6,7 +6,7 @@ import 'package:priorli/core/user/entities/user.dart';
 class FileSelectorState extends Equatable {
   final List<String>? uploadedLocations;
   final bool? autoUpload;
-  final List<File>? selectedFiles;
+  final List<dynamic>? selectedFiles;
   final User? user;
   final bool? uploading;
 
@@ -23,7 +23,7 @@ class FileSelectorState extends Equatable {
           User? user,
           bool? autoUpload,
           bool? uploading,
-          List<File>? selectedFiles}) =>
+          List<dynamic>? selectedFiles}) =>
       FileSelectorState(
           selectedFiles: selectedFiles ?? this.selectedFiles,
           user: user ?? this.user,

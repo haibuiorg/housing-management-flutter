@@ -12,7 +12,8 @@ import '../shared/custom_form_field.dart';
 const housingCompanyPaymentPath = 'payment';
 
 class HousingCompanyPaymentScreen extends StatefulWidget {
-  const HousingCompanyPaymentScreen({super.key});
+  const HousingCompanyPaymentScreen({super.key, required this.companyId});
+  final String companyId;
 
   @override
   State<HousingCompanyPaymentScreen> createState() =>
@@ -39,9 +40,7 @@ class _HousingCompanyPaymentScreenState
   }
 
   _getInitialData() async {
-    final housingCompanyId =
-        Uri.parse(GoRouter.of(context).location).pathSegments[1];
-    cubit.init(housingCompanyId);
+    cubit.init(widget.companyId);
   }
 
   @override
@@ -108,7 +107,7 @@ class BankAccountBox extends StatelessWidget {
   _showConfirmDeleteDialog(BuildContext context, Function() onDismiss) async {
     showDialog(
       context: context,
-      builder: (BuildContext context) {
+      builder: (BuildContext builder) {
         return AlertDialog(
           title: const Text("Confirm"),
           content:
@@ -116,7 +115,7 @@ class BankAccountBox extends StatelessWidget {
           actions: [
             OutlinedButton(onPressed: onDismiss, child: const Text("Delete")),
             TextButton(
-              onPressed: () => Navigator.of(context).pop(false),
+              onPressed: () => Navigator.of(builder).pop(false),
               child: const Text("Cancel"),
             ),
           ],

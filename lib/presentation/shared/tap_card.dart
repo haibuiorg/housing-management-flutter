@@ -9,11 +9,13 @@ class TapCard extends StatelessWidget {
       required this.child,
       this.onTap,
       this.backgroundColor,
-      this.height});
+      this.height,
+      this.width});
   final Widget child;
   final Color? backgroundColor;
   final Function()? onTap;
   final double? height;
+  final double? width;
 
   @override
   Widget build(BuildContext context) {
@@ -23,11 +25,9 @@ class TapCard extends StatelessWidget {
       child: BlocBuilder<SettingCubit, SettingState>(builder: (context, state) {
         return Container(
           height: height,
+          width: width,
           decoration: BoxDecoration(
               border: const BorderDirectional(),
-              backgroundBlendMode: state.brightness == Brightness.light
-                  ? BlendMode.modulate
-                  : BlendMode.plus,
               color: backgroundColor ??
                   Theme.of(context).colorScheme.primaryContainer,
               borderRadius: const BorderRadius.all(Radius.circular(16))),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:priorli/core/apartment/entities/apartment.dart';
 import 'package:priorli/presentation/send_invitation/invite_tenant_state.dart';
 import 'package:priorli/presentation/shared/custom_form_field.dart';
@@ -12,12 +11,11 @@ import 'invite_tenant_cubit.dart';
 const inviteTenantPath = 'invite';
 
 class InviteTenantScreen extends StatelessWidget {
-  const InviteTenantScreen({super.key});
+  const InviteTenantScreen({super.key, required this.housingCompanyId});
+  final String housingCompanyId;
 
   @override
   Widget build(BuildContext context) {
-    final housingCompanyId =
-        Uri.parse(GoRouter.of(context).location).pathSegments[1];
     final cubit = serviceLocator<InviteTenantCubit>();
     cubit.init(housingCompanyId);
     return BlocProvider(

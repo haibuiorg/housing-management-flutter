@@ -60,7 +60,8 @@ class MessageCubit extends Cubit<MessageState> {
           pendingState.copyWith(conversation: conversationResult.data);
     }
     _myMessageSubscription?.cancel();
-    if (messageType == messageTypeCommunity) {
+    if (messageType == messageTypeCommunity ||
+        messageType == messageTypeFaultReport) {
       _myMessageSubscription = _getCommunityMessages(GetCommunityMessageParams(
               conversationId: conversationId, companyId: channelId))
           .listen(_messageListener);

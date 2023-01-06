@@ -11,7 +11,9 @@ import 'announcement_item.dart';
 const announcementPath = 'announcements';
 
 class AnnouncementScreen extends StatefulWidget {
-  const AnnouncementScreen({super.key});
+  const AnnouncementScreen({super.key, required this.housingCompanyId});
+
+  final String housingCompanyId;
 
   @override
   State<AnnouncementScreen> createState() => _AnnouncementScreenState();
@@ -43,76 +45,73 @@ class _AnnouncementScreenState extends State<AnnouncementScreen> {
   }
 
   _getInitialData() async {
-    final housingCompanyId =
-        Uri.parse(GoRouter.of(context).location).pathSegments[1];
-    await cubit.init(housingCompanyId);
+    await cubit.init(widget.housingCompanyId);
   }
 
   @override
   Widget build(BuildContext context) {
-    final housingCompanyId =
-        Uri.parse(GoRouter.of(context).location).pathSegments[1];
     return BlocProvider<AnnouncementCubit>(
       create: (_) => cubit,
-      child: Scaffold(
-        floatingActionButton: FloatingActionButton(
-          child: const Icon(Icons.add),
-          onPressed: () {
-            showModalBottomSheet(
-                context: context,
-                isScrollControlled: true,
-                useSafeArea: true,
-                builder: (context) {
-                  return MakeAnnouncementDialog(
-                    onSubmit: (
-                        {required body,
-                        required subtitle,
-                        required title,
-                        required sendEmail,
-                        uploadedDocuments}) {
-                      cubit.addAnnouncement(
-                          sendEmail: sendEmail,
-                          storageItems: uploadedDocuments,
-                          title: title,
-                          subtitle: subtitle,
-                          body: body);
-                      Navigator.pop(context, true);
+      child: BlocBuilder<AnnouncementCubit, AnnouncementState>(
+          builder: (context, state) {
+        return Scaffold(
+            floatingActionButton: state.isManager == true
+                ? FloatingActionButton(
+                    child: const Icon(Icons.add),
+                    onPressed: () {
+                      showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          useSafeArea: true,
+                          builder: (builder) {
+                            return AnnouncementDialog(
+                              onSubmit: (
+                                  {required body,
+                                  required subtitle,
+                                  required title,
+                                  required sendEmail,
+                                  uploadedDocuments}) {
+                                cubit.addAnnouncement(
+                                    sendEmail: sendEmail,
+                                    storageItems: uploadedDocuments,
+                                    title: title,
+                                    subtitle: subtitle,
+                                    body: body);
+                                Navigator.pop(builder, true);
+                              },
+                            );
+                          });
                     },
-                  );
-                });
-          },
-        ),
-        appBar: AppBar(
-          title: const Text('Announcement'),
-        ),
-        body: BlocBuilder<AnnouncementCubit, AnnouncementState>(
-            builder: (context, state) {
-          return RefreshIndicator(
-            onRefresh: () => cubit.init(housingCompanyId),
-            child: ListView.builder(
-                controller: _controller,
-                itemCount: state.announcementList?.length ?? 0,
-                itemBuilder: (context, index) {
-                  final announcement = state.announcementList?[index];
-                  return Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-                    child: announcement != null
-                        ? AnnouncementItem(
-                            companyId: housingCompanyId,
-                            announcement: announcement,
-                          )
-                        : const SizedBox.shrink(),
-                  );
-                }),
-          );
-        }),
-      ),
+                  )
+                : null,
+            appBar: AppBar(
+              title: const Text('Announcement'),
+            ),
+            body: RefreshIndicator(
+              onRefresh: () => cubit.init(widget.housingCompanyId),
+              child: ListView.builder(
+                  controller: _controller,
+                  itemCount: state.announcementList?.length ?? 0,
+                  itemBuilder: (context, index) {
+                    final announcement = state.announcementList?[index];
+                    return Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                      child: announcement != null
+                          ? AnnouncementItem(
+                              companyId: widget.housingCompanyId,
+                              announcement: announcement,
+                            )
+                          : const SizedBox.shrink(),
+                    );
+                  }),
+            ));
+      }),
     );
   }
 }
 
-class MakeAnnouncementDialog extends StatefulWidget {
-  const MakeAnnouncementDialog({super.key, required this.onSubmit});
+class AnnouncementDialog extends StatefulWidget {
+  const AnnouncementDialog({super.key, required this.onSubmit});
   final Function(
       {required String title,
       required String subtitle,
@@ -121,10 +120,10 @@ class MakeAnnouncementDialog extends StatefulWidget {
       List<String>? uploadedDocuments}) onSubmit;
 
   @override
-  State<MakeAnnouncementDialog> createState() => _MakeAnnouncementDialogState();
+  State<AnnouncementDialog> createState() => _AnnouncementDialogState();
 }
 
-class _MakeAnnouncementDialogState extends State<MakeAnnouncementDialog> {
+class _AnnouncementDialogState extends State<AnnouncementDialog> {
   final _titleController = TextEditingController();
   final _subtitleController = TextEditingController();
   final _bodyController = TextEditingController();

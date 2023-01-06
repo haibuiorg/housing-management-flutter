@@ -11,6 +11,7 @@ class User extends Equatable {
   final String? avatarUrl;
   final bool? emailVerified;
   final List<String> roles;
+  final List<String>? apartments;
 
   const User(
       {required this.userId,
@@ -19,6 +20,7 @@ class User extends Equatable {
       required this.firstName,
       required this.lastName,
       required this.roles,
+      this.apartments,
       this.avatarUrl,
       this.emailVerified});
 
@@ -27,8 +29,8 @@ class User extends Equatable {
         userId: userModel.userId,
         email: userModel.email,
         phone: userModel.phone,
-        firstName: userModel.firstName ?? '',
-        lastName: userModel.lastName ?? '',
+        firstName: userModel.firstName,
+        lastName: userModel.lastName,
         roles: userModel.roles?.map((e) => e.toString()).toList() ?? [],
         avatarUrl: userModel.avatarUrl,
         emailVerified: userModel.emailVerified);
@@ -43,6 +45,7 @@ class User extends Equatable {
     String? avatarUrl,
     bool? emailVerified,
     List<String>? roles,
+    List<String>? apartments,
   }) =>
       User(
         userId: userId ?? this.userId,
@@ -53,6 +56,7 @@ class User extends Equatable {
         roles: roles ?? this.roles,
         avatarUrl: avatarUrl ?? this.avatarUrl,
         emailVerified: emailVerified ?? this.emailVerified,
+        apartments: apartments ?? this.apartments,
       );
 
   @override
@@ -65,6 +69,7 @@ class User extends Equatable {
         roles,
         roles.length,
         avatarUrl,
-        emailVerified
+        emailVerified,
+        apartments
       ];
 }

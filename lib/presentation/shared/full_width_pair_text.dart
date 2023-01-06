@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 
 class FullWidthPairText extends StatelessWidget {
-  const FullWidthPairText(
-      {super.key, required this.label, required this.content});
+  const FullWidthPairText({super.key, required this.label, this.content});
 
   final String label;
-  final String content;
+  final String? content;
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +12,7 @@ class FullWidthPairText extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [Text(label), Text(content)],
+        children: [Text(label), Text(content ?? '')],
       ),
     );
   }

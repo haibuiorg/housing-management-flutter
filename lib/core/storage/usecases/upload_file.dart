@@ -18,7 +18,7 @@ class UploadFile extends UseCase<List<String>, UploadFileParams> {
 }
 
 class UploadFileParams extends Equatable {
-  final List<File> files;
+  final List<dynamic> files;
   final String userId;
 
   const UploadFileParams({

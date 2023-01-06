@@ -13,7 +13,7 @@ class StorageRepositoryImpl implements StorageRepository {
   StorageRepositoryImpl({required this.storageDataSource});
   @override
   Future<Result<List<String>>> uploadFile(
-      {required List<File> files, required String userId}) async {
+      {required List<dynamic> files, required String userId}) async {
     try {
       final fileUpload = await storageDataSource.uploadFile(
         files: files,

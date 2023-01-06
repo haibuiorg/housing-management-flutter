@@ -1,4 +1,5 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:priorli/core/auth/usecases/change_password.dart';
 import 'package:priorli/core/base/result.dart';
@@ -76,7 +77,12 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   Future<void> logOut() async {
-    await deleteNotificationToken();
+    try {
+      await deleteNotificationToken();
+    } catch (error) {
+      debugPrint(error.toString());
+    }
+
     final logOutResult = await _logOut(NoParams());
     final isLoggedIn =
         !((logOutResult is ResultSuccess<bool>) && logOutResult.data);

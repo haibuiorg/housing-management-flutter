@@ -27,6 +27,7 @@ class _PdfViewerState extends State<PdfViewer> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
         Padding(
           padding: const EdgeInsets.all(8.0),
@@ -40,7 +41,8 @@ class _PdfViewerState extends State<PdfViewer> {
                 label: const Text('Download')),
           ),
         ),
-        Expanded(
+        SizedBox(
+          height: MediaQuery.of(context).size.height * 0.75,
           child: SfPdfViewer.network(
             widget.link,
             controller: _pdfViewerController,

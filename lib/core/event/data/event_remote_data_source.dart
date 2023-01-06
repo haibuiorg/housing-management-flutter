@@ -112,6 +112,7 @@ class EventRemoteDataSource implements EventDataSource {
         'last_created_on': lastCreatedOn,
         'limit': limit,
       };
+      data.removeWhere((key, value) => value == null);
       final result = await client.get('/events', queryParameters: data);
       return (result.data as List<dynamic>)
           .map((e) => EventModel.fromJson(e as Map<String, dynamic>))

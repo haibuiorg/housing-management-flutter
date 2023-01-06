@@ -40,6 +40,9 @@ class ConversationListCubit extends Cubit<ConversationListState> {
         conversationList: conversationList
             .where((element) => element.type == messageTypeCommunity)
             .toList(),
+        faultConversationList: conversationList
+            .where((element) => element.type == messageTypeFaultReport)
+            .toList(),
         supportConversationList: conversationList
             .where((element) => element.type == messageTypeSupport)
             .toList()));

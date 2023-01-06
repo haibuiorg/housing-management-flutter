@@ -192,13 +192,10 @@ class ApartmentRemoteDataSource implements ApartmentDataSource {
         'housing_company_id': housingCompanyId,
         'apartment_id': apartmentId,
         'type': type,
+        'limit': limit,
+        'last_created_on': lastCreatedOn,
       };
-      if (limit != null) {
-        data['limit'] = limit;
-      }
-      if (lastCreatedOn != null) {
-        data['last_created_on'] = lastCreatedOn;
-      }
+      data.removeWhere((key, value) => value == null);
       final result =
           await client.get('/apartment/documents', queryParameters: data);
       return (result.data as List<dynamic>)

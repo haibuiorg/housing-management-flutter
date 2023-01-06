@@ -42,9 +42,10 @@ class EventScreenCubit extends Cubit<EventScreenState> {
         return;
       }
     }
-    getCompanyData(companyId ?? '');
-    emit(state.copyWith(
-        companyId: companyId, apartmentId: apartmentId, isInitializing: false));
+    getCompanyData(companyId ?? '').then((value) => emit(state.copyWith(
+        companyId: companyId,
+        apartmentId: apartmentId,
+        isInitializing: state.company?.isUserManager == false)));
   }
 
   Future<void> getUserData() async {
@@ -73,7 +74,6 @@ class EventScreenCubit extends Cubit<EventScreenState> {
       List<int>? reminders,
       int? repeatUntil,
       Repeat? repeat}) async {
-    print(reminders);
     final createEventResult = await _createEvent(CreateEventParams(
         name: name,
         description: description,

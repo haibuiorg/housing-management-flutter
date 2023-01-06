@@ -3,9 +3,11 @@ import 'package:priorli/core/apartment/usecases/add_apartment_documents.dart';
 import 'package:priorli/core/apartment/usecases/get_apartment_document.dart';
 import 'package:priorli/core/apartment/usecases/get_apartment_document_list.dart';
 import 'package:priorli/core/base/result.dart';
+import 'package:priorli/core/housing/entities/housing_company.dart';
 import 'package:priorli/core/housing/usecases/add_company_documents.dart';
 import 'package:priorli/core/housing/usecases/get_company_document.dart';
 import 'package:priorli/core/housing/usecases/get_company_document_list.dart';
+import 'package:priorli/core/housing/usecases/get_housing_company.dart';
 import 'package:priorli/core/storage/entities/storage_item.dart';
 import 'package:priorli/presentation/documents/document_list_screen_state.dart';
 
@@ -16,6 +18,7 @@ class DocumentListScreenCubit extends Cubit<DocumentListScreenState> {
   final GetCompanyDocumentList _getCompanyDocumentList;
   final GetApartmentDocument _getApartmentDocument;
   final GetCompanyDocument _getCompanyDocument;
+  final GetHousingCompany _getHousingCompany;
 
   DocumentListScreenCubit(
       this._addCompanyDocuments,
@@ -23,7 +26,8 @@ class DocumentListScreenCubit extends Cubit<DocumentListScreenState> {
       this._getApartmentDocumentList,
       this._getCompanyDocumentList,
       this._getApartmentDocument,
-      this._getCompanyDocument)
+      this._getCompanyDocument,
+      this._getHousingCompany)
       : super(const DocumentListScreenState());
 
   Future<void> init(String? companyId, String? apartmentId) async {
@@ -33,17 +37,28 @@ class DocumentListScreenCubit extends Cubit<DocumentListScreenState> {
           GetApartmentDocumentListParams(
               housingCompanyId: companyId!, apartmentId: apartmentId!));
       if (documentListResult is ResultSuccess<List<StorageItem>>) {
-        emit(state.copyWith(documentList: documentListResult.data));
+        emit(state.copyWith(
+            documentList: documentListResult.data, addDocument: true));
       }
     } else if (companyId?.isNotEmpty == true) {
+      getCompanyData(companyId!);
       emit(state.copyWith(companyId: companyId));
       final documentListResult =
           await _getCompanyDocumentList(GetCompanyDocumentListParams(
-        housingCompanyId: companyId!,
+        housingCompanyId: companyId,
       ));
       if (documentListResult is ResultSuccess<List<StorageItem>>) {
         emit(state.copyWith(documentList: documentListResult.data));
       }
+    }
+  }
+
+  Future<void> getCompanyData(String companyId) async {
+    final companytResult = await _getHousingCompany(GetHousingCompanyParams(
+      housingCompanyId: companyId,
+    ));
+    if (companytResult is ResultSuccess<HousingCompany>) {
+      emit(state.copyWith(addDocument: companytResult.data.isUserManager));
     }
   }
 

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:priorli/core/housing/entities/housing_company.dart';
 import 'package:priorli/core/utils/string_extension.dart';
+import 'package:priorli/go_router_navigation.dart';
 import 'package:priorli/presentation/shared/tap_card.dart';
 import 'package:priorli/setting_cubit.dart';
 import 'package:priorli/setting_state.dart';
@@ -22,8 +23,8 @@ class HousingCompanyTile extends StatelessWidget {
       return Padding(
         padding: const EdgeInsets.all(8.0),
         child: TapCard(
-          onTap: () => GoRouter.of(context)
-              .push('/$housingCompanyScreenPath/${housingCompany?.id}'),
+          onTap: () => context.pushFromCurrentLocation(
+              '$housingCompanyScreenPath/${housingCompany?.id}'),
           child: Container(
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16),
@@ -44,7 +45,7 @@ class HousingCompanyTile extends StatelessWidget {
                   children: [
                     housingCompany?.logoUrl.isNotEmpty == true
                         ? CircleAvatar(
-                            radius: 36,
+                            radius: 48,
                             backgroundImage: CachedNetworkImageProvider(
                                 housingCompany?.logoUrl ?? ''),
                           )
@@ -60,9 +61,17 @@ class HousingCompanyTile extends StatelessWidget {
                               style: Theme.of(context).textTheme.displayMedium,
                             ),
                           ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: Text(housingCompany?.name.capitalize() ?? ''),
+                    const Spacer(),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8, horizontal: 16),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          color:
+                              Theme.of(context).colorScheme.secondaryContainer),
+                      child: Text(
+                        housingCompany?.name ?? 'Housing company',
+                      ),
                     ),
                     Text(
                         '${housingCompany?.streetAddress1} ${housingCompany?.streetAddress2} ${housingCompany?.postalCode} ${housingCompany?.city}')

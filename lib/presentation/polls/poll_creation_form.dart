@@ -3,7 +3,7 @@ import 'package:priorli/core/poll/entities/poll_type.dart';
 
 import '../../core/user/entities/user.dart';
 import '../../core/utils/time_utils.dart';
-import '../housing_company_users/guest_invitation.dart';
+import '../guest_invitation/guest_invitation.dart';
 import '../shared/custom_form_field.dart';
 import '../shared/date_time_selector.dart';
 import '../shared/setting_button.dart';
@@ -71,12 +71,12 @@ class _PollCreationFormState extends State<PollCreationForm> {
     if (_votingOptionControllers.length < 2) {
       showDialog(
           context: context,
-          builder: (context) => AlertDialog(
+          builder: (builder) => AlertDialog(
                 content: const Text('Must have at least 1 voting option'),
                 actions: [
                   OutlinedButton(
                       onPressed: () {
-                        Navigator.pop(context);
+                        Navigator.pop(builder);
                       },
                       child: const Text('Ok'))
                 ],
@@ -201,7 +201,7 @@ class _PollCreationFormState extends State<PollCreationForm> {
                             .map((e) => '${e.firstName} ${e.lastName}')
                             .toList();
                       });
-                      Navigator.pop(context, true);
+                      Navigator.pop(builder, true);
                     },
                   ),
                 );

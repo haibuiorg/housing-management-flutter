@@ -14,12 +14,11 @@ import 'water_consumption_management_cubit.dart';
 const waterConsumptionManagementScreenPath = 'water_consumption_management';
 
 class WaterConsumptionManagementScreen extends StatelessWidget {
-  const WaterConsumptionManagementScreen({super.key});
-
+  const WaterConsumptionManagementScreen(
+      {super.key, required this.housingCompanyId});
+  final String housingCompanyId;
   @override
   Widget build(BuildContext context) {
-    final housingCompanyId =
-        Uri.parse(GoRouter.of(context).location).pathSegments[1];
     final cubit = serviceLocator<WaterConsumptionManagementCubit>();
     cubit.init(housingCompanyId);
     return BlocProvider<WaterConsumptionManagementCubit>(
@@ -76,20 +75,21 @@ class WaterConsumptionManagementScreen extends StatelessWidget {
                                 'Basic fee: ${formatCurrency(state.activeWaterPrice?.basicFee, state.housingCompany?.currencyCode)}'),
                           ],
                         ),
-                        OutlinedButton(
-                            onPressed: () {
-                              showDialog(
-                                  context: context,
-                                  builder: (_) => WaterPriceDialog(
-                                        onSubmit: (
-                                            {required basicFee,
-                                            required pricePerCube}) async {
-                                          await cubit.addNewWaterPrice(
-                                              basicFee, pricePerCube);
-                                        },
-                                      ));
-                            },
-                            child: const Text('Add new water price')),
+                        if (state.housingCompany?.isUserManager == true)
+                          OutlinedButton(
+                              onPressed: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (_) => WaterPriceDialog(
+                                          onSubmit: (
+                                              {required basicFee,
+                                              required pricePerCube}) async {
+                                            await cubit.addNewWaterPrice(
+                                                basicFee, pricePerCube);
+                                          },
+                                        ));
+                              },
+                              child: const Text('Add new water price')),
                       ],
                     ),
                     const Divider(),
@@ -139,28 +139,31 @@ class WaterConsumptionManagementScreen extends StatelessWidget {
                               direction: Axis.vertical,
                             ),
                           ),
-                          OutlinedButton(
-                              onPressed: () {
-                                showDialog(
-                                    context: context,
-                                    builder: (_) => WaterConsumptionDialog(
-                                          showIncompleteError: (state
-                                                      .latestWaterConsumption
-                                                      ?.consumptionValues
-                                                      ?.length ??
-                                                  0) <
-                                              (state.housingCompany
-                                                      ?.apartmentCount ??
-                                                  0),
-                                          onSubmit: ({
-                                            required totalReading,
-                                          }) async {
-                                            await cubit.startNewWaterBillPeriod(
-                                                totalReading);
-                                          },
-                                        ));
-                              },
-                              child: const Text('Start new water bill period')),
+                          if (state.housingCompany?.isUserManager == true)
+                            OutlinedButton(
+                                onPressed: () {
+                                  showDialog(
+                                      context: context,
+                                      builder: (_) => WaterConsumptionDialog(
+                                            showIncompleteError: (state
+                                                        .latestWaterConsumption
+                                                        ?.consumptionValues
+                                                        ?.length ??
+                                                    0) <
+                                                (state.housingCompany
+                                                        ?.apartmentCount ??
+                                                    0),
+                                            onSubmit: ({
+                                              required totalReading,
+                                            }) async {
+                                              await cubit
+                                                  .startNewWaterBillPeriod(
+                                                      totalReading);
+                                            },
+                                          ));
+                                },
+                                child:
+                                    const Text('Start new water bill period')),
                         ],
                       ),
                     ),

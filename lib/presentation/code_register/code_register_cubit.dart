@@ -14,7 +14,7 @@ class CodeRegisterCubit extends Cubit<CodeRegisterState> {
 
   onTypingCode(String code) {
     emit(state.copyWith(
-        code: code.split('/')[0], companyId: code.split('/')[1]));
+        companyId: code.split('/')[0], code: code.split('/')[1]));
   }
 
   onTypingPassword(String password) {

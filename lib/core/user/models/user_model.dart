@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:priorli/core/address/address_model.dart';
 
 part 'user_model.g.dart';
 
@@ -18,14 +19,23 @@ class UserModel extends Equatable {
   final dynamic avatarUrl;
   @JsonKey(name: 'email_verified')
   final bool? emailVerified;
+  final List<AddressModel>? addresses;
 
-  const UserModel(this.userId, this.phone, this.email, this.roles,
-      this.firstName, this.lastName, this.avatarUrl, this.emailVerified);
+  const UserModel(
+      this.userId,
+      this.phone,
+      this.email,
+      this.roles,
+      this.addresses,
+      this.firstName,
+      this.lastName,
+      this.avatarUrl,
+      this.emailVerified);
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>
       _$UserModelFromJson(json);
 
   @override
   List<Object?> get props =>
-      [userId, phone, email, roles, firstName, lastName, avatarUrl];
+      [userId, phone, email, roles, firstName, lastName, avatarUrl, addresses];
 }

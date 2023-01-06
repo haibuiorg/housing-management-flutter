@@ -20,11 +20,12 @@ class GetHousingCompany
 
 class GetHousingCompanyParams extends Equatable {
   final String housingCompanyId;
+  final int? lastCreatedOn;
+  final int? limit;
 
-  const GetHousingCompanyParams({
-    required this.housingCompanyId,
-  });
+  const GetHousingCompanyParams(
+      {required this.housingCompanyId, this.lastCreatedOn, this.limit});
 
   @override
-  List<Object?> get props => [housingCompanyId];
+  List<Object?> get props => [housingCompanyId, lastCreatedOn, limit];
 }

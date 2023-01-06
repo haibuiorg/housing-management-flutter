@@ -50,7 +50,7 @@ class _MessageScreenState extends State<MessageScreen> {
   _showJoinConversationChannelDialog() {
     showDialog(
         context: context,
-        builder: (context) => AlertDialog(
+        builder: (builder) => AlertDialog(
               title: const Text('Join this channel'),
               content: const Text(
                   'Do you want to join this channel and start discussion'),
@@ -58,7 +58,7 @@ class _MessageScreenState extends State<MessageScreen> {
                 OutlinedButton(
                     onPressed: () {
                       _cubit.joinConversation();
-                      Navigator.pop(context, true);
+                      Navigator.pop(builder, true);
                     },
                     child: const Text('Sure!'))
               ],

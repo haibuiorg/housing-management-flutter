@@ -183,4 +183,39 @@ class HousingCompanyRepositoryImpl extends HousingCompanyRepository {
       return ResultFailure(ServerFailure());
     }
   }
+
+  @override
+  Future<Result<User>> addHousingCompanyManager(
+      {required String housingCompanyId,
+      required String email,
+      String? firstName,
+      String? lastName,
+      String? phoneNumber}) async {
+    try {
+      final userModel = await housingCompanyDataSource.addHousingCompanyManager(
+          housingCompanyId: housingCompanyId,
+          email: email,
+          firstName: firstName,
+          lastName: lastName,
+          phoneNumber: phoneNumber);
+      return ResultSuccess(User.modelToEntity(userModel));
+    } on ServerException {
+      return ResultFailure(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Result<List<User>>> getHousingCompanyManagers(
+      {required String companyId}) async {
+    try {
+      final userModels =
+          await housingCompanyDataSource.getHousingCompanyManagers(
+        companyId: companyId,
+      );
+      return ResultSuccess(
+          userModels.map((e) => User.modelToEntity(e)).toList());
+    } on ServerException {
+      return ResultFailure(ServerFailure());
+    }
+  }
 }

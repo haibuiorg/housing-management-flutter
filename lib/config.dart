@@ -5,6 +5,6 @@ abstract class Config {
   // ignore: constant_identifier_names
   static const String API_URL = String.fromEnvironment(
     'API_URL',
-    defaultValue: '',
+    defaultValue: 'https://priorli.oa.r.appspot.com/api/v1',
   );
 }

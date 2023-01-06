@@ -6,7 +6,7 @@ import '../../core/event/entities/reminder.dart';
 import '../../core/event/entities/repeat.dart';
 import '../../core/user/entities/user.dart';
 import '../../core/utils/time_utils.dart';
-import '../housing_company_users/guest_invitation.dart';
+import '../guest_invitation/guest_invitation.dart';
 import '../shared/custom_form_field.dart';
 import '../shared/date_time_selector.dart';
 import '../shared/full_width_pair_text.dart';
@@ -322,7 +322,7 @@ class _EventDetailState extends State<EventDetail> {
                   companyId: widget.companyId,
                   initialSelectedUser: widget.event.accepted,
                   onUserSelected: ({required List<User> userList}) {
-                    Navigator.pop(context, true);
+                    Navigator.pop(builder, true);
                   },
                 ),
               );

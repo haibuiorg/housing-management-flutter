@@ -171,6 +171,7 @@ class MessagingRemoteDataSource implements MessagingDataSource {
           .doc(companyId)
           .collection(conversations)
           .orderBy(updatedOn, descending: true)
+          //.where('type', isEqualTo: messageTypeCommunity)
           .snapshots()
           .map((it) {
         final newList =
@@ -261,12 +262,8 @@ class MessagingRemoteDataSource implements MessagingDataSource {
         "conversation_id": conversationId,
         "type": messageType,
       };
-      try {
-        final result = await client.get('/conversation', queryParameters: data);
-        return ConversationModel.fromJson(result.data);
-      } catch (error) {
-        throw ServerException();
-      }
+      final result = await client.get('/conversation', queryParameters: data);
+      return ConversationModel.fromJson(result.data);
     } catch (error) {
       throw ServerException(error: error);
     }

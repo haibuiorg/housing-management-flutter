@@ -5,7 +5,7 @@ import 'package:universal_io/io.dart' as universal_platform;
 extension ExtString on String {
   bool get isValidEmail {
     final emailRegExp = RegExp(r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
-    return emailRegExp.hasMatch(this);
+    return true; //emailRegExp.hasMatch(this);
   }
 
   bool get isValidPassword {

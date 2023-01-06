@@ -96,7 +96,11 @@ class _CodeRegisterScreenState extends State<CodeRegisterScreen> {
                             onPressed: state.email?.isValidEmail == true &&
                                     state.password?.isValidPassword == true
                                 ? () => BlocProvider.of<AuthCubit>(context)
-                                    .registerWithCode()
+                                    .registerWithCode(
+                                        email: state.email,
+                                        companyId: state.companyId,
+                                        code: state.code,
+                                        password: state.password)
                                 : null,
                             child: const Text('Register'))
                       ]),

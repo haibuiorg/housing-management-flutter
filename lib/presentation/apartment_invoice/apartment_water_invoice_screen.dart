@@ -10,7 +10,10 @@ import 'apartment_water_invoice_cubit.dart';
 const apartmentWaterInvoice = 'water_bill';
 
 class ApartmentWaterInvoiceScreen extends StatefulWidget {
-  const ApartmentWaterInvoiceScreen({super.key});
+  const ApartmentWaterInvoiceScreen(
+      {super.key, required this.companyId, required this.apartmentId});
+  final String companyId;
+  final String apartmentId;
 
   @override
   State<ApartmentWaterInvoiceScreen> createState() =>
@@ -36,11 +39,7 @@ class _ApartmentWaterInvoiceScreenState
   }
 
   _getInitialData() async {
-    final housingCompanyId =
-        Uri.parse(GoRouter.of(context).location).pathSegments[1];
-    final apartmentId =
-        Uri.parse(GoRouter.of(context).location).pathSegments[3];
-    await cubit.init(housingCompanyId, apartmentId);
+    await cubit.init(widget.companyId, widget.apartmentId);
   }
 
   @override

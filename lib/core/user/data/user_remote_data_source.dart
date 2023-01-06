@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:priorli/core/base/exceptions.dart';
 import '../models/user_model.dart';
 import 'user_data_source.dart';

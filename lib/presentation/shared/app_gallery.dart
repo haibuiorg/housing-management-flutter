@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import 'package:priorli/core/storage/entities/storage_item.dart';
-import 'package:priorli/presentation/shared/app_lottie_animation.dart';
 import 'package:priorli/presentation/shared/pdf_viewer.dart';
 
 class AppGallery extends StatefulWidget {

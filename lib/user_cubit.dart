@@ -29,4 +29,19 @@ class UserCubit extends Cubit<UserState> {
       emit(state.copyWith(user: updateUserInfoResult.data));
     }
   }
+
+  Future<User?> saveNewUserDetail(
+      {String? phone, String? lastName, String? firstName}) async {
+    final saveNameUserResult = await _updateUserInfo(UpdateUserInfoParams(
+      phone: phone ?? state.user?.phone ?? '',
+      lastName: lastName ?? state.user?.lastName ?? '',
+      firstName: firstName ?? state.user?.firstName ?? '',
+    ));
+    if (saveNameUserResult is ResultSuccess<User>) {
+      emit(state.copyWith(
+        user: saveNameUserResult.data,
+      ));
+    }
+    return state.user;
+  }
 }

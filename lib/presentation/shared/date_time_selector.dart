@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 class DateTimePicker extends StatefulWidget {
-  const DateTimePicker({super.key, required this.onConfirmTime});
+  const DateTimePicker(
+      {super.key, required this.onConfirmTime, this.initialDate});
   final Function(DateTime dateTime) onConfirmTime;
+  final DateTime? initialDate;
 
   @override
   State<DateTimePicker> createState() => _DateTimePickerState();
@@ -13,7 +15,8 @@ class _DateTimePickerState extends State<DateTimePicker> {
   late TimeOfDay time;
   @override
   void initState() {
-    selectedDate = DateTime.now().add(const Duration(days: 1));
+    selectedDate =
+        widget.initialDate ?? DateTime.now().add(const Duration(days: 1));
     time = TimeOfDay.fromDateTime(selectedDate);
     time = time.replacing(hour: time.hour < 23 ? time.hour + 1 : 0, minute: 0);
     super.initState();
@@ -30,7 +33,7 @@ class _DateTimePickerState extends State<DateTimePicker> {
           onDateChanged: (DateTime value) {
             selectedDate = value;
           },
-          lastDate: DateTime.now().add(const Duration(days: 14)),
+          lastDate: DateTime.now().add(const Duration(days: 365)),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,

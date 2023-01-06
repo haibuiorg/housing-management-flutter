@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:priorli/core/utils/user_utils.dart';
 import 'package:priorli/presentation/account/account_screen.dart';
 import 'package:priorli/presentation/account/change_password_screen.dart';
 import 'package:priorli/presentation/add_apartment/add_apartment_screen.dart';
+import 'package:priorli/presentation/admin/admin_screen.dart';
 import 'package:priorli/presentation/announcement/announcement_screen.dart';
 import 'package:priorli/presentation/apartment_management/apartment_management_screen.dart';
 import 'package:priorli/presentation/code_register/code_register_screen.dart';
+import 'package:priorli/presentation/company_user_management/company_user_screen.dart';
 import 'package:priorli/presentation/conversation_list/conversation_list_screen.dart';
 import 'package:priorli/presentation/create_housing_company/create_housing_company_screen.dart';
 import 'package:priorli/presentation/documents/document_list_screen.dart';
@@ -19,6 +19,9 @@ import 'package:priorli/presentation/home/home_screen.dart';
 import 'package:priorli/presentation/housing_company/housing_company_screen.dart';
 import 'package:priorli/presentation/housing_company_management/housing_company_management_screen.dart';
 import 'package:priorli/presentation/housing_company_ui/housing_company_ui_screen.dart';
+import 'package:priorli/presentation/invoice/invoice_creation_form.dart';
+import 'package:priorli/presentation/invoice/invoice_group_list_screen.dart';
+import 'package:priorli/presentation/invoice/invoice_list_screen.dart';
 import 'package:priorli/presentation/login/login_screen.dart';
 import 'package:priorli/presentation/main/main_screen.dart';
 import 'package:priorli/presentation/notification_center/notification_center_screen.dart';
@@ -26,184 +29,268 @@ import 'package:priorli/presentation/polls/poll_screen.dart';
 import 'package:priorli/presentation/send_invitation/invite_tenant_screen.dart';
 import 'package:priorli/presentation/profile/profile_screen.dart';
 import 'package:priorli/presentation/water_consumption_management/water_consumption_management_screen.dart';
-import 'package:priorli/user_cubit.dart';
-import 'package:priorli/user_state.dart';
 import 'presentation/apartment_invoice/apartment_water_invoice_screen.dart';
 import 'presentation/apartments/apartment_screen.dart';
 import 'presentation/housing_company_payment/housing_company_payment_screen.dart';
 import 'presentation/join_apartment/join_apartment_screen.dart';
 import 'presentation/message/message_screen.dart';
 import 'presentation/register/register_screen.dart';
+import 'presentation/shared/dialog_page.dart';
 
 const mainPathName = 'Main';
 const homePathName = 'Home';
 const housingCompanyScreenPathName = 'Housing company';
-
+final GlobalKey<NavigatorState> _shellNavigatorKey =
+    GlobalKey<NavigatorState>();
 GoRouter createAppRouter() {
   return GoRouter(
-    initialLocation: mainPath,
-    redirect: (context, state) {
-      if (state.location == '/') {
-        return mainPath;
-      }
-      return null;
-    },
+    initialLocation: homePath,
     routes: [
-      GoRoute(
-        name: mainPathName,
-        path: mainPath,
-        builder: (BuildContext context, GoRouterState state) {
-          return BlocBuilder<UserCubit, UserState>(builder: (context, state) {
-            return const MainScreen();
-          });
+      ShellRoute(
+        navigatorKey: _shellNavigatorKey,
+        builder: (context, state, child) {
+          return MainScreen(child: child);
         },
+        routes: [
+          GoRoute(
+            name: homePathName,
+            path: homePath,
+            builder: (BuildContext context, GoRouterState state) {
+              return const HomeScreen();
+            },
+            routes: [
+              GoRoute(
+                  name: housingCompanyScreenPathName,
+                  path: '$housingCompanyScreenPath/:companyId',
+                  builder: (BuildContext context, GoRouterState state) {
+                    return HousingCompanyScreen(
+                      housingCompanyId: state.params['companyId'] ?? '',
+                    );
+                  },
+                  routes: [
+                    GoRoute(
+                      path: addApartmentPath,
+                      builder: (BuildContext context, GoRouterState state) {
+                        return AddApartmentScreen(
+                          housingCompanyId: state.params['companyId'] ?? '',
+                        );
+                      },
+                    ),
+                    GoRoute(
+                      path: announcementPath,
+                      builder: (BuildContext context, GoRouterState state) {
+                        return AnnouncementScreen(
+                          housingCompanyId: state.params['companyId'] ?? '',
+                        );
+                      },
+                    ),
+                    GoRoute(
+                      path: ':isPersonal/$invoiceListPath/:groupId',
+                      builder: (BuildContext context, GoRouterState state) {
+                        return InvoiceListScreen(
+                          companyId: state.params['companyId'] ?? '',
+                          invoiceGroupId: state.params['groupId'] ?? '',
+                          isPersonal: state.params['isPersonal'] == 'personal',
+                        );
+                      },
+                    ),
+                    GoRoute(
+                      path: invoiceCreationPath,
+                      builder: (BuildContext context, GoRouterState state) {
+                        return InvoiceCreationForm(
+                          companyId: state.params['companyId'] ?? '',
+                        );
+                      },
+                    ),
+                    GoRoute(
+                      path: invoiceGroupPath,
+                      builder: (BuildContext context, GoRouterState state) {
+                        return InvoiceGroupListScreen(
+                          companyId: state.params['companyId'] ?? '',
+                        );
+                      },
+                    ),
+                    GoRoute(
+                        path: manageScreenPath,
+                        builder: (BuildContext context, GoRouterState state) {
+                          return HousingCompanyManagementScreen(
+                            companyId: state.params['companyId'] ?? '',
+                          );
+                        },
+                        routes: [
+                          GoRoute(
+                            path: companyUserPath,
+                            builder:
+                                (BuildContext context, GoRouterState state) {
+                              return CompanyUserSreen(
+                                companyId: state.params['companyId'] ?? '',
+                              );
+                            },
+                          ),
+                          GoRoute(
+                            path: inviteTenantPath,
+                            builder:
+                                (BuildContext context, GoRouterState state) {
+                              return InviteTenantScreen(
+                                housingCompanyId:
+                                    state.params['companyId'] ?? '',
+                              );
+                            },
+                          ),
+                          GoRoute(
+                            path: housingCompanyPaymentPath,
+                            builder:
+                                (BuildContext context, GoRouterState state) {
+                              return HousingCompanyPaymentScreen(
+                                companyId: state.params['companyId'] ?? '',
+                              );
+                            },
+                          ),
+                          GoRoute(
+                            path: housingCompanyUiScreenPath,
+                            builder:
+                                (BuildContext context, GoRouterState state) {
+                              return HousingCompanyUiScreen(
+                                housingCompanyId:
+                                    state.params['companyId'] ?? '',
+                              );
+                            },
+                          ),
+                        ]),
+                    GoRoute(
+                      path: documentListScreenPath,
+                      builder: (BuildContext context, GoRouterState state) {
+                        return DocumentListScreen(
+                          companyId: state.params['companyId'] ?? '',
+                        );
+                      },
+                    ),
+                    GoRoute(
+                      path: '$eventScreenPath/:eventId',
+                      builder: (BuildContext context, GoRouterState state) {
+                        return EventScreen(
+                          companyId: state.params['companyId'] ?? '',
+                          eventId: state.params['eventId'],
+                          initialStartTime:
+                              state.queryParams['initialStartTime'],
+                          initialEndTime: state.queryParams['initialEndTime'],
+                        );
+                      },
+                    ),
+                    GoRoute(
+                      path: eventScreenPath,
+                      builder: (BuildContext context, GoRouterState state) {
+                        return EventScreen(
+                          companyId: state.params['companyId'] ?? '',
+                          initialStartTime:
+                              state.queryParams['initialStartTime'],
+                          initialEndTime: state.queryParams['initialEndTime'],
+                        );
+                      },
+                    ),
+                    GoRoute(
+                      path: pollScreenPath,
+                      builder: (BuildContext context, GoRouterState state) {
+                        return PollScreen(
+                          companyId: state.params['companyId'] ?? '',
+                        );
+                      },
+                    ),
+                    GoRoute(
+                      path: '$pollScreenPath/:pollId',
+                      builder: (BuildContext context, GoRouterState state) {
+                        return PollScreen(
+                          companyId: state.params['companyId'] ?? '',
+                          pollId: state.params['pollId'],
+                        );
+                      },
+                    ),
+                    GoRoute(
+                      path: waterConsumptionManagementScreenPath,
+                      builder: (BuildContext context, GoRouterState state) {
+                        return WaterConsumptionManagementScreen(
+                          housingCompanyId: state.params['companyId'] ?? '',
+                        );
+                      },
+                    ),
+                    GoRoute(
+                        path: '$apartmentScreenPath/:apartmentId',
+                        builder: (BuildContext context, GoRouterState state) {
+                          return ApartmentScreen(
+                            companyId: state.params['companyId'] ?? '',
+                            apartmentId: state.params['apartmentId'] ?? '',
+                          );
+                        },
+                        routes: [
+                          GoRoute(
+                            path: documentListScreenPath,
+                            builder:
+                                (BuildContext context, GoRouterState state) {
+                              return DocumentListScreen(
+                                companyId: state.params['companyId'] ?? '',
+                                apartmentId: state.params['apartmentId'] ?? '',
+                              );
+                            },
+                          ),
+                          GoRoute(
+                            path: manageScreenPath,
+                            builder:
+                                (BuildContext context, GoRouterState state) {
+                              return ApartmentManagementScreen(
+                                companyId: state.params['companyId'] ?? '',
+                                apartmentId: state.params['apartmentId'] ?? '',
+                              );
+                            },
+                          ),
+                          GoRoute(
+                            path: apartmentWaterInvoice,
+                            builder:
+                                (BuildContext context, GoRouterState state) {
+                              return ApartmentWaterInvoiceScreen(
+                                companyId: state.params['companyId'] ?? '',
+                                apartmentId: state.params['apartmentId'] ?? '',
+                              );
+                            },
+                          )
+                        ])
+                  ]),
+            ],
+          ),
+          GoRoute(
+            path: profilePath,
+            builder: (BuildContext context, GoRouterState state) {
+              return const SettingScreen();
+            },
+          ),
+          GoRoute(
+            path: conversationListPath,
+            builder: (BuildContext context, GoRouterState state) {
+              return const ConversationListScreen();
+            },
+          ),
+          GoRoute(
+            path: adminScreenPath,
+            builder: (BuildContext context, GoRouterState state) {
+              return const AdminScreen();
+            },
+          ),
+        ],
       ),
       GoRoute(
         path: '/$eventScreenPath/:eventId',
         builder: (BuildContext context, GoRouterState state) {
           return EventScreen(
+            companyId: state.params['companyId'] ?? '',
             eventId: state.params['eventId'],
+            initialStartTime: state.queryParams['initialStartTime'],
+            initialEndTime: state.queryParams['initialEndTime'],
           );
-        },
-      ),
-      GoRoute(
-          name: homePathName,
-          path: homePath,
-          builder: (BuildContext context, GoRouterState state) {
-            return const HomeScreen();
-          },
-          routes: [
-            GoRoute(
-                name: housingCompanyScreenPathName,
-                path: '$housingCompanyScreenPath/:companyId',
-                builder: (BuildContext context, GoRouterState state) {
-                  return HousingCompanyScreen(
-                    housingCompanyId: state.params['companyId'] ?? '',
-                  );
-                },
-                routes: [
-                  GoRoute(
-                    path: addApartmentPath,
-                    builder: (BuildContext context, GoRouterState state) {
-                      return const AddApartmentScreen();
-                    },
-                  ),
-                  GoRoute(
-                    path: announcementPath,
-                    builder: (BuildContext context, GoRouterState state) {
-                      return const AnnouncementScreen();
-                    },
-                  ),
-                  GoRoute(
-                      path: manageScreenPath,
-                      builder: (BuildContext context, GoRouterState state) {
-                        return const HousingCompanyManagementScreen();
-                      },
-                      routes: [
-                        GoRoute(
-                          path: inviteTenantPath,
-                          builder: (BuildContext context, GoRouterState state) {
-                            return const InviteTenantScreen();
-                          },
-                        ),
-                        GoRoute(
-                          path: housingCompanyPaymentPath,
-                          builder: (BuildContext context, GoRouterState state) {
-                            return const HousingCompanyPaymentScreen();
-                          },
-                        ),
-                        GoRoute(
-                          path: housingCompanyUiScreenPath,
-                          builder: (BuildContext context, GoRouterState state) {
-                            return const HousingCompanyUiScreen();
-                          },
-                        ),
-                      ]),
-                  GoRoute(
-                    path: documentListScreenPath,
-                    builder: (BuildContext context, GoRouterState state) {
-                      return const DocumentListScreen();
-                    },
-                  ),
-                  GoRoute(
-                    path: '$eventScreenPath/:eventId',
-                    builder: (BuildContext context, GoRouterState state) {
-                      return EventScreen(
-                        eventId: state.params['eventId'],
-                      );
-                    },
-                  ),
-                  GoRoute(
-                    path: eventScreenPath,
-                    builder: (BuildContext context, GoRouterState state) {
-                      return const EventScreen();
-                    },
-                  ),
-                  GoRoute(
-                    path: pollScreenPath,
-                    builder: (BuildContext context, GoRouterState state) {
-                      return const PollScreen();
-                    },
-                  ),
-                  GoRoute(
-                    path: '$pollScreenPath/:pollId',
-                    builder: (BuildContext context, GoRouterState state) {
-                      return PollScreen(
-                        pollId: state.params['pollId'],
-                      );
-                    },
-                  ),
-                  GoRoute(
-                    path: waterConsumptionManagementScreenPath,
-                    builder: (BuildContext context, GoRouterState state) {
-                      return const WaterConsumptionManagementScreen();
-                    },
-                  ),
-                  GoRoute(
-                      path: '$apartmentScreenPath/:apartmentId',
-                      builder: (BuildContext context, GoRouterState state) {
-                        return ApartmentScreen(
-                          apartmentId: state.params['apartmentId'] ?? '',
-                        );
-                      },
-                      routes: [
-                        GoRoute(
-                          path: documentListScreenPath,
-                          builder: (BuildContext context, GoRouterState state) {
-                            return const DocumentListScreen();
-                          },
-                        ),
-                        GoRoute(
-                          path: manageScreenPath,
-                          builder: (BuildContext context, GoRouterState state) {
-                            return const ApartmentManagementScreen();
-                          },
-                        ),
-                        GoRoute(
-                          path: apartmentWaterInvoice,
-                          builder: (BuildContext context, GoRouterState state) {
-                            return const ApartmentWaterInvoiceScreen();
-                          },
-                        )
-                      ])
-                ]),
-          ]),
-      GoRoute(
-        path: profilePath,
-        builder: (BuildContext context, GoRouterState state) {
-          return const SettingScreen();
         },
       ),
       GoRoute(
         path: notificationCenterPath,
         builder: (BuildContext context, GoRouterState state) {
           return const NotificationCenterScreen();
-        },
-      ),
-      GoRoute(
-        path: conversationListPath,
-        builder: (BuildContext context, GoRouterState state) {
-          return const ConversationListScreen();
         },
       ),
       GoRoute(
@@ -230,9 +317,10 @@ GoRouter createAppRouter() {
       ),
       GoRoute(
         path: accountPath,
-        builder: (BuildContext context, GoRouterState state) {
-          return const AccountScreen();
-        },
+        pageBuilder: (context, state) => DialogPage(
+          child: const AccountScreen(),
+          key: state.pageKey,
+        ),
       ),
       GoRoute(
         path: changePasswordPath,
@@ -297,4 +385,15 @@ GoRouter createAppRouter() {
     ],
     debugLogDiagnostics: true,
   );
+}
+
+extension AppGoRouterHelper on BuildContext {
+  /// Push a location onto the page stack.
+
+  void pushFromCurrentLocation(String location, {Object? extra}) {
+    final newLocation =
+        '${GoRouter.of(this).location}/$location'.replaceAll('//', '/');
+    print(newLocation);
+    GoRouter.of(this).push(newLocation, extra: extra);
+  }
 }

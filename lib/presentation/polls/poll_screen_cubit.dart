@@ -39,9 +39,10 @@ class PollScreenCubit extends Cubit<PollScreenState> {
   Future<void> init({String? pollId, required String companyId}) async {
     emit(state.copyWith(companyId: companyId));
     getUserData();
-    getCompanyData(companyId);
+    await getCompanyData(companyId);
     if (pollId == null) {
-      emit(state.copyWith(isInitializing: false));
+      emit(
+          state.copyWith(isInitializing: state.company?.isUserManager != true));
       return;
     }
     getPollData(pollId);

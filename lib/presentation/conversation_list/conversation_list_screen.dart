@@ -54,6 +54,27 @@ class _ConversationListScreenState extends State<ConversationListScreen> {
                     childCount: state.conversationList?.length ?? 0,
                   )),
                   const SliverToBoxAdapter(
+                      child: FullWidthTitle(
+                    title: 'Fault reports',
+                  )),
+                  SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                      final conversation = state.faultConversationList?[index];
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: conversation != null
+                            ? ConversationItem(
+                                onPressed: () => GoRouter.of(context).push(
+                                    '$messagePath/${conversation.type}/${conversation.channelId}/${conversation.id}'),
+                                conversation: conversation,
+                              )
+                            : const SizedBox.shrink(),
+                      );
+                    },
+                    childCount: state.faultConversationList?.length ?? 0,
+                  )),
+                  const SliverToBoxAdapter(
                     child: FullWidthTitle(
                       title: 'Support messages',
                     ),

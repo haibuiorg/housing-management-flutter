@@ -34,11 +34,27 @@ import 'package:priorli/core/event/usecases/get_event_list.dart';
 import 'package:priorli/core/event/usecases/invite_to_event.dart';
 import 'package:priorli/core/event/usecases/remove_user_from_event.dart';
 import 'package:priorli/core/event/usecases/response_to_event.dart';
+import 'package:priorli/core/fault_report/data/fault_report_data_source.dart';
+import 'package:priorli/core/fault_report/data/fault_report_remote_data_source.dart';
+import 'package:priorli/core/fault_report/repos/fault_report_repository.dart';
+import 'package:priorli/core/fault_report/repos/fault_report_repository_impl.dart';
+import 'package:priorli/core/fault_report/usecases/create_fault_report.dart';
 import 'package:priorli/core/housing/usecases/add_company_documents.dart';
+import 'package:priorli/core/housing/usecases/add_company_manager.dart';
 import 'package:priorli/core/housing/usecases/delete_housing_company.dart';
 import 'package:priorli/core/housing/usecases/get_company_document.dart';
 import 'package:priorli/core/housing/usecases/get_company_document_list.dart';
+import 'package:priorli/core/housing/usecases/get_housing_company_managers.dart';
 import 'package:priorli/core/housing/usecases/update_company_document.dart';
+import 'package:priorli/core/invoice/data/invoice_data_source.dart';
+import 'package:priorli/core/invoice/data/invoice_remote_data_source.dart';
+import 'package:priorli/core/invoice/repos/invoice_repository.dart';
+import 'package:priorli/core/invoice/repos/invoice_repository_impl.dart';
+import 'package:priorli/core/invoice/usecases/create_new_invoices.dart';
+import 'package:priorli/core/invoice/usecases/delete_invoice.dart';
+import 'package:priorli/core/invoice/usecases/get_company_invoices.dart';
+import 'package:priorli/core/invoice/usecases/get_invoice_detail.dart';
+import 'package:priorli/core/invoice/usecases/get_personal_invoices.dart';
 import 'package:priorli/core/messaging/data/messaging_remote_data_source.dart';
 import 'package:priorli/core/messaging/repos/messaging_repository.dart';
 import 'package:priorli/core/messaging/repos/messaging_repository_impl.dart';
@@ -96,6 +112,7 @@ import 'package:priorli/presentation/announcement/announcement_item_cubit.dart';
 import 'package:priorli/presentation/apartment_invoice/apartment_water_invoice_cubit.dart';
 import 'package:priorli/presentation/apartments/apartment_cubit.dart';
 import 'package:priorli/presentation/code_register/code_register_cubit.dart';
+import 'package:priorli/presentation/company_user_management/company_user_cubit.dart';
 import 'package:priorli/presentation/conversation_list/conversation_list_cubit.dart';
 import 'package:priorli/presentation/create_housing_company/create_housing_company_cubit.dart';
 import 'package:priorli/presentation/documents/document_list_screen_cubit.dart';
@@ -107,7 +124,11 @@ import 'package:priorli/presentation/help/help_cubit.dart';
 import 'package:priorli/presentation/home/home_cubit.dart';
 import 'package:priorli/presentation/housing_company/housing_company_cubit.dart';
 import 'package:priorli/presentation/housing_company_payment/housing_company_payment_cubit.dart';
-import 'package:priorli/presentation/housing_company_users/guest_invitation_cubit.dart';
+import 'package:priorli/presentation/guest_invitation/guest_invitation_cubit.dart';
+import 'package:priorli/presentation/invoice/invoice_creation_cubit.dart';
+import 'package:priorli/presentation/invoice/invoice_group_cubit.dart';
+import 'package:priorli/presentation/invoice/invoice_group_list_screen.dart';
+import 'package:priorli/presentation/invoice/invoice_list_cubit.dart';
 import 'package:priorli/presentation/join_apartment/join_apartment_cubit.dart';
 import 'package:priorli/presentation/main/main_cubit.dart';
 import 'package:priorli/presentation/message/message_cubit.dart';
@@ -147,6 +168,7 @@ import 'core/housing/usecases/get_housing_companies.dart';
 import 'core/housing/usecases/get_housing_company.dart';
 import 'core/housing/usecases/get_housing_company_users.dart';
 import 'core/housing/usecases/update_housing_company_info.dart';
+import 'core/invoice/usecases/get_invoice_groups.dart';
 import 'core/messaging/data/messaging_data_source.dart';
 import 'core/payment/usecases/add_bank_account.dart';
 import 'core/settings/data/setting_data_source.dart';
@@ -228,6 +250,7 @@ Future<void> init() async {
       serviceLocator(),
       serviceLocator(),
       serviceLocator(),
+      serviceLocator(),
       serviceLocator()));
   serviceLocator.registerFactory(
       () => AddApartmentCubit(serviceLocator(), serviceLocator()));
@@ -249,6 +272,7 @@ Future<void> init() async {
       serviceLocator(),
       serviceLocator(),
       serviceLocator(),
+      serviceLocator(),
       serviceLocator()));
   serviceLocator.registerFactory(() => ApartmentManagementCubit(
       serviceLocator(), serviceLocator(), serviceLocator()));
@@ -258,8 +282,8 @@ Future<void> init() async {
       serviceLocator(), serviceLocator(), serviceLocator()));
   serviceLocator
       .registerFactory(() => NotificationCenterCubit(serviceLocator()));
-  serviceLocator.registerFactory(
-      () => AnnouncementCubit(serviceLocator(), serviceLocator()));
+  serviceLocator.registerFactory(() =>
+      AnnouncementCubit(serviceLocator(), serviceLocator(), serviceLocator()));
   serviceLocator.registerFactory(() => MessageCubit(
       serviceLocator(),
       serviceLocator(),
@@ -280,6 +304,7 @@ Future<void> init() async {
   serviceLocator.registerFactory(
       () => FileSelectorCubit(serviceLocator(), serviceLocator()));
   serviceLocator.registerFactory(() => DocumentListScreenCubit(
+      serviceLocator(),
       serviceLocator(),
       serviceLocator(),
       serviceLocator(),
@@ -317,6 +342,14 @@ Future<void> init() async {
       serviceLocator(),
       serviceLocator(),
       serviceLocator()));
+  serviceLocator.registerFactory(
+      () => InvoiceCreationCubit(serviceLocator(), serviceLocator()));
+  serviceLocator.registerFactory(() => InvoiceListCubit(
+      serviceLocator(), serviceLocator(), serviceLocator(), serviceLocator()));
+  serviceLocator.registerFactory(
+      () => InvoiceGroupCubit(serviceLocator(), serviceLocator()));
+  serviceLocator.registerFactory(() => CompanyUserCubit(
+      serviceLocator(), serviceLocator(), serviceLocator(), serviceLocator()));
 
   /** usecases */
 
@@ -534,6 +567,29 @@ Future<void> init() async {
   serviceLocator.registerLazySingleton<ResponseToEvent>(
       () => ResponseToEvent(eventRepository: serviceLocator()));
 
+  // fault report
+  serviceLocator.registerLazySingleton<CreateFaultReport>(
+      () => CreateFaultReport(faultReportRepository: serviceLocator()));
+
+  // invoice
+  serviceLocator.registerLazySingleton<CreateNewInvoices>(
+      () => CreateNewInvoices(invoiceRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<DeleteInvoice>(
+      () => DeleteInvoice(invoiceRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<GetCompanyInvoices>(
+      () => GetCompanyInvoices(invoiceRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<GetPersonalInvoices>(
+      () => GetPersonalInvoices(invoiceRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<GetInvoiceDetail>(
+      () => GetInvoiceDetail(invoiceRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<GetInvoiceGroups>(
+      () => GetInvoiceGroups(invoiceRepository: serviceLocator()));
+
+  serviceLocator.registerLazySingleton<AddCompanyManager>(
+      () => AddCompanyManager(housingCompanyRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<GetHousingCompanyManagers>(() =>
+      GetHousingCompanyManagers(housingCompanyRepository: serviceLocator()));
+
   /** repos */
   serviceLocator.registerLazySingleton<AuthenticationRepository>(() =>
       AuthenticationRepositoryImpl(authenticationDataSource: serviceLocator()));
@@ -564,6 +620,10 @@ Future<void> init() async {
       () => EventRepositoryImpl(eventRemoteDataSource: serviceLocator()));
   serviceLocator.registerLazySingleton<PollRepository>(
       () => PollRepositoryImpl(pollRemoteDataSource: serviceLocator()));
+  serviceLocator.registerLazySingleton<FaultReportRepository>(() =>
+      FaultReportRepositoryImpl(faultReportRemoteDataSource: serviceLocator()));
+  serviceLocator.registerLazySingleton<InvoiceRepository>(
+      () => InvoiceRepositoryImpl(invoiceRemoteDataSource: serviceLocator()));
 
   /** datasource*/
   serviceLocator.registerLazySingleton<AuthenticationDataSource>(() =>
@@ -599,6 +659,11 @@ Future<void> init() async {
       () => PollRemoteDataSource(client: serviceLocator()));
   serviceLocator.registerLazySingleton<EventDataSource>(
       () => EventRemoteDataSource(client: serviceLocator()));
+  serviceLocator.registerLazySingleton<FaultReportDataSource>(
+      () => FaultReportRemoteDataSource(client: serviceLocator()));
+  serviceLocator.registerLazySingleton<InvoiceDataSource>(
+      () => InvoiceRemoteDataSource(client: serviceLocator()));
+
   /** network */
   serviceLocator.registerLazySingleton<Dio>(
       () => DioModule(firebaseAuth: serviceLocator()).dio);

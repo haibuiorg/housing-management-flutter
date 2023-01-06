@@ -15,7 +15,8 @@ import '../shared/full_width_title.dart';
 const housingCompanyUiScreenPath = 'appearance';
 
 class HousingCompanyUiScreen extends StatefulWidget {
-  const HousingCompanyUiScreen({super.key});
+  const HousingCompanyUiScreen({super.key, required this.housingCompanyId});
+  final String housingCompanyId;
 
   @override
   State<HousingCompanyUiScreen> createState() => _HousingCompanyUiScreenState();
@@ -34,13 +35,12 @@ class _HousingCompanyUiScreenState extends State<HousingCompanyUiScreen> {
 
   @override
   void dispose() {
+    _cubit.close();
     super.dispose();
   }
 
   _getInitialData() async {
-    final housingCompanyId =
-        Uri.parse(GoRouter.of(context).location).pathSegments[1];
-    await _cubit.init(housingCompanyId);
+    await _cubit.init(widget.housingCompanyId);
   }
 
   @override
@@ -59,18 +59,21 @@ class _HousingCompanyUiScreenState extends State<HousingCompanyUiScreen> {
                 title: 'Company logo',
               ),
               InkWell(
-                onTap: () => showModalBottomSheet(
+                onTap: () => showDialog(
                     context: context,
-                    builder: (context) => FileSelector(
-                        isSingleFile: true,
-                        isImageOnly: true,
-                        onCompleteUploaded: (onCompleteUploaded) {
-                          if (onCompleteUploaded.isNotEmpty == true) {
-                            _cubit
-                                .uploadNewLogo(onCompleteUploaded[0])
-                                .then((value) => Navigator.pop(context, true));
-                          }
-                        })),
+                    builder: (builder) => Dialog(
+                          child: FileSelector(
+                              isSingleFile: true,
+                              isImageOnly: true,
+                              onCompleteUploaded: (onCompleteUploaded) {
+                                if (onCompleteUploaded.isNotEmpty == true) {
+                                  _cubit
+                                      .uploadNewLogo(onCompleteUploaded[0])
+                                      .then((value) =>
+                                          Navigator.pop(builder, true));
+                                }
+                              }),
+                        )),
                 child: state.company?.logoUrl.isNotEmpty == true
                     ? CircleAvatar(
                         radius: 56,
@@ -95,18 +98,19 @@ class _HousingCompanyUiScreenState extends State<HousingCompanyUiScreen> {
                 padding: const EdgeInsets.all(16.0),
                 child: InkWell(
                   borderRadius: BorderRadius.circular(8),
-                  onTap: () => showModalBottomSheet(
+                  onTap: () => showDialog(
                     context: context,
-                    builder: (context) => FileSelector(
-                        isSingleFile: true,
-                        isImageOnly: true,
-                        onCompleteUploaded: (onCompleteUploaded) {
-                          if (onCompleteUploaded.isNotEmpty == true) {
-                            _cubit
-                                .uploadNewCover(onCompleteUploaded[0])
-                                .then((value) => Navigator.pop(context, true));
-                          }
-                        }),
+                    builder: (builder) => Dialog(
+                      child: FileSelector(
+                          isSingleFile: true,
+                          isImageOnly: true,
+                          onCompleteUploaded: (onCompleteUploaded) {
+                            if (onCompleteUploaded.isNotEmpty == true) {
+                              _cubit.uploadNewCover(onCompleteUploaded[0]).then(
+                                  (value) => Navigator.pop(builder, true));
+                            }
+                          }),
+                    ),
                   ),
                   child: CachedNetworkImage(
                     width: double.infinity,
@@ -135,18 +139,21 @@ class _HousingCompanyUiScreenState extends State<HousingCompanyUiScreen> {
                 title: 'Company primary color',
               ),
               InkWell(
-                onTap: () => showModalBottomSheet(
+                onTap: () => showDialog(
                   context: context,
-                  builder: (context) => Padding(
+                  builder: (builder) => Padding(
                     padding: const EdgeInsets.all(32.0),
-                    child: BlockPicker(
-                        useInShowDialog: false,
-                        pickerColor: Theme.of(context).colorScheme.primary,
-                        onColorChanged: (color) {
-                          _cubit
-                              .updateCompanyColor(colorToHex(color))
-                              .then((value) => Navigator.pop(context, true));
-                        }),
+                    child: Dialog(
+                      child: BlockPicker(
+                          useInShowDialog: false,
+                          pickerColor: Theme.of(context).colorScheme.primary,
+                          onColorChanged: (color) {
+                            _cubit
+                                .updateCompanyColor(colorToHex(color,
+                                    includeHashSign: true, enableAlpha: false))
+                                .then((value) => Navigator.pop(builder, true));
+                          }),
+                    ),
                   ),
                 ),
                 child: Container(
@@ -159,6 +166,9 @@ class _HousingCompanyUiScreenState extends State<HousingCompanyUiScreen> {
                               state.company?.ui?.seedColor ?? appSeedColor)
                           : Theme.of(context).colorScheme.primary),
                 ),
+              ),
+              SizedBox.fromSize(
+                size: const Size.fromHeight(100),
               )
             ]),
           );

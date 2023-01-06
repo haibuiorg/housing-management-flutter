@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -78,7 +79,7 @@ class _FileSelectorState extends State<FileSelector> {
                       ? CarouselSlider.builder(
                           itemCount: state.selectedFiles?.length ?? 1,
                           options: CarouselOptions(
-                              height: MediaQuery.of(context).size.width / 2,
+                              height: MediaQuery.of(context).size.height / 2,
                               viewportFraction: 0.5,
                               autoPlayCurve: Curves.fastOutSlowIn,
                               enableInfiniteScroll: false,
@@ -104,22 +105,33 @@ class _FileSelectorState extends State<FileSelector> {
                                               3,
                                           height: MediaQuery.of(context)
                                                   .size
-                                                  .width /
+                                                  .height /
                                               3,
                                           child: Container(
                                             decoration: BoxDecoration(
                                                 borderRadius:
                                                     BorderRadius.circular(8),
-                                                image: DecorationImage(
-                                                    fit: BoxFit.cover,
-                                                    onError: (exception,
-                                                        stackTrace) {},
-                                                    image: FileImage(
-                                                        state.selectedFiles![
-                                                            itemIndex]))),
-                                            child: !state
-                                                    .selectedFiles![itemIndex]
-                                                    .isImage
+                                                image: state.selectedFiles![
+                                                        itemIndex] is File
+                                                    ? DecorationImage(
+                                                        fit: BoxFit.cover,
+                                                        onError: (exception,
+                                                            stackTrace) {},
+                                                        image: kIsWeb
+                                                            ? Image.network(state
+                                                                    .selectedFiles![
+                                                                        itemIndex]
+                                                                    .path)
+                                                                .image
+                                                            : FileImage(
+                                                                state.selectedFiles![itemIndex]))
+                                                    : null),
+                                            child: kIsWeb &&
+                                                    state.selectedFiles![
+                                                        itemIndex]! is File &&
+                                                    !(state.selectedFiles![
+                                                            itemIndex]! as File)
+                                                        .isImage
                                                 ? const AppLottieAnimation(
                                                     loadingResource:
                                                         'documents',
@@ -131,9 +143,13 @@ class _FileSelectorState extends State<FileSelector> {
                                           children: [
                                             Expanded(
                                               child: Text(
-                                                p.basename(state
-                                                    .selectedFiles![itemIndex]
-                                                    .path),
+                                                state.selectedFiles![itemIndex]
+                                                        is File
+                                                    ? p.basename(state
+                                                        .selectedFiles![
+                                                            itemIndex]
+                                                        .path)
+                                                    : 'File ${itemIndex + 1}',
                                                 overflow: TextOverflow.ellipsis,
                                               ),
                                             ),
@@ -155,11 +171,11 @@ class _FileSelectorState extends State<FileSelector> {
                                           width: MediaQuery.of(context)
                                                   .size
                                                   .width /
-                                              2,
+                                              3,
                                           height: MediaQuery.of(context)
                                                   .size
                                                   .width /
-                                              2,
+                                              3,
                                           imageUrl: widget.previewUrl ?? '',
                                           imageBuilder:
                                               (context, imageProvider) =>
@@ -203,8 +219,8 @@ class _FileSelectorState extends State<FileSelector> {
                                               allowMultiple:
                                                   !widget.isSingleFile);
                                       if (result != null) {
-                                        List<File> files = result.paths
-                                            .map((path) => File(path!))
+                                        final files = result.files
+                                            .map((file) => (file.bytes))
                                             .toList();
                                         await cubit.loadFiles(files);
                                       }

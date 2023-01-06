@@ -7,6 +7,15 @@ import '../entities/ui.dart';
 abstract class HousingCompanyDataSource {
   Future<HousingCompanyModel> createHousingCompany(
       {required String name, required String countryCode});
+  Future<List<UserModel>> getHousingCompanyManagers({
+    required String companyId,
+  });
+  Future<UserModel> addHousingCompanyManager(
+      {required String housingCompanyId,
+      required String email,
+      String? firstName,
+      String? lastName,
+      String? phoneNumber});
   Future<HousingCompanyModel> updateHousingCompanyInfo(
       {String? name,
       required String housingCompanyId,
