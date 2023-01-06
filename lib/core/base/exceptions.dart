@@ -9,7 +9,8 @@ class ServerException extends Equatable implements Exception {
 
   ServerException({this.serverMessage, this.code, this.error}) {
     debugPrint('$serverMessage/$code/$error/');
-    debugPrint((error as DioError).stackTrace.toString());
+
+    debugPrint((error as Error).stackTrace.toString());
   }
   @override
   List<Object?> get props => [serverMessage, code, error];

@@ -1,9 +1,9 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_snake_navigationbar/flutter_snake_navigationbar.dart';
 import 'package:go_router/go_router.dart';
 import 'package:priorli/presentation/admin/admin_screen.dart';
 import 'package:priorli/presentation/home/home_screen.dart';
@@ -162,23 +162,25 @@ class AdminUI extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<UserCubit, UserState>(builder: (context, state) {
       return Scaffold(
-        bottomNavigationBar: ResponsiveVisibility(
-          visible: false,
-          visibleWhen: const [
-            Condition.smallerThan(name: TABLET),
-          ],
-          child: CurvedNavigationBar(
-              backgroundColor: Colors.transparent,
-              color: Theme.of(context).colorScheme.primaryContainer,
-              index: _calculateSelectedIndex(context),
-              items: const [
-                Icon(Icons.manage_accounts, size: 30),
-                Icon(Icons.home, size: 30),
-                Icon(Icons.feed, size: 30),
-                Icon(Icons.settings, size: 30),
-              ],
-              onTap: (index) => _onItemTapped(index, context)),
-        ),
+        extendBody: false,
+        bottomNavigationBar: ResponsiveWrapper.of(context).isSmallerThan(TABLET)
+            ? SnakeNavigationBar.color(
+                behaviour: SnakeBarBehaviour.floating,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25)),
+                backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+                currentIndex: _calculateSelectedIndex(context),
+                padding: const EdgeInsets.all(16),
+                items: const [
+                  BottomNavigationBarItem(
+                      icon: Icon(Icons.admin_panel_settings, size: 30)),
+                  BottomNavigationBarItem(icon: Icon(Icons.home, size: 30)),
+                  BottomNavigationBarItem(icon: Icon(Icons.feed, size: 30)),
+                  BottomNavigationBarItem(icon: Icon(Icons.settings, size: 30)),
+                ],
+                onTap: (index) => _onItemTapped(index, context),
+              )
+            : null,
         body: Row(
           children: [
             ResponsiveVisibility(
@@ -293,72 +295,70 @@ class DefaultUI extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<UserCubit, UserState>(builder: (context, state) {
       return Scaffold(
-        bottomNavigationBar: ResponsiveVisibility(
-          visible: false,
-          visibleWhen: const [
-            Condition.equals(name: MOBILE),
-          ],
-          child: CurvedNavigationBar(
-            backgroundColor: Theme.of(context).canvasColor,
-            color: Theme.of(context).colorScheme.primaryContainer,
-            index: _calculateSelectedIndex(context),
-            items: const [
-              Icon(Icons.home, size: 30),
-              Icon(Icons.feed, size: 30),
-              Icon(Icons.settings, size: 30),
-            ],
-            onTap: (index) => _onItemTapped(index, context),
-          ),
-        ),
-        body: Row(
-          children: [
-            ResponsiveVisibility(
-              visible: false,
-              visibleWhen: const [
-                Condition.largerThan(name: MOBILE),
-              ],
-              child: CollapsibleSidebar(
-                  titleStyle: Theme.of(context).textTheme.bodyMedium,
-                  toggleTitle: '',
-                  onTitleTap: () {
-                    GoRouter.of(context).push(accountPath);
-                  },
-                  backgroundColor: Theme.of(context).colorScheme.surface,
-                  isCollapsed: ResponsiveValue(
-                        context,
-                        defaultValue: true,
-                        valueWhen: const [
-                          Condition.smallerThan(
-                            name: TABLET,
-                            value: true,
-                          ),
-                          Condition.largerThan(
-                            name: TABLET,
-                            value: false,
-                          )
-                        ],
-                      ).value ??
-                      false,
-                  unselectedTextColor: Theme.of(context).colorScheme.secondary,
-                  selectedTextColor: Theme.of(context).colorScheme.primary,
-                  textStyle: Theme.of(context).textTheme.titleMedium,
-                  selectedIconColor:
-                      Theme.of(context).colorScheme.onPrimaryContainer,
-                  unselectedIconColor:
-                      Theme.of(context).colorScheme.onPrimaryContainer,
-                  selectedIconBox:
-                      Theme.of(context).colorScheme.secondaryContainer,
-                  title: '${state.user?.firstName}… ${state.user?.lastName}',
-                  avatarImg: NetworkImage(
-                    state.user?.avatarUrl ?? '',
-                  ),
-                  items: _generateItems(context),
-                  sidebarBoxShadow: const [],
-                  body: const SizedBox.shrink()),
-            ),
-            Expanded(child: child)
-          ],
-        ),
+        bottomNavigationBar: ResponsiveWrapper.of(context).isSmallerThan(TABLET)
+            ? SnakeNavigationBar.color(
+                behaviour: SnakeBarBehaviour.floating,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25)),
+
+                //color: Theme.of(context).colorScheme.primaryContainer,
+                currentIndex: _calculateSelectedIndex(context),
+                padding: const EdgeInsets.all(16),
+                items: const [
+                  BottomNavigationBarItem(icon: Icon(Icons.home, size: 30)),
+                  BottomNavigationBarItem(icon: Icon(Icons.feed, size: 30)),
+                  BottomNavigationBarItem(icon: Icon(Icons.settings, size: 30)),
+                ],
+                onTap: (index) => _onItemTapped(index, context),
+              )
+            : null,
+        body: ResponsiveWrapper.of(context).isLargerThan(PHONE)
+            ? Row(
+                children: [
+                  CollapsibleSidebar(
+                      titleStyle: Theme.of(context).textTheme.bodyMedium,
+                      toggleTitle: '',
+                      onTitleTap: () {
+                        GoRouter.of(context).push(accountPath);
+                      },
+                      backgroundColor: Theme.of(context).colorScheme.surface,
+                      isCollapsed: ResponsiveValue(
+                            context,
+                            defaultValue: true,
+                            valueWhen: const [
+                              Condition.smallerThan(
+                                name: TABLET,
+                                value: true,
+                              ),
+                              Condition.largerThan(
+                                name: TABLET,
+                                value: false,
+                              )
+                            ],
+                          ).value ??
+                          false,
+                      unselectedTextColor:
+                          Theme.of(context).colorScheme.secondary,
+                      selectedTextColor: Theme.of(context).colorScheme.primary,
+                      textStyle: Theme.of(context).textTheme.titleMedium,
+                      selectedIconColor:
+                          Theme.of(context).colorScheme.onPrimaryContainer,
+                      unselectedIconColor:
+                          Theme.of(context).colorScheme.onPrimaryContainer,
+                      selectedIconBox:
+                          Theme.of(context).colorScheme.secondaryContainer,
+                      title:
+                          '${state.user?.firstName}… ${state.user?.lastName}',
+                      avatarImg: NetworkImage(
+                        state.user?.avatarUrl ?? '',
+                      ),
+                      items: _generateItems(context),
+                      sidebarBoxShadow: const [],
+                      body: const SizedBox.shrink()),
+                  Expanded(child: child)
+                ],
+              )
+            : child,
       );
     });
   }
