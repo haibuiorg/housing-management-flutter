@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:priorli/presentation/announcement/announcement_cubit.dart';
 import 'package:priorli/presentation/announcement/announcement_state.dart';
 import 'package:priorli/presentation/file_selector/file_selector.dart';
