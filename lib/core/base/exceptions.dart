@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 
@@ -9,7 +8,6 @@ class ServerException extends Equatable implements Exception {
 
   ServerException({this.serverMessage, this.code, this.error}) {
     debugPrint('$serverMessage/$code/$error/');
-
     debugPrint((error as Error).stackTrace.toString());
   }
   @override
