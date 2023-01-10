@@ -210,21 +210,7 @@ class _FileSelectorState extends State<FileSelector> {
                               onPressed: widget.isSingleFile &&
                                       (state.selectedFiles?.length ?? 0) > 0
                                   ? null
-                                  : () async {
-                                      final cubit =
-                                          BlocProvider.of<FileSelectorCubit>(
-                                              context);
-                                      FilePickerResult? result =
-                                          await FilePicker.platform.pickFiles(
-                                              allowMultiple:
-                                                  !widget.isSingleFile);
-                                      if (result != null) {
-                                        final files = result.files
-                                            .map((file) => (file.bytes))
-                                            .toList();
-                                        await cubit.loadFiles(files);
-                                      }
-                                    },
+                                  : () async {},
                               icon: const Icon(Icons.file_open),
                             )
                           : const SizedBox.shrink(),
@@ -234,24 +220,23 @@ class _FileSelectorState extends State<FileSelector> {
                                 (state.selectedFiles?.length ?? 0) > 0
                             ? null
                             : () async {
-                                final cubit =
-                                    BlocProvider.of<FileSelectorCubit>(context);
-                                final ImagePicker picker = ImagePicker();
-                                if (widget.isSingleFile) {
-                                  final file = await picker.pickImage(
-                                      imageQuality: 50,
-                                      source: ImageSource.gallery);
-                                  if (file != null) {
-                                    await cubit.loadFiles([File(file.path)]);
+                                try {
+                                  final ImagePicker picker = ImagePicker();
+                                  if (widget.isSingleFile) {
+                                    final file = await picker.pickImage(
+                                        source: ImageSource.gallery);
+                                    if (file != null) {
+                                      await _cubit.loadFiles([File(file.path)]);
+                                    }
+                                  } else {
+                                    final List<XFile> results =
+                                        await picker.pickMultiImage();
+                                    List<File> files = results
+                                        .map((result) => File(result.path))
+                                        .toList();
+                                    await _cubit.loadFiles(files);
                                   }
-                                } else {
-                                  final List<XFile> results = await picker
-                                      .pickMultiImage(imageQuality: 50);
-                                  List<File> files = results
-                                      .map((result) => File(result.path))
-                                      .toList();
-                                  await cubit.loadFiles(files);
-                                }
+                                } catch (errp) {}
                               },
                       ),
                       IconButton(
