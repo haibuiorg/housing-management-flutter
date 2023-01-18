@@ -52,6 +52,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '901368737444',
     projectId: 'priorli',
     authDomain: 'priorli.firebaseapp.com',
+    databaseURL: 'https://priorli-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'priorli.appspot.com',
     measurementId: 'G-TZ8XYQ8MB4',
   );
@@ -61,6 +62,7 @@ class DefaultFirebaseOptions {
     appId: '1:901368737444:android:787ca89f38c7b283dd0031',
     messagingSenderId: '901368737444',
     projectId: 'priorli',
+    databaseURL: 'https://priorli-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'priorli.appspot.com',
   );
 
@@ -69,7 +71,9 @@ class DefaultFirebaseOptions {
     appId: '1:901368737444:ios:dda86e898c89d17cdd0031',
     messagingSenderId: '901368737444',
     projectId: 'priorli',
+    databaseURL: 'https://priorli-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'priorli.appspot.com',
+    androidClientId: '901368737444-qfjdrmlho3peevv1qj7uu5th9nt1a9q3.apps.googleusercontent.com',
     iosClientId: '901368737444-b09itlqartqotjg81c5qpu5eurctei74.apps.googleusercontent.com',
     iosBundleId: 'com.priorli.priorli',
   );

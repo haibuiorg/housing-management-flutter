@@ -57,7 +57,7 @@ class PollRemoteDataSource implements PollDataSource {
   @override
   Future<PollModel> getPoll({required String id}) async {
     try {
-      final result = await client.put('/poll/$id');
+      final result = await client.get('/poll/$id');
       return PollModel.fromJson(result.data as Map<String, dynamic>);
     } catch (error) {
       throw ServerException(error: error);

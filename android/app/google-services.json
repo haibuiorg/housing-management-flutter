@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "901368737444",
+    "firebase_url": "https://priorli-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "priorli",
     "storage_bucket": "priorli.appspot.com"
   },
@@ -13,6 +14,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "901368737444-qfjdrmlho3peevv1qj7uu5th9nt1a9q3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.priorli.priorli",
+            "certificate_hash": "dd1258e139021e3a2118156f9a12e46c32fe3874"
+          }
+        },
         {
           "client_id": "901368737444-k8jadneta2r9pr2hi7nhafk9ikqjob7j.apps.googleusercontent.com",
           "client_type": 3

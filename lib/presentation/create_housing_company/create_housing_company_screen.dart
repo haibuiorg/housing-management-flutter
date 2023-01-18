@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_emoji/flutter_emoji.dart';
 import 'package:go_router/go_router.dart';
-import 'package:priorli/go_router_navigation.dart';
 import 'package:priorli/presentation/create_housing_company/create_housing_company_cubit.dart';
 import 'package:priorli/presentation/create_housing_company/create_housing_company_state.dart';
 import 'package:priorli/presentation/shared/custom_form_field.dart';
@@ -23,7 +22,7 @@ class CreateHousingCompanyScreen extends StatelessWidget {
           listener: (context, state) {
         if (state.newCompanyId != null &&
             state.newCompanyId?.isNotEmpty == true) {
-          Navigator.of(context).popUntil(ModalRoute.withName(mainPathName));
+          Navigator.of(context).pop();
           GoRouter.of(context)
               .push('/$housingCompanyScreenPath/${state.newCompanyId}');
         }

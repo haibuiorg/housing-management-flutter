@@ -53,7 +53,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Image.asset(
-                    'logo.png',
+                    'assets/logo.png',
                     height: 120,
                     fit: BoxFit.scaleDown,
                   ),
@@ -121,7 +121,7 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const ResponsiveVisibility(
                     visible: false,
@@ -130,7 +130,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         name: MOBILE,
                       ),
                     ],
-                    child: AppLottieAnimation(loadingResource: 'apartment'),
+                    child: SizedBox(
+                        height: 500,
+                        child:
+                            AppLottieAnimation(loadingResource: 'apartment')),
                   ),
                   OutlinedButton(
                       style: OutlinedButton.styleFrom(

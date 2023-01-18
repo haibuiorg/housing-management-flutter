@@ -63,6 +63,10 @@ class _AccountScreenState extends State<AccountScreen> {
       child: BlocBuilder<AccountCubit, AccountState>(builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
+            leading: IconButton(
+              icon: const Icon(Icons.close),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
             title: const Text('Account management'),
             actions: [
               TextButton(

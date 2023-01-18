@@ -300,8 +300,7 @@ class DefaultUI extends StatelessWidget {
                 behaviour: SnakeBarBehaviour.floating,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(25)),
-
-                //color: Theme.of(context).colorScheme.primaryContainer,
+                backgroundColor: Theme.of(context).colorScheme.primaryContainer,
                 currentIndex: _calculateSelectedIndex(context),
                 padding: const EdgeInsets.all(16),
                 items: const [
@@ -312,7 +311,7 @@ class DefaultUI extends StatelessWidget {
                 onTap: (index) => _onItemTapped(index, context),
               )
             : null,
-        body: ResponsiveWrapper.of(context).isLargerThan(PHONE)
+        body: ResponsiveWrapper.of(context).isLargerThan(MOBILE)
             ? Row(
                 children: [
                   CollapsibleSidebar(

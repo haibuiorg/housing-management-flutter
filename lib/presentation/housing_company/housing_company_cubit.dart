@@ -18,7 +18,6 @@ import 'package:priorli/core/invoice/entities/invoice_group.dart';
 import 'package:priorli/core/invoice/usecases/get_invoice_groups.dart';
 import 'package:priorli/core/messaging/usecases/get_company_conversation_lists.dart';
 import 'package:priorli/core/messaging/usecases/start_conversation.dart';
-import 'package:priorli/core/poll/entities/poll_type.dart';
 import 'package:priorli/core/poll/usecases/get_poll_list.dart';
 import 'package:priorli/core/storage/entities/storage_item.dart';
 import 'package:priorli/core/user/entities/user.dart';
@@ -135,7 +134,7 @@ class HousingCompanyCubit extends Cubit<HousingCompanyState> {
       String housingCompanyId) async {
     final waterConsumptionResult = await _getYearlyWaterConsumption(
         GetYearlyWaterConsumptionParams(
-            housingCompanyId: housingCompanyId, year: 2022));
+            housingCompanyId: housingCompanyId, year: DateTime.now().year));
     if (waterConsumptionResult is ResultSuccess<List<WaterConsumption>>) {
       emit(state.copyWith(yearlyWaterConsumption: waterConsumptionResult.data));
       return waterConsumptionResult.data;
@@ -194,6 +193,7 @@ class HousingCompanyCubit extends Cubit<HousingCompanyState> {
       final newState =
           (state.copyWith(ongoingPollList: ongoingPollListResult.data));
       emit(newState);
+      print('state $newState');
       return ongoingPollListResult.data;
     }
     emit(state.copyWith(ongoingPollList: []));

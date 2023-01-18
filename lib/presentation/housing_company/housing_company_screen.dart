@@ -161,10 +161,16 @@ class _HousingCompanyScreenState extends State<HousingCompanyScreen> {
                                           startHour: 7,
                                           endHour: 22),
                                   firstDayOfWeek: 1,
-                                  view: ResponsiveWrapper.of(context)
-                                          .isSmallerThan(TABLET)
-                                      ? CalendarView.day
-                                      : CalendarView.week,
+                                  view: ResponsiveValue<CalendarView>(context,
+                                      defaultValue: CalendarView.month,
+                                      valueWhen: [
+                                        const Condition.smallerThan(
+                                            name: TABLET,
+                                            value: CalendarView.day),
+                                        const Condition.largerThan(
+                                            name: MOBILE,
+                                            value: CalendarView.month)
+                                      ]).value!,
                                   onTap: (calendarTapDetails) {
                                     if (calendarTapDetails.appointments?[0] !=
                                         null) {

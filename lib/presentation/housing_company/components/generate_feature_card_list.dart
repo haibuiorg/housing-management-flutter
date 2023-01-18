@@ -238,7 +238,7 @@ List<Widget> createFeatureWidgetList(
           ),
           Expanded(
             child: ListView.builder(
-                itemCount: state.documentList?.length ?? 0,
+                itemCount: state.ongoingPollList?.length ?? 0,
                 itemBuilder: (context, index) {
                   final poll = state.ongoingPollList?[index];
                   return Padding(

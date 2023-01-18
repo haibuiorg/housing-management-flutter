@@ -104,21 +104,33 @@ class _ManagerCreationFormState extends State<ManagerCreationForm> {
             ],
           ),
           Align(
-            alignment: Alignment.centerRight,
-            child: ResponsiveWrapper.of(context).isSmallerThan(TABLET)
-                ? ResponsiveRowColumnItem(
-                    rowFit: FlexFit.loose,
-                    child: TextButton(
-                      onPressed: _submit,
-                      child: const Text('Add'),
-                    ))
-                : ResponsiveRowColumnItem(
-                    rowFit: FlexFit.loose,
-                    child: IconButton(
-                      onPressed: _submit,
-                      icon: const Icon(Icons.arrow_forward_rounded),
-                    )),
-          )
+              alignment: Alignment.centerRight,
+              child: ResponsiveValue<Widget>(context,
+                  defaultValue: ResponsiveRowColumnItem(
+                      rowFit: FlexFit.loose,
+                      child: TextButton(
+                        onPressed: _submit,
+                        child: const Text('Add'),
+                      )),
+                  valueWhen: [
+                    Condition.largerThan(
+                        name: MOBILE,
+                        value: ResponsiveRowColumnItem(
+                          rowFit: FlexFit.loose,
+                          child: TextButton(
+                            onPressed: _submit,
+                            child: const Text('Add'),
+                          ),
+                        )),
+                    Condition.smallerThan(
+                        name: TABLET,
+                        value: ResponsiveRowColumnItem(
+                            rowFit: FlexFit.loose,
+                            child: IconButton(
+                              onPressed: _submit,
+                              icon: const Icon(Icons.arrow_forward_rounded),
+                            )))
+                  ]).value)
         ],
       ),
     );
