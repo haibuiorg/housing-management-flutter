@@ -1,5 +1,4 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -346,8 +345,7 @@ class DefaultUI extends StatelessWidget {
                           Theme.of(context).colorScheme.onPrimaryContainer,
                       selectedIconBox:
                           Theme.of(context).colorScheme.secondaryContainer,
-                      title:
-                          '${state.user?.firstName}… ${state.user?.lastName}',
+                      title: '${state.user?.firstName} ${state.user?.lastName}',
                       avatarImg: NetworkImage(
                         state.user?.avatarUrl ?? '',
                       ),
