@@ -169,12 +169,13 @@ class _AppState extends State<App> {
                   ? ThemeMode.dark
                   : ThemeMode.light,
               builder: (context, child) => ResponsiveWrapper.builder(
-                child,
+                BouncingScrollWrapper.builder(context, child!),
                 defaultScale: true,
                 breakpoints: const [
                   ResponsiveBreakpoint.resize(480, name: MOBILE),
                   ResponsiveBreakpoint.autoScale(800, name: TABLET),
                   ResponsiveBreakpoint.resize(1000, name: DESKTOP),
+                  ResponsiveBreakpoint.autoScale(1700, name: 'XL'),
                 ],
               ),
             );
