@@ -5,8 +5,9 @@
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
-    ]
-  },
-  "appAssociation": "AUTO",
-  "rewrites": [ { "source": "/dynamic_links/**", "dynamicLinks": true } ]
+    ],
+    "appAssociation": "AUTO",
+    "rewrites": [ { "source": "/dynamic_links/**", "dynamicLinks": true } ]
+  }
+  
 }
