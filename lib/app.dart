@@ -19,6 +19,7 @@ import 'package:responsive_framework/responsive_framework.dart';
 
 import 'auth_cubit.dart';
 import 'core/utils/color_extension.dart';
+import 'core/utils/os_utils.dart';
 import 'notification_controller.dart';
 import 'presentation/home/home_screen.dart';
 import 'presentation/shared/no_transition_builder.dart';
@@ -101,6 +102,11 @@ class _AppState extends State<App> {
       ],
       child: BlocConsumer<AuthCubit, AuthState>(listener: (context, state) {
         if (!state.isLoggedIn) {
+          if (appRouter.location == loginPath ||
+              appRouter.location == registerPath ||
+              appRouter.location == codeRegisterPath) {
+            return;
+          }
           appRouter.go(loginPath);
           if (widget.initialLink != null && widget.initialLink?.link != null) {
             appRouter.push(_getAppScreenPathFromAppLinkPath(
@@ -169,7 +175,26 @@ class _AppState extends State<App> {
                   ? ThemeMode.dark
                   : ThemeMode.light,
               builder: (context, child) => ResponsiveWrapper.builder(
-                BouncingScrollWrapper.builder(context, child!),
+                Column(
+                  children: [
+                    isIOSWeb
+                        ? SizedBox(
+                            height: 75,
+                            child: Center(
+                                child: Image.asset(
+                                    'assets/app-store-png-logo.png')))
+                        : isAndroidWeb
+                            ? SizedBox(
+                                height: 75,
+                                child: Center(
+                                  child: Image.asset(
+                                      'assets/google-play-png-logo.png'),
+                                ))
+                            : const SizedBox.shrink(),
+                    Expanded(
+                        child: BouncingScrollWrapper.builder(context, child!)),
+                  ],
+                ),
                 defaultScale: true,
                 breakpoints: const [
                   ResponsiveBreakpoint.resize(480, name: MOBILE),

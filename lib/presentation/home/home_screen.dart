@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:priorli/presentation/create_housing_company/create_housing_company_screen.dart';
+import 'package:priorli/presentation/home/home_state.dart';
 import 'package:priorli/presentation/join_apartment/join_apartment_screen.dart';
+import 'package:priorli/presentation/shared/app_lottie_animation.dart';
 
 import '../../service_locator.dart';
 import 'home_cubit.dart';
@@ -54,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         onPressed: () {
                           GoRouter.of(context).push(createCompanyPath);
                         },
-                        child: const Text('Create a new company')),
+                        child: const Text('Create a new company or community')),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(
@@ -81,7 +83,17 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         body: BlocProvider<HomeCubit>(
           create: (_) => cubit,
-          child: const SelectableCompanyList(),
+          child: BlocConsumer<HomeCubit, HomeState>(listener: (context, state) {
+            if (state.housingCompanies?.isEmpty == true) {
+              _showMoreDialog();
+            }
+          }, builder: (context, state) {
+            return state.housingCompanies?.isEmpty == true
+                ? const AppLottieAnimation(
+                    loadingResource: 'apartment',
+                  )
+                : const SelectableCompanyList();
+          }),
         ));
   }
 }
