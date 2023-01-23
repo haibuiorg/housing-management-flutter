@@ -6,7 +6,7 @@
 	<string>development</string>
 	<key>com.apple.developer.associated-domains</key>
 	<array>
-		<string>applinks:priorli.com/app_link</string>
+		<string>applinks:app.priorli.com/dynamic_links</string>
 	</array>
 </dict>
 </plist>
