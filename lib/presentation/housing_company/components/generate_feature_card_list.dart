@@ -32,33 +32,6 @@ List<Widget> createFeatureWidgetList(
       Column(
         children: [
           const FullWidthTitle(
-            title: 'Announcements',
-          ),
-          Expanded(
-            child: ListView.builder(
-                itemCount: state.announcementList?.length ?? 0,
-                itemBuilder: (context, index) {
-                  final announcement = state.announcementList?[index];
-                  return announcement != null
-                      ? Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: AnnouncementItem(
-                            companyId: state.housingCompany?.id ?? '',
-                            announcement: announcement,
-                          ))
-                      : const SizedBox.shrink();
-                }),
-          ),
-          TextButton(
-              onPressed: () {
-                context.pushFromCurrentLocation(announcementPath);
-              },
-              child: const Text('More'))
-        ],
-      ),
-      Column(
-        children: [
-          const FullWidthTitle(
             title: 'Communication channels',
           ),
           Expanded(
@@ -274,7 +247,7 @@ List<Widget> createFeatureWidgetList(
           ),
           Expanded(
             child: ListView.builder(
-                itemCount: state.conversationList?.length ?? 0,
+                itemCount: state.faultReportList?.length ?? 0,
                 itemBuilder: (context, index) {
                   final faultReport = state.faultReportList?[index];
                   return faultReport != null
@@ -328,8 +301,8 @@ List<Widget> createFeatureWidgetList(
                 child: const Text('More'))
           ],
         ),
-      Column(
-        children: const [
+      const Column(
+        children: [
           FullWidthTitle(
             title: 'Renovation requests',
           )

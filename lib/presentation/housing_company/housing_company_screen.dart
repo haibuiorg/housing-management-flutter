@@ -12,6 +12,8 @@ import 'package:priorli/presentation/shared/app_lottie_animation.dart';
 import 'package:priorli/presentation/shared/full_width_title.dart';
 import 'package:priorli/service_locator.dart';
 import 'package:priorli/setting_cubit.dart';
+import '../announcement/announcement_item.dart';
+import '../announcement/announcement_screen.dart';
 import '../events/event_screen.dart';
 import '../housing_company_management/housing_company_management_screen.dart';
 import 'components/event_data_source.dart';
@@ -31,7 +33,8 @@ class _HousingCompanyScreenState extends State<HousingCompanyScreen> {
   late final HousingCompanyCubit cubit;
   @override
   void initState() {
-    cubit = serviceLocator<HousingCompanyCubit>();
+    cubit = serviceLocator<HousingCompanyCubit>()
+      ..init(widget.housingCompanyId);
     super.initState();
   }
 
@@ -43,7 +46,6 @@ class _HousingCompanyScreenState extends State<HousingCompanyScreen> {
 
   @override
   Widget build(BuildContext context) {
-    cubit.init(widget.housingCompanyId);
     return BlocProvider<HousingCompanyCubit>(
       create: (_) => cubit,
       child: BlocConsumer<HousingCompanyCubit, HousingCompanyState>(
@@ -83,119 +85,26 @@ class _HousingCompanyScreenState extends State<HousingCompanyScreen> {
                           vertical: 8, horizontal: 16),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8),
-                          color: Theme.of(context)
-                              .colorScheme
-                              .primary
-                              .withAlpha(90)),
+                          color: Theme.of(context).colorScheme.background),
                       child: Text(
                         state.housingCompany?.name ?? 'Housing company',
                       ),
                     ),
                     flexibleSpace: FlexibleSpaceBar(
                         background: CachedNetworkImage(
-                      fit: BoxFit.cover,
-                      imageUrl: state.housingCompany?.coverImageUrl ?? '',
-                      errorWidget: (context, url, error) => const Padding(
-                        padding: EdgeInsets.only(top: 100),
-                        child: AppLottieAnimation(
-                          loadingResource: 'apartment',
-                        ),
-                      ),
-                    )),
+                            fit: BoxFit.cover,
+                            imageUrl: state.housingCompany?.coverImageUrl ?? '',
+                            errorWidget: (context, url, error) => Image.asset(
+                                  'assets/apartment_background.png',
+                                  fit: BoxFit.fill,
+                                ))),
                   ),
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: EdgeInsets.all(ResponsiveValue(
-                            context,
-                            defaultValue: 32.0,
-                            valueWhen: const [
-                              Condition.smallerThan(
-                                name: TABLET,
-                                value: 8.0,
-                              ),
-                              Condition.largerThan(
-                                name: TABLET,
-                                value: 32.0,
-                              )
-                            ],
-                          ).value ??
-                          32.0),
-                      child: AspectRatio(
-                        aspectRatio: ResponsiveValue(
-                              context,
-                              defaultValue: 2.0,
-                              valueWhen: const [
-                                Condition.smallerThan(
-                                  name: TABLET,
-                                  value: 1.0,
-                                ),
-                                Condition.largerThan(
-                                  name: TABLET,
-                                  value: 2.0,
-                                )
-                              ],
-                            ).value ??
-                            2,
-                        child: Card(
-                          child: Column(
-                            children: [
-                              FullWidthTitle(
-                                title: 'Events',
-                                action: TextButton(
-                                  onPressed:
-                                      state.housingCompany?.isUserManager ==
-                                              true
-                                          ? () {
-                                              context.pushFromCurrentLocation(
-                                                  eventScreenPath);
-                                            }
-                                          : null,
-                                  child: const Text('Add'),
-                                ),
-                              ),
-                              Expanded(
-                                child: SfCalendar(
-                                  timeSlotViewSettings:
-                                      const TimeSlotViewSettings(
-                                          timeIntervalHeight: 30,
-                                          startHour: 7,
-                                          endHour: 22),
-                                  firstDayOfWeek: 1,
-                                  view: ResponsiveValue<CalendarView>(context,
-                                      defaultValue: CalendarView.month,
-                                      valueWhen: [
-                                        const Condition.smallerThan(
-                                            name: TABLET,
-                                            value: CalendarView.day),
-                                        const Condition.largerThan(
-                                            name: MOBILE,
-                                            value: CalendarView.month)
-                                      ]).value!,
-                                  onTap: (calendarTapDetails) {
-                                    if (calendarTapDetails.appointments?[0] !=
-                                        null) {
-                                      context.pushFromCurrentLocation(
-                                        '$eventScreenPath/${(calendarTapDetails.appointments?[0] as Event).id}',
-                                      );
-                                    } else if (state
-                                            .housingCompany?.isUserManager ==
-                                        true) {
-                                      context.pushFromCurrentLocation(
-                                        '$eventScreenPath?initialStartTime=${calendarTapDetails.date?.millisecondsSinceEpoch}',
-                                      );
-                                    }
-                                  },
-                                  onSelectionChanged: (onSelectionChanged) {},
-                                  dataSource: EventDataSource(
-                                      state.ongoingEventList ?? []),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
+                  const SliverToBoxAdapter(
+                    child: AnnouncementBox(),
+                  ),
+                  const SliverToBoxAdapter(
+                    child: CalendarBox(),
+                  ),
                 ];
               },
               body: Padding(
@@ -217,5 +126,141 @@ class _HousingCompanyScreenState extends State<HousingCompanyScreen> {
             ));
           }),
     );
+  }
+}
+
+class CalendarBox extends StatelessWidget {
+  const CalendarBox({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<HousingCompanyCubit, HousingCompanyState>(
+        builder: (context, state) {
+      return Padding(
+        padding: EdgeInsets.all(ResponsiveValue(
+              context,
+              defaultValue: 32.0,
+              valueWhen: const [
+                Condition.smallerThan(
+                  name: TABLET,
+                  value: 8.0,
+                ),
+                Condition.largerThan(
+                  name: TABLET,
+                  value: 32.0,
+                )
+              ],
+            ).value ??
+            32.0),
+        child: AspectRatio(
+          aspectRatio: ResponsiveValue(
+                context,
+                defaultValue: 2.5,
+                valueWhen: const [
+                  Condition.smallerThan(
+                    name: TABLET,
+                    value: 1.0,
+                  ),
+                  Condition.largerThan(
+                    name: TABLET,
+                    value: 2.5,
+                  )
+                ],
+              ).value ??
+              2,
+          child: Card(
+            child: Column(
+              children: [
+                FullWidthTitle(
+                  title: 'Events',
+                  action: TextButton(
+                    onPressed: state.housingCompany?.isUserManager == true
+                        ? () {
+                            context.pushFromCurrentLocation(eventScreenPath);
+                          }
+                        : null,
+                    child: const Text('Add'),
+                  ),
+                ),
+                Expanded(
+                  child: SfCalendar(
+                    timeSlotViewSettings: const TimeSlotViewSettings(
+                        timeIntervalHeight: 30, startHour: 7, endHour: 22),
+                    firstDayOfWeek: 1,
+                    view: ResponsiveValue<CalendarView>(context,
+                        defaultValue: CalendarView.month,
+                        valueWhen: [
+                          const Condition.smallerThan(
+                              name: TABLET, value: CalendarView.day),
+                          const Condition.largerThan(
+                              name: MOBILE, value: CalendarView.month)
+                        ]).value!,
+                    onTap: (calendarTapDetails) {
+                      if (calendarTapDetails.appointments?[0] != null) {
+                        context.pushFromCurrentLocation(
+                          '$eventScreenPath/${(calendarTapDetails.appointments?[0] as Event).id}',
+                        );
+                      } else if (state.housingCompany?.isUserManager == true) {
+                        context.pushFromCurrentLocation(
+                          '$eventScreenPath?initialStartTime=${calendarTapDetails.date?.millisecondsSinceEpoch}',
+                        );
+                      }
+                    },
+                    onSelectionChanged: (onSelectionChanged) {},
+                    dataSource: EventDataSource(state.ongoingEventList ?? []),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    });
+  }
+}
+
+class AnnouncementBox extends StatelessWidget {
+  const AnnouncementBox({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<HousingCompanyCubit, HousingCompanyState>(
+        builder: (context, state) {
+      return Column(
+        children: [
+          const FullWidthTitle(
+            title: 'Announcements',
+          ),
+          SizedBox(
+            width: double.infinity,
+            height: 250,
+            child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: state.announcementList?.length ?? 0,
+                itemBuilder: (context, index) {
+                  final announcement = state.announcementList?[index];
+                  return announcement != null
+                      ? Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: AnnouncementItem(
+                            initialExpand: true,
+                            companyId: state.housingCompany?.id ?? '',
+                            announcement: announcement,
+                          ))
+                      : const SizedBox.shrink();
+                }),
+          ),
+          TextButton(
+              onPressed: () {
+                context.pushFromCurrentLocation(announcementPath);
+              },
+              child: const Text('More'))
+        ],
+      );
+    });
   }
 }

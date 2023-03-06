@@ -1,4 +1,3 @@
-import 'package:equatable/equatable.dart';
 import 'package:priorli/core/base/usecase.dart';
 import 'package:priorli/core/user/entities/user.dart';
 

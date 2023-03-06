@@ -49,13 +49,15 @@ class AppImageRow extends StatelessWidget {
                                   builder: (builder) => AppGallery(
                                       galleryItems: storageItems ?? []));
                             },
-                            child: Container(
-                              width: 100,
-                              height: 100,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                image: DecorationImage(
-                                    fit: BoxFit.cover, image: imageProvider),
+                            child: Center(
+                              child: Container(
+                                width: 150,
+                                height: 100,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  image: DecorationImage(
+                                      fit: BoxFit.cover, image: imageProvider),
+                                ),
                               ),
                             ),
                           );

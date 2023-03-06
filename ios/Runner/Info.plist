@@ -73,5 +73,7 @@
 	<string>We will need your permission to access camera for taking photo and upload to our database</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>We will need your permission to access photo gallery for uploading to our database</string>
+	<key>FLTEnableImpeller</key>
+  	<true/>	
 </dict>
 </plist>
