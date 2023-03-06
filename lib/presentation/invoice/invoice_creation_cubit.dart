@@ -136,7 +136,6 @@ class InvoiceCreationCubit extends Cubit<InvoiceCreationState> {
   }
 
   void selectBankAccount(String? id) {
-    print(id);
     emit(state.copyWith(bankAccountId: id));
   }
 }

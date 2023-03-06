@@ -193,7 +193,6 @@ class HousingCompanyCubit extends Cubit<HousingCompanyState> {
       final newState =
           (state.copyWith(ongoingPollList: ongoingPollListResult.data));
       emit(newState);
-      print('state $newState');
       return ongoingPollListResult.data;
     }
     emit(state.copyWith(ongoingPollList: []));

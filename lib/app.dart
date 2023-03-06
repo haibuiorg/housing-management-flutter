@@ -34,10 +34,19 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> {
   _defaultLightColorScheme(String? colorValue) => ColorScheme.fromSeed(
-      seedColor: HexColor.fromHex(colorValue ?? appSeedColor));
+        seedColor: HexColor.fromHex(appSeedColor),
+        primary: HexColor.fromHex(colorValue ?? appPrimaryColor),
+        secondary: HexColor.fromHex(appSecondaryColor),
+        background: HexColor.fromHex(appBackgroundColor),
+        primaryContainer: HexColor.fromHex(appPrimaryContainerColor),
+      );
 
   _defaultDarkColorScheme(String? colorValue) => ColorScheme.fromSeed(
-      seedColor: HexColor.fromHex(colorValue ?? appSeedColor),
+      seedColor: HexColor.fromHex(appSeedColorDark),
+      primary: HexColor.fromHex(colorValue ?? appPrimaryColorDark),
+      secondary: HexColor.fromHex(appSecondaryColor),
+      background: HexColor.fromHex(appBackgroundColorDark),
+      primaryContainer: HexColor.fromHex(appPrimaryContainerColorDark),
       brightness: Brightness.dark);
   late final GoRouter appRouter;
 
@@ -175,26 +184,32 @@ class _AppState extends State<App> {
                   ? ThemeMode.dark
                   : ThemeMode.light,
               builder: (context, child) => ResponsiveWrapper.builder(
-                Column(
-                  children: [
-                    isIOSWeb
-                        ? SizedBox(
-                            height: 75,
-                            child: Center(
-                                child: Image.asset(
-                                    'assets/app-store-png-logo.png')))
-                        : isAndroidWeb
-                            ? SizedBox(
-                                height: 75,
-                                child: Center(
+                BouncingScrollWrapper.builder(
+                  context,
+                  Column(
+                    children: [
+                      isIOSWeb
+                          ? SizedBox(
+                              height: 75,
+                              child: Center(
                                   child: Image.asset(
-                                      'assets/google-play-png-logo.png'),
-                                ))
-                            : const SizedBox.shrink(),
-                    Expanded(
-                        child: BouncingScrollWrapper.builder(context, child!)),
-                  ],
+                                      'assets/app-store-png-logo.png')))
+                          : isAndroidWeb
+                              ? SizedBox(
+                                  height: 75,
+                                  child: Center(
+                                    child: Image.asset(
+                                        'assets/google-play-png-logo.png'),
+                                  ))
+                              : const SizedBox.shrink(),
+                      Expanded(child: child!),
+                    ],
+                  ),
                 ),
+                maxWidth: kIsWeb && !isIOSWeb && !isAndroidWeb
+                    ? MediaQuery.of(context).size.width * 0.9
+                    : 1200,
+                minWidth: 450,
                 defaultScale: true,
                 breakpoints: const [
                   ResponsiveBreakpoint.resize(480, name: MOBILE),

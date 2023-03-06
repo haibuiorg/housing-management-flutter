@@ -126,6 +126,7 @@ class _AnnouncementDialogState extends State<AnnouncementDialog> {
   final _titleController = TextEditingController();
   final _subtitleController = TextEditingController();
   final _bodyController = TextEditingController();
+  bool _isAllFilled = false;
   bool _sendEmail = false;
   List<String> _uploadedDocuments = [];
   @override
@@ -134,6 +135,14 @@ class _AnnouncementDialogState extends State<AnnouncementDialog> {
     _subtitleController.dispose();
     _bodyController.dispose();
     super.dispose();
+  }
+
+  _checkIfAllFilled() {
+    setState(() {
+      _isAllFilled = _titleController.text.isNotEmpty &&
+          _subtitleController.text.isNotEmpty &&
+          _bodyController.text.isNotEmpty;
+    });
   }
 
   @override
@@ -168,6 +177,7 @@ class _AnnouncementDialogState extends State<AnnouncementDialog> {
                     controller: _titleController,
                     maxLines: 1,
                     autofocus: true,
+                    onChanged: _checkIfAllFilled(),
                     decoration: const InputDecoration(
                       hintText: 'Title',
                     ),
@@ -181,6 +191,7 @@ class _AnnouncementDialogState extends State<AnnouncementDialog> {
                     decoration: const InputDecoration(
                       hintText: 'Subtitle',
                     ),
+                    onChanged: _checkIfAllFilled(),
                   ),
                 ),
                 TextFormField(
@@ -194,6 +205,7 @@ class _AnnouncementDialogState extends State<AnnouncementDialog> {
                       borderRadius: BorderRadius.all(Radius.circular(16.0)),
                     ),
                   ),
+                  onChanged: _checkIfAllFilled(),
                 ),
                 FileSelector(
                   onCompleteUploaded: (onCompleteUploaded) {
@@ -215,14 +227,16 @@ class _AnnouncementDialogState extends State<AnnouncementDialog> {
                     const Text('Also send email'),
                     const Spacer(),
                     OutlinedButton(
-                        onPressed: () {
-                          widget.onSubmit(
-                              sendEmail: _sendEmail,
-                              body: _bodyController.text,
-                              subtitle: _subtitleController.text,
-                              title: _titleController.text,
-                              uploadedDocuments: _uploadedDocuments);
-                        },
+                        onPressed: _isAllFilled
+                            ? () {
+                                widget.onSubmit(
+                                    sendEmail: _sendEmail,
+                                    body: _bodyController.text,
+                                    subtitle: _subtitleController.text,
+                                    title: _titleController.text,
+                                    uploadedDocuments: _uploadedDocuments);
+                              }
+                            : null,
                         child: const Text('Submit'))
                   ],
                 ),

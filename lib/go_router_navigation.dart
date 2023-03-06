@@ -7,6 +7,7 @@ import 'package:priorli/presentation/add_apartment/add_apartment_screen.dart';
 import 'package:priorli/presentation/admin/admin_screen.dart';
 import 'package:priorli/presentation/announcement/announcement_screen.dart';
 import 'package:priorli/presentation/apartment_management/apartment_management_screen.dart';
+import 'package:priorli/presentation/checkout/check_out_screen.dart';
 import 'package:priorli/presentation/code_register/code_register_screen.dart';
 import 'package:priorli/presentation/company_user_management/company_user_screen.dart';
 import 'package:priorli/presentation/conversation_list/conversation_list_screen.dart';
@@ -18,6 +19,7 @@ import 'package:priorli/presentation/help/help_screen.dart';
 import 'package:priorli/presentation/home/home_screen.dart';
 import 'package:priorli/presentation/housing_company/housing_company_screen.dart';
 import 'package:priorli/presentation/housing_company_management/housing_company_management_screen.dart';
+import 'package:priorli/presentation/housing_company_subscription/company_subscription_screen.dart';
 import 'package:priorli/presentation/housing_company_ui/housing_company_ui_screen.dart';
 import 'package:priorli/presentation/invoice/invoice_creation_form.dart';
 import 'package:priorli/presentation/invoice/invoice_group_list_screen.dart';
@@ -34,6 +36,7 @@ import 'presentation/apartments/apartment_screen.dart';
 import 'presentation/housing_company_payment/housing_company_payment_screen.dart';
 import 'presentation/join_apartment/join_apartment_screen.dart';
 import 'presentation/message/message_screen.dart';
+import 'presentation/payment_success/payment_success_screen.dart';
 import 'presentation/register/register_screen.dart';
 import 'presentation/shared/dialog_page.dart';
 
@@ -134,6 +137,15 @@ GoRouter createAppRouter() {
                               return InviteTenantScreen(
                                 housingCompanyId:
                                     state.params['companyId'] ?? '',
+                              );
+                            },
+                          ),
+                          GoRoute(
+                            path: companySubscriptionScreenPath,
+                            builder:
+                                (BuildContext context, GoRouterState state) {
+                              return CompanySubscriptionScreen(
+                                companyId: state.params['companyId'] ?? '',
                               );
                             },
                           ),
@@ -277,6 +289,22 @@ GoRouter createAppRouter() {
         ],
       ),
       GoRoute(
+        path: '/$checkoutScreenPath/:sessionId',
+        builder: (BuildContext context, GoRouterState state) {
+          return CheckoutScreen(
+            sessionId: state.params['sessionId'] ?? '',
+          );
+        },
+      ),
+      GoRoute(
+        path: '/$paymentSuccessPath',
+        builder: (BuildContext context, GoRouterState state) {
+          return PaymentSuccessScreen(
+            sessionId: state.queryParams['session_id'] ?? '',
+          );
+        },
+      ),
+      GoRoute(
         path: '/$eventScreenPath/:eventId',
         builder: (BuildContext context, GoRouterState state) {
           return EventScreen(
@@ -393,7 +421,6 @@ extension AppGoRouterHelper on BuildContext {
   void pushFromCurrentLocation(String location, {Object? extra}) {
     final newLocation =
         '${GoRouter.of(this).location}/$location'.replaceAll('//', '/');
-    print(newLocation);
     GoRouter.of(this).push(newLocation, extra: extra);
   }
 }

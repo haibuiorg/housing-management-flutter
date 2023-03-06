@@ -135,6 +135,7 @@ class PollRemoteDataSource implements PollDataSource {
         'multiple': multiple,
         'deleted': deleted
       };
+      data.removeWhere((key, value) => value == null);
       final result = await client.put('/poll/$pollId', data: data);
       return PollModel.fromJson(result.data as Map<String, dynamic>);
     } catch (error) {

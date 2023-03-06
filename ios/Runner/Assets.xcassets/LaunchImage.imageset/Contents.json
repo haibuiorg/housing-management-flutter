@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "128.png",
+      "filename" : "4.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "256.png",
+      "filename" : "Priorli-313.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "512.png",
+      "filename" : "Priorli-500.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

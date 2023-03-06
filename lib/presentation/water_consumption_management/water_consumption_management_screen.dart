@@ -6,7 +6,6 @@ import 'package:priorli/presentation/shared/custom_form_field.dart';
 import 'package:priorli/presentation/water_consumption_management/water_consumption_management_state.dart';
 import 'package:priorli/service_locator.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:liquid_progress_indicator/liquid_progress_indicator.dart';
 
 import '../../core/utils/string_extension.dart';
 import 'water_consumption_management_cubit.dart';
@@ -118,9 +117,11 @@ class WaterConsumptionManagementScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           SizedBox(
-                            width: 120,
-                            height: 120,
-                            child: LiquidCircularProgressIndicator(
+                              width: 120,
+                              height: 120,
+                              child: SizedBox.fromSize(
+                                size: const Size.fromHeight(200),
+                              ) /*LiquidCircularProgressIndicator(
                               value: (state.latestWaterConsumption
                                           ?.consumptionValues?.length ??
                                       0) /
@@ -137,8 +138,8 @@ class WaterConsumptionManagementScreen extends StatelessWidget {
                                   Theme.of(context).colorScheme.secondary,
                               borderWidth: 1,
                               direction: Axis.vertical,
-                            ),
-                          ),
+                            ),*/
+                              ),
                           if (state.housingCompany?.isUserManager == true)
                             OutlinedButton(
                                 onPressed: () {

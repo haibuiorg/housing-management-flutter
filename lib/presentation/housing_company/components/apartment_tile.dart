@@ -14,7 +14,9 @@ class _ApartmentTileState extends State<ApartmentTile> {
   Widget build(BuildContext context) {
     return Card(
       color: Theme.of(context).colorScheme.tertiaryContainer,
-      child: Center(child: Text(widget.apartment.building)),
+      child: Center(
+          child: Text(
+              widget.apartment.building + (widget.apartment.houseCode ?? ''))),
     );
   }
 }

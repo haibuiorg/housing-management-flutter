@@ -12,13 +12,18 @@ class MainCubit extends Cubit<MainState> {
 
   MainCubit(this._getUserInfo) : super(const MainState());
 
-  Future<void> init() async {
+  Future<void> init(int selectedIndex) async {
     final result = await _getUserInfo(NoParams());
     if (result is ResultSuccess<User>) {
       emit(state.copyWith(
           user: result.data,
+          selectedTabIndex: selectedIndex,
           isAdmin: isUserAdmin(result.data),
           isInitializing: false));
     }
+  }
+
+  void changeTab(int index) {
+    emit(state.copyWith(selectedTabIndex: index));
   }
 }

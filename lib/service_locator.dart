@@ -101,16 +101,27 @@ import 'package:priorli/core/storage/data/storage_remote_data_source.dart';
 import 'package:priorli/core/storage/repos/storage_repository.dart';
 import 'package:priorli/core/storage/repos/storage_repository_impl.dart';
 import 'package:priorli/core/storage/usecases/upload_file.dart';
+import 'package:priorli/core/subscription/data/subscription_data_source.dart';
+import 'package:priorli/core/subscription/data/subscription_remote_data_source.dart';
+import 'package:priorli/core/subscription/repos/subscription_repository.dart';
+import 'package:priorli/core/subscription/repos/subscription_repository_impl.dart';
+import 'package:priorli/core/subscription/usecases/add_subscription_plan.dart';
+import 'package:priorli/core/subscription/usecases/check_out.dart';
+import 'package:priorli/core/subscription/usecases/get_available_subscription_plans.dart';
+import 'package:priorli/core/subscription/usecases/get_payment_key.dart';
+import 'package:priorli/core/subscription/usecases/subscription_status_check.dart';
 import 'package:priorli/core/user/usecases/register_with_code.dart';
 import 'package:priorli/core/water_usage/usecases/get_water_bill_link.dart';
 import 'package:priorli/core/water_usage/usecases/get_yearly_water_consumption.dart';
 import 'package:priorli/go_router_navigation.dart';
 import 'package:priorli/presentation/account/account_cubit.dart';
 import 'package:priorli/presentation/add_apartment/add_apart_cubit.dart';
+import 'package:priorli/presentation/admin/admin_cubit.dart';
 import 'package:priorli/presentation/announcement/announcement_cubit.dart';
 import 'package:priorli/presentation/announcement/announcement_item_cubit.dart';
 import 'package:priorli/presentation/apartment_invoice/apartment_water_invoice_cubit.dart';
 import 'package:priorli/presentation/apartments/apartment_cubit.dart';
+import 'package:priorli/presentation/checkout/check_out_cubit.dart';
 import 'package:priorli/presentation/code_register/code_register_cubit.dart';
 import 'package:priorli/presentation/company_user_management/company_user_cubit.dart';
 import 'package:priorli/presentation/conversation_list/conversation_list_cubit.dart';
@@ -125,6 +136,7 @@ import 'package:priorli/presentation/home/home_cubit.dart';
 import 'package:priorli/presentation/housing_company/housing_company_cubit.dart';
 import 'package:priorli/presentation/housing_company_payment/housing_company_payment_cubit.dart';
 import 'package:priorli/presentation/guest_invitation/guest_invitation_cubit.dart';
+import 'package:priorli/presentation/housing_company_subscription/company_subscription_cubit.dart';
 import 'package:priorli/presentation/invoice/invoice_creation_cubit.dart';
 import 'package:priorli/presentation/invoice/invoice_group_cubit.dart';
 import 'package:priorli/presentation/invoice/invoice_group_list_screen.dart';
@@ -133,6 +145,7 @@ import 'package:priorli/presentation/join_apartment/join_apartment_cubit.dart';
 import 'package:priorli/presentation/main/main_cubit.dart';
 import 'package:priorli/presentation/message/message_cubit.dart';
 import 'package:priorli/presentation/notification_center/notification_center_cubit.dart';
+import 'package:priorli/presentation/payment_success/payment_success_cubit.dart';
 import 'package:priorli/presentation/polls/poll_screen.dart';
 import 'package:priorli/presentation/polls/poll_screen_cubit.dart';
 import 'package:priorli/user_cubit.dart';
@@ -350,6 +363,12 @@ Future<void> init() async {
       () => InvoiceGroupCubit(serviceLocator(), serviceLocator()));
   serviceLocator.registerFactory(() => CompanyUserCubit(
       serviceLocator(), serviceLocator(), serviceLocator(), serviceLocator()));
+  serviceLocator.registerFactory(() => CheckoutCubit(serviceLocator()));
+  serviceLocator
+      .registerFactory(() => AdminCubit(serviceLocator(), serviceLocator()));
+  serviceLocator.registerFactory(() => CompanySubscriptionCubit(
+      serviceLocator(), serviceLocator(), serviceLocator()));
+  serviceLocator.registerFactory(() => PaymentSuccessCubit(serviceLocator()));
 
   /** usecases */
 
@@ -590,6 +609,17 @@ Future<void> init() async {
   serviceLocator.registerLazySingleton<GetHousingCompanyManagers>(() =>
       GetHousingCompanyManagers(housingCompanyRepository: serviceLocator()));
 
+  serviceLocator.registerLazySingleton<AddSubscriptionPlan>(
+      () => AddSubscriptionPlan(subscriptionRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<GetAvailableSubscriptionPlans>(() =>
+      GetAvailableSubscriptionPlans(subscriptionRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<Checkout>(
+      () => Checkout(subscriptionRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<GetPaymentKey>(
+      () => GetPaymentKey(subscriptionRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<SubscriptionStatusCheck>(
+      () => SubscriptionStatusCheck(subscriptionRepository: serviceLocator()));
+
   /** repos */
   serviceLocator.registerLazySingleton<AuthenticationRepository>(() =>
       AuthenticationRepositoryImpl(authenticationDataSource: serviceLocator()));
@@ -624,6 +654,9 @@ Future<void> init() async {
       FaultReportRepositoryImpl(faultReportRemoteDataSource: serviceLocator()));
   serviceLocator.registerLazySingleton<InvoiceRepository>(
       () => InvoiceRepositoryImpl(invoiceRemoteDataSource: serviceLocator()));
+  serviceLocator.registerLazySingleton<SubscriptionRepository>(() =>
+      SubscriptionRepositoryImpl(
+          subscriptionRemoteDataSource: serviceLocator()));
 
   /** datasource*/
   serviceLocator.registerLazySingleton<AuthenticationDataSource>(() =>
@@ -663,6 +696,8 @@ Future<void> init() async {
       () => FaultReportRemoteDataSource(client: serviceLocator()));
   serviceLocator.registerLazySingleton<InvoiceDataSource>(
       () => InvoiceRemoteDataSource(client: serviceLocator()));
+  serviceLocator.registerLazySingleton<SubscriptionDataSource>(
+      () => SubscriptionRemoteDataSource(client: serviceLocator()));
 
   /** network */
   serviceLocator.registerLazySingleton<Dio>(

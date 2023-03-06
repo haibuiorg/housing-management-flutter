@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:priorli/go_router_navigation.dart';
@@ -7,6 +8,7 @@ import 'package:priorli/service_locator.dart';
 import 'package:flutter_emoji/flutter_emoji.dart';
 import '../company_user_management/company_user_screen.dart';
 import '../housing_company_payment/housing_company_payment_screen.dart';
+import '../housing_company_subscription/company_subscription_screen.dart';
 import '../housing_company_ui/housing_company_ui_screen.dart';
 import '../send_invitation/invite_tenant_screen.dart';
 import '../shared/setting_button.dart';
@@ -189,6 +191,20 @@ class _HousingCompanyManagementScreenState
                               onChanged: (value) => cubit.updateCity(value),
                               keyboardType: TextInputType.text,
                             ),
+                            SizedBox.fromSize(
+                              size: const Size.fromHeight(56),
+                            ),
+                            if (kIsWeb)
+                              SettingButton(
+                                onPressed: () {
+                                  context.pushFromCurrentLocation(
+                                      companySubscriptionScreenPath);
+                                },
+                                label: Text(
+                                  'Manage subscription',
+                                  style: Theme.of(context).textTheme.bodyLarge,
+                                ),
+                              ),
                             SettingButton(
                               onPressed: () {
                                 context.pushFromCurrentLocation(
