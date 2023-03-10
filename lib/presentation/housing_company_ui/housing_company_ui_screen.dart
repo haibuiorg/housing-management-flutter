@@ -144,8 +144,7 @@ class _HousingCompanyUiScreenState extends State<HousingCompanyUiScreen> {
                   builder: (builder) => Padding(
                     padding: const EdgeInsets.all(32.0),
                     child: Dialog(
-                      child: BlockPicker(
-                          useInShowDialog: false,
+                      child: MaterialPicker(
                           pickerColor: Theme.of(context).colorScheme.primary,
                           onColorChanged: (color) {
                             _cubit

@@ -60,4 +60,6 @@ abstract class HousingCompanyRepository {
       String? firstName,
       String? lastName,
       String? phoneNumber});
+  Future<Result<List<HousingCompany>>> adminGetCompanies(
+      {required int lastCreatedOn, required int limit});
 }

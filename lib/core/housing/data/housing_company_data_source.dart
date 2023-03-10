@@ -58,4 +58,9 @@ abstract class HousingCompanyDataSource {
   Future<List<UserModel>> getCompanyUsers({
     required String housingCompanyId,
   });
+
+  Future<List<HousingCompanyModel>> adminGetCompanies({
+    required int lastCreatedOn,
+    required int limit,
+  });
 }

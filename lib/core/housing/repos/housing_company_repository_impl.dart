@@ -218,4 +218,19 @@ class HousingCompanyRepositoryImpl extends HousingCompanyRepository {
       return ResultFailure(ServerFailure());
     }
   }
+
+  @override
+  Future<Result<List<HousingCompany>>> adminGetCompanies(
+      {required int lastCreatedOn, required int limit}) async {
+    try {
+      final housingCompanyListModel = await housingCompanyDataSource
+          .adminGetCompanies(lastCreatedOn: lastCreatedOn, limit: limit);
+
+      return ResultSuccess(housingCompanyListModel
+          .map((e) => HousingCompany.modelToEntity(e))
+          .toList());
+    } on ServerException {
+      return ResultFailure(ServerFailure());
+    }
+  }
 }

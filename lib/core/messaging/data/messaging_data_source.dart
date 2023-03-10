@@ -53,7 +53,7 @@ abstract class MessagingDataSource {
     required String conversationId,
   });
   Stream<List<ConversationModel>> getConversationLists({
-    required String messageType,
+    required bool isFromAdmin,
     required String userId,
   });
   Stream<List<ConversationModel>> getCompanyConversationLists({

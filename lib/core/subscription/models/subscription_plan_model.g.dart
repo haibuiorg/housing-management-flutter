@@ -21,11 +21,15 @@ SubscriptionPlanModel _$SubscriptionPlanModelFromJson(
       max_account: json['max_account'] as int,
       translation: json['translation'] as bool,
       max_messaging_channels: json['max_messaging_channels'] as int,
-      max_company_events: json['max_company_events'] as int,
+      max_announcement: json['max_announcement'] as int?,
       max_invoice_number: json['max_invoice_number'] as int,
       additional_invoice_cost:
           (json['additional_invoice_cost'] as num).toDouble(),
       interval: json['interval'] as String,
+      notification_types: (json['notification_types'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
+      has_apartment_document: json['has_apartment_document'] as bool?,
       interval_count: json['interval_count'] as int,
     );
 
@@ -44,9 +48,11 @@ Map<String, dynamic> _$SubscriptionPlanModelToJson(
       'max_account': instance.max_account,
       'translation': instance.translation,
       'max_messaging_channels': instance.max_messaging_channels,
-      'max_company_events': instance.max_company_events,
+      'max_announcement': instance.max_announcement,
       'max_invoice_number': instance.max_invoice_number,
       'additional_invoice_cost': instance.additional_invoice_cost,
       'interval': instance.interval,
       'interval_count': instance.interval_count,
+      'has_apartment_document': instance.has_apartment_document,
+      'notification_types': instance.notification_types,
     };

@@ -19,7 +19,7 @@ class SelectableCompanyList extends StatelessWidget {
           child: ResponsiveGridView.builder(
             gridDelegate: const ResponsiveGridDelegate(
                 minCrossAxisExtent: 300,
-                childAspectRatio: 2,
+                childAspectRatio: 1.7,
                 mainAxisSpacing: 24,
                 crossAxisSpacing: 24),
             itemBuilder: ((context, index) {

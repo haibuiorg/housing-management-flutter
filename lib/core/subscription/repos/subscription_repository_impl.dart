@@ -17,12 +17,14 @@ class SubscriptionRepositoryImpl implements SubscriptionRepository {
       required double price,
       required String currency,
       required String countryCode,
+      required bool hasApartmentDocument,
+      required List<String> notificationTypes,
       int? maxAccount,
       bool? translation,
       int? maxMessagingChannels,
-      int? maxCompanyEvents,
+      int? maxAnnouncement,
       int? maxInvoiceNumber,
-      double? additionalInvoiceCost,
+      required double additionalInvoiceCost,
       String? interval = 'month',
       int? intervalCount = 1}) async {
     try {
@@ -35,8 +37,10 @@ class SubscriptionRepositoryImpl implements SubscriptionRepository {
               countryCode: countryCode,
               translation: translation,
               maxMessagingChannels: maxMessagingChannels,
-              maxCompanyEvents: maxCompanyEvents,
+              maxAnnouncement: maxAnnouncement,
               maxInvoiceNumber: maxInvoiceNumber,
+              hasApartmentDocument: hasApartmentDocument,
+              notificationTypes: notificationTypes,
               additionalInvoiceCost: additionalInvoiceCost,
               interval: interval,
               intervalCount: intervalCount);
@@ -49,10 +53,14 @@ class SubscriptionRepositoryImpl implements SubscriptionRepository {
 
   @override
   Future<Result<String>> checkout(
-      {required String subscriptionPlanId, required String companyId}) async {
+      {required String subscriptionPlanId,
+      required String companyId,
+      required int quantity}) async {
     try {
       final url = await subscriptionRemoteDataSource.checkout(
-          companyId: companyId, subscriptionPlanId: subscriptionPlanId);
+          companyId: companyId,
+          subscriptionPlanId: subscriptionPlanId,
+          quantity: quantity);
       return ResultSuccess(url);
     } on ServerException {
       return ResultFailure(ServerFailure());
@@ -90,6 +98,32 @@ class SubscriptionRepositoryImpl implements SubscriptionRepository {
       final subscriptionModel = await subscriptionRemoteDataSource
           .subscriptionStatusCheck(sessionId: sessionId);
       return ResultSuccess(Subscription.modelToEntity(subscriptionModel));
+    } on ServerException {
+      return ResultFailure(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Result<bool>> deleteSubscriptionPlan(
+      {required String subscriptionPlanId}) async {
+    try {
+      final subscriptionPlanModel = await subscriptionRemoteDataSource
+          .deleteSubscriptionPlan(subscriptionPlanId: subscriptionPlanId);
+      return ResultSuccess(subscriptionPlanModel);
+    } on ServerException {
+      return ResultFailure(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Result<List<Subscription>>> getCompanySubscriptions(
+      {required String companyId}) async {
+    try {
+      final subscriptionModelList = await subscriptionRemoteDataSource
+          .getCompanySubscriptions(companyId: companyId);
+      return ResultSuccess(subscriptionModelList
+          .map((e) => Subscription.modelToEntity(e))
+          .toList());
     } on ServerException {
       return ResultFailure(ServerFailure());
     }

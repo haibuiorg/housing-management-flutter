@@ -19,11 +19,13 @@ class SubscriptionPlanModel extends Equatable {
   final int max_account;
   final bool translation;
   final int max_messaging_channels;
-  final int max_company_events;
+  final int? max_announcement;
   final int max_invoice_number;
   final double additional_invoice_cost;
   final String interval;
   final int interval_count;
+  final bool? has_apartment_document;
+  final List<String>? notification_types;
 
   const SubscriptionPlanModel(
       {required this.id,
@@ -38,10 +40,12 @@ class SubscriptionPlanModel extends Equatable {
       required this.max_account,
       required this.translation,
       required this.max_messaging_channels,
-      required this.max_company_events,
+      required this.max_announcement,
       required this.max_invoice_number,
       required this.additional_invoice_cost,
       required this.interval,
+      required this.notification_types,
+      required this.has_apartment_document,
       required this.interval_count});
   factory SubscriptionPlanModel.fromJson(Map<String, dynamic> json) =>
       _$SubscriptionPlanModelFromJson(json);
@@ -58,11 +62,13 @@ class SubscriptionPlanModel extends Equatable {
         created_on,
         max_account,
         translation,
+        notification_types,
         max_messaging_channels,
-        max_company_events,
+        max_announcement,
         max_invoice_number,
         additional_invoice_cost,
         interval,
-        interval_count
+        interval_count,
+        has_apartment_document
       ];
 }

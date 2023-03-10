@@ -19,3 +19,4 @@ const appWebsite = 'https://priorli.com';
 const messageTypeSupport = 'support';
 const messageTypeCommunity = 'community';
 const messageTypeFaultReport = 'fault_report';
+const maxNumeberOfAccount = 10000000000;

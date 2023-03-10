@@ -17,6 +17,11 @@ import 'package:priorli/core/apartment/usecases/delete_apartment.dart';
 import 'package:priorli/core/apartment/usecases/get_apartment_document.dart';
 import 'package:priorli/core/apartment/usecases/get_apartment_document_list.dart';
 import 'package:priorli/core/apartment/usecases/join_apartment.dart';
+import 'package:priorli/core/contact_leads/data/contact_lead_remote_data_source.dart';
+import 'package:priorli/core/contact_leads/repos/contact_lead_repo.dart';
+import 'package:priorli/core/contact_leads/repos/contact_lead_repo_impl.dart';
+import 'package:priorli/core/contact_leads/usecases/get_contact_leads.dart';
+import 'package:priorli/core/contact_leads/usecases/update_contact_lead.dart';
 import 'package:priorli/core/country/data/country_data_source.dart';
 import 'package:priorli/core/country/data/country_remote_data_source.dart';
 import 'package:priorli/core/country/repos/country_repository.dart';
@@ -41,6 +46,7 @@ import 'package:priorli/core/fault_report/repos/fault_report_repository_impl.dar
 import 'package:priorli/core/fault_report/usecases/create_fault_report.dart';
 import 'package:priorli/core/housing/usecases/add_company_documents.dart';
 import 'package:priorli/core/housing/usecases/add_company_manager.dart';
+import 'package:priorli/core/housing/usecases/admin_get_companies.dart';
 import 'package:priorli/core/housing/usecases/delete_housing_company.dart';
 import 'package:priorli/core/housing/usecases/get_company_document.dart';
 import 'package:priorli/core/housing/usecases/get_company_document_list.dart';
@@ -107,8 +113,10 @@ import 'package:priorli/core/subscription/repos/subscription_repository.dart';
 import 'package:priorli/core/subscription/repos/subscription_repository_impl.dart';
 import 'package:priorli/core/subscription/usecases/add_subscription_plan.dart';
 import 'package:priorli/core/subscription/usecases/check_out.dart';
+import 'package:priorli/core/subscription/usecases/delete_subscription_plan.dart';
 import 'package:priorli/core/subscription/usecases/get_available_subscription_plans.dart';
 import 'package:priorli/core/subscription/usecases/get_payment_key.dart';
+import 'package:priorli/core/subscription/usecases/get_subscriptions.dart';
 import 'package:priorli/core/subscription/usecases/subscription_status_check.dart';
 import 'package:priorli/core/user/usecases/register_with_code.dart';
 import 'package:priorli/core/water_usage/usecases/get_water_bill_link.dart';
@@ -172,6 +180,7 @@ import 'core/auth/usecases/is_logged_in.dart';
 import 'core/auth/usecases/log_out.dart';
 import 'core/auth/usecases/login_email_password.dart';
 import 'core/auth/usecases/reset_password.dart';
+import 'core/contact_leads/data/contact_lead_data_source.dart';
 import 'core/housing/data/housing_company_data_source.dart';
 import 'core/housing/data/housing_company_remote_data_source.dart';
 import 'core/housing/repos/housing_company_repository.dart';
@@ -364,10 +373,15 @@ Future<void> init() async {
   serviceLocator.registerFactory(() => CompanyUserCubit(
       serviceLocator(), serviceLocator(), serviceLocator(), serviceLocator()));
   serviceLocator.registerFactory(() => CheckoutCubit(serviceLocator()));
-  serviceLocator
-      .registerFactory(() => AdminCubit(serviceLocator(), serviceLocator()));
+  serviceLocator.registerFactory(() => AdminCubit(
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator()));
   serviceLocator.registerFactory(() => CompanySubscriptionCubit(
-      serviceLocator(), serviceLocator(), serviceLocator()));
+      serviceLocator(), serviceLocator(), serviceLocator(), serviceLocator()));
   serviceLocator.registerFactory(() => PaymentSuccessCubit(serviceLocator()));
 
   /** usecases */
@@ -415,6 +429,10 @@ Future<void> init() async {
       () => ResetPassword(authenticationRepository: serviceLocator()));
   serviceLocator.registerLazySingleton<ChangePassword>(
       () => ChangePassword(authenticationRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<DeleteSubscriptionPlan>(
+      () => DeleteSubscriptionPlan(subscriptionRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<GetSubscriptions>(
+      () => GetSubscriptions(repository: serviceLocator()));
 
   // user
   serviceLocator.registerLazySingleton<RegisterWithCode>(
@@ -619,6 +637,12 @@ Future<void> init() async {
       () => GetPaymentKey(subscriptionRepository: serviceLocator()));
   serviceLocator.registerLazySingleton<SubscriptionStatusCheck>(
       () => SubscriptionStatusCheck(subscriptionRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<GetContactLeads>(
+      () => GetContactLeads(contactLeadRepo: serviceLocator()));
+  serviceLocator.registerLazySingleton<UpdateContactLead>(
+      () => UpdateContactLead(contactLeadRepo: serviceLocator()));
+  serviceLocator.registerLazySingleton<AdminGetCompanies>(
+      () => AdminGetCompanies(repository: serviceLocator()));
 
   /** repos */
   serviceLocator.registerLazySingleton<AuthenticationRepository>(() =>
@@ -657,6 +681,8 @@ Future<void> init() async {
   serviceLocator.registerLazySingleton<SubscriptionRepository>(() =>
       SubscriptionRepositoryImpl(
           subscriptionRemoteDataSource: serviceLocator()));
+  serviceLocator.registerLazySingleton<ContactLeadRepo>(
+      () => ContactLeadRepoImpl(remoteDataSource: serviceLocator()));
 
   /** datasource*/
   serviceLocator.registerLazySingleton<AuthenticationDataSource>(() =>
@@ -698,6 +724,8 @@ Future<void> init() async {
       () => InvoiceRemoteDataSource(client: serviceLocator()));
   serviceLocator.registerLazySingleton<SubscriptionDataSource>(
       () => SubscriptionRemoteDataSource(client: serviceLocator()));
+  serviceLocator.registerLazySingleton<ContactLeadDataSource>(
+      () => ContactLeadRemoteDataSource(client: serviceLocator()));
 
   /** network */
   serviceLocator.registerLazySingleton<Dio>(

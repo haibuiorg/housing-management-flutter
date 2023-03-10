@@ -12,17 +12,32 @@ import '../shared/conversation_item.dart';
 const conversationListPath = '/conversations';
 
 class ConversationListScreen extends StatefulWidget {
-  const ConversationListScreen({super.key});
+  const ConversationListScreen({super.key, this.isFromAdmin = false});
+  final bool isFromAdmin;
 
   @override
   State<ConversationListScreen> createState() => _ConversationListScreenState();
 }
 
 class _ConversationListScreenState extends State<ConversationListScreen> {
+  late final ConversationListCubit _cubit;
+
+  @override
+  void initState() {
+    super.initState();
+    _cubit = serviceLocator<ConversationListCubit>()..init(widget.isFromAdmin);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _cubit.close();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider<ConversationListCubit>(
-      create: (_) => serviceLocator<ConversationListCubit>(),
+      create: (_) => _cubit,
       child: BlocConsumer<ConversationListCubit, ConversationListState>(
           listener: (context, state) {},
           builder: (context, state) {
@@ -32,10 +47,11 @@ class _ConversationListScreenState extends State<ConversationListScreen> {
               child: CustomScrollView(
                 clipBehavior: Clip.none,
                 slivers: [
-                  const SliverToBoxAdapter(
-                      child: FullWidthTitle(
-                    title: 'Messages from companies',
-                  )),
+                  if (state.conversationList?.isNotEmpty == true)
+                    const SliverToBoxAdapter(
+                        child: FullWidthTitle(
+                      title: 'Messages from companies',
+                    )),
                   SliverList(
                       delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
@@ -53,10 +69,11 @@ class _ConversationListScreenState extends State<ConversationListScreen> {
                     },
                     childCount: state.conversationList?.length ?? 0,
                   )),
-                  const SliverToBoxAdapter(
-                      child: FullWidthTitle(
-                    title: 'Fault reports',
-                  )),
+                  if (state.faultConversationList?.isNotEmpty == true)
+                    const SliverToBoxAdapter(
+                        child: FullWidthTitle(
+                      title: 'Fault reports',
+                    )),
                   SliverList(
                       delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
@@ -74,11 +91,12 @@ class _ConversationListScreenState extends State<ConversationListScreen> {
                     },
                     childCount: state.faultConversationList?.length ?? 0,
                   )),
-                  const SliverToBoxAdapter(
-                    child: FullWidthTitle(
-                      title: 'Support messages',
+                  if (state.supportConversationList?.isNotEmpty == true)
+                    const SliverToBoxAdapter(
+                      child: FullWidthTitle(
+                        title: 'Support messages',
+                      ),
                     ),
-                  ),
                   SliverList(
                       delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {

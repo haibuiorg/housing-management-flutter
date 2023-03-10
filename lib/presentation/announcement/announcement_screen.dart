@@ -137,7 +137,7 @@ class _AnnouncementDialogState extends State<AnnouncementDialog> {
     super.dispose();
   }
 
-  _checkIfAllFilled() {
+  _checkIfAllFilled(String newValue) {
     setState(() {
       _isAllFilled = _titleController.text.isNotEmpty &&
           _subtitleController.text.isNotEmpty &&
@@ -177,7 +177,7 @@ class _AnnouncementDialogState extends State<AnnouncementDialog> {
                     controller: _titleController,
                     maxLines: 1,
                     autofocus: true,
-                    onChanged: _checkIfAllFilled(),
+                    onChanged: _checkIfAllFilled,
                     decoration: const InputDecoration(
                       hintText: 'Title',
                     ),
@@ -191,7 +191,7 @@ class _AnnouncementDialogState extends State<AnnouncementDialog> {
                     decoration: const InputDecoration(
                       hintText: 'Subtitle',
                     ),
-                    onChanged: _checkIfAllFilled(),
+                    onChanged: _checkIfAllFilled,
                   ),
                 ),
                 TextFormField(
@@ -205,7 +205,7 @@ class _AnnouncementDialogState extends State<AnnouncementDialog> {
                       borderRadius: BorderRadius.all(Radius.circular(16.0)),
                     ),
                   ),
-                  onChanged: _checkIfAllFilled(),
+                  onChanged: _checkIfAllFilled,
                 ),
                 FileSelector(
                   onCompleteUploaded: (onCompleteUploaded) {

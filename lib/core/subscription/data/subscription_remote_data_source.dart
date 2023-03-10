@@ -15,12 +15,14 @@ class SubscriptionRemoteDataSource implements SubscriptionDataSource {
       required double price,
       required String currency,
       required String countryCode,
+      required bool hasApartmentDocument,
+      required List<String> notificationTypes,
       int? maxAccount,
       bool? translation,
       int? maxMessagingChannels,
-      int? maxCompanyEvents,
+      int? maxAnnouncement,
       int? maxInvoiceNumber,
-      double? additionalInvoiceCost,
+      required double additionalInvoiceCost,
       String? interval = 'month',
       int? intervalCount = 1}) async {
     try {
@@ -32,7 +34,9 @@ class SubscriptionRemoteDataSource implements SubscriptionDataSource {
         'max_account': maxAccount,
         'translation': translation,
         'max_messaging_channels': maxMessagingChannels,
-        'max_company_events': maxCompanyEvents,
+        'max_announcement': maxAnnouncement,
+        'has_apartment_document': hasApartmentDocument,
+        'notification_types': notificationTypes,
         'max_invoice_number': maxInvoiceNumber,
         'additional_invoice_cost': additionalInvoiceCost,
         'interval': interval,
@@ -48,11 +52,14 @@ class SubscriptionRemoteDataSource implements SubscriptionDataSource {
 
   @override
   Future<String> checkout(
-      {required String subscriptionPlanId, required String companyId}) async {
+      {required String subscriptionPlanId,
+      required String companyId,
+      required int quantity}) async {
     try {
       final data = {
         'company_id': companyId,
         'subscription_plan_id': subscriptionPlanId,
+        'quantity': quantity,
       };
       final result = await client.post('/checkout', data: data);
       return (result.data as Map).values.first;
@@ -95,6 +102,32 @@ class SubscriptionRemoteDataSource implements SubscriptionDataSource {
       final result =
           await client.get('/subscription/status_check', queryParameters: data);
       return SubscriptionModel.fromJson(result.data);
+    } catch (error) {
+      throw ServerException(error: error);
+    }
+  }
+
+  @override
+  Future<bool> deleteSubscriptionPlan(
+      {required String subscriptionPlanId}) async {
+    try {
+      await client.delete('/admin/subscription_plan',
+          queryParameters: {'subscription_plan_id': subscriptionPlanId});
+      return true;
+    } catch (error) {
+      throw ServerException(error: error);
+    }
+  }
+
+  @override
+  Future<List<SubscriptionModel>> getCompanySubscriptions(
+      {required String companyId}) async {
+    try {
+      final result = await client
+          .get('/subscriptions', queryParameters: {'company_id': companyId});
+      return (result.data as List<dynamic>)
+          .map((e) => SubscriptionModel.fromJson(e as Map<String, dynamic>))
+          .toList();
     } catch (error) {
       throw ServerException(error: error);
     }

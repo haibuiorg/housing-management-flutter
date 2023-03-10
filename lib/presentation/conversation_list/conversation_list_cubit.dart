@@ -19,18 +19,15 @@ class ConversationListCubit extends Cubit<ConversationListState> {
   ConversationListCubit(
     this._getConversationList,
     this._getUserInfo,
-  ) : super(const ConversationListState()) {
-    init();
-  }
+  ) : super(const ConversationListState());
 
-  Future<void> init() async {
+  Future<void> init(bool isAdmin) async {
     final getUserInfoResult = await _getUserInfo(NoParams());
     if (getUserInfoResult is ResultSuccess<User>) {
       _conversationSubscription?.cancel();
       _conversationSubscription = _getConversationList(
               GetConversationMessageParams(
-                  messageType: messageTypeCommunity,
-                  userId: getUserInfoResult.data.userId))
+                  isFromAdmin: isAdmin, userId: getUserInfoResult.data.userId))
           .listen(_messageListener);
     }
   }
