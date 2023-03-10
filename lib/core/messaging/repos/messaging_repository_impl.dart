@@ -55,10 +55,10 @@ class MessagingRepositoryImpl implements MessagingRepository {
 
   @override
   Stream<List<Conversation>> getConversationLists(
-      {required String messageType, required String userId}) {
+      {required bool isFromAdmin, required String userId}) {
     return messagingDataSource
         .getConversationLists(
-          messageType: messageType,
+          isFromAdmin: isFromAdmin,
           userId: userId,
         )
         .map((event) => event

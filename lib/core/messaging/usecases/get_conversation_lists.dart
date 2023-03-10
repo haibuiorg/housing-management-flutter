@@ -12,19 +12,19 @@ class GetConversationList
   @override
   Stream<List<Conversation>> call(GetConversationMessageParams params) {
     return messagingRepository.getConversationLists(
-      messageType: params.messageType,
+      isFromAdmin: params.isFromAdmin,
       userId: params.userId,
     );
   }
 }
 
 class GetConversationMessageParams extends Equatable {
-  final String messageType;
   final String userId;
+  final bool isFromAdmin;
 
   const GetConversationMessageParams(
-      {required this.messageType, required this.userId});
+      {required this.isFromAdmin, required this.userId});
 
   @override
-  List<Object?> get props => [userId, messageType];
+  List<Object?> get props => [userId, isFromAdmin];
 }

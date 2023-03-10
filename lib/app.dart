@@ -207,9 +207,9 @@ class _AppState extends State<App> {
                   ),
                 ),
                 maxWidth: kIsWeb && !isIOSWeb && !isAndroidWeb
-                    ? MediaQuery.of(context).size.width * 0.9
+                    ? MediaQuery.of(context).size.width * 0.95
                     : 1200,
-                minWidth: 450,
+                minWidth: 320,
                 defaultScale: true,
                 breakpoints: const [
                   ResponsiveBreakpoint.resize(480, name: MOBILE),

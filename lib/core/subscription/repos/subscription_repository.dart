@@ -11,12 +11,14 @@ abstract class SubscriptionRepository {
     required double price,
     required String currency,
     required String countryCode,
+    required bool hasApartmentDocument,
+    required List<String> notificationTypes,
     int? maxAccount,
     bool? translation,
     int? maxMessagingChannels,
-    int? maxCompanyEvents,
+    int? maxAnnouncement,
     int? maxInvoiceNumber,
-    double? additionalInvoiceCost,
+    required double additionalInvoiceCost,
     String? interval = 'month',
     int? intervalCount = 1,
   });
@@ -24,6 +26,13 @@ abstract class SubscriptionRepository {
     required String sessionId,
   });
   Future<Result<String>> checkout(
-      {required String subscriptionPlanId, required String companyId});
+      {required String subscriptionPlanId,
+      required String companyId,
+      required int quantity});
   Future<Result<String>> getPaymentKey();
+
+  Future<Result<bool>> deleteSubscriptionPlan(
+      {required String subscriptionPlanId});
+  Future<Result<List<Subscription>>> getCompanySubscriptions(
+      {required String companyId});
 }

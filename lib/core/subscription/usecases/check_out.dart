@@ -10,6 +10,7 @@ class Checkout extends UseCase<String, CheckoutParams> {
   @override
   Future<Result<String>> call(CheckoutParams params) {
     return subscriptionRepository.checkout(
+        quantity: params.quantity,
         subscriptionPlanId: params.subscriptionPlanId,
         companyId: params.companyId);
   }
@@ -18,10 +19,13 @@ class Checkout extends UseCase<String, CheckoutParams> {
 class CheckoutParams extends Equatable {
   final String subscriptionPlanId;
   final String companyId;
+  final int quantity;
 
   const CheckoutParams(
-      {required this.subscriptionPlanId, required this.companyId});
+      {required this.subscriptionPlanId,
+      required this.companyId,
+      required this.quantity});
 
   @override
-  List<Object?> get props => [subscriptionPlanId, companyId];
+  List<Object?> get props => [subscriptionPlanId, companyId, quantity];
 }

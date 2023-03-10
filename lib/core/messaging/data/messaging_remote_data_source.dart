@@ -111,23 +111,37 @@ class MessagingRemoteDataSource implements MessagingDataSource {
 
   @override
   Stream<List<ConversationModel>> getConversationLists({
-    required String messageType,
+    required bool isFromAdmin,
     required String userId,
   }) {
     Stream<List<ConversationModel>> query;
     try {
-      query = firestore
-          .collectionGroup(conversations)
-          .where(userIds, arrayContains: userId)
-          //.where(type, isEqualTo: messageType)
-          .orderBy(updatedOn, descending: true)
-          .snapshots()
-          .map((it) {
-        final newList =
-            it.docs.map((e) => ConversationModel.fromJson(e.data())).toList();
+      query = isFromAdmin
+          ? firestore
+              .collectionGroup(conversations)
+              .where(type, isEqualTo: messageTypeSupport)
+              .orderBy(updatedOn, descending: true)
+              .snapshots()
+              .map((it) {
+              final newList = it.docs
+                  .map((e) => ConversationModel.fromJson(e.data()))
+                  .toList();
 
-        return newList;
-      });
+              return newList;
+            })
+          : firestore
+              .collectionGroup(conversations)
+              .where(userIds, arrayContains: userId)
+              //.where(type, isEqualTo: messageType)
+              .orderBy(updatedOn, descending: true)
+              .snapshots()
+              .map((it) {
+              final newList = it.docs
+                  .map((e) => ConversationModel.fromJson(e.data()))
+                  .toList();
+
+              return newList;
+            });
       return query;
     } catch (error) {
       throw ServerException(error: error);

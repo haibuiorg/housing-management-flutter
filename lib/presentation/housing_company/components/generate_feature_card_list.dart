@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:priorli/core/utils/string_extension.dart';
 import 'package:priorli/go_router_navigation.dart';
 import 'package:priorli/presentation/housing_company/components/create_new_channel_dialog.dart';
 import 'package:priorli/presentation/housing_company/housing_company_cubit.dart';
@@ -74,13 +75,12 @@ List<Widget> createFeatureWidgetList(
         children: [
           FullWidthTitle(
             title: 'Water consumption',
-            action: OutlinedButton.icon(
-                icon: const Icon(Icons.water_drop_outlined),
-                onPressed: () {
+            action: InkWell(
+                onTap: () {
                   context.pushFromCurrentLocation(
                       waterConsumptionManagementScreenPath);
                 },
-                label: const Text('Detail')),
+                child: const Icon(Icons.water_drop_outlined)),
           ),
           Expanded(
             child: Padding(
@@ -250,16 +250,21 @@ List<Widget> createFeatureWidgetList(
                 itemCount: state.faultReportList?.length ?? 0,
                 itemBuilder: (context, index) {
                   final faultReport = state.faultReportList?[index];
-                  return faultReport != null
-                      ? Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: ConversationItem(
-                            onPressed: () => GoRouter.of(context).push(
-                                '$messagePath/${faultReport.type}/${faultReport.channelId}/${faultReport.id}'),
-                            conversation: faultReport,
-                          ),
-                        )
-                      : const SizedBox.shrink();
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ListTile(
+                      onTap: () {
+                        GoRouter.of(context).push(
+                            '$messagePath/${faultReport!.type}/${faultReport.channelId}/${faultReport.id}');
+                      },
+                      title: Text(faultReport?.name ?? ''),
+                      subtitle: Text((faultReport?.status ?? '').capitalize()),
+                      leading: Icon(Icons.report,
+                          color: faultReport?.status == 'pending'
+                              ? Theme.of(context).colorScheme.error
+                              : Theme.of(context).colorScheme.secondary),
+                    ),
+                  );
                 }),
           ),
         ],

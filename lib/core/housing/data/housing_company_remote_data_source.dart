@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:priorli/core/housing/entities/housing_company.dart';
 import 'package:priorli/core/housing/models/housing_company_model.dart';
 import 'package:priorli/core/user/models/user_model.dart';
 
@@ -257,6 +258,20 @@ class HousingCompanyRemoteDataSource implements HousingCompanyDataSource {
       );
       return (result.data as List<dynamic>)
           .map((e) => UserModel.fromJson(e))
+          .toList();
+    } catch (error) {
+      throw ServerException(error: error);
+    }
+  }
+
+  @override
+  Future<List<HousingCompanyModel>> adminGetCompanies(
+      {required int lastCreatedOn, required int limit}) async {
+    try {
+      final result = await client.get('/admin/companies',
+          queryParameters: {'last_created_on': lastCreatedOn, 'limit': limit});
+      return (result.data as List<dynamic>)
+          .map((e) => HousingCompanyModel.fromJson(e))
           .toList();
     } catch (error) {
       throw ServerException(error: error);

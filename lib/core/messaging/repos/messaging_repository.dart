@@ -19,7 +19,7 @@ abstract class MessagingRepository {
       required String messageType,
       List<String>? storageItems});
   Stream<List<Conversation>> getConversationLists({
-    required String messageType,
+    required bool isFromAdmin,
     required String userId,
   });
   Stream<List<Conversation>> getCompanyConversationLists({

@@ -14,11 +14,13 @@ class SubscriptionPlan extends Equatable {
   final int maxAccount;
   final bool translation;
   final int maxMessagingChannels;
-  final int maxCompanyEvents;
+  final int maxAnnouncement;
   final int maxInvoiceNumber;
   final double additionalInvoiceCost;
   final String interval;
   final int intervalCount;
+  final bool hasApartmentDocument;
+  final List<String> notificationTypes;
 
   const SubscriptionPlan(
       {required this.id,
@@ -33,8 +35,10 @@ class SubscriptionPlan extends Equatable {
       required this.maxAccount,
       required this.translation,
       required this.maxMessagingChannels,
-      required this.maxCompanyEvents,
+      required this.maxAnnouncement,
       required this.maxInvoiceNumber,
+      required this.hasApartmentDocument,
+      required this.notificationTypes,
       required this.additionalInvoiceCost,
       required this.interval,
       required this.intervalCount});
@@ -53,10 +57,12 @@ class SubscriptionPlan extends Equatable {
           maxAccount: model.max_account,
           translation: model.translation,
           maxMessagingChannels: model.max_messaging_channels,
-          maxCompanyEvents: model.max_company_events,
+          maxAnnouncement: model.max_announcement ?? 1,
           maxInvoiceNumber: model.max_invoice_number,
           additionalInvoiceCost: model.additional_invoice_cost,
           interval: model.interval,
+          notificationTypes: model.notification_types ?? ['push'],
+          hasApartmentDocument: model.has_apartment_document ?? false,
           intervalCount: model.interval_count);
   @override
   List<Object?> get props => [
@@ -72,10 +78,12 @@ class SubscriptionPlan extends Equatable {
         maxAccount,
         translation,
         maxMessagingChannels,
-        maxCompanyEvents,
+        maxAnnouncement,
         maxInvoiceNumber,
         additionalInvoiceCost,
         interval,
-        intervalCount
+        intervalCount,
+        hasApartmentDocument,
+        notificationTypes,
       ];
 }
