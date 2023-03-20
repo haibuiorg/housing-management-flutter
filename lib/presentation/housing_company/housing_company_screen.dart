@@ -62,10 +62,8 @@ class _HousingCompanyScreenState extends State<HousingCompanyScreen> {
                   (BuildContext context, bool innerBoxIsScrolled) {
                 return [
                   SliverAppBar(
-                    leading: BackButton(
-                      color: Theme.of(context).colorScheme.background,
-                    ),
-                    expandedHeight: MediaQuery.of(context).size.height / 3,
+                    leading: const SizedBox.shrink(),
+                    expandedHeight: 200,
                     floating: false,
                     pinned: true,
                     actions: [
@@ -240,7 +238,7 @@ class AnnouncementBox extends StatelessWidget {
           ),
           SizedBox(
             width: double.infinity,
-            height: 250,
+            height: 120,
             child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: state.announcementList?.length ?? 0,
@@ -250,7 +248,7 @@ class AnnouncementBox extends StatelessWidget {
                       ? Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: AnnouncementItem(
-                            initialExpand: true,
+                            initialExpand: false,
                             companyId: state.housingCompany?.id ?? '',
                             announcement: announcement,
                           ))

@@ -25,6 +25,13 @@ class _AdminScreenState extends State<AdminScreen> {
   late final AdminCubit _cubit;
   int selectedIndex = 0;
 
+  final List<Widget> _widgetOptions = <Widget>[
+    const ContactLeadListView(),
+    const AdminCompanyListView(),
+    const ConversationListScreen(),
+    const SubscriptionPlanListView(),
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -42,89 +49,59 @@ class _AdminScreenState extends State<AdminScreen> {
     return BlocProvider<AdminCubit>(
       create: (context) => _cubit,
       child: BlocBuilder<AdminCubit, AdminState>(builder: (context, state) {
-        return Scaffold(
-            body: NestedScrollView(
-          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-            return [
-              SliverAppBar(
-                floating: true,
-                pinned: true,
-                elevation: 20,
-                shadowColor: Theme.of(context).colorScheme.primaryContainer,
-                collapsedHeight: 120,
-                title: const Text('Admin'),
-                actions: [
-                  DropdownButton<String>(
-                    value: state.selectedCountryCode,
-                    icon: const Icon(Icons.arrow_drop_down),
-                    onChanged: (String? value) {
-                      _cubit.selectCountry(value);
-                    },
-                    items: state.supportedCountries
-                        ?.map<DropdownMenuItem<String>>((Country value) {
-                      return DropdownMenuItem<String>(
-                        value: value.countryCode,
-                        child: Text(value.countryCode),
-                      );
-                    }).toList(),
-                  ),
-                ],
-                flexibleSpace: Padding(
-                  padding: const EdgeInsets.only(top: 54.0),
-                  child: FittedBox(
-                    fit: BoxFit.fitWidth,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        ChoiceChip(
-                          onSelected: (value) {
-                            setState(() {
-                              selectedIndex = 0;
-                            });
-                          },
-                          label: const Text('Sale management'),
-                          selected: selectedIndex == 0,
-                        ),
-                        ChoiceChip(
-                            onSelected: (value) {
-                              setState(() {
-                                selectedIndex = 1;
-                              });
-                            },
-                            selected: selectedIndex == 1,
-                            label: const Text('Housing company management')),
-                        ChoiceChip(
-                            onSelected: (value) {
-                              setState(() {
-                                selectedIndex = 2;
-                              });
-                            },
-                            selected: selectedIndex == 2,
-                            label:
-                                const Text('Customer relationship management')),
-                        ChoiceChip(
-                            onSelected: (value) => setState(() {
-                                  selectedIndex = 3;
-                                }),
-                            selected: selectedIndex == 3,
-                            label: const Text('Subscription management')),
+        return DefaultTabController(
+          length: _widgetOptions.length,
+          child: Scaffold(
+              body: NestedScrollView(
+            headerSliverBuilder:
+                (BuildContext context, bool innerBoxIsScrolled) {
+              return [
+                SliverAppBar(
+                  floating: true,
+                  pinned: true,
+                  snap: true,
+                  forceElevated: innerBoxIsScrolled,
+                  shadowColor: Theme.of(context).colorScheme.primaryContainer,
+                  title: const Text('Admin'),
+                  actions: [
+                    DropdownButton<String>(
+                      value: state.selectedCountryCode,
+                      icon: const Icon(Icons.arrow_drop_down),
+                      onChanged: (String? value) {
+                        _cubit.selectCountry(value);
+                      },
+                      items: state.supportedCountries
+                          ?.map<DropdownMenuItem<String>>((Country value) {
+                        return DropdownMenuItem<String>(
+                          value: value.countryCode,
+                          child: Text(value.countryCode),
+                        );
+                      }).toList(),
+                    ),
+                  ],
+                  bottom: PreferredSize(
+                    preferredSize: const Size.fromHeight(64.0),
+                    child: TabBar(
+                      tabs: [
+                        for (final widget in _widgetOptions)
+                          Tab(
+                            height: 52,
+                            child: Center(
+                              child: Text(
+                                widget.toStringShort(),
+                                style: const TextStyle(fontSize: 20),
+                              ),
+                            ),
+                          ),
                       ],
                     ),
                   ),
                 ),
-              ),
-            ];
-          },
-          body: selectedIndex == 0
-              ? const ContactLeadListView()
-              : selectedIndex == 1
-                  ? const AdminCompanyListView()
-                  : selectedIndex == 2
-                      ? const ConversationListScreen(
-                          isFromAdmin: true,
-                        )
-                      : const SubscriptionPlanListView(),
-        ));
+              ];
+            },
+            body: TabBarView(children: _widgetOptions),
+          )),
+        );
       }),
     );
   }

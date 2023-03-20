@@ -20,7 +20,7 @@ class InvoiceModel extends Equatable {
   final String receiver;
   final String? storage_link;
   final int payment_date;
-  final String? virtual_barcode;
+  final dynamic virtual_barcode;
   final bool is_deleted;
   final int created_on;
   final String company_id;

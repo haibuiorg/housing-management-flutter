@@ -19,7 +19,7 @@ InvoiceModel _$InvoiceModelFromJson(Map<String, dynamic> json) => InvoiceModel(
       receiver: json['receiver'] as String,
       storage_link: json['storage_link'] as String?,
       payment_date: json['payment_date'] as int,
-      virtual_barcode: json['virtual_barcode'] as String?,
+      virtual_barcode: json['virtual_barcode'],
       invoice_url: json['invoice_url'] as String?,
       invoice_url_expiration: json['invoice_url_expiration'] as int?,
       is_deleted: json['is_deleted'] as bool,

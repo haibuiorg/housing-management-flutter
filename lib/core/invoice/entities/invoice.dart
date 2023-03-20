@@ -43,7 +43,7 @@ class Invoice extends Equatable {
       invoiceName: model.invoice_name,
       referenceNumber: model.reference_number,
       storageLink: model.storage_link,
-      virtualBarcode: model.virtual_barcode,
+      virtualBarcode: model.virtual_barcode.toString(),
       id: model.id,
       subtotal: model.subtotal,
       paid: model.paid,
