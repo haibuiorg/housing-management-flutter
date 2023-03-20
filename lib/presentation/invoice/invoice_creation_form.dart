@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:priorli/core/invoice/entities/invoice_item.dart';
-import 'package:priorli/core/payment/entities/bank_account.dart';
 import 'package:priorli/presentation/invoice/invoice_creation_cubit.dart';
 import 'package:priorli/presentation/invoice/invoice_creation_state.dart';
 import 'package:priorli/presentation/invoice/invoice_item_form.dart';
@@ -11,7 +11,6 @@ import 'package:priorli/presentation/shared/full_width_pair_text.dart';
 import 'package:priorli/presentation/shared/tap_card.dart';
 import 'package:priorli/service_locator.dart';
 import 'package:responsive_framework/responsive_framework.dart';
-import 'package:responsive_framework/responsive_row_column.dart';
 
 import '../../core/user/entities/user.dart';
 import '../../core/utils/time_utils.dart';
@@ -59,7 +58,14 @@ class _InvoiceCreationFormState extends State<InvoiceCreationForm> {
                 ? ElevatedButton(
                     child: const Text('Send invoice'),
                     onPressed: () {
-                      _cubit.createNewInvoice();
+                      _cubit.createNewInvoice().then((success) {
+                        if (success) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text('Invoice created!')));
+                          GoRouter.of(context).pop();
+                        }
+                      });
                     },
                   )
                 : null,
@@ -76,14 +82,14 @@ class _InvoiceCreationFormState extends State<InvoiceCreationForm> {
                   ),
                 ),
               ),
-              SliverToBoxAdapter(
+              const SliverToBoxAdapter(
                 child: ResponsiveVisibility(
                   visible: false,
-                  visibleWhen: const [
+                  visibleWhen: [
                     Condition.largerThan(name: TABLET),
                   ],
                   child: Column(
-                    children: const [
+                    children: [
                       InvoiceItemRowColumn(
                         name: 'Item name',
                         description: 'Description',

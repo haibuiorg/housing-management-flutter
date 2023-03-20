@@ -36,7 +36,7 @@ class InvoiceCreationCubit extends Cubit<InvoiceCreationState> {
     }
   }
 
-  Future<void> createNewInvoice() async {
+  Future<bool> createNewInvoice() async {
     final createNewInvoiceResult = await _createNewInvoices(
         CreateInvoicesParams(
             companyId: state.companyId ?? '',
@@ -49,7 +49,7 @@ class InvoiceCreationCubit extends Cubit<InvoiceCreationState> {
                     .millisecondsSinceEpoch,
             items: state.invoiceItemList ?? [],
             sendEmail: state.sendEmail ?? true));
-    if (createNewInvoiceResult is ResultSuccess<List<Invoice>>) {}
+    return createNewInvoiceResult is ResultSuccess<List<Invoice>>;
   }
 
   void setSendEmail(bool? value) {
