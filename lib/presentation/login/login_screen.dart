@@ -25,8 +25,17 @@ class _LoginScreenState extends State<LoginScreen> {
   final _passwordController = TextEditingController();
   bool _isObscured = true;
   _login(BuildContext context) {
-    BlocProvider.of<AuthCubit>(context).logIn(
-        email: _emailController.text, password: _passwordController.text);
+    BlocProvider.of<AuthCubit>(context)
+        .logIn(email: _emailController.text, password: _passwordController.text)
+        .then((success) {
+      if (!success) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Login failed'),
+          ),
+        );
+      }
+    });
   }
 
   @override

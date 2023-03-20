@@ -22,6 +22,7 @@ class HousingCompany extends Equatable {
   final String coverImageUrl;
   final bool isUserOwner;
   final bool isUserManager;
+  final double? creditAmount;
 
   const HousingCompany(
       {required this.id,
@@ -38,6 +39,7 @@ class HousingCompany extends Equatable {
       required this.currencyCode,
       required this.isUserManager,
       required this.isUserOwner,
+      this.creditAmount,
       this.ui,
       required this.vat,
       required this.logoUrl,
@@ -62,6 +64,7 @@ class HousingCompany extends Equatable {
           lng: housingCompanyModel.lng ?? 0.0,
           name: housingCompanyModel.name ?? '',
           logoUrl: housingCompanyModel.logoUrl ?? '',
+          creditAmount: housingCompanyModel.credit_amount,
           isUserManager: housingCompanyModel.is_user_manager == true,
           isUserOwner: housingCompanyModel.is_user_owner == true,
           coverImageUrl: housingCompanyModel.coverImageUrl ?? '',
@@ -102,6 +105,7 @@ class HousingCompany extends Equatable {
           vat: vat ?? this.vat,
           coverImageUrl: coverImageUrl ?? this.coverImageUrl,
           logoUrl: logoUrl ?? this.logoUrl,
+          creditAmount: creditAmount,
           apartmentCount: apartmentCount);
 
   @override
@@ -125,5 +129,6 @@ class HousingCompany extends Equatable {
         ui,
         businessId,
         currencyCode,
+        creditAmount
       ];
 }

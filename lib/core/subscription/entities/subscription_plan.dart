@@ -11,7 +11,6 @@ class SubscriptionPlan extends Equatable {
   final String stripeProductId;
   final String stripePriceId;
   final int createdOn;
-  final int maxAccount;
   final bool translation;
   final int maxMessagingChannels;
   final int maxAnnouncement;
@@ -32,7 +31,6 @@ class SubscriptionPlan extends Equatable {
       required this.stripeProductId,
       required this.stripePriceId,
       required this.createdOn,
-      required this.maxAccount,
       required this.translation,
       required this.maxMessagingChannels,
       required this.maxAnnouncement,
@@ -54,7 +52,6 @@ class SubscriptionPlan extends Equatable {
           stripeProductId: model.stripe_product_id,
           stripePriceId: model.stripe_price_id,
           createdOn: model.created_on,
-          maxAccount: model.max_account,
           translation: model.translation,
           maxMessagingChannels: model.max_messaging_channels,
           maxAnnouncement: model.max_announcement ?? 1,
@@ -75,7 +72,6 @@ class SubscriptionPlan extends Equatable {
         stripeProductId,
         stripePriceId,
         createdOn,
-        maxAccount,
         translation,
         maxMessagingChannels,
         maxAnnouncement,

@@ -38,11 +38,13 @@ class HousingCompanyModel extends Equatable {
   final String? coverImageUrl;
   final bool? is_user_owner;
   final bool? is_user_manager;
+  final double? credit_amount;
 
   const HousingCompanyModel(
       this.id,
       this.streetAddress1,
       this.streetAddress2,
+      this.credit_amount,
       this.postalCode,
       this.city,
       this.countryCode,
@@ -83,6 +85,7 @@ class HousingCompanyModel extends Equatable {
         is_user_manager,
         is_user_owner,
         logoUrl,
-        coverImageUrl
+        coverImageUrl,
+        credit_amount
       ];
 }

@@ -106,12 +106,11 @@ class ApartmentRepositoryImpl implements ApartmentRepository {
   }
 
   @override
-  Future<Result<Apartment>> joinApartment(
-      {required String invitationCode,
-      required String housingCompanyId}) async {
+  Future<Result<Apartment>> joinApartment({
+    required String invitationCode,
+  }) async {
     try {
       final apartmentModel = await apartmentDataSource.joinApartment(
-        housingCompanyId: housingCompanyId,
         invitationCode: invitationCode,
       );
       return ResultSuccess(Apartment.modelToEntity(apartmentModel));

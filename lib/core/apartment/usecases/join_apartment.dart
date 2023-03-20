@@ -12,17 +12,14 @@ class JoinApartment extends UseCase<Apartment, JoinApartmentParams> {
   @override
   Future<Result<Apartment>> call(JoinApartmentParams params) {
     return apartmentRepository.joinApartment(
-        invitationCode: params.invitationCode,
-        housingCompanyId: params.housingCompanyId);
+        invitationCode: params.invitationCode);
   }
 }
 
 class JoinApartmentParams extends Equatable {
-  final String housingCompanyId;
   final String invitationCode;
-  const JoinApartmentParams(
-      {required this.housingCompanyId, required this.invitationCode});
+  const JoinApartmentParams({required this.invitationCode});
 
   @override
-  List<Object?> get props => [housingCompanyId, invitationCode];
+  List<Object?> get props => [invitationCode];
 }

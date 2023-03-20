@@ -10,12 +10,20 @@ class Subscription extends Equatable {
   final String createdBy;
   final String companyId;
   final bool isActive;
+  final int quantity;
+  final int usedActiveUsers;
+  final bool latestInvoicePaid;
+  final String latestInvoiceUrl;
   final String? paymentServiceSubscriptionId;
   final Map<String, dynamic>? detail;
 
   const Subscription(
       {required this.subscriptionPlanId,
       required this.id,
+      required this.quantity,
+      required this.usedActiveUsers,
+      required this.latestInvoicePaid,
+      required this.latestInvoiceUrl,
       this.detail,
       required this.paymentServiceSubscriptionId,
       required this.createdOn,
@@ -32,6 +40,10 @@ class Subscription extends Equatable {
       isActive: model.is_active,
       createdOn: model.created_on,
       endedOn: model.ended_on,
+      quantity: model.quantity,
+      usedActiveUsers: model.used_active_users,
+      latestInvoicePaid: model.latest_invoice_paid,
+      latestInvoiceUrl: model.latest_invoice_url,
       detail: model.detail,
       checkoutSessionId: model.checkout_session_id,
       createdBy: model.created_by,
@@ -47,6 +59,10 @@ class Subscription extends Equatable {
         isActive,
         checkoutSessionId,
         createdBy,
-        companyId
+        companyId,
+        quantity,
+        usedActiveUsers,
+        latestInvoicePaid,
+        latestInvoiceUrl
       ];
 }

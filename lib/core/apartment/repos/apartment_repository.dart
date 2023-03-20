@@ -28,7 +28,6 @@ abstract class ApartmentRepository {
       List<String>? emails});
   Future<Result<Apartment>> joinApartment({
     required String invitationCode,
-    required String housingCompanyId,
   });
   Future<Result<List<StorageItem>>> addApartmentDocuments(
       {required List<String> storageItems,

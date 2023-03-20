@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:priorli/core/subscription/entities/payment_product_item.dart';
+import 'package:priorli/core/subscription/entities/subscription.dart';
 import 'package:priorli/core/subscription/entities/subscription_plan.dart';
 import 'package:priorli/core/utils/string_extension.dart';
 import 'package:priorli/presentation/housing_company_subscription/company_subscription_cubit.dart';
 import 'package:priorli/presentation/housing_company_subscription/company_subscription_state.dart';
 import 'package:priorli/presentation/shared/full_width_pair_text.dart';
+import 'package:priorli/presentation/shared/full_width_title.dart';
 import 'package:priorli/service_locator.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/utils/constants.dart';
+import 'widgets/subscription_plan_box.dart';
 
 const companySubscriptionScreenPath = 'company_subscription';
 
@@ -76,6 +80,9 @@ class _CompanySubscriptionScreenState extends State<CompanySubscriptionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Subscription'),
+      ),
       body: BlocProvider<CompanySubscriptionCubit>(
         create: (_) => _cubit,
         child: BlocBuilder<CompanySubscriptionCubit, CompanySubscriptionState>(
@@ -86,57 +93,108 @@ class _CompanySubscriptionScreenState extends State<CompanySubscriptionScreen> {
                       : element.interval == 'month')
                   .toList() ??
               [];
+          final List<Subscription> companySubscriptions =
+              state.companySubscriptionList ?? [];
 
-          return Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(bottom: 16.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: ChoiceChip(
-                        onSelected: (value) {
-                          setState(() {
-                            yearly = false;
-                          });
-                        },
-                        label: const Text('Monthly price'),
-                        selected: !yearly,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: ChoiceChip(
-                          onSelected: (value) {
-                            setState(() {
-                              yearly = true;
-                            });
-                          },
-                          selected: yearly,
-                          label: const Text('Yearly price')),
-                    ),
-                  ],
+          return CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(
+                child: FullWidthTitle(
+                  title:
+                      'Company credit: ${formatCurrency(state.company?.creditAmount, state.company?.currencyCode)}',
                 ),
               ),
-              ResponsiveRowColumn(
-                rowMainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                layout: ResponsiveWrapper.of(context).isSmallerThan(TABLET)
-                    ? ResponsiveRowColumnType.COLUMN
-                    : ResponsiveRowColumnType.ROW,
-                children: plans
-                    .map((e) => ResponsiveRowColumnItem(
-                          child: SubscriptionPlanBox(
-                              subscriptionPlan: e,
-                              onPressed: () => subscribeToPlanByCard(e),
-                              isCurrentPlan: state.companySubscriptionList
-                                      ?.map((e) => e.subscriptionPlanId)
-                                      .toList()
-                                      .contains(e.id) ==
-                                  true),
-                        ))
-                    .toList(),
+              SliverList.builder(
+                  itemCount: state.paymentProducts?.length ?? 0,
+                  itemBuilder: (context, index) {
+                    final paymentProductItem = state.paymentProducts![index];
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ListTile(
+                        onTap: () {
+                          _cubit
+                              .purchasePaymentProduct(
+                                  paymentProductId: paymentProductItem.id,
+                                  quantity: 1)
+                              .then((value) => launchUrl(Uri.parse(value!)));
+                        },
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.0)),
+                        tileColor: Theme.of(context).cardColor,
+                        title: Text(paymentProductItem.name),
+                        subtitle: Text(formatCurrency(paymentProductItem.amount,
+                            paymentProductItem.currencyCode)),
+                      ),
+                    );
+                  }),
+              const SliverToBoxAdapter(
+                child: FullWidthTitle(
+                  title: 'Current subscriptions',
+                ),
+              ),
+              SliverList(
+                  delegate: SliverChildListDelegate.fixed([
+                ...companySubscriptions.map((e) => SubscriptionBox(
+                      subscription: e,
+                    ))
+              ])),
+              const SliverToBoxAdapter(
+                child: FullWidthTitle(
+                  title: 'Available subscriptions',
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ChoiceChip(
+                          onSelected: (value) {
+                            setState(() {
+                              yearly = false;
+                            });
+                          },
+                          label: const Text('Monthly price'),
+                          selected: !yearly,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ChoiceChip(
+                            onSelected: (value) {
+                              setState(() {
+                                yearly = true;
+                              });
+                            },
+                            selected: yearly,
+                            label: const Text('Yearly price')),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: ResponsiveRowColumn(
+                  rowMainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  layout: ResponsiveWrapper.of(context).isSmallerThan(TABLET)
+                      ? ResponsiveRowColumnType.COLUMN
+                      : ResponsiveRowColumnType.ROW,
+                  children: plans
+                      .map((e) => ResponsiveRowColumnItem(
+                            child: SubscriptionPlanBox(
+                                subscriptionPlan: e,
+                                onPressed: () => subscribeToPlanByCard(e),
+                                isCurrentPlan: state.companySubscriptionList
+                                        ?.map((e) => e.subscriptionPlanId)
+                                        .toList()
+                                        .contains(e.id) ==
+                                    true),
+                          ))
+                      .toList(),
+                ),
               ),
             ],
           );
@@ -146,77 +204,45 @@ class _CompanySubscriptionScreenState extends State<CompanySubscriptionScreen> {
   }
 }
 
-class SubscriptionPlanBox extends StatelessWidget {
-  const SubscriptionPlanBox({
+class SubscriptionBox extends StatelessWidget {
+  const SubscriptionBox({
     super.key,
-    required this.subscriptionPlan,
-    required this.isCurrentPlan,
-    required this.onPressed,
+    required this.subscription,
   });
-  final SubscriptionPlan subscriptionPlan;
-  final bool isCurrentPlan;
-  final VoidCallback onPressed;
+
+  final Subscription subscription;
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: isCurrentPlan
-          ? Theme.of(context).colorScheme.primaryContainer
-          : Theme.of(context).cardColor,
-      child: Padding(
+    return BlocBuilder<CompanySubscriptionCubit, CompanySubscriptionState>(
+        builder: (context, state) {
+      return Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                subscriptionPlan.name,
-                overflow: TextOverflow.fade,
-                style: Theme.of(context)
-                    .textTheme
-                    .titleMedium
-                    ?.copyWith(fontWeight: FontWeight.bold),
-                textAlign: TextAlign.right,
-              ),
-            ),
-            FullWidthPairText(
-              label: 'Price: ',
-              content: formatCurrency(
-                  subscriptionPlan.price, subscriptionPlan.currency),
-              isBoldContent: true,
-            ),
-            FullWidthPairText(
-              label: 'Additional invoice cost: ',
-              content: formatCurrency(subscriptionPlan.additionalInvoiceCost,
-                  subscriptionPlan.currency),
-              isBoldContent: true,
-            ),
-            FullWidthPairText(
-                label: 'Max messaging channels: ',
-                content: subscriptionPlan.maxMessagingChannels.toString()),
-            FullWidthPairText(
-                label: 'Max number of accounts: ',
-                content: subscriptionPlan.maxAccount > maxNumeberOfAccount
-                    ? 'Unlimited'
-                    : subscriptionPlan.maxAccount.toString()),
-            FullWidthPairText(
-                label: 'Max invoice number:',
-                content: subscriptionPlan.maxInvoiceNumber.toString()),
-            FullWidthPairText(
-                label: 'Max announcement number:',
-                content: subscriptionPlan.maxAnnouncement.toString()),
-            Align(
-                alignment: Alignment.center,
-                child: OutlinedButton(
-                    onPressed: onPressed,
-                    child: Text(
-                      isCurrentPlan ? 'Get more accounts' : 'Get it now',
-                      maxLines: 1,
-                    )))
-          ],
+        child: ListTile(
+          tileColor: Theme.of(context).colorScheme.primaryContainer,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+          selected: !subscription.latestInvoicePaid,
+          selectedColor: Theme.of(context).colorScheme.error,
+          selectedTileColor: Theme.of(context).colorScheme.errorContainer,
+          onTap: !subscription.latestInvoicePaid &&
+                  subscription.latestInvoiceUrl.isNotEmpty
+              ? () {
+                  launchUrl(Uri.parse(subscription.latestInvoiceUrl));
+                }
+              : null,
+          trailing: subscription.latestInvoicePaid
+              ? null
+              : const Icon(Icons.error_outline),
+          title: Text(state.availableSubscriptionPlans
+                  ?.where((p) => p.id == subscription.subscriptionPlanId)
+                  .first
+                  .name ??
+              ''),
+          subtitle: Text(
+              '${subscription.quantity - subscription.usedActiveUsers} / ${subscription.quantity} accounts available${subscription.latestInvoicePaid ? '' : '\n(Invoice not paid - click to pay!)'}'),
         ),
-      ),
-    );
+      );
+    });
   }
 }

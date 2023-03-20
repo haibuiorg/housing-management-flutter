@@ -62,6 +62,9 @@ class _HousingCompanyScreenState extends State<HousingCompanyScreen> {
                   (BuildContext context, bool innerBoxIsScrolled) {
                 return [
                   SliverAppBar(
+                    leading: BackButton(
+                      color: Theme.of(context).colorScheme.background,
+                    ),
                     expandedHeight: MediaQuery.of(context).size.height / 3,
                     floating: false,
                     pinned: true,

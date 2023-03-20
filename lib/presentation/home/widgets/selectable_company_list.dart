@@ -18,8 +18,7 @@ class SelectableCompanyList extends StatelessWidget {
               BlocProvider.of<HomeCubit>(context).getUserHousingCompanies(),
           child: ResponsiveGridView.builder(
             gridDelegate: const ResponsiveGridDelegate(
-                minCrossAxisExtent: 300,
-                childAspectRatio: 1.7,
+                minCrossAxisExtent: 200,
                 mainAxisSpacing: 24,
                 crossAxisSpacing: 24),
             itemBuilder: ((context, index) {

@@ -111,12 +111,15 @@ import 'package:priorli/core/subscription/data/subscription_data_source.dart';
 import 'package:priorli/core/subscription/data/subscription_remote_data_source.dart';
 import 'package:priorli/core/subscription/repos/subscription_repository.dart';
 import 'package:priorli/core/subscription/repos/subscription_repository_impl.dart';
+import 'package:priorli/core/subscription/usecases/add_payment_product.dart';
 import 'package:priorli/core/subscription/usecases/add_subscription_plan.dart';
 import 'package:priorli/core/subscription/usecases/check_out.dart';
 import 'package:priorli/core/subscription/usecases/delete_subscription_plan.dart';
 import 'package:priorli/core/subscription/usecases/get_available_subscription_plans.dart';
 import 'package:priorli/core/subscription/usecases/get_payment_key.dart';
+import 'package:priorli/core/subscription/usecases/get_payment_products.dart';
 import 'package:priorli/core/subscription/usecases/get_subscriptions.dart';
+import 'package:priorli/core/subscription/usecases/remove_payment_product.dart';
 import 'package:priorli/core/subscription/usecases/subscription_status_check.dart';
 import 'package:priorli/core/user/usecases/register_with_code.dart';
 import 'package:priorli/core/water_usage/usecases/get_water_bill_link.dart';
@@ -199,6 +202,8 @@ import 'core/settings/repo/setting_repository.dart';
 import 'core/settings/repo/setting_repository_impl.dart';
 import 'core/settings/usecases/get_setting.dart';
 import 'core/settings/usecases/save_setting.dart';
+import 'core/subscription/usecases/cancel_subscription.dart';
+import 'core/subscription/usecases/purchase_payment_product.dart';
 import 'core/user/data/user_data_source.dart';
 import 'core/user/data/user_remote_data_source.dart';
 import 'core/user/repos/user_repository.dart';
@@ -379,9 +384,17 @@ Future<void> init() async {
       serviceLocator(),
       serviceLocator(),
       serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
       serviceLocator()));
   serviceLocator.registerFactory(() => CompanySubscriptionCubit(
-      serviceLocator(), serviceLocator(), serviceLocator(), serviceLocator()));
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator()));
   serviceLocator.registerFactory(() => PaymentSuccessCubit(serviceLocator()));
 
   /** usecases */
@@ -637,12 +650,24 @@ Future<void> init() async {
       () => GetPaymentKey(subscriptionRepository: serviceLocator()));
   serviceLocator.registerLazySingleton<SubscriptionStatusCheck>(
       () => SubscriptionStatusCheck(subscriptionRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<CancelSubscription>(
+      () => CancelSubscription(repository: serviceLocator()));
+  serviceLocator.registerLazySingleton<PurchasePaymentProduct>(
+      () => PurchasePaymentProduct(repository: serviceLocator()));
+
   serviceLocator.registerLazySingleton<GetContactLeads>(
       () => GetContactLeads(contactLeadRepo: serviceLocator()));
   serviceLocator.registerLazySingleton<UpdateContactLead>(
       () => UpdateContactLead(contactLeadRepo: serviceLocator()));
   serviceLocator.registerLazySingleton<AdminGetCompanies>(
       () => AdminGetCompanies(repository: serviceLocator()));
+
+  serviceLocator.registerLazySingleton<AddPaymentProduct>(
+      () => AddPaymentProduct(repository: serviceLocator()));
+  serviceLocator.registerLazySingleton<RemovePaymentProduct>(
+      () => RemovePaymentProduct(repository: serviceLocator()));
+  serviceLocator.registerLazySingleton<GetPaymentProducts>(
+      () => GetPaymentProducts(repository: serviceLocator()));
 
   /** repos */
   serviceLocator.registerLazySingleton<AuthenticationRepository>(() =>

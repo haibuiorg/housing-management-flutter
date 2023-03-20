@@ -369,20 +369,11 @@ GoRouter createAppRouter() {
         },
       ),
       GoRoute(
-        path: '$codeRegisterPath/:companyId/:code',
+        path: codeRegisterPath,
         builder: (BuildContext context, GoRouterState state) {
           return CodeRegisterScreen(
-            code: state.params['code'],
-            companyId: state.params['companyId'] ?? '',
-          );
-        },
-      ),
-      GoRoute(
-        path: '$joinApartmentPath/:companyId/:code',
-        builder: (BuildContext context, GoRouterState state) {
-          return JoinApartmentScreen(
-            code: state.params['code'],
-            companyId: state.params['companyId'] ?? '',
+            code: state.queryParams['code'],
+            email: state.params['email'] ?? '',
           );
         },
       ),
@@ -391,7 +382,6 @@ GoRouter createAppRouter() {
         builder: (BuildContext context, GoRouterState state) {
           return const JoinApartmentScreen(
             code: '',
-            companyId: '',
           );
         },
       ),
@@ -400,7 +390,7 @@ GoRouter createAppRouter() {
         builder: (BuildContext context, GoRouterState state) {
           return const CodeRegisterScreen(
             code: '',
-            companyId: '',
+            email: '',
           );
         },
       ),

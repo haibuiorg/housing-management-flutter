@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:priorli/core/contact_leads/entities/contact_lead.dart';
 import 'package:priorli/core/country/entities/country.dart';
 import 'package:priorli/core/housing/entities/housing_company.dart';
+import 'package:priorli/core/subscription/entities/payment_product_item.dart';
 import 'package:priorli/core/subscription/entities/subscription_plan.dart';
 
 class AdminState extends Equatable {
@@ -9,8 +10,10 @@ class AdminState extends Equatable {
   final List<ContactLead>? contactLeadList;
   final List<SubscriptionPlan>? subscriptionPlanList;
   final List<Country>? supportedCountries;
+  final List<PaymentProductItem>? paymentProductItems;
   final String? selectedCountryCode;
   const AdminState({
+    this.paymentProductItems,
     this.companyList,
     this.contactLeadList,
     this.subscriptionPlanList,
@@ -23,6 +26,7 @@ class AdminState extends Equatable {
           List<ContactLead>? contactLeadList,
           List<SubscriptionPlan>? subscriptionPlanList,
           List<Country>? supportedCountries,
+          List<PaymentProductItem>? paymentProductItems,
           String? selectedCountryCode}) =>
       AdminState(
           selectedCountryCode: selectedCountryCode ?? this.selectedCountryCode,
@@ -30,7 +34,8 @@ class AdminState extends Equatable {
           subscriptionPlanList:
               subscriptionPlanList ?? this.subscriptionPlanList,
           contactLeadList: contactLeadList ?? this.contactLeadList,
-          supportedCountries: supportedCountries ?? this.supportedCountries);
+          supportedCountries: supportedCountries ?? this.supportedCountries,
+          paymentProductItems: paymentProductItems ?? this.paymentProductItems);
 
   @override
   List<Object?> get props => [
@@ -38,6 +43,7 @@ class AdminState extends Equatable {
         subscriptionPlanList,
         contactLeadList,
         supportedCountries,
-        selectedCountryCode
+        selectedCountryCode,
+        paymentProductItems,
       ];
 }

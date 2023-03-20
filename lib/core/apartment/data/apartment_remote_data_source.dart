@@ -128,12 +128,9 @@ class ApartmentRemoteDataSource implements ApartmentDataSource {
   }
 
   @override
-  Future<ApartmentModel> joinApartment(
-      {required String invitationCode,
-      required String housingCompanyId}) async {
+  Future<ApartmentModel> joinApartment({required String invitationCode}) async {
     try {
       final Map<String, dynamic> data = {
-        "housing_company_id": housingCompanyId,
         "invitation_code": invitationCode,
       };
       final result = await client.post('/apartment/join_with_code', data: data);

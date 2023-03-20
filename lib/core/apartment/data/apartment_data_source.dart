@@ -30,9 +30,9 @@ abstract class ApartmentDataSource {
       required String housingCompanyId,
       required int numberOfTenants,
       List<String>? emails});
+
   Future<ApartmentModel> joinApartment({
     required String invitationCode,
-    required String housingCompanyId,
   });
 
   Future<List<StorageItemModel>> addApartmentDocuments(
