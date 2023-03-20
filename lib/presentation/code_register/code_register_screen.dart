@@ -10,8 +10,8 @@ import 'package:priorli/service_locator.dart';
 const codeRegisterPath = '/code_register';
 
 class CodeRegisterScreen extends StatefulWidget {
-  const CodeRegisterScreen({super.key, this.companyId, this.code});
-  final String? companyId;
+  const CodeRegisterScreen({super.key, this.email, this.code});
+  final String? email;
   final String? code;
 
   @override
@@ -23,15 +23,21 @@ class _CodeRegisterScreenState extends State<CodeRegisterScreen> {
   bool _isObscured = true;
   @override
   void initState() {
-    _cubit = serviceLocator<CodeRegisterCubit>();
+    _cubit = serviceLocator<CodeRegisterCubit>()
+      ..init(code: widget.code, email: widget.email);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _cubit.close();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<CodeRegisterCubit>(
-        create: (_) =>
-            _cubit..init(code: widget.code, companyId: widget.companyId),
+        create: (_) => _cubit,
         child: BlocBuilder<CodeRegisterCubit, CodeRegisterState>(
             builder: (context, state) => Scaffold(
                   appBar: AppBar(
@@ -44,6 +50,7 @@ class _CodeRegisterScreenState extends State<CodeRegisterScreen> {
                         CustomFormField(
                             hintText: 'Email',
                             autofocus: true,
+                            initialValue: '${state.email}',
                             autoValidate: true,
                             keyboardType: TextInputType.emailAddress,
                             icon: const Icon(
@@ -62,7 +69,7 @@ class _CodeRegisterScreenState extends State<CodeRegisterScreen> {
                             Icons.abc,
                           ),
                           helperText: 'Invitation code from company',
-                          initialValue: '${state.companyId}/${state.code}',
+                          initialValue: state.code ?? '',
                           onChanged: (code) => _cubit.onTypingCode(code),
                         ),
                         CustomFormField(
@@ -98,9 +105,15 @@ class _CodeRegisterScreenState extends State<CodeRegisterScreen> {
                                 ? () => BlocProvider.of<AuthCubit>(context)
                                     .registerWithCode(
                                         email: state.email,
-                                        companyId: state.companyId,
                                         code: state.code,
                                         password: state.password)
+                                    .then((success) => {
+                                          if (!success)
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(const SnackBar(
+                                                    content: Text(
+                                                        'Invalid code or email')))
+                                        })
                                 : null,
                             child: const Text('Register'))
                       ]),

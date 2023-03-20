@@ -1,12 +1,18 @@
+import 'dart:math';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:priorli/core/base/result.dart';
 import 'package:priorli/core/contact_leads/usecases/get_contact_leads.dart';
 import 'package:priorli/core/country/entities/country.dart';
 import 'package:priorli/core/country/usecases/get_support_countries.dart';
 import 'package:priorli/core/housing/usecases/admin_get_companies.dart';
+import 'package:priorli/core/subscription/entities/payment_product_item.dart';
 import 'package:priorli/core/subscription/entities/subscription_plan.dart';
+import 'package:priorli/core/subscription/usecases/add_payment_product.dart';
 import 'package:priorli/core/subscription/usecases/add_subscription_plan.dart';
 import 'package:priorli/core/subscription/usecases/delete_subscription_plan.dart';
+import 'package:priorli/core/subscription/usecases/get_payment_products.dart';
+import 'package:priorli/core/subscription/usecases/remove_payment_product.dart';
 import 'package:priorli/presentation/admin/admin_state.dart';
 
 import '../../core/base/usecase.dart';
@@ -21,6 +27,9 @@ class AdminCubit extends Cubit<AdminState> {
   final AdminGetCompanies _adminGetCompanies;
   final GetSupportCountries _getSupportCountries;
   final DeleteSubscriptionPlan _deleteSubscriptionPlan;
+  final GetPaymentProducts _getPaymentProducts;
+  final AddPaymentProduct _addPaymentProduct;
+  final RemovePaymentProduct _removePaymentProduct;
 
   AdminCubit(
       this._addSubscriptionPlan,
@@ -28,13 +37,22 @@ class AdminCubit extends Cubit<AdminState> {
       this._getContactLeads,
       this._adminGetCompanies,
       this._getSupportCountries,
-      this._deleteSubscriptionPlan)
+      this._deleteSubscriptionPlan,
+      this._getPaymentProducts,
+      this._addPaymentProduct,
+      this._removePaymentProduct)
       : super(const AdminState());
 
-  void getInit() {
+  Future<void> getInit({String? countryCode}) async {
     getInitCompanies();
     getInitContactList();
-    getInitSubscriptionPlans();
+    if (countryCode != null) {
+      selectCountry(countryCode);
+    } else {
+      await getSupportCountries();
+      getInitSubscriptionPlans();
+      getPaymentProducts();
+    }
   }
 
   Future<void> getInitContactList() async {
@@ -60,6 +78,22 @@ class AdminCubit extends Cubit<AdminState> {
   }
 
   Future<void> getInitSubscriptionPlans() async {
+    final countryCode = state.selectedCountryCode;
+    if (countryCode == null) {
+      return;
+    }
+    final getSubscriptionPlansResult = await _availableSubscriptionPlans(
+      countryCode,
+    );
+    if (getSubscriptionPlansResult is ResultSuccess<List<SubscriptionPlan>>) {
+      final List<SubscriptionPlan> subscriptionPlans =
+          List.from(state.subscriptionPlanList ?? []);
+      subscriptionPlans.addAll(getSubscriptionPlansResult.data);
+      emit(state.copyWith(subscriptionPlanList: subscriptionPlans));
+    }
+  }
+
+  Future<void> getSupportCountries() async {
     final getSupptedCountriesResult = await _getSupportCountries(NoParams());
     if (getSupptedCountriesResult is ResultSuccess<List<Country>> &&
         getSupptedCountriesResult.data.isNotEmpty) {
@@ -67,14 +101,6 @@ class AdminCubit extends Cubit<AdminState> {
           supportedCountries: getSupptedCountriesResult.data,
           selectedCountryCode:
               getSupptedCountriesResult.data.first.countryCode));
-      final getSubscriptionPlansResult = await _availableSubscriptionPlans(
-          getSupptedCountriesResult.data.first.countryCode);
-      if (getSubscriptionPlansResult is ResultSuccess<List<SubscriptionPlan>>) {
-        final List<SubscriptionPlan> subscriptionPlans =
-            List.from(state.subscriptionPlanList ?? []);
-        subscriptionPlans.addAll(getSubscriptionPlansResult.data);
-        emit(state.copyWith(subscriptionPlanList: subscriptionPlans));
-      }
     }
   }
 
@@ -83,7 +109,6 @@ class AdminCubit extends Cubit<AdminState> {
     required String price,
     required bool hasApartmentDocument,
     required List<String> notificationTypes,
-    required String maxAccount,
     bool? translation,
     required String maxMessagingChannels,
     required String maxAnnouncement,
@@ -105,7 +130,6 @@ class AdminCubit extends Cubit<AdminState> {
             hasApartmentDocument: hasApartmentDocument,
             notificationTypes: notificationTypes,
             countryCode: state.selectedCountryCode ?? 'fi',
-            maxAccount: int.tryParse(maxAccount),
             translation: translation,
             maxMessagingChannels: int.tryParse(maxMessagingChannels),
             maxAnnouncement: int.tryParse(maxAnnouncement),
@@ -132,7 +156,54 @@ class AdminCubit extends Cubit<AdminState> {
     }
   }
 
+  Future<void> getPaymentProducts() async {
+    final countryCode = state.selectedCountryCode;
+    if (countryCode == null) {
+      return;
+    }
+    final getPaymentProductsResult = await _getPaymentProducts(
+        GetPaymentProductParams(countryCode: countryCode));
+    if (getPaymentProductsResult is ResultSuccess<List<PaymentProductItem>>) {
+      emit(state.copyWith(paymentProductItems: getPaymentProductsResult.data));
+    }
+  }
+
+  Future<void> addPaymentProduct(
+      {required String name,
+      required String price,
+      String? description}) async {
+    final countryCode = state.selectedCountryCode;
+    if (countryCode == null) {
+      return;
+    }
+    final addPaymentProductResult = await _addPaymentProduct(
+        AddPaymentProductParams(
+            name: name,
+            price: double.tryParse(price) ?? 1.99,
+            countryCode: countryCode,
+            description: description ?? ''));
+    if (addPaymentProductResult is ResultSuccess<PaymentProductItem>) {
+      final List<PaymentProductItem> paymentProductItems =
+          List.from(state.paymentProductItems ?? []);
+      paymentProductItems.add(addPaymentProductResult.data);
+      emit(state.copyWith(paymentProductItems: paymentProductItems));
+    }
+  }
+
+  Future<void> removePaymentProductItem(String id) async {
+    final removePaymentProductResult = await _removePaymentProduct(
+        RemovePaymentProductParams(paymentProductId: id));
+    if (removePaymentProductResult is ResultSuccess<bool>) {
+      final List<PaymentProductItem> paymentProductItems =
+          List.from(state.paymentProductItems ?? []);
+      paymentProductItems.removeWhere((element) => element.id == id);
+      emit(state.copyWith(paymentProductItems: paymentProductItems));
+    }
+  }
+
   void selectCountry(String? value) {
     emit(state.copyWith(selectedCountryCode: value));
+    getInitSubscriptionPlans();
+    getPaymentProducts();
   }
 }

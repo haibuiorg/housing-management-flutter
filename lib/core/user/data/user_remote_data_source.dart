@@ -85,17 +85,17 @@ class UserRemoteDataSource implements UserDataSource {
   }
 
   @override
-  Future<UserModel> registerWithCode(
-      {required String email,
-      required String password,
-      required String code,
-      required String companyId}) async {
+  Future<UserModel> registerWithCode({
+    required String email,
+    required String password,
+    required String code,
+  }) async {
     final Map<String, dynamic> data = {
       "email": email,
       "password": password,
       "invitation_code": code,
-      "housing_company_id": companyId,
     };
+    print('$data');
     try {
       final result = await client.post('/code_register', data: data);
       return UserModel.fromJson(result.data as Map<String, dynamic>);

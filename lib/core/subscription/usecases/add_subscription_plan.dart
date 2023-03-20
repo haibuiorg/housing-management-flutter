@@ -16,7 +16,6 @@ class AddSubscriptionPlan
         price: params.price,
         currency: params.currency,
         countryCode: params.countryCode,
-        maxAccount: params.maxAccount,
         translation: params.translation,
         maxMessagingChannels: params.maxMessagingChannels,
         maxAnnouncement: params.maxAnnouncement,
@@ -34,7 +33,6 @@ class AddSubscriptionPlanParams extends Equatable {
   final double price;
   final String currency;
   final String countryCode;
-  final int? maxAccount;
   final bool? translation;
   final int? maxMessagingChannels;
   final int? maxAnnouncement;
@@ -52,7 +50,6 @@ class AddSubscriptionPlanParams extends Equatable {
       required this.countryCode,
       required this.hasApartmentDocument,
       required this.notificationTypes,
-      this.maxAccount,
       this.translation,
       this.maxMessagingChannels,
       this.maxAnnouncement,
@@ -67,7 +64,6 @@ class AddSubscriptionPlanParams extends Equatable {
         price,
         currency,
         countryCode,
-        maxAccount,
         translation,
         maxMessagingChannels,
         maxAnnouncement,

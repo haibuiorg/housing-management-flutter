@@ -1,5 +1,6 @@
 import 'package:priorli/core/base/result.dart';
 
+import '../entities/payment_product_item.dart';
 import '../entities/subscription.dart';
 import '../entities/subscription_plan.dart';
 
@@ -13,7 +14,6 @@ abstract class SubscriptionRepository {
     required String countryCode,
     required bool hasApartmentDocument,
     required List<String> notificationTypes,
-    int? maxAccount,
     bool? translation,
     int? maxMessagingChannels,
     int? maxAnnouncement,
@@ -35,4 +35,23 @@ abstract class SubscriptionRepository {
       {required String subscriptionPlanId});
   Future<Result<List<Subscription>>> getCompanySubscriptions(
       {required String companyId});
+  Future<Result<bool>> cancelSubscription({
+    required String subscriptionId,
+    required String companyId,
+  });
+  Future<Result<bool>> deletePaymentProductItem(
+      {required String paymentProductItemId});
+  Future<Result<List<PaymentProductItem>>> getPaymentProductItems(
+      {required String countryCode});
+  Future<Result<PaymentProductItem>> addPaymentProductItem({
+    required String name,
+    required String description,
+    required double price,
+    required String countryCode,
+  });
+  Future<Result<String>> purchasePaymentProduct({
+    required String paymentProductItemId,
+    required String companyId,
+    required int quantity,
+  });
 }

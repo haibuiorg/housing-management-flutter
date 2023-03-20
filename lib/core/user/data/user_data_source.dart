@@ -17,9 +17,9 @@ abstract class UserDataSource {
     required String firstName,
     required String lastName,
   });
-  Future<UserModel> registerWithCode(
-      {required String email,
-      required String password,
-      required String code,
-      required String companyId});
+  Future<UserModel> registerWithCode({
+    required String email,
+    required String password,
+    required String code,
+  });
 }

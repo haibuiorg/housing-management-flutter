@@ -15,6 +15,10 @@ class SubscriptionModel extends Equatable {
   final String created_by;
   final bool is_active;
   final String company_id;
+  final int quantity;
+  final int used_active_users;
+  final String latest_invoice_url;
+  final bool latest_invoice_paid;
   final String? payment_service_subscription_id;
   final Map<String, dynamic>? detail;
 
@@ -22,6 +26,10 @@ class SubscriptionModel extends Equatable {
       {required this.subscription_plan_id,
       required this.id,
       required this.created_on,
+      required this.quantity,
+      required this.used_active_users,
+      required this.latest_invoice_paid,
+      required this.latest_invoice_url,
       this.detail,
       this.payment_service_subscription_id,
       this.ended_on,
@@ -37,6 +45,10 @@ class SubscriptionModel extends Equatable {
         id,
         created_by,
         created_on,
+        quantity,
+        used_active_users,
+        latest_invoice_paid,
+        latest_invoice_url,
         is_active,
         checkout_session_id,
         company_id,

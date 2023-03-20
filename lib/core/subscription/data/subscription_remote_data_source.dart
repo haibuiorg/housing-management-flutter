@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:priorli/core/subscription/data/subscription_data_source.dart';
+import 'package:priorli/core/subscription/models/payment_product_item_model.dart';
 import 'package:priorli/core/subscription/models/subscription_model.dart';
 import 'package:priorli/core/subscription/models/subscription_plan_model.dart';
 
@@ -17,7 +18,6 @@ class SubscriptionRemoteDataSource implements SubscriptionDataSource {
       required String countryCode,
       required bool hasApartmentDocument,
       required List<String> notificationTypes,
-      int? maxAccount,
       bool? translation,
       int? maxMessagingChannels,
       int? maxAnnouncement,
@@ -31,7 +31,6 @@ class SubscriptionRemoteDataSource implements SubscriptionDataSource {
         'price': price,
         'currency': currency,
         'country_code': countryCode,
-        'max_account': maxAccount,
         'translation': translation,
         'max_messaging_channels': maxMessagingChannels,
         'max_announcement': maxAnnouncement,
@@ -61,7 +60,7 @@ class SubscriptionRemoteDataSource implements SubscriptionDataSource {
         'subscription_plan_id': subscriptionPlanId,
         'quantity': quantity,
       };
-      final result = await client.post('/checkout', data: data);
+      final result = await client.post('/checkout/subscription', data: data);
       return (result.data as Map).values.first;
     } catch (error) {
       throw ServerException(error: error);
@@ -128,6 +127,85 @@ class SubscriptionRemoteDataSource implements SubscriptionDataSource {
       return (result.data as List<dynamic>)
           .map((e) => SubscriptionModel.fromJson(e as Map<String, dynamic>))
           .toList();
+    } catch (error) {
+      throw ServerException(error: error);
+    }
+  }
+
+  @override
+  Future<bool> cancelSubscription(
+      {required String subscriptionId, required String companyId}) async {
+    try {
+      await client.delete('/subscription', queryParameters: {
+        'subscription_id': subscriptionId,
+        'company_id': companyId
+      });
+      return true;
+    } catch (error) {
+      throw ServerException(error: error);
+    }
+  }
+
+  @override
+  Future<PaymentProductItemModel> addPaymentProductItem(
+      {required String name,
+      required String description,
+      required double price,
+      required String countryCode}) async {
+    final data = {
+      'name': name,
+      'description': description,
+      'amount': price,
+      'country_code': countryCode
+    };
+    try {
+      final result = await client.post('/admin/payment_product', data: data);
+      return PaymentProductItemModel.fromJson(result.data);
+    } catch (error) {
+      throw ServerException(error: error);
+    }
+  }
+
+  @override
+  Future<bool> deletePaymentProductItem(
+      {required String paymentProductItemId}) async {
+    try {
+      await client.delete('/admin/payment_product',
+          queryParameters: {'id': paymentProductItemId});
+      return true;
+    } catch (error) {
+      throw ServerException(error: error);
+    }
+  }
+
+  @override
+  Future<List<PaymentProductItemModel>> getPaymentProductItems(
+      {required String countryCode}) async {
+    try {
+      final result = await client.get('/payment_products',
+          queryParameters: {'country_code': countryCode});
+      return (result.data as List<dynamic>)
+          .map((e) =>
+              PaymentProductItemModel.fromJson(e as Map<String, dynamic>))
+          .toList();
+    } catch (error) {
+      throw ServerException(error: error);
+    }
+  }
+
+  @override
+  Future<String> purchasePaymentProduct(
+      {required String paymentProductItemId,
+      required String companyId,
+      required int quantity}) async {
+    try {
+      final data = {
+        'company_id': companyId,
+        'payment_product_item_id': paymentProductItemId,
+        'quantity': quantity,
+      };
+      final result = await client.post('/checkout/payment_product', data: data);
+      return (result.data as Map).values.first;
     } catch (error) {
       throw ServerException(error: error);
     }

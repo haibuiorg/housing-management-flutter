@@ -1,6 +1,6 @@
 const appSeedColor = '#FFB300';
 const appSeedColorDark = '#FFDF6D';
-const appPrimaryColor = '#FFB300';
+const appPrimaryColor = '#FFDF6D';
 const appPrimaryColorDark = '#FFDF6D';
 const appSecondaryColor = '#FEF3C9';
 const appBackgroundColor = '#F0F0F0';

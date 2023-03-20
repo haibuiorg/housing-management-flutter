@@ -62,24 +62,54 @@
   <!-- This script adds the flutter initialization JS code -->
   <script src="flutter.js" defer></script>
 </head>
-<style>
-  .container {
-    display: flex;
-        justify-content: center;
-        align-items: center;
-        margin: 0;
-        position: absolute;
-        top: 43%;
-        left: 43%;
+<style type="text/css">
+
+  .loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      -ms-transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%);
   }
-  .indicator{
-    width: 100px;
+
+  .loader {
+      border: 6px solid #FFDF6D;
+      border-radius: 50%;
+      border-left: 6px solid #595D6B;
+      width: 40px;
+      height: 40px;
+      -webkit-animation: spin 1s linear infinite;
+      animation: spin 1s linear infinite;
   }
-  
+
+  @-webkit-keyframes spin {
+      0% {
+          -webkit-transform: rotate(0deg);
+      }
+
+      100% {
+          -webkit-transform: rotate(360deg);
+      }
+  }
+
+  @keyframes spin {
+      0% {
+          transform: rotate(0deg);
+      }
+
+      100% {
+          transform: rotate(360deg);
+      }
+  }
+
 </style>
 <body style="overflow: hidden">
-  <div id="loading_indicator" class="container">
-    <img class="indicator" src="./assets/loading.gif" />
+  <div class="loading">
+    <div class="loader"></div>
   </div>
   <script src="//cdnjs.cloudflare.com/ajax/libs/pdf.js/2.4.456/pdf.min.js"></script>
   <script type="text/javascript">

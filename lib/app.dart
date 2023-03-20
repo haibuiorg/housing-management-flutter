@@ -143,6 +143,7 @@ class _AppState extends State<App> {
               debugShowCheckedModeBanner: false,
               routerConfig: appRouter,
               theme: ThemeData(
+                fontFamily: 'Lato',
                 pageTransitionsTheme: PageTransitionsTheme(
                   builders: kIsWeb
                       ? {
@@ -162,6 +163,7 @@ class _AppState extends State<App> {
                 useMaterial3: true,
               ),
               darkTheme: ThemeData(
+                fontFamily: 'Lato',
                 pageTransitionsTheme: PageTransitionsTheme(
                   builders: kIsWeb
                       ? {

@@ -4,8 +4,8 @@ import 'package:priorli/presentation/code_register/code_register_state.dart';
 class CodeRegisterCubit extends Cubit<CodeRegisterState> {
   CodeRegisterCubit() : super(const CodeRegisterState());
 
-  init({String? companyId, String? code}) {
-    emit(state.copyWith(companyId: companyId, code: code));
+  init({String? email, String? code}) {
+    emit(state.copyWith(email: email, code: code));
   }
 
   onTypingEmail(String email) {
@@ -13,8 +13,7 @@ class CodeRegisterCubit extends Cubit<CodeRegisterState> {
   }
 
   onTypingCode(String code) {
-    emit(state.copyWith(
-        companyId: code.split('/')[0], code: code.split('/')[1]));
+    emit(state.copyWith(code: code));
   }
 
   onTypingPassword(String password) {

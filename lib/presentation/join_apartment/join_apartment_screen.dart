@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:priorli/go_router_navigation.dart';
 import 'package:priorli/presentation/join_apartment/join_apartment_cubit.dart';
 import 'package:priorli/presentation/join_apartment/join_apartment_state.dart';
-import 'package:priorli/presentation/main/main_screen.dart';
 import 'package:priorli/presentation/shared/custom_form_field.dart';
 import 'package:priorli/service_locator.dart';
 
@@ -14,8 +13,7 @@ import '../housing_company/housing_company_screen.dart';
 const joinApartmentPath = '/join_apartment';
 
 class JoinApartmentScreen extends StatefulWidget {
-  const JoinApartmentScreen({super.key, this.companyId, this.code});
-  final String? companyId;
+  const JoinApartmentScreen({super.key, this.code});
   final String? code;
 
   @override
@@ -33,8 +31,7 @@ class _JoinApartmentScreenState extends State<JoinApartmentScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<JoinApartmentCubit>(
-        create: (_) =>
-            _cubit..init(code: widget.code, companyId: widget.companyId),
+        create: (_) => _cubit..init(code: widget.code),
         child: BlocConsumer<JoinApartmentCubit, JoinApartmentState>(
             listener: (context, state) {
               if (state.addedToApartment?.id.isNotEmpty == true &&
@@ -61,12 +58,11 @@ class _JoinApartmentScreenState extends State<JoinApartmentScreen> {
                             Icons.abc,
                           ),
                           helperText: 'Invitation code from company',
-                          initialValue: '${state.companyId}/${state.code}',
+                          initialValue: '${state.code}',
                           onChanged: (code) => _cubit.onTypingCode(code),
                         ),
                         OutlinedButton(
-                            onPressed: state.code?.isNotEmpty == true &&
-                                    state.companyId?.isNotEmpty == true
+                            onPressed: state.code?.isNotEmpty == true
                                 ? () => _cubit.joinWithCode()
                                 : null,
                             child: const Text('Confirm'))

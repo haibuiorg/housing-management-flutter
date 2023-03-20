@@ -23,6 +23,5 @@ abstract class UserRepository {
     required String email,
     required String password,
     required String code,
-    required String companyId,
   });
 }

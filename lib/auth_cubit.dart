@@ -64,7 +64,7 @@ class AuthCubit extends Cubit<AuthState> {
     ));
   }
 
-  Future<void> logIn({required String email, required String password}) async {
+  Future<bool> logIn({required String email, required String password}) async {
     final loginResult = await _loginEmailPassword(
         LoginEmailPasswordParams(email: email, password: password));
     final isLoggedIn = (loginResult is ResultSuccess<bool>) && loginResult.data;
@@ -74,6 +74,7 @@ class AuthCubit extends Cubit<AuthState> {
     emit(state.copyWith(
       isLoggedIn: isLoggedIn,
     ));
+    return isLoggedIn;
   }
 
   Future<void> logOut() async {
@@ -123,10 +124,10 @@ class AuthCubit extends Cubit<AuthState> {
       }
       _updateUserNotificationToken(
           UpdateUserNotificationTokenParams(notificationToken: token));
-      FirebaseMessaging.instance.onTokenRefresh.listen((newToken) => {
-            _updateUserNotificationToken(
-                UpdateUserNotificationTokenParams(notificationToken: newToken))
-          });
+      FirebaseMessaging.instance.onTokenRefresh.listen((newToken) {
+        _updateUserNotificationToken(
+            UpdateUserNotificationTokenParams(notificationToken: newToken));
+      });
     } catch (error) {}
   }
 
@@ -145,20 +146,16 @@ class AuthCubit extends Cubit<AuthState> {
     onError();
   }
 
-  Future<void> registerWithCode(
-      {String? email,
-      String? companyId,
-      String? code,
-      String? password}) async {
+  Future<bool> registerWithCode(
+      {String? email, String? code, String? password}) async {
     final registerWithCodeResult = await _registerWithCode(
         RegisterWithCodeParams(
-            code: code ?? '',
-            companyId: companyId ?? '',
-            email: email ?? '',
-            password: password ?? ''));
+            code: code ?? '', email: email ?? '', password: password ?? ''));
     if (registerWithCodeResult is ResultSuccess<User>) {
       await logIn(
           email: registerWithCodeResult.data.email, password: password ?? '');
+      return true;
     }
+    return false;
   }
 }

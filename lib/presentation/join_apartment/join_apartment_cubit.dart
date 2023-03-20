@@ -9,19 +9,19 @@ class JoinApartmentCubit extends Cubit<JoinApartmentState> {
 
   JoinApartmentCubit(this._joinApartment) : super(const JoinApartmentState());
 
-  init({String? companyId, String? code}) {
-    emit(state.copyWith(companyId: companyId, code: code));
+  init({String? code}) {
+    emit(state.copyWith(code: code));
   }
 
   onTypingCode(String code) {
     emit(state.copyWith(
-        code: code.split('/')[1], companyId: code.split('/')[0]));
+      code: code,
+    ));
   }
 
   Future<void> joinWithCode() async {
-    final joinApartmentResult = await _joinApartment(JoinApartmentParams(
-        housingCompanyId: state.companyId ?? '',
-        invitationCode: state.code ?? ''));
+    final joinApartmentResult = await _joinApartment(
+        JoinApartmentParams(invitationCode: state.code ?? ''));
     if (joinApartmentResult is ResultSuccess<Apartment>) {
       emit(state.copyWith(addedToApartment: joinApartmentResult.data));
     }

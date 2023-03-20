@@ -11,6 +11,7 @@ HousingCompanyModel _$HousingCompanyModelFromJson(Map<String, dynamic> json) =>
       json['id'] as String?,
       json['street_address_1'] as String?,
       json['street_address_2'] as String?,
+      (json['credit_amount'] as num?)?.toDouble(),
       json['postal_code'] as String?,
       json['city'] as String?,
       json['country_code'] as String?,
@@ -53,4 +54,5 @@ Map<String, dynamic> _$HousingCompanyModelToJson(
       'cover_image_url': instance.coverImageUrl,
       'is_user_owner': instance.is_user_owner,
       'is_user_manager': instance.is_user_manager,
+      'credit_amount': instance.credit_amount,
     };

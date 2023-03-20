@@ -16,20 +16,17 @@ class RegisterWithCode extends UseCase<User, RegisterWithCodeParams> {
       email: params.email,
       password: params.password,
       code: params.code,
-      companyId: params.companyId,
     );
   }
 }
 
 class RegisterWithCodeParams extends Equatable {
   final String password;
-  final String companyId;
   final String email;
   final String code;
 
   const RegisterWithCodeParams({
     required this.code,
-    required this.companyId,
     required this.email,
     required this.password,
   });
@@ -38,7 +35,6 @@ class RegisterWithCodeParams extends Equatable {
   List<Object?> get props => [
         email,
         password,
-        companyId,
         code,
       ];
 }

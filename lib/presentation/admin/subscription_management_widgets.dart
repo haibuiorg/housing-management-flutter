@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:priorli/core/subscription/entities/payment_product_item.dart';
+import 'package:priorli/core/subscription/entities/subscription_plan.dart';
+import 'package:priorli/presentation/shared/full_width_title.dart';
 
 import '../../core/utils/number_formatters.dart';
+import '../../core/utils/string_extension.dart';
 import 'admin_cubit.dart';
 import 'admin_state.dart';
 
@@ -14,75 +18,253 @@ class SubscriptionPlanListView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AdminCubit, AdminState>(builder: (context, state) {
       return Scaffold(
-        floatingActionButton: FloatingActionButton(
-          child: const Icon(Icons.add),
-          onPressed: () {
-            showModalBottomSheet(
-                context: context,
-                isScrollControlled: true,
-                useSafeArea: true,
-                builder: (builder) {
-                  return SubscriptionPlanDialog(
-                      currencyCode: state.supportedCountries
-                              ?.where((element) =>
-                                  element.countryCode ==
-                                  state.selectedCountryCode)
-                              .first
-                              .currencyCode ??
-                          'eur',
-                      onSubmit: (
-                              {required additionalInvoiceCost,
-                              required hasApartmentDocument,
-                              interval,
-                              required intervalCount,
-                              required maxAccount,
-                              required maxAnnouncement,
-                              required maxInvoiceNumber,
-                              required maxMessagingChannels,
-                              required name,
-                              required notificationTypes,
-                              required price,
-                              required translation}) =>
-                          BlocProvider.of<AdminCubit>(context)
-                              .addSubscription(
-                                  additionalInvoiceCost: additionalInvoiceCost,
-                                  hasApartmentDocument: hasApartmentDocument,
-                                  interval: interval,
-                                  intervalCount: intervalCount,
-                                  maxAccount: maxAccount,
-                                  maxAnnouncement: maxAnnouncement,
-                                  maxInvoiceNumber: maxInvoiceNumber,
-                                  maxMessagingChannels: maxMessagingChannels,
-                                  name: name,
-                                  notificationTypes: notificationTypes,
-                                  price: price,
-                                  translation: translation)
-                              .then((value) => Navigator.pop(context)));
-                });
-          },
+        body: CustomScrollView(
+          slivers: [
+            const SliverToBoxAdapter(
+              child: FullWidthTitle(title: 'Subscription plans'),
+            ),
+            SliverList.builder(
+                itemCount: state.subscriptionPlanList?.length ?? 0,
+                itemBuilder: (context, index) {
+                  return SubscriptionTile(
+                    subscriptionPlan: state.subscriptionPlanList![index],
+                  );
+                }),
+            SliverToBoxAdapter(
+              child: TextButton(
+                  onPressed: () {
+                    showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        useSafeArea: true,
+                        builder: (builder) {
+                          return SubscriptionPlanDialog(
+                              currencyCode: state.supportedCountries
+                                      ?.where((element) =>
+                                          element.countryCode ==
+                                          state.selectedCountryCode)
+                                      .first
+                                      .currencyCode ??
+                                  'eur',
+                              onSubmit: (
+                                      {required additionalInvoiceCost,
+                                      required hasApartmentDocument,
+                                      interval,
+                                      required intervalCount,
+                                      required maxAnnouncement,
+                                      required maxInvoiceNumber,
+                                      required maxMessagingChannels,
+                                      required name,
+                                      required notificationTypes,
+                                      required price,
+                                      required translation}) =>
+                                  BlocProvider.of<AdminCubit>(context)
+                                      .addSubscription(
+                                          additionalInvoiceCost:
+                                              additionalInvoiceCost,
+                                          hasApartmentDocument:
+                                              hasApartmentDocument,
+                                          interval: interval,
+                                          intervalCount: intervalCount,
+                                          maxAnnouncement: maxAnnouncement,
+                                          maxInvoiceNumber: maxInvoiceNumber,
+                                          maxMessagingChannels:
+                                              maxMessagingChannels,
+                                          name: name,
+                                          notificationTypes: notificationTypes,
+                                          price: price,
+                                          translation: translation)
+                                      .then((value) => Navigator.pop(builder)));
+                        });
+                  },
+                  child: const Text('Add subscription plan')),
+            ),
+            const SliverToBoxAdapter(
+              child: FullWidthTitle(title: 'Payment products'),
+            ),
+            SliverList.builder(
+                itemCount: state.paymentProductItems?.length ?? 0,
+                itemBuilder: (context, index) {
+                  return PaymentProductTile(
+                    paymentProductItem: state.paymentProductItems![index],
+                  );
+                }),
+            SliverToBoxAdapter(
+              child: TextButton(
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (builder) {
+                          return AlertDialog(
+                            content: PaymentProductDialog(
+                                onSubmit: (
+                                        {required String name,
+                                        required String price,
+                                        required String description}) =>
+                                    BlocProvider.of<AdminCubit>(context)
+                                        .addPaymentProduct(
+                                            name: name,
+                                            price: price,
+                                            description: description)
+                                        .then(
+                                            (value) => Navigator.pop(builder))),
+                          );
+                        });
+                  },
+                  child: const Text('Add payment product plan')),
+            ),
+          ],
         ),
-        body: ListView.builder(
-            itemCount: state.subscriptionPlanList?.length ?? 0,
-            itemBuilder: (context, index) {
-              return Card(
-                child: ListTile(
-                  title:
-                      Text('Plan ${state.subscriptionPlanList![index].name}'),
-                  subtitle:
-                      Text('Price ${state.subscriptionPlanList![index].price}'),
-                  trailing: OutlinedButton.icon(
-                    icon: const Icon(Icons.delete_forever_rounded),
-                    onPressed: () {
-                      BlocProvider.of<AdminCubit>(context).deleteSubscription(
-                          state.subscriptionPlanList![index].id);
-                    },
-                    label: const Text('Remove this subscription plan'),
-                  ),
-                ),
-              );
-            }),
       );
     });
+  }
+}
+
+class SubscriptionTile extends StatelessWidget {
+  const SubscriptionTile({
+    super.key,
+    required this.subscriptionPlan,
+  });
+
+  final SubscriptionPlan subscriptionPlan;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: ListTile(
+        title: Text('Plan ${subscriptionPlan.name}'),
+        subtitle: Text('Price ${subscriptionPlan.price}'),
+        trailing: OutlinedButton.icon(
+          icon: const Icon(Icons.delete_forever_rounded),
+          onPressed: () {
+            BlocProvider.of<AdminCubit>(context)
+                .deleteSubscription(subscriptionPlan.id);
+          },
+          label: const Text('Remove'),
+        ),
+      ),
+    );
+  }
+}
+
+class PaymentProductTile extends StatelessWidget {
+  const PaymentProductTile({
+    super.key,
+    required this.paymentProductItem,
+  });
+
+  final PaymentProductItem paymentProductItem;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: ListTile(
+        title: Text('Product: ${paymentProductItem.name}\n'
+            'Price: ${formatCurrency(paymentProductItem.amount, paymentProductItem.currencyCode)}'),
+        subtitle: Text('Description ${paymentProductItem.description}'),
+        trailing: OutlinedButton.icon(
+          icon: const Icon(Icons.delete_forever_rounded),
+          onPressed: () {
+            BlocProvider.of<AdminCubit>(context)
+                .removePaymentProductItem(paymentProductItem.id);
+          },
+          label: const Text('Remove'),
+        ),
+      ),
+    );
+  }
+}
+
+class PaymentProductDialog extends StatefulWidget {
+  const PaymentProductDialog({super.key, required this.onSubmit});
+  final Function({
+    required String name,
+    required String price,
+    required String description,
+  }) onSubmit;
+  @override
+  State<PaymentProductDialog> createState() => _PaymentProductDialogState();
+}
+
+class _PaymentProductDialogState extends State<PaymentProductDialog> {
+  final _nameController = TextEditingController();
+  final _priceController = TextEditingController();
+  final _descriptionController = TextEditingController();
+  bool _isAllFilled = false;
+  _checkIfAllFilled(String _) {
+    setState(() {
+      _isAllFilled = _nameController.text.isNotEmpty &&
+          _priceController.text.isNotEmpty &&
+          _descriptionController.text.isNotEmpty;
+    });
+  }
+
+  @override
+  dispose() {
+    _nameController.dispose();
+    _priceController.dispose();
+    _descriptionController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        TextFormField(
+          keyboardType: TextInputType.name,
+          controller: _nameController,
+          maxLines: 1,
+          autofocus: true,
+          onChanged: _checkIfAllFilled,
+          decoration: const InputDecoration(
+            hintText: 'Name',
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(8.0)),
+            ),
+          ),
+        ),
+        TextFormField(
+          inputFormatters: [DecimalTextInputFormatter(decimalRange: 2)],
+          keyboardType: const TextInputType.numberWithOptions(decimal: true),
+          controller: _priceController,
+          maxLines: 1,
+          // ignore: prefer_const_constructors
+          decoration: InputDecoration(
+            hintText: 'Price',
+            border: const OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(8.0)),
+            ),
+          ),
+          onChanged: _checkIfAllFilled,
+        ),
+        TextFormField(
+          keyboardType: TextInputType.text,
+          controller: _descriptionController,
+          maxLines: 1,
+          autofocus: true,
+          onChanged: _checkIfAllFilled,
+          decoration: const InputDecoration(
+            hintText: 'Description',
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(8.0)),
+            ),
+          ),
+        ),
+        OutlinedButton(
+            onPressed: _isAllFilled
+                ? () {
+                    widget.onSubmit(
+                      name: _nameController.text,
+                      price: _priceController.text,
+                      description: _descriptionController.text,
+                    );
+                  }
+                : null,
+            child: Text('Add payment product')),
+      ],
+    );
   }
 }
 
@@ -93,7 +275,6 @@ class SubscriptionPlanDialog extends StatefulWidget {
   final Function(
       {required String name,
       required String price,
-      required String maxAccount,
       required bool translation,
       required String maxMessagingChannels,
       required String maxAnnouncement,
@@ -111,7 +292,6 @@ class SubscriptionPlanDialog extends StatefulWidget {
 class _SubscriptionPlanDialogState extends State<SubscriptionPlanDialog> {
   final _nameController = TextEditingController();
   final _priceController = TextEditingController();
-  final _maxAccountController = TextEditingController();
   final _maxMessagingChannelController = TextEditingController();
   final _maxAnnouncementController = TextEditingController();
   final _maxInvoiceNumberController = TextEditingController();
@@ -126,7 +306,6 @@ class _SubscriptionPlanDialogState extends State<SubscriptionPlanDialog> {
   void dispose() {
     _nameController.dispose();
     _priceController.dispose();
-    _maxAccountController.dispose();
     _maxMessagingChannelController.dispose();
     _maxAnnouncementController.dispose();
     _maxInvoiceNumberController.dispose();
@@ -138,7 +317,6 @@ class _SubscriptionPlanDialogState extends State<SubscriptionPlanDialog> {
     setState(() {
       _isAllFilled = _nameController.text.isNotEmpty &&
           _priceController.text.isNotEmpty &&
-          _maxAccountController.text.isNotEmpty &&
           _additionalInvoiceCostController.text.isNotEmpty &&
           _maxAnnouncementController.text.isNotEmpty &&
           _maxInvoiceNumberController.text.isNotEmpty &&
@@ -243,24 +421,6 @@ class _SubscriptionPlanDialogState extends State<SubscriptionPlanDialog> {
                         hintText:
                             'Additional cost per invoice ${widget.currencyCode.toUpperCase()}',
                         border: const OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                        ),
-                      ),
-                      onChanged: _checkIfAllFilled),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 16.0),
-                  child: TextFormField(
-                      controller: _maxAccountController,
-                      maxLines: 1,
-                      inputFormatters: [
-                        DecimalTextInputFormatter(decimalRange: 2)
-                      ],
-                      keyboardType:
-                          const TextInputType.numberWithOptions(decimal: true),
-                      decoration: const InputDecoration(
-                        hintText: 'Max account',
-                        border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(8.0)),
                         ),
                       ),
@@ -376,7 +536,6 @@ class _SubscriptionPlanDialogState extends State<SubscriptionPlanDialog> {
                               widget.onSubmit(
                                   name: _nameController.text,
                                   price: _priceController.text,
-                                  maxAccount: _maxAccountController.text,
                                   maxMessagingChannels:
                                       _maxMessagingChannelController.text,
                                   maxAnnouncement:

@@ -1,4 +1,5 @@
 import 'package:priorli/core/subscription/data/subscription_data_source.dart';
+import 'package:priorli/core/subscription/entities/payment_product_item.dart';
 import 'package:priorli/core/subscription/entities/subscription.dart';
 import 'package:priorli/core/subscription/entities/subscription_plan.dart';
 import 'package:priorli/core/base/result.dart';
@@ -19,7 +20,6 @@ class SubscriptionRepositoryImpl implements SubscriptionRepository {
       required String countryCode,
       required bool hasApartmentDocument,
       required List<String> notificationTypes,
-      int? maxAccount,
       bool? translation,
       int? maxMessagingChannels,
       int? maxAnnouncement,
@@ -33,7 +33,6 @@ class SubscriptionRepositoryImpl implements SubscriptionRepository {
               currency: currency,
               name: name,
               price: price,
-              maxAccount: maxAccount,
               countryCode: countryCode,
               translation: translation,
               maxMessagingChannels: maxMessagingChannels,
@@ -124,6 +123,79 @@ class SubscriptionRepositoryImpl implements SubscriptionRepository {
       return ResultSuccess(subscriptionModelList
           .map((e) => Subscription.modelToEntity(e))
           .toList());
+    } on ServerException {
+      return ResultFailure(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Result<PaymentProductItem>> addPaymentProductItem(
+      {required String name,
+      required String description,
+      required double price,
+      required String countryCode}) async {
+    try {
+      final paymentItemModel =
+          await subscriptionRemoteDataSource.addPaymentProductItem(
+              name: name,
+              description: description,
+              price: price,
+              countryCode: countryCode);
+      return ResultSuccess(PaymentProductItem.modelToEntity(paymentItemModel));
+    } on ServerException {
+      return ResultFailure(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Result<bool>> cancelSubscription(
+      {required String subscriptionId, required String companyId}) async {
+    try {
+      final isCancelled = await subscriptionRemoteDataSource.cancelSubscription(
+          subscriptionId: subscriptionId, companyId: companyId);
+      return ResultSuccess(isCancelled);
+    } on ServerException {
+      return ResultFailure(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Result<bool>> deletePaymentProductItem(
+      {required String paymentProductItemId}) async {
+    try {
+      final isDeleted = await subscriptionRemoteDataSource
+          .deletePaymentProductItem(paymentProductItemId: paymentProductItemId);
+      return ResultSuccess(isDeleted);
+    } on ServerException {
+      return ResultFailure(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Result<List<PaymentProductItem>>> getPaymentProductItems(
+      {required String countryCode}) async {
+    try {
+      final paymentItemModelList = await subscriptionRemoteDataSource
+          .getPaymentProductItems(countryCode: countryCode);
+      return ResultSuccess(paymentItemModelList
+          .map((e) => PaymentProductItem.modelToEntity(e))
+          .toList());
+    } on ServerException {
+      return ResultFailure(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Result<String>> purchasePaymentProduct(
+      {required String paymentProductItemId,
+      required String companyId,
+      required int quantity}) async {
+    try {
+      final url = await subscriptionRemoteDataSource.purchasePaymentProduct(
+          companyId: companyId,
+          paymentProductItemId: paymentProductItemId,
+          quantity: quantity);
+      return ResultSuccess(url);
     } on ServerException {
       return ResultFailure(ServerFailure());
     }

@@ -85,17 +85,16 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<Result<User>> registerWithCode(
-      {required String email,
-      required String password,
-      required String code,
-      required String companyId}) async {
+  Future<Result<User>> registerWithCode({
+    required String email,
+    required String password,
+    required String code,
+  }) async {
     try {
       final userModel = await userRemoteDataSource.registerWithCode(
         email: email,
         password: password,
         code: code,
-        companyId: companyId,
       );
       return ResultSuccess(User.modelToEntity(userModel));
     } on ServerException {

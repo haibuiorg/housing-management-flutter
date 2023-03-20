@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:priorli/presentation/company_user_management/manager_creation_form.dart';
 import 'package:priorli/presentation/shared/full_width_title.dart';
 import 'package:priorli/service_locator.dart';
-import 'package:responsive_framework/responsive_framework.dart';
 
 import '../../core/user/entities/user.dart';
 import 'company_user_cubit.dart';

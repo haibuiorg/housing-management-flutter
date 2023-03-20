@@ -1,3 +1,4 @@
+import 'package:priorli/core/subscription/models/payment_product_item_model.dart';
 import 'package:priorli/core/subscription/models/subscription_model.dart';
 import 'package:priorli/core/subscription/models/subscription_plan_model.dart';
 
@@ -6,6 +7,10 @@ abstract class SubscriptionDataSource {
       {required String countryCode});
   Future<String> checkout(
       {required String subscriptionPlanId,
+      required String companyId,
+      required int quantity});
+  Future<String> purchasePaymentProduct(
+      {required String paymentProductItemId,
       required String companyId,
       required int quantity});
   Future<SubscriptionModel> subscriptionStatusCheck(
@@ -19,7 +24,6 @@ abstract class SubscriptionDataSource {
     required String countryCode,
     required bool hasApartmentDocument,
     required List<String> notificationTypes,
-    int? maxAccount,
     bool? translation,
     int? maxMessagingChannels,
     int? maxAnnouncement,
@@ -31,4 +35,15 @@ abstract class SubscriptionDataSource {
   Future<bool> deleteSubscriptionPlan({required String subscriptionPlanId});
   Future<List<SubscriptionModel>> getCompanySubscriptions(
       {required String companyId});
+  Future<bool> cancelSubscription(
+      {required String subscriptionId, required String companyId});
+  Future<PaymentProductItemModel> addPaymentProductItem({
+    required String name,
+    required String description,
+    required double price,
+    required String countryCode,
+  });
+  Future<List<PaymentProductItemModel>> getPaymentProductItems(
+      {required String countryCode});
+  Future<bool> deletePaymentProductItem({required String paymentProductItemId});
 }
