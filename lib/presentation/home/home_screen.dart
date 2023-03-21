@@ -56,7 +56,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         onPressed: () {
                           GoRouter.of(context).push(createCompanyPath);
                         },
-                        child: const Text('Create a new company or community')),
+                        child: const Text(
+                          'Create a new company or community',
+                          textAlign: TextAlign.center,
+                        )),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(

@@ -17,23 +17,25 @@ class ContactLeadListView extends StatelessWidget {
           itemBuilder: (context, index) {
             return Padding(
               padding: const EdgeInsets.all(8.0),
-              child: ListTile(
-                onTap: () {},
-                trailing: IconButton(
-                  icon: const Icon(Icons.chevron_right_rounded),
-                  onPressed: () {},
+              child: SelectionArea(
+                child: ListTile(
+                  onTap: () {},
+                  trailing: IconButton(
+                    icon: const Icon(Icons.chevron_right_rounded),
+                    onPressed: () {},
+                  ),
+                  tileColor: Theme.of(context).cardColor,
+                  shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10))),
+                  title: Text('Name ${state.contactLeadList![index].name} \n'
+                      'Email ${state.contactLeadList![index].email} \n'
+                      'Phone ${state.contactLeadList![index].phone}'),
+                  subtitle:
+                      Text('Message: ${state.contactLeadList![index].message}'),
+                  leading: state.contactLeadList![index].type == 'contact_form'
+                      ? const Icon(Icons.contact_mail_rounded)
+                      : const Icon(Icons.percent_rounded),
                 ),
-                tileColor: Theme.of(context).cardColor,
-                shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10))),
-                title: Text('Name ${state.contactLeadList![index].name} \n'
-                    'Email ${state.contactLeadList![index].email} \n'
-                    'Phone ${state.contactLeadList![index].phone}'),
-                subtitle:
-                    Text('Message: ${state.contactLeadList![index].message}'),
-                leading: state.contactLeadList![index].type == 'contact_form'
-                    ? const Icon(Icons.contact_mail_rounded)
-                    : const Icon(Icons.percent_rounded),
               ),
             );
           });

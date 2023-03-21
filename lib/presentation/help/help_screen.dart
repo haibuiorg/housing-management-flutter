@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_emoji/flutter_emoji.dart';
 import 'package:go_router/go_router.dart';
-import 'package:priorli/app.dart';
 import 'package:priorli/core/utils/string_extension.dart';
 import 'package:priorli/presentation/help/help_cubit.dart';
 import 'package:priorli/presentation/help/help_state.dart';

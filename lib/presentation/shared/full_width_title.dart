@@ -13,9 +13,11 @@ class FullWidthTitle extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           FittedBox(
+            fit: BoxFit.fitWidth,
             child: Text(
               title ?? '',
-              style: Theme.of(context).textTheme.titleLarge,
+              textScaleFactor: 1,
+              style: Theme.of(context).textTheme.titleMedium,
               textAlign: TextAlign.left,
             ),
           ),
