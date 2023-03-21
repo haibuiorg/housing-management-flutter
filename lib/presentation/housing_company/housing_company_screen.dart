@@ -57,73 +57,74 @@ class _HousingCompanyScreenState extends State<HousingCompanyScreen> {
                   .updateUIFromCompany(state.housingCompany?.ui);
             }
             return Scaffold(
-                body: NestedScrollView(
-              headerSliverBuilder:
-                  (BuildContext context, bool innerBoxIsScrolled) {
-                return [
-                  SliverAppBar(
-                    leading: const SizedBox.shrink(),
-                    expandedHeight: 200,
-                    floating: false,
-                    pinned: true,
-                    actions: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: ElevatedButton.icon(
-                          icon: const Icon(Icons.settings),
-                          onPressed: state.housingCompany?.isUserManager == true
-                              ? () {
-                                  context.pushFromCurrentLocation(
-                                      manageScreenPath);
-                                }
-                              : null,
-                          label: const Text('Manage'),
-                        ),
-                      )
-                    ],
-                    title: Container(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 8, horizontal: 16),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          color: Theme.of(context).colorScheme.background),
+                body: RefreshIndicator(
+              onRefresh: () => cubit.init(widget.housingCompanyId),
+              child: CustomScrollView(slivers: [
+                SliverAppBar(
+                  expandedHeight: 200,
+                  floating: false,
+                  centerTitle: false,
+                  elevation: 8,
+                  forceElevated: true,
+                  pinned: true,
+                  actions: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: IconButton.filled(
+                        color: Theme.of(context).colorScheme.onPrimary,
+                        onPressed: state.housingCompany?.isUserManager == true
+                            ? () {
+                                context
+                                    .pushFromCurrentLocation(manageScreenPath);
+                              }
+                            : null,
+                        icon: const Icon(Icons.manage_accounts),
+                      ),
+                    )
+                  ],
+                  title: Container(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: Theme.of(context).colorScheme.background),
+                    child: FittedBox(
                       child: Text(
                         state.housingCompany?.name ?? 'Housing company',
                       ),
                     ),
-                    flexibleSpace: FlexibleSpaceBar(
-                        background: CachedNetworkImage(
-                            fit: BoxFit.cover,
-                            imageUrl: state.housingCompany?.coverImageUrl ?? '',
-                            errorWidget: (context, url, error) => Image.asset(
-                                  'assets/apartment_background.png',
-                                  fit: BoxFit.fill,
-                                ))),
                   ),
-                  const SliverToBoxAdapter(
-                    child: AnnouncementBox(),
-                  ),
-                  const SliverToBoxAdapter(
-                    child: CalendarBox(),
-                  ),
-                ];
-              },
-              body: Padding(
-                  padding: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).padding.bottom),
-                  child: ResponsiveGridView.builder(
-                      itemCount: widgetList.length,
-                      alignment: Alignment.center,
-                      gridDelegate: const ResponsiveGridDelegate(
-                          minCrossAxisExtent: 300,
-                          childAspectRatio: 4 / 3,
-                          mainAxisSpacing: 24,
-                          crossAxisSpacing: 24),
-                      itemBuilder: (context, index) {
-                        return Card(
+                  flexibleSpace: FlexibleSpaceBar(
+                      background: CachedNetworkImage(
+                          fit: BoxFit.cover,
+                          imageUrl: state.housingCompany?.coverImageUrl ?? '',
+                          errorWidget: (context, url, error) => Image.asset(
+                                'assets/apartment_background.png',
+                                fit: BoxFit.fill,
+                              ))),
+                ),
+                const SliverToBoxAdapter(
+                  child: AnnouncementBox(),
+                ),
+                const SliverToBoxAdapter(
+                  child: CalendarBox(),
+                ),
+                SliverGrid.builder(
+                    itemCount: widgetList.length,
+                    gridDelegate: const ResponsiveGridDelegate(
+                        minCrossAxisExtent: 200,
+                        maxCrossAxisExtent: 500,
+                        mainAxisSpacing: 8,
+                        crossAxisSpacing: 8),
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: Card(
                           child: widgetList[index],
-                        );
-                      })),
+                        ),
+                      );
+                    }),
+              ]),
             ));
           }),
     );
@@ -142,7 +143,7 @@ class CalendarBox extends StatelessWidget {
       return Padding(
         padding: EdgeInsets.all(ResponsiveValue(
               context,
-              defaultValue: 32.0,
+              defaultValue: 16.0,
               valueWhen: const [
                 Condition.smallerThan(
                   name: TABLET,
@@ -150,11 +151,11 @@ class CalendarBox extends StatelessWidget {
                 ),
                 Condition.largerThan(
                   name: TABLET,
-                  value: 32.0,
+                  value: 16.0,
                 )
               ],
             ).value ??
-            32.0),
+            16.0),
         child: AspectRatio(
           aspectRatio: ResponsiveValue(
                 context,
@@ -239,21 +240,24 @@ class AnnouncementBox extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             height: 120,
-            child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: state.announcementList?.length ?? 0,
-                itemBuilder: (context, index) {
-                  final announcement = state.announcementList?[index];
-                  return announcement != null
-                      ? Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: AnnouncementItem(
-                            initialExpand: false,
-                            companyId: state.housingCompany?.id ?? '',
-                            announcement: announcement,
-                          ))
-                      : const SizedBox.shrink();
-                }),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: ListView.builder(
+                  clipBehavior: Clip.none,
+                  scrollDirection: Axis.horizontal,
+                  itemCount: state.announcementList?.length ?? 0,
+                  itemBuilder: (context, index) {
+                    final announcement = state.announcementList?[index];
+                    return announcement != null
+                        ? Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: AnnouncementItem(
+                              companyId: state.housingCompany?.id ?? '',
+                              announcement: announcement,
+                            ))
+                        : const SizedBox.shrink();
+                  }),
+            ),
           ),
           TextButton(
               onPressed: () {

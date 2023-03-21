@@ -59,7 +59,7 @@ class _AdminScreenState extends State<AdminScreen> {
                 SliverAppBar(
                   floating: true,
                   pinned: true,
-                  snap: true,
+                  snap: false,
                   forceElevated: innerBoxIsScrolled,
                   shadowColor: Theme.of(context).colorScheme.primaryContainer,
                   title: const Text('Admin'),
@@ -80,17 +80,16 @@ class _AdminScreenState extends State<AdminScreen> {
                     ),
                   ],
                   bottom: PreferredSize(
-                    preferredSize: const Size.fromHeight(64.0),
+                    preferredSize: const Size.fromHeight(56.0),
                     child: TabBar(
                       tabs: [
                         for (final widget in _widgetOptions)
                           Tab(
                             height: 52,
-                            child: Center(
-                              child: Text(
-                                widget.toStringShort(),
-                                style: const TextStyle(fontSize: 20),
-                              ),
+                            child: Text(
+                              widget.toStringShort(),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
                       ],

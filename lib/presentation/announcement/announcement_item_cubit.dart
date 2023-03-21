@@ -20,13 +20,15 @@ class AnnouncementItemCubit extends Cubit<AnnouncementItemState> {
         housingCompanyId: housingCompanyId, announcement: announcement));
   }
 
-  Future<void> getAnnouncementDetail() async {
+  Future<Announcement?> getAnnouncementDetail() async {
     final getAnnouncementDetailResult = await _getAnnouncement(
         GetAnnouncementParams(
             housingCompanyId: state.housingCompanyId ?? '',
             announcementId: state.announcement?.id ?? ''));
     if (getAnnouncementDetailResult is ResultSuccess<Announcement>) {
       emit(state.copyWith(announcement: getAnnouncementDetailResult.data));
+      return state.announcement;
     }
+    return null;
   }
 }

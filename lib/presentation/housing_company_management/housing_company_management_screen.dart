@@ -114,162 +114,152 @@ class _HousingCompanyManagementScreenState
                   ],
                   title: const Text('Manage'),
                 ),
-                body: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                  ),
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: SingleChildScrollView(
-                          child: Column(children: [
-                            CustomFormField(
-                              textEditingController: _companyName,
-                              hintText: 'Company name',
-                              autofocus: false,
-                              onChanged: (value) =>
-                                  cubit.updateCompanyName(value),
-                              keyboardType: TextInputType.name,
-                            ),
-                            CustomFormField(
-                              hintText: 'Street address 1',
-                              textEditingController: _streetAddress1,
-                              autofocus: false,
-                              onChanged: (value) =>
-                                  cubit.updateStreetAddress1(value),
-                              keyboardType: TextInputType.streetAddress,
-                            ),
-                            CustomFormField(
-                              hintText: 'Street address 2',
-                              textEditingController: _streetAddress2,
-                              autofocus: false,
-                              onChanged: (value) =>
-                                  cubit.updateStreetAddress2(value),
-                              keyboardType: TextInputType.streetAddress,
-                            ),
-                            CustomFormField(
-                              hintText: 'Postal code',
-                              textEditingController: _postalCode,
-                              autofocus: false,
-                              onChanged: (value) =>
-                                  cubit.updatePostalCode(value),
-                              keyboardType: TextInputType.streetAddress,
-                            ),
-                            CustomFormField(
-                              hintText: 'City',
-                              textEditingController: _city,
-                              autofocus: false,
-                              onChanged: (value) => cubit.updateCity(value),
-                              keyboardType: TextInputType.streetAddress,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 8.0, right: 8.0, top: 8.0),
-                              child: Row(
-                                children: [
-                                  Text(
-                                    'Country: ',
-                                    style:
-                                        Theme.of(context).textTheme.bodyLarge,
-                                  ),
-                                  state.housingCompany?.countryCode != null
-                                      ? Text(
-                                          EmojiParser().emojify(
-                                              ':flag-${state.housingCompany?.countryCode}:'),
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .displaySmall,
-                                        )
-                                      : const Text('No data')
-                                ],
-                              ),
-                            ),
-                            CustomFormField(
-                              hintText: 'Business Id',
-                              textEditingController: _businessId,
-                              autofocus: false,
-                              onChanged: (value) => cubit.updateCity(value),
-                              keyboardType: TextInputType.text,
-                            ),
-                            SizedBox.fromSize(
-                              size: const Size.fromHeight(56),
-                            ),
-                            if (kIsWeb)
-                              SettingButton(
-                                onPressed: () {
-                                  context.pushFromCurrentLocation(
-                                      companySubscriptionScreenPath);
-                                },
-                                label: Text(
-                                  'Manage subscription',
+                body: Column(
+                  children: [
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: Column(children: [
+                          CustomFormField(
+                            textEditingController: _companyName,
+                            hintText: 'Company name',
+                            autofocus: false,
+                            onChanged: (value) =>
+                                cubit.updateCompanyName(value),
+                            keyboardType: TextInputType.name,
+                          ),
+                          CustomFormField(
+                            hintText: 'Street address 1',
+                            textEditingController: _streetAddress1,
+                            autofocus: false,
+                            onChanged: (value) =>
+                                cubit.updateStreetAddress1(value),
+                            keyboardType: TextInputType.streetAddress,
+                          ),
+                          CustomFormField(
+                            hintText: 'Street address 2',
+                            textEditingController: _streetAddress2,
+                            autofocus: false,
+                            onChanged: (value) =>
+                                cubit.updateStreetAddress2(value),
+                            keyboardType: TextInputType.streetAddress,
+                          ),
+                          CustomFormField(
+                            hintText: 'Postal code',
+                            textEditingController: _postalCode,
+                            autofocus: false,
+                            onChanged: (value) => cubit.updatePostalCode(value),
+                            keyboardType: TextInputType.streetAddress,
+                          ),
+                          CustomFormField(
+                            hintText: 'City',
+                            textEditingController: _city,
+                            autofocus: false,
+                            onChanged: (value) => cubit.updateCity(value),
+                            keyboardType: TextInputType.streetAddress,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                left: 8.0, right: 8.0, top: 8.0),
+                            child: Row(
+                              children: [
+                                Text(
+                                  'Country: ',
                                   style: Theme.of(context).textTheme.bodyLarge,
                                 ),
-                              ),
+                                state.housingCompany?.countryCode != null
+                                    ? Text(
+                                        EmojiParser().emojify(
+                                            ':flag-${state.housingCompany?.countryCode}:'),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .displaySmall,
+                                      )
+                                    : const Text('No data')
+                              ],
+                            ),
+                          ),
+                          CustomFormField(
+                            hintText: 'Business Id',
+                            textEditingController: _businessId,
+                            autofocus: false,
+                            onChanged: (value) => cubit.updateCity(value),
+                            keyboardType: TextInputType.text,
+                          ),
+                          SizedBox.fromSize(
+                            size: const Size.fromHeight(56),
+                          ),
+                          if (kIsWeb)
                             SettingButton(
                               onPressed: () {
                                 context.pushFromCurrentLocation(
-                                    housingCompanyUiScreenPath);
+                                    companySubscriptionScreenPath);
                               },
                               label: Text(
-                                'Appearance',
+                                'Manage subscription',
                                 style: Theme.of(context).textTheme.bodyLarge,
                               ),
                             ),
-                            SettingButton(
-                              onPressed: () {
-                                context.pushFromCurrentLocation(
-                                    housingCompanyPaymentPath);
-                              },
-                              label: Text(
-                                'Payment and bank account detail',
-                                style: Theme.of(context).textTheme.bodyLarge,
-                              ),
+                          SettingButton(
+                            onPressed: () {
+                              context.pushFromCurrentLocation(
+                                  housingCompanyUiScreenPath);
+                            },
+                            label: Text(
+                              'Appearance',
+                              style: Theme.of(context).textTheme.bodyLarge,
                             ),
-                            SettingButton(
-                              onPressed: () {
-                                context
-                                    .pushFromCurrentLocation(inviteTenantPath);
-                              },
-                              label: Text(
-                                'Send invitation to an apartment',
-                                style: Theme.of(context).textTheme.bodyLarge,
-                              ),
+                          ),
+                          SettingButton(
+                            onPressed: () {
+                              context.pushFromCurrentLocation(
+                                  housingCompanyPaymentPath);
+                            },
+                            label: Text(
+                              'Payment and bank account detail',
+                              style: Theme.of(context).textTheme.bodyLarge,
                             ),
-                            SettingButton(
-                              onPressed: () {
-                                context
-                                    .pushFromCurrentLocation(companyUserPath);
-                              },
-                              label: Text(
-                                'User managements',
-                                style: Theme.of(context).textTheme.bodyLarge,
-                              ),
+                          ),
+                          SettingButton(
+                            onPressed: () {
+                              context.pushFromCurrentLocation(inviteTenantPath);
+                            },
+                            label: Text(
+                              'Send invitation to an apartment',
+                              style: Theme.of(context).textTheme.bodyLarge,
                             ),
-                            SettingButton(
-                              onPressed: () async {
-                                _showConfirmDeleteDialog(() {
-                                  cubit.deleteThisHousingCompany();
-                                });
-                              },
-                              label: Text(
-                                'Delete this company',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyLarge
-                                    ?.copyWith(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .error),
-                              ),
+                          ),
+                          SettingButton(
+                            onPressed: () {
+                              context.pushFromCurrentLocation(companyUserPath);
+                            },
+                            label: Text(
+                              'User managements',
+                              style: Theme.of(context).textTheme.bodyLarge,
                             ),
-                            SizedBox.fromSize(
-                              size: const Size.fromHeight(56),
-                            )
-                          ]),
-                        ),
+                          ),
+                          SettingButton(
+                            onPressed: () async {
+                              _showConfirmDeleteDialog(() {
+                                cubit.deleteThisHousingCompany();
+                              });
+                            },
+                            label: Text(
+                              'Delete this company',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge
+                                  ?.copyWith(
+                                      color:
+                                          Theme.of(context).colorScheme.error),
+                            ),
+                          ),
+                          SizedBox.fromSize(
+                            size: const Size.fromHeight(56),
+                          )
+                        ]),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ))
             : const AppLottieAnimation(loadingResource: 'apartment');
       }),

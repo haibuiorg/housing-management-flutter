@@ -61,19 +61,14 @@ class WaterConsumptionManagementScreen extends StatelessWidget {
                               yValueMapper: (WaterPrice price, _) =>
                                   price.basicFee)
                         ]),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text('Current water price:'),
-                            Text(
-                                'Per cube: ${formatCurrency(state.activeWaterPrice?.pricePerCube, state.housingCompany?.currencyCode)}'),
-                            Text(
-                                'Basic fee: ${formatCurrency(state.activeWaterPrice?.basicFee, state.housingCompany?.currencyCode)}'),
-                          ],
-                        ),
+                        const Text('Current water price:'),
+                        Text(
+                            'Per cube: ${formatCurrency(state.activeWaterPrice?.pricePerCube, state.housingCompany?.currencyCode)}'),
+                        Text(
+                            'Basic fee: ${formatCurrency(state.activeWaterPrice?.basicFee, state.housingCompany?.currencyCode)}'),
                         if (state.housingCompany?.isUserManager == true)
                           OutlinedButton(
                               onPressed: () {
@@ -111,6 +106,29 @@ class WaterConsumptionManagementScreen extends StatelessWidget {
                         'Year: ${state.latestWaterConsumption?.year ?? 'Unknown'}'),
                     Text(
                         'Progress: ${state.latestWaterConsumption?.consumptionValues?.length ?? '0'}/${state.housingCompany?.apartmentCount ?? '0'}'),
+                    if (state.housingCompany?.isUserManager == true)
+                      OutlinedButton(
+                          onPressed: () {
+                            showDialog(
+                                context: context,
+                                builder: (_) => WaterConsumptionDialog(
+                                      showIncompleteError: (state
+                                                  .latestWaterConsumption
+                                                  ?.consumptionValues
+                                                  ?.length ??
+                                              0) <
+                                          (state.housingCompany
+                                                  ?.apartmentCount ??
+                                              0),
+                                      onSubmit: ({
+                                        required totalReading,
+                                      }) async {
+                                        await cubit.startNewWaterBillPeriod(
+                                            totalReading);
+                                      },
+                                    ));
+                          },
+                          child: const Text('Start new water bill period')),
                     Padding(
                       padding: const EdgeInsets.only(top: 32, bottom: 32),
                       child: Row(
@@ -140,31 +158,6 @@ class WaterConsumptionManagementScreen extends StatelessWidget {
                               direction: Axis.vertical,
                             ),*/
                               ),
-                          if (state.housingCompany?.isUserManager == true)
-                            OutlinedButton(
-                                onPressed: () {
-                                  showDialog(
-                                      context: context,
-                                      builder: (_) => WaterConsumptionDialog(
-                                            showIncompleteError: (state
-                                                        .latestWaterConsumption
-                                                        ?.consumptionValues
-                                                        ?.length ??
-                                                    0) <
-                                                (state.housingCompany
-                                                        ?.apartmentCount ??
-                                                    0),
-                                            onSubmit: ({
-                                              required totalReading,
-                                            }) async {
-                                              await cubit
-                                                  .startNewWaterBillPeriod(
-                                                      totalReading);
-                                            },
-                                          ));
-                                },
-                                child:
-                                    const Text('Start new water bill period')),
                         ],
                       ),
                     ),

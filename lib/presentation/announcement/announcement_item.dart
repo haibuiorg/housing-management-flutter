@@ -4,19 +4,17 @@ import 'package:priorli/core/announcement/entities/announcement.dart';
 import 'package:priorli/presentation/announcement/announcement_item_cubit.dart';
 import 'package:priorli/presentation/announcement/announcement_item_state.dart';
 import 'package:priorli/presentation/shared/app_image_row.dart';
-import 'package:priorli/presentation/shared/tap_card.dart';
 import 'package:priorli/service_locator.dart';
 
 import '../../core/utils/time_utils.dart';
 
 class AnnouncementItem extends StatefulWidget {
-  const AnnouncementItem(
-      {super.key,
-      required this.announcement,
-      required this.companyId,
-      this.initialExpand = false});
+  const AnnouncementItem({
+    super.key,
+    required this.announcement,
+    required this.companyId,
+  });
   final Announcement announcement;
-  final bool initialExpand;
   final String companyId;
 
   @override
@@ -24,7 +22,6 @@ class AnnouncementItem extends StatefulWidget {
 }
 
 class _AnnouncementItemState extends State<AnnouncementItem> {
-  late bool _expanded;
   late AnnouncementItemCubit _cubit;
 
   @override
@@ -32,7 +29,6 @@ class _AnnouncementItemState extends State<AnnouncementItem> {
     super.initState();
     _cubit = serviceLocator<AnnouncementItemCubit>();
     _cubit.init(widget.companyId, widget.announcement);
-    _expanded = widget.initialExpand;
   }
 
   @override
@@ -42,10 +38,57 @@ class _AnnouncementItemState extends State<AnnouncementItem> {
   }
 
   _expand() {
-    setState(() {
-      _expanded = !_expanded;
-    });
-    _cubit.getAnnouncementDetail();
+    _cubit.getAnnouncementDetail().then((announcement) => {
+          if (announcement != null)
+            {
+              showDialog(
+                  context: context,
+                  builder: (builder) {
+                    return Dialog.fullscreen(
+                      child: Scaffold(
+                          appBar: AppBar(
+                            title: Text(announcement.title),
+                          ),
+                          body: Container(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(announcement.subtitle),
+                                const SizedBox(
+                                  height: 8,
+                                ),
+                                Text(
+                                    '${announcement.updatedOn != null ? 'Edited on' : 'Created on'} ${getFormattedDateTime(announcement.updatedOn ?? announcement.createdOn ?? 0)} by ${announcement.displayName}'),
+                                const SizedBox(
+                                  height: 8,
+                                ),
+                                SizedBox(
+                                  height: 100,
+                                  child: AppImageRow(
+                                    storageItems: announcement.storageItems,
+                                  ),
+                                ),
+                                Expanded(
+                                  child: SingleChildScrollView(
+                                    child: Align(
+                                      alignment: Alignment.topLeft,
+                                      child: Text(
+                                        announcement.body,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 8,
+                                ),
+                              ],
+                            ),
+                          )),
+                    );
+                  })
+            }
+        });
   }
 
   @override
@@ -54,32 +97,29 @@ class _AnnouncementItemState extends State<AnnouncementItem> {
       create: (context) => _cubit,
       child: BlocBuilder<AnnouncementItemCubit, AnnouncementItemState>(
           builder: (context, state) {
-        return TapCard(
-          onTap: _expand,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  state.announcement?.title ?? '',
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-                Text(
-                  state.announcement?.subtitle ?? '',
-                  style: Theme.of(context).textTheme.labelMedium,
-                ),
-                _expanded
-                    ? AppImageRow(
-                        storageItems: state.announcement?.storageItems)
-                    : const SizedBox.shrink(),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Text(
-                      '${state.announcement?.updatedOn != null ? 'Edited on' : 'Created on'} ${getFormattedDateTime(state.announcement?.updatedOn ?? state.announcement?.createdOn ?? 0)} by ${state.announcement?.displayName}'),
-                )
-              ],
+        return SizedBox(
+          width: MediaQuery.of(context).size.width * 0.75,
+          child: ListTile(
+            tileColor: Theme.of(context).cardColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(
+                8,
+              ),
             ),
+            isThreeLine: false,
+            trailing: (state.announcement?.storageItems?.isNotEmpty == true)
+                ? const IconButton.filled(
+                    onPressed: null, icon: Icon(Icons.attachment_rounded))
+                : null,
+            title: Text(widget.announcement.title),
+            subtitle: Text(
+              '${widget.announcement.subtitle}\n${state.announcement?.updatedOn != null ? 'Edited on' : 'Created on'} ${getFormattedDateTime(state.announcement?.updatedOn ?? state.announcement?.createdOn ?? 0)} by ${state.announcement?.displayName}',
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+            ),
+            onTap: () {
+              _expand();
+            },
           ),
         );
       }),

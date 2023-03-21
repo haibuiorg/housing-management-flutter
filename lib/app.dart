@@ -190,7 +190,7 @@ class _AppState extends State<App> {
                   context,
                   Column(
                     children: [
-                      isIOSWeb
+                      /*isIOSWeb
                           ? SizedBox(
                               height: 75,
                               child: Center(
@@ -203,20 +203,17 @@ class _AppState extends State<App> {
                                     child: Image.asset(
                                         'assets/google-play-png-logo.png'),
                                   ))
-                              : const SizedBox.shrink(),
+                              : const SizedBox.shrink(),*/
                       Expanded(child: child!),
                     ],
                   ),
                 ),
-                maxWidth: kIsWeb && !isIOSWeb && !isAndroidWeb
-                    ? MediaQuery.of(context).size.width * 0.95
-                    : 1200,
                 minWidth: 320,
                 defaultScale: true,
                 breakpoints: const [
                   ResponsiveBreakpoint.autoScale(480, name: MOBILE),
                   ResponsiveBreakpoint.resize(800, name: TABLET),
-                  ResponsiveBreakpoint.autoScale(1000, name: DESKTOP),
+                  ResponsiveBreakpoint.resize(1000, name: DESKTOP),
                   ResponsiveBreakpoint.autoScale(1700, name: 'XL'),
                 ],
               ),
