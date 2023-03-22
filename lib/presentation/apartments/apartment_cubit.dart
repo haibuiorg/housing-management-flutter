@@ -84,7 +84,9 @@ class ApartmentCubit extends Cubit<ApartmentState> {
         apartmentId: apartmentId,
         housingCompanyId: housingCompanyId));
     if (billByYearResult is ResultSuccess<List<WaterBill>>) {
-      emit(state.copyWith(yearlyWaterBills: billByYearResult.data));
+      final waterBills = billByYearResult.data;
+      waterBills.sort((a, b) => a.period.compareTo(b.period));
+      emit(state.copyWith(yearlyWaterBills: waterBills));
     }
   }
 

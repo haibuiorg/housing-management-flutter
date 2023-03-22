@@ -62,13 +62,15 @@ class _HousingCompanyPaymentScreenState
                 onPressed: () {
                   showDialog(
                       context: context,
-                      builder: (context) {
+                      builder: (builder) {
                         return AddBankAccountDialog(onSubmit: (
                             {required bankAccountNumber,
                             required swift}) async {
-                          cubit.addNewBankAccount(
-                              bankAccountNumber: bankAccountNumber,
-                              swift: swift);
+                          cubit
+                              .addNewBankAccount(
+                                  bankAccountNumber: bankAccountNumber,
+                                  swift: swift)
+                              .then((value) => Navigator.pop(builder));
                         });
                       });
                 }),

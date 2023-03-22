@@ -7,6 +7,7 @@ import 'package:priorli/presentation/water_consumption_management/water_consumpt
 import 'package:priorli/service_locator.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
+import '../../core/utils/number_formatters.dart';
 import '../../core/utils/string_extension.dart';
 import 'water_consumption_management_cubit.dart';
 
@@ -196,6 +197,7 @@ class _WaterConsumptionDialogState extends State<WaterConsumptionDialog> {
           : const Text('Start new water bill period'),
       content: Column(mainAxisSize: MainAxisSize.min, children: [
         CustomFormField(
+          inputFormatters: [DecimalTextInputFormatter(decimalRange: 2)],
           keyboardType: const TextInputType.numberWithOptions(decimal: true),
           hintText: 'Total reading',
           textEditingController: _totalReadingController,
@@ -240,11 +242,13 @@ class _WaterPriceDialogState extends State<WaterPriceDialog> {
       title: const Text('Add new water price'),
       content: Column(mainAxisSize: MainAxisSize.min, children: [
         CustomFormField(
+          inputFormatters: [DecimalTextInputFormatter(decimalRange: 2)],
           keyboardType: const TextInputType.numberWithOptions(decimal: true),
           hintText: 'Per cube',
           textEditingController: _perCubeController,
         ),
         CustomFormField(
+          inputFormatters: [DecimalTextInputFormatter(decimalRange: 2)],
           keyboardType: const TextInputType.numberWithOptions(decimal: true),
           hintText: 'Basic fee',
           textEditingController: _basicFeeController,

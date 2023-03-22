@@ -1,7 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:priorli/go_router_navigation.dart';
+import 'package:priorli/presentation/main/main_screen.dart';
 import 'package:priorli/presentation/shared/app_lottie_animation.dart';
 import 'package:priorli/presentation/shared/custom_form_field.dart';
 import 'package:priorli/service_locator.dart';
@@ -95,7 +97,7 @@ class _HousingCompanyManagementScreenState
       child: BlocConsumer<HousingCompanyManagementCubit,
           HousingCompanyManagementState>(listener: (context, state) {
         if (state.housingCompanyDeleted == true) {
-          Navigator.of(context).popUntil(ModalRoute.withName(mainPathName));
+          GoRouter.of(context).go(mainPath);
         }
       }, builder: (context, state) {
         return state.housingCompany?.isUserManager == true
