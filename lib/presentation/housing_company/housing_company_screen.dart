@@ -70,7 +70,7 @@ class _HousingCompanyScreenState extends State<HousingCompanyScreen> {
                   actions: [
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: IconButton.filled(
+                      child: IconButton(
                         color: Theme.of(context).colorScheme.onPrimary,
                         onPressed: state.housingCompany?.isUserManager == true
                             ? () {

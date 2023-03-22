@@ -108,7 +108,7 @@ class _AnnouncementItemState extends State<AnnouncementItem> {
             ),
             isThreeLine: false,
             trailing: (state.announcement?.storageItems?.isNotEmpty == true)
-                ? const IconButton.filled(
+                ? const IconButton(
                     onPressed: null, icon: Icon(Icons.attachment_rounded))
                 : null,
             title: Text(widget.announcement.title),

@@ -16,6 +16,7 @@ class _ContactUsPublicScreenState extends State<ContactUsPublicScreen> {
       appBar: AppBar(
         leading: Image.asset('assets/images/logo.png'),
         title: const Text('Contact Us'),
+        backgroundColor: Theme.of(context).colorScheme.background,
       ),
       body: const Center(
         child: Text('Contact Us'),
