@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:priorli/presentation/polls/poll_creation_form.dart';
 import 'package:priorli/presentation/polls/poll_detail.dart';
 import 'package:priorli/presentation/polls/poll_screen_cubit.dart';

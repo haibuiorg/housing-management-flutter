@@ -35,7 +35,7 @@ class EditPollParams extends Equatable {
   final List<String>? additionInvitees;
   final bool? deleted;
 
-  EditPollParams(
+  const EditPollParams(
       {this.name,
       this.description,
       this.expandable,

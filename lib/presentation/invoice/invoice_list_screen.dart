@@ -3,12 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:priorli/core/utils/time_utils.dart';
 import 'package:priorli/presentation/invoice/invoice_list_cubit.dart';
 import 'package:priorli/presentation/invoice/invoice_list_state.dart';
-import 'package:priorli/presentation/shared/app_gallery.dart';
 import 'package:priorli/presentation/shared/full_width_pair_text.dart';
 import 'package:priorli/presentation/shared/full_width_title.dart';
 import 'package:priorli/presentation/shared/pdf_viewer.dart';
 import 'package:priorli/presentation/shared/popover.dart';
-import 'package:priorli/presentation/shared/tap_card.dart';
 import 'package:priorli/service_locator.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:priorli/core/utils/string_extension.dart';
 import 'package:priorli/presentation/shared/custom_form_field.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 

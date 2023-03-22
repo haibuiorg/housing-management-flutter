@@ -79,14 +79,14 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 const Spacer(),
                 Text(
                   'Forgot your password?',
-                  style: Theme.of(context).textTheme.headline5,
+                  style: Theme.of(context).textTheme.headlineSmall,
                   textAlign: TextAlign.center,
                 ),
                 Container(
                   margin: const EdgeInsets.only(top: 16),
                   child: Text(
                     'Enter your email address for resetting password',
-                    style: Theme.of(context).textTheme.subtitle1,
+                    style: Theme.of(context).textTheme.titleMedium,
                     textAlign: TextAlign.center,
                   ),
                 ),

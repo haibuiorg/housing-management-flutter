@@ -1,9 +1,7 @@
-import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:mime/mime.dart';
 
 import '../../base/exceptions.dart';
 import 'storage_data_source.dart';

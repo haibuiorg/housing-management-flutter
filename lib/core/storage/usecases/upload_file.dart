@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:equatable/equatable.dart';
 import 'package:priorli/core/base/result.dart';

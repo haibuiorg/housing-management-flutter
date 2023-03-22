@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:priorli/core/announcement/entities/announcement.dart';
 import 'package:priorli/core/announcement/usecases/get_announcement_list.dart';
 import 'package:priorli/core/apartment/entities/apartment.dart';

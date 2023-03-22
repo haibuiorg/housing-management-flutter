@@ -1,9 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:priorli/core/housing/entities/housing_company.dart';
-import 'package:priorli/core/utils/string_extension.dart';
 import 'package:priorli/go_router_navigation.dart';
 import 'package:priorli/presentation/shared/tap_card.dart';
 import 'package:priorli/setting_cubit.dart';

@@ -1,7 +1,5 @@
-import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:priorli/core/event/entities/event_type.dart';
 import 'package:priorli/notification_service.dart';
 import 'package:priorli/presentation/events/event_screen_cubit.dart';

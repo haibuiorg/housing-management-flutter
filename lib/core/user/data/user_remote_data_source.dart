@@ -14,7 +14,6 @@ class UserRemoteDataSource implements UserDataSource {
   Future<UserModel> getUserInfo() async {
     try {
       final response = await client.get(_path);
-      print(response.data);
       return UserModel.fromJson(response.data);
     } catch (error) {
       throw ServerException(error: error);
@@ -75,7 +74,7 @@ class UserRemoteDataSource implements UserDataSource {
       "password": password,
       "phone": phone,
       "first_name": firstName,
-      "last_name": lastName
+      "last_name": lastName,
     };
     try {
       final result = await client.post(_registerPath, data: data);

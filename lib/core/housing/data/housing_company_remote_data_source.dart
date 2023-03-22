@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:priorli/core/housing/entities/housing_company.dart';
 import 'package:priorli/core/housing/models/housing_company_model.dart';
 import 'package:priorli/core/user/models/user_model.dart';
 

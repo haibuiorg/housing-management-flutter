@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:go_router/go_router.dart';
 import 'package:priorli/core/utils/color_extension.dart';
 import 'package:priorli/presentation/file_selector/file_selector.dart';
 import 'package:priorli/presentation/housing_company_ui/housing_company_ui_screen_cubit.dart';

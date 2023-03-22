@@ -7,7 +7,7 @@ class AcceptInvitationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.amberAccent,
-      child: Column(
+      child: const Column(
         children: [],
       ),
     );

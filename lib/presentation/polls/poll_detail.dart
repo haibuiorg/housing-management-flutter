@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:priorli/core/poll/entities/poll_type.dart';
-import 'package:priorli/core/poll/entities/voting_option.dart';
 import 'package:priorli/presentation/housing_company/components/poll_chart.dart';
 import 'package:priorli/presentation/polls/poll_screen_cubit.dart';
 import 'package:priorli/presentation/polls/poll_screen_state.dart';

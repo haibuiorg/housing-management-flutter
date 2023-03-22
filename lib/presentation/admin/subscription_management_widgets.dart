@@ -262,7 +262,7 @@ class _PaymentProductDialogState extends State<PaymentProductDialog> {
                     );
                   }
                 : null,
-            child: Text('Add payment product')),
+            child: const Text('Add payment product')),
       ],
     );
   }

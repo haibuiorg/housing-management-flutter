@@ -9,8 +9,6 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../../core/water_usage/entities/water_consumption.dart';
 import '../../add_apartment/add_apartment_screen.dart';
-import '../../announcement/announcement_item.dart';
-import '../../announcement/announcement_screen.dart';
 import '../../apartments/apartment_screen.dart';
 import '../../documents/document_list_screen.dart';
 import '../../invoice/invoice_creation_form.dart';

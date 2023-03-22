@@ -144,13 +144,13 @@ class _LoginScreenState extends State<LoginScreen> {
                         child:
                             AppLottieAnimation(loadingResource: 'apartment')),
                   ),
-                  /*OutlinedButton(
+                  OutlinedButton(
                       style: OutlinedButton.styleFrom(
                           minimumSize: const Size.fromHeight(40)),
                       onPressed: () {
                         GoRouter.of(context).push(registerPath);
                       },
-                      child: const Text('Register')),*/
+                      child: const Text('Register')),
                   TextButton(
                       style: OutlinedButton.styleFrom(
                           minimumSize: const Size.fromHeight(40)),

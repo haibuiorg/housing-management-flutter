@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:priorli/core/subscription/entities/payment_product_item.dart';
 import 'package:priorli/core/subscription/entities/subscription.dart';
 import 'package:priorli/core/subscription/entities/subscription_plan.dart';
 import 'package:priorli/core/utils/string_extension.dart';
 import 'package:priorli/presentation/housing_company_subscription/company_subscription_cubit.dart';
 import 'package:priorli/presentation/housing_company_subscription/company_subscription_state.dart';
-import 'package:priorli/presentation/shared/full_width_pair_text.dart';
 import 'package:priorli/presentation/shared/full_width_title.dart';
 import 'package:priorli/service_locator.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../core/utils/constants.dart';
 import 'widgets/subscription_plan_box.dart';
 
 const companySubscriptionScreenPath = 'company_subscription';

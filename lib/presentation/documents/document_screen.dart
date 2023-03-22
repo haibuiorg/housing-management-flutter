@@ -16,7 +16,7 @@ class DocumentScreen extends StatelessWidget {
         child: BlocConsumer<DocumentListScreenCubit, DocumentListScreenState>(
             listener: (context, state) {},
             builder: (context, state) {
-              return Scaffold();
+              return const Scaffold();
             }));
   }
 }

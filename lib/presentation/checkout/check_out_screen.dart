@@ -67,7 +67,7 @@ class CheckoutScreenState extends State<CheckoutScreen> {
   void _redirectToStripe(String apiKey, String sessionId) {
     //<--- prepare the JS in a normal string
     final redirectToCheckoutJs = '''
-var stripe = Stripe(\'$apiKey\');
+var stripe = Stripe('$apiKey');
     
 stripe.redirectToCheckout({
   sessionId: '$sessionId'

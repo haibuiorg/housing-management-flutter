@@ -1,4 +1,3 @@
-import 'package:equatable/equatable.dart';
 import 'package:priorli/core/base/result.dart';
 import 'package:priorli/core/base/usecase.dart';
 import 'package:priorli/core/water_usage/entities/water_bill.dart';
