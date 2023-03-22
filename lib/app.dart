@@ -116,6 +116,9 @@ class _AppState extends State<App> {
         return DynamicColorBuilder(
             builder: (lightColorScheme, darkColorScheme) {
           return MaterialApp.router(
+            onGenerateTitle: (context) {
+              return 'Priorli dashboard';
+            },
             debugShowCheckedModeBanner: false,
             routerConfig: appRouter,
             theme: ThemeData(
