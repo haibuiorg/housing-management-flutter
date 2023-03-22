@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:priorli/presentation/public/contact_us_public_cubit.dart';
 import 'package:priorli/service_locator.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/utils/color_extension.dart';
 import '../../core/utils/constants.dart';
@@ -37,14 +38,16 @@ class _ContactUsPublicScreenState extends State<ContactUsPublicScreen> {
       child: Scaffold(
         appBar: AppBar(
           leadingWidth: 300,
-          toolbarHeight: 80,
-          leading: Container(
-            margin: const EdgeInsets.symmetric(horizontal: 50),
+          toolbarHeight: 60,
+          leading: InkWell(
+            onTap: () => launchUrl(Uri.parse('https://priorli.com/')),
             child: Image.asset(
               'assets/images/priorli_horizontal.png',
+              height: 48,
             ),
           ),
-          title: const Text('Ota yhteyttä'),
+          title:
+              const Text('Ota yhteyttä', style: TextStyle(color: Colors.white)),
           backgroundColor: HexColor.fromHex(appPrimaryContainerColorDark),
         ),
         body: const Center(
@@ -81,7 +84,8 @@ class _ContactUsFormState extends State<ContactUsForm> {
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 64.0),
+                padding: EdgeInsets.symmetric(
+                    horizontal: MediaQuery.of(context).size.width * 0.1),
                 child: Text(
                   'Haluatko varata demoesittelyn tai onko sinulla kysyttävää? Voit jättää yhteystietosi ja viestisi tänne, niin otamme sinuun yhteyttä mahdollisimman pian ja annamme sinulle parhaan tarjouksen!',
                   style: Theme.of(context).textTheme.titleMedium,

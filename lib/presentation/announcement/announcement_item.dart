@@ -59,7 +59,7 @@ class _AnnouncementItemState extends State<AnnouncementItem> {
                                   height: 8,
                                 ),
                                 Text(
-                                    '${announcement.updatedOn != null ? 'Edited on' : 'Created on'} ${getFormattedDateTime(announcement.updatedOn ?? announcement.createdOn ?? 0)} by ${announcement.displayName}'),
+                                    '${announcement.updatedOn != null ? 'Edited on' : 'Created on'} ${getFormattedDateTime(announcement.updatedOn ?? announcement.createdOn)} by ${announcement.displayName}'),
                                 const SizedBox(
                                   height: 8,
                                 ),

@@ -26,8 +26,10 @@ class DioModule {
       } else if (!request.path.contains('/register') &&
           !request.path.contains('/code_register') &&
           !request.path.contains('/reset_password')) {
-        return handler
-            .resolve(Response(requestOptions: request, data: 'No auth token'));
+        return handler.reject(DioError(
+            requestOptions: request,
+            error: 'No token',
+            type: DioErrorType.other));
       }
       return handler.next(request);
     }, onResponse: (response, handler) {

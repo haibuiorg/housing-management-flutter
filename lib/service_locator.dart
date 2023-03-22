@@ -244,7 +244,7 @@ final serviceLocator = GetIt.instance;
 
 Future<void> init() async {
   // App router
-  serviceLocator.registerSingleton<GoRouter>(createAppRouter());
+  serviceLocator.registerFactory<GoRouter>(() => createAppRouter());
 
   // Cubits
   serviceLocator.registerFactory(() => SettingCubit(

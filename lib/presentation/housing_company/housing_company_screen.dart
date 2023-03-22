@@ -71,6 +71,9 @@ class _HousingCompanyScreenState extends State<HousingCompanyScreen> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: IconButton(
+                        style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                                Theme.of(context).colorScheme.primary)),
                         color: Theme.of(context).colorScheme.onPrimary,
                         onPressed: state.housingCompany?.isUserManager == true
                             ? () {

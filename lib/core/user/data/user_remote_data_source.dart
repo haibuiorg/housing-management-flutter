@@ -14,6 +14,7 @@ class UserRemoteDataSource implements UserDataSource {
   Future<UserModel> getUserInfo() async {
     try {
       final response = await client.get(_path);
+      print(response.data);
       return UserModel.fromJson(response.data);
     } catch (error) {
       throw ServerException(error: error);
@@ -95,7 +96,6 @@ class UserRemoteDataSource implements UserDataSource {
       "password": password,
       "invitation_code": code,
     };
-    print('$data');
     try {
       final result = await client.post('/code_register', data: data);
       return UserModel.fromJson(result.data as Map<String, dynamic>);

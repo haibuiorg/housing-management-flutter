@@ -56,6 +56,7 @@ class _AppState extends State<App> {
   void initState() {
     super.initState();
     appRouter = serviceLocator<GoRouter>();
+
     _checkNotificationAction();
     _checkForInitialLink();
   }
@@ -111,112 +112,116 @@ class _AppState extends State<App> {
         BlocProvider<UserCubit>(
             create: (context) => serviceLocator<UserCubit>()),
       ],
-      child: BlocConsumer<AuthCubit, AuthState>(listener: (context, state) {
-        if (!state.isLoggedIn) {
-          if (appRouter.location == loginPath ||
-              appRouter.location == registerPath ||
-              appRouter.location == contactUsPublicScreenRoute ||
-              appRouter.location == codeRegisterPath) {
-            return;
-          }
-          appRouter.go(loginPath);
-          if (widget.initialLink != null && widget.initialLink?.link != null) {
-            appRouter.push(_getAppScreenPathFromAppLinkPath(
-                    widget.initialLink?.link.path) ??
-                registerPath);
-          }
-        } else {
-          if (appRouter.location == loginPath ||
-              appRouter.location == registerPath ||
-              appRouter.location == codeRegisterPath) {
-            appRouter.go(homePath);
-          }
-          if (widget.initialLink != null && widget.initialLink?.link != null) {
-            appRouter.push(_getAppScreenPathFromAppLinkPath(
-                    widget.initialLink?.link.path) ??
-                homePath);
-          }
-        }
-      }, builder: (context, state) {
-        return BlocBuilder<SettingCubit, SettingState>(
-            builder: (context, state) {
-          return DynamicColorBuilder(
-              builder: (lightColorScheme, darkColorScheme) {
-            return MaterialApp.router(
-              debugShowCheckedModeBanner: false,
-              routerConfig: appRouter,
-              theme: ThemeData(
-                fontFamily: 'Lato',
-                pageTransitionsTheme: PageTransitionsTheme(
-                  builders: kIsWeb
-                      ? {
-                          // No animations for every OS if the app running on the web
-                          for (final platform in TargetPlatform.values)
-                            platform: const NoTransitionBuilder(),
+      child: BlocBuilder<SettingCubit, SettingState>(builder: (context, state) {
+        return DynamicColorBuilder(
+            builder: (lightColorScheme, darkColorScheme) {
+          return MaterialApp.router(
+            debugShowCheckedModeBanner: false,
+            routerConfig: appRouter,
+            theme: ThemeData(
+              fontFamily: 'Lato',
+              pageTransitionsTheme: PageTransitionsTheme(
+                builders: kIsWeb
+                    ? {
+                        // No animations for every OS if the app running on the web
+                        for (final platform in TargetPlatform.values)
+                          platform: const NoTransitionBuilder(),
+                      }
+                    : const {
+                        TargetPlatform.android: ZoomPageTransitionsBuilder(),
+                        TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+                      },
+              ),
+              colorScheme: state.useSystemColor
+                  ? lightColorScheme
+                  : _defaultLightColorScheme(
+                      state.ui?.seedColor ?? appSeedColor),
+              useMaterial3: true,
+            ),
+            darkTheme: ThemeData(
+              fontFamily: 'Lato',
+              pageTransitionsTheme: PageTransitionsTheme(
+                builders: kIsWeb
+                    ? {
+                        // No animations for every OS if the app running on the web
+                        for (final platform in TargetPlatform.values)
+                          platform: const NoTransitionBuilder(),
+                      }
+                    : const {
+                        TargetPlatform.android: ZoomPageTransitionsBuilder(),
+                        TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+                      },
+              ),
+              colorScheme: state.useSystemColor
+                  ? lightColorScheme
+                  : _defaultDarkColorScheme(
+                      state.ui?.seedColor ?? appSeedColor),
+              useMaterial3: true,
+            ),
+            themeMode: state.brightness == Brightness.dark
+                ? ThemeMode.dark
+                : ThemeMode.light,
+            builder: (context, child) => ResponsiveWrapper.builder(
+              BouncingScrollWrapper.builder(
+                context,
+                Stack(
+                  alignment: Alignment.bottomCenter,
+                  children: [
+                    BlocConsumer<AuthCubit, AuthState>(
+                        listener: (context, state) {
+                      final currentLocation = appRouter.location;
+                      print(currentLocation);
+                      if (!state.isLoggedIn) {
+                        if (currentLocation == loginPath ||
+                            currentLocation == registerPath ||
+                            currentLocation == contactUsPublicScreenRoute ||
+                            currentLocation == codeRegisterPath) {
+                          return;
                         }
-                      : const {
-                          TargetPlatform.android: ZoomPageTransitionsBuilder(),
-                          TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
-                        },
-                ),
-                colorScheme: state.useSystemColor
-                    ? lightColorScheme
-                    : _defaultLightColorScheme(
-                        state.ui?.seedColor ?? appSeedColor),
-                useMaterial3: true,
-              ),
-              darkTheme: ThemeData(
-                fontFamily: 'Lato',
-                pageTransitionsTheme: PageTransitionsTheme(
-                  builders: kIsWeb
-                      ? {
-                          // No animations for every OS if the app running on the web
-                          for (final platform in TargetPlatform.values)
-                            platform: const NoTransitionBuilder(),
+                        appRouter.go(loginPath);
+                        if (widget.initialLink != null &&
+                            widget.initialLink?.link != null) {
+                          appRouter.push(_getAppScreenPathFromAppLinkPath(
+                                  widget.initialLink?.link.path) ??
+                              registerPath);
                         }
-                      : const {
-                          TargetPlatform.android: ZoomPageTransitionsBuilder(),
-                          TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+                      } else {
+                        if (currentLocation == loginPath ||
+                            currentLocation == registerPath ||
+                            currentLocation == codeRegisterPath) {
+                          appRouter.go(homePath);
+                        }
+                        if (widget.initialLink != null &&
+                            widget.initialLink?.link != null) {
+                          appRouter.push(_getAppScreenPathFromAppLinkPath(
+                                  widget.initialLink?.link.path) ??
+                              homePath);
+                        }
+                      }
+                    }, builder: (context, state) {
+                      return child!;
+                    }),
+                    if (showDownloadDialog)
+                      DownloadAppDialog(
+                        onClosed: () {
+                          setState(() {
+                            showDownloadDialog = false;
+                          });
                         },
+                      ),
+                  ],
                 ),
-                colorScheme: state.useSystemColor
-                    ? lightColorScheme
-                    : _defaultDarkColorScheme(
-                        state.ui?.seedColor ?? appSeedColor),
-                useMaterial3: true,
               ),
-              themeMode: state.brightness == Brightness.dark
-                  ? ThemeMode.dark
-                  : ThemeMode.light,
-              builder: (context, child) => ResponsiveWrapper.builder(
-                BouncingScrollWrapper.builder(
-                  context,
-                  Stack(
-                    alignment: Alignment.bottomCenter,
-                    children: [
-                      child!,
-                      if (showDownloadDialog)
-                        DownloadAppDialog(
-                          onClosed: () {
-                            setState(() {
-                              showDownloadDialog = false;
-                            });
-                          },
-                        ),
-                    ],
-                  ),
-                ),
-                minWidth: 320,
-                defaultScale: true,
-                breakpoints: const [
-                  ResponsiveBreakpoint.autoScale(480, name: MOBILE),
-                  ResponsiveBreakpoint.resize(800, name: TABLET),
-                  ResponsiveBreakpoint.resize(1000, name: DESKTOP),
-                  ResponsiveBreakpoint.autoScale(1700, name: 'XL'),
-                ],
-              ),
-            );
-          });
+              minWidth: 320,
+              defaultScale: true,
+              breakpoints: const [
+                ResponsiveBreakpoint.autoScale(480, name: MOBILE),
+                ResponsiveBreakpoint.resize(800, name: TABLET),
+                ResponsiveBreakpoint.resize(1000, name: DESKTOP),
+                ResponsiveBreakpoint.autoScale(1700, name: 'XL'),
+              ],
+            ),
+          );
         });
       }),
     );
