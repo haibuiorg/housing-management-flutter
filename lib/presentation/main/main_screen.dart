@@ -205,8 +205,13 @@ class _DefaultUIState extends State<DefaultUI> {
                       extendedTheme: const SidebarXTheme(width: 200),
                       controller: _controller,
                       headerBuilder: (context, extended) {
-                        return SizedBox(
-                          height: 100,
+                        return Container(
+                          margin: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color:
+                                Theme.of(context).colorScheme.primaryContainer,
+                            shape: BoxShape.circle,
+                          ),
                           child: InkWell(
                             onTap: () => GoRouter.of(context).push(accountPath),
                             child: Padding(
