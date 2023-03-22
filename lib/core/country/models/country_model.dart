@@ -12,13 +12,15 @@ class CountryModel extends Equatable {
   final String currency_code;
   final List<String> support_languages;
   final String support_phone_number;
+  final String support_email;
 
   const CountryModel(
       {required this.country_code,
       required this.support_languages,
       required this.id,
       required this.support_phone_number,
-      required this.currency_code});
+      required this.currency_code,
+      required this.support_email});
 
   factory CountryModel.fromJson(Map<String, dynamic> json) =>
       _$CountryModelFromJson(json);
@@ -29,6 +31,7 @@ class CountryModel extends Equatable {
         currency_code,
         support_languages,
         id,
-        support_phone_number
+        support_phone_number,
+        support_email,
       ];
 }

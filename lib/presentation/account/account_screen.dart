@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:priorli/core/utils/constants.dart';
 import 'package:priorli/presentation/account/account_cubit.dart';
 import 'package:priorli/presentation/account/account_state.dart';
 import 'package:priorli/presentation/shared/app_user_circle_avatar.dart';
 import 'package:priorli/service_locator.dart';
 import 'package:priorli/user_state.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../auth_cubit.dart';
 import '../../user_cubit.dart';
@@ -152,16 +154,33 @@ class _AccountScreenState extends State<AccountScreen> {
                 SettingButton(
                   icon: const Icon(Icons.open_in_new_outlined),
                   label: const Text('Terms of use'),
-                  onPressed: () {
-                    //GoRouter.of(context).push(paymentPath);
-                  },
+                  onPressed: state.legalDocuments
+                              ?.where((element) => element.type == 'terms') !=
+                          null
+                      ? () {
+                          final terms = state.legalDocuments
+                              ?.where((element) => element.type == 'terms')
+                              .first;
+                          final url = terms?.url ?? terms?.webUrl ?? appWebsite;
+                          launchUrl(Uri.parse(url));
+                        }
+                      : null,
                 ),
                 SettingButton(
                   icon: const Icon(Icons.open_in_new_outlined),
                   label: const Text('Privacy policies'),
-                  onPressed: () {
-                    //GoRouter.of(context).push(paymentPath);
-                  },
+                  onPressed: state.legalDocuments?.where(
+                              (element) => element.type == 'policies') !=
+                          null
+                      ? () {
+                          final policies = state.legalDocuments
+                              ?.where((element) => element.type == 'policies')
+                              .first;
+                          final url =
+                              policies?.url ?? policies?.webUrl ?? appWebsite;
+                          launchUrl(Uri.parse(url));
+                        }
+                      : null,
                 ),
                 SettingButton(
                   onPressed: () {

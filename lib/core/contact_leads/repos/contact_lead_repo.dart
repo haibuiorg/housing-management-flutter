@@ -6,4 +6,12 @@ abstract class ContactLeadRepo {
       {String? status, String? type});
   Future<Result<ContactLead>> updateContactLeadStatus(
       {required String id, required String status});
+
+  Future<Result<bool>> submitContactForm({
+    required String name,
+    required String email,
+    required String phone,
+    required String message,
+    required bool bookDemo,
+  });
 }

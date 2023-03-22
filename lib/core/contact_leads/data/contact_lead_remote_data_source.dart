@@ -42,4 +42,26 @@ class ContactLeadRemoteDataSource implements ContactLeadDataSource {
       throw ServerException(error: error);
     }
   }
+
+  @override
+  Future<bool> submitContactForm(
+      {required String name,
+      required String email,
+      required String phone,
+      required String message,
+      required bool bookDemo}) async {
+    try {
+      final data = {
+        'name': name,
+        'email': email,
+        'phone': phone,
+        'message': message,
+        'book_demo': bookDemo,
+      };
+      await client.post('/contact_leads/contact_form', data: data);
+      return true;
+    } catch (error) {
+      throw ServerException(error: error);
+    }
+  }
 }

@@ -14,6 +14,7 @@ CountryModel _$CountryModelFromJson(Map<String, dynamic> json) => CountryModel(
       id: json['id'] as String,
       support_phone_number: json['support_phone_number'] as String,
       currency_code: json['currency_code'] as String,
+      support_email: json['support_email'] as String,
     );
 
 Map<String, dynamic> _$CountryModelToJson(CountryModel instance) =>
@@ -23,4 +24,5 @@ Map<String, dynamic> _$CountryModelToJson(CountryModel instance) =>
       'currency_code': instance.currency_code,
       'support_languages': instance.support_languages,
       'support_phone_number': instance.support_phone_number,
+      'support_email': instance.support_email,
     };

@@ -22,6 +22,7 @@ import 'core/utils/color_extension.dart';
 import 'core/utils/os_utils.dart';
 import 'notification_controller.dart';
 import 'presentation/home/home_screen.dart';
+import 'presentation/public/contact_us_public_screen.dart';
 import 'presentation/shared/no_transition_builder.dart';
 import 'service_locator.dart';
 
@@ -49,6 +50,7 @@ class _AppState extends State<App> {
       primaryContainer: HexColor.fromHex(appPrimaryContainerColorDark),
       brightness: Brightness.dark);
   late final GoRouter appRouter;
+  bool showDownloadDialog = isIOSWeb || isAndroidWeb;
 
   @override
   void initState() {
@@ -113,6 +115,7 @@ class _AppState extends State<App> {
         if (!state.isLoggedIn) {
           if (appRouter.location == loginPath ||
               appRouter.location == registerPath ||
+              appRouter.location == contactUsPublicScreenRoute ||
               appRouter.location == codeRegisterPath) {
             return;
           }
@@ -188,23 +191,18 @@ class _AppState extends State<App> {
               builder: (context, child) => ResponsiveWrapper.builder(
                 BouncingScrollWrapper.builder(
                   context,
-                  Column(
+                  Stack(
+                    alignment: Alignment.bottomCenter,
                     children: [
-                      /*isIOSWeb
-                          ? SizedBox(
-                              height: 75,
-                              child: Center(
-                                  child: Image.asset(
-                                      'assets/app-store-png-logo.png')))
-                          : isAndroidWeb
-                              ? SizedBox(
-                                  height: 75,
-                                  child: Center(
-                                    child: Image.asset(
-                                        'assets/google-play-png-logo.png'),
-                                  ))
-                              : const SizedBox.shrink(),*/
-                      Expanded(child: child!),
+                      child!,
+                      if (showDownloadDialog)
+                        DownloadAppDialog(
+                          onClosed: () {
+                            setState(() {
+                              showDownloadDialog = false;
+                            });
+                          },
+                        ),
                     ],
                   ),
                 ),
@@ -221,6 +219,52 @@ class _AppState extends State<App> {
           });
         });
       }),
+    );
+  }
+}
+
+class DownloadAppDialog extends StatelessWidget {
+  const DownloadAppDialog(
+      {super.key, this.networkImagePath, required this.onClosed});
+
+  final String? networkImagePath;
+
+  final Function() onClosed;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      color: Theme.of(context).cardColor.withOpacity(0.5),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(
+          16,
+        ),
+      ),
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 100),
+      child: ListTile(
+        leading: IconButton(
+          icon: const Icon(Icons.close),
+          onPressed: onClosed,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(
+            16,
+          ),
+        ),
+        onTap: () {},
+        title: networkImagePath != null
+            ? Image.network(networkImagePath!)
+            : Image.asset(
+                isIOSWeb
+                    ? 'assets/app-store-png-logo.png'
+                    : 'assets/google-play-png-logo.png',
+                height: MediaQuery.of(context).size.height * 0.075,
+              ),
+        subtitle: const Text(
+          'Get the full experience on your phone',
+          textAlign: TextAlign.center,
+        ),
+      ),
     );
   }
 }

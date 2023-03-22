@@ -36,4 +36,24 @@ class ContactLeadRepoImpl extends ContactLeadRepo {
       return ResultFailure(ServerFailure());
     }
   }
+
+  @override
+  Future<Result<bool>> submitContactForm(
+      {required String name,
+      required String email,
+      required String phone,
+      required String message,
+      required bool bookDemo}) async {
+    try {
+      final result = await remoteDataSource.submitContactForm(
+          name: name,
+          email: email,
+          phone: phone,
+          message: message,
+          bookDemo: bookDemo);
+      return ResultSuccess(result);
+    } on ServerException {
+      return ResultFailure(ServerFailure());
+    }
+  }
 }

@@ -27,6 +27,7 @@ import 'package:priorli/core/country/data/country_remote_data_source.dart';
 import 'package:priorli/core/country/repos/country_repository.dart';
 import 'package:priorli/core/country/repos/country_repository_impl.dart';
 import 'package:priorli/core/country/usecases/get_country_data.dart';
+import 'package:priorli/core/country/usecases/get_country_legal_documents.dart';
 import 'package:priorli/core/country/usecases/get_support_countries.dart';
 import 'package:priorli/core/event/data/event_data_source.dart';
 import 'package:priorli/core/event/data/event_remote_data_source.dart';
@@ -159,6 +160,7 @@ import 'package:priorli/presentation/notification_center/notification_center_cub
 import 'package:priorli/presentation/payment_success/payment_success_cubit.dart';
 import 'package:priorli/presentation/polls/poll_screen.dart';
 import 'package:priorli/presentation/polls/poll_screen_cubit.dart';
+import 'package:priorli/presentation/public/contact_us_public_cubit.dart';
 import 'package:priorli/user_cubit.dart';
 
 import 'auth_cubit.dart';
@@ -184,6 +186,7 @@ import 'core/auth/usecases/log_out.dart';
 import 'core/auth/usecases/login_email_password.dart';
 import 'core/auth/usecases/reset_password.dart';
 import 'core/contact_leads/data/contact_lead_data_source.dart';
+import 'core/contact_leads/usecases/submit_contact_form.dart';
 import 'core/housing/data/housing_company_data_source.dart';
 import 'core/housing/data/housing_company_remote_data_source.dart';
 import 'core/housing/repos/housing_company_repository.dart';
@@ -323,8 +326,8 @@ Future<void> init() async {
       () => ConversationListCubit(serviceLocator(), serviceLocator()));
   serviceLocator
       .registerFactory(() => UserCubit(serviceLocator(), serviceLocator()));
-  serviceLocator
-      .registerFactory(() => AccountCubit(serviceLocator(), serviceLocator()));
+  serviceLocator.registerFactory(
+      () => AccountCubit(serviceLocator(), serviceLocator(), serviceLocator()));
   serviceLocator.registerFactory(() => CodeRegisterCubit());
   serviceLocator.registerFactory(() => JoinApartmentCubit(serviceLocator()));
   serviceLocator.registerFactory(() => ForgotPasswordCubit(serviceLocator()));
@@ -396,6 +399,7 @@ Future<void> init() async {
       serviceLocator(),
       serviceLocator()));
   serviceLocator.registerFactory(() => PaymentSuccessCubit(serviceLocator()));
+  serviceLocator.registerFactory(() => ContactUsPublicCubit(serviceLocator()));
 
   /** usecases */
 
@@ -563,6 +567,8 @@ Future<void> init() async {
       () => GetSupportCountries(countryRepository: serviceLocator()));
   serviceLocator.registerLazySingleton<GetCountryData>(
       () => GetCountryData(countryRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<GetCountryLegalDocuments>(
+      () => GetCountryLegalDocuments(countryRepository: serviceLocator()));
 
   // documents
   serviceLocator.registerLazySingleton<AddApartmentDocuments>(
@@ -661,6 +667,8 @@ Future<void> init() async {
       () => UpdateContactLead(contactLeadRepo: serviceLocator()));
   serviceLocator.registerLazySingleton<AdminGetCompanies>(
       () => AdminGetCompanies(repository: serviceLocator()));
+  serviceLocator.registerLazySingleton<SubmitContactForm>(
+      () => SubmitContactForm(contactLeadRepo: serviceLocator()));
 
   serviceLocator.registerLazySingleton<AddPaymentProduct>(
       () => AddPaymentProduct(repository: serviceLocator()));

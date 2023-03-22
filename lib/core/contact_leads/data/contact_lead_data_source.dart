@@ -5,4 +5,11 @@ abstract class ContactLeadDataSource {
       {String? status, String? type});
   Future<ContactLeadModel> updateContactLeadStatus(
       {required String id, required String status});
+  Future<bool> submitContactForm({
+    required String name,
+    required String email,
+    required String phone,
+    required String message,
+    required bool bookDemo,
+  });
 }

@@ -20,22 +20,35 @@ class UserModel extends Equatable {
   @JsonKey(name: 'email_verified')
   final bool? emailVerified;
   final List<AddressModel>? addresses;
+  @JsonKey(name: 'country_code')
+  final String? countryCode;
 
   const UserModel(
-      this.userId,
-      this.phone,
-      this.email,
+      {required this.userId,
+      required this.phone,
+      required this.email,
       this.roles,
       this.addresses,
-      this.firstName,
-      this.lastName,
+      required this.firstName,
+      required this.lastName,
       this.avatarUrl,
-      this.emailVerified);
+      this.emailVerified,
+      this.countryCode});
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>
       _$UserModelFromJson(json);
 
   @override
-  List<Object?> get props =>
-      [userId, phone, email, roles, firstName, lastName, avatarUrl, addresses];
+  List<Object?> get props => [
+        userId,
+        phone,
+        email,
+        roles,
+        firstName,
+        lastName,
+        avatarUrl,
+        addresses,
+        countryCode,
+        emailVerified
+      ];
 }

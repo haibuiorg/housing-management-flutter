@@ -1,15 +1,20 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:priorli/core/base/result.dart';
 import 'package:priorli/core/base/usecase.dart';
+import 'package:priorli/core/country/usecases/get_country_legal_documents.dart';
 import 'package:priorli/core/user/entities/user.dart';
 import 'package:priorli/core/user/usecases/get_user_info.dart';
 import 'package:priorli/core/user/usecases/update_user_info.dart';
 import 'package:priorli/presentation/account/account_state.dart';
 
+import '../../core/country/entities/legal_document.dart';
+
 class AccountCubit extends Cubit<AccountState> {
   final GetUserInfo _getUserInfo;
   final UpdateUserInfo _updateUserInfo;
-  AccountCubit(this._getUserInfo, this._updateUserInfo)
+  final GetCountryLegalDocuments _getCountryLegalDocuments;
+  AccountCubit(
+      this._getUserInfo, this._updateUserInfo, this._getCountryLegalDocuments)
       : super(const AccountState());
 
   Future<void> init() async {
@@ -17,6 +22,12 @@ class AccountCubit extends Cubit<AccountState> {
     if (getUserInfo is ResultSuccess<User>) {
       emit(state.copyWith(
           user: getUserInfo.data, pendingUser: getUserInfo.data));
+    }
+    final countryCode = state.user?.countryCode ?? 'fi';
+    final getCountryLegalDocumentResult = await _getCountryLegalDocuments(
+        GetCountryLegalDocumentDataParams(countryCode: countryCode));
+    if (getCountryLegalDocumentResult is ResultSuccess<List<LegalDocument>>) {
+      emit(state.copyWith(legalDocuments: getCountryLegalDocumentResult.data));
     }
   }
 

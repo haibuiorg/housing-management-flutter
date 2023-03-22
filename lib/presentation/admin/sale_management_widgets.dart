@@ -24,7 +24,9 @@ class ContactLeadListView extends StatelessWidget {
                     icon: const Icon(Icons.chevron_right_rounded),
                     onPressed: () {},
                   ),
-                  tileColor: Theme.of(context).cardColor,
+                  tileColor: state.contactLeadList![index].type == 'demo_form'
+                      ? Theme.of(context).colorScheme.secondaryContainer
+                      : Theme.of(context).cardColor,
                   shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(10))),
                   title: Text('Name ${state.contactLeadList![index].name} \n'
@@ -34,7 +36,9 @@ class ContactLeadListView extends StatelessWidget {
                       Text('Message: ${state.contactLeadList![index].message}'),
                   leading: state.contactLeadList![index].type == 'contact_form'
                       ? const Icon(Icons.contact_mail_rounded)
-                      : const Icon(Icons.percent_rounded),
+                      : state.contactLeadList![index].type == 'demo_form'
+                          ? const Icon(Icons.calendar_month_rounded)
+                          : const Icon(Icons.percent_rounded),
                 ),
               ),
             );
