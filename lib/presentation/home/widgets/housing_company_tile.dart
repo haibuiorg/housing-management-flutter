@@ -18,6 +18,9 @@ class HousingCompanyTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SettingCubit, SettingState>(builder: (context, state) {
+      final address =
+          '${housingCompany?.streetAddress1 ?? ''} ${housingCompany?.streetAddress2 ?? ''} ${housingCompany?.postalCode ?? ''} ${housingCompany?.city ?? ''}';
+
       return Padding(
         padding: const EdgeInsets.all(8.0),
         child: TapCard(
@@ -67,12 +70,16 @@ class HousingCompanyTile extends StatelessWidget {
                           borderRadius: BorderRadius.circular(8),
                           color:
                               Theme.of(context).colorScheme.secondaryContainer),
-                      child: Text(
-                        housingCompany?.name ?? 'Housing company',
+                      child: Column(
+                        children: [
+                          Text(
+                            housingCompany?.name ?? 'Housing company',
+                          ),
+                          if (address.trim().replaceAll(" ", "").isNotEmpty)
+                            Text(address)
+                        ],
                       ),
                     ),
-                    Text(
-                        '${housingCompany?.streetAddress1} ${housingCompany?.streetAddress2} ${housingCompany?.postalCode} ${housingCompany?.city}')
                   ]),
             ),
           ),

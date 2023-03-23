@@ -24,7 +24,6 @@ abstract class ApartmentRepository {
   Future<Result<ApartmentInvitation>> sendInvitationToApartment(
       {required String apartmentId,
       required String housingCompanyId,
-      required int numberOfTenants,
       List<String>? emails});
   Future<Result<Apartment>> joinApartment({
     required String invitationCode,

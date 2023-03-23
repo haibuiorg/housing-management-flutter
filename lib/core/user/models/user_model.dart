@@ -22,11 +22,13 @@ class UserModel extends Equatable {
   final List<AddressModel>? addresses;
   @JsonKey(name: 'country_code')
   final String? countryCode;
+  final List<String>? apartments;
 
   const UserModel(
       {required this.userId,
       required this.phone,
       required this.email,
+      this.apartments,
       this.roles,
       this.addresses,
       required this.firstName,
@@ -45,6 +47,7 @@ class UserModel extends Equatable {
         email,
         roles,
         firstName,
+        apartments,
         lastName,
         avatarUrl,
         addresses,

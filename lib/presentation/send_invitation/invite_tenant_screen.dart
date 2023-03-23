@@ -29,7 +29,6 @@ class InviteTenantScreen extends StatelessWidget {
         return Scaffold(
           floatingActionButton: OutlinedButton(
               onPressed: state.emails?.isNotEmpty == true &&
-                      state.numberOfInvitations > 0 &&
                       state.selectedApartment?.isNotEmpty == true
                   ? () async => cubit.sendInvitation()
                   : null,
@@ -40,25 +39,21 @@ class InviteTenantScreen extends StatelessWidget {
           body: SingleChildScrollView(
               child: Column(
             children: [
-              DropdownSearch<Apartment>(
-                items: state.apartmentList ?? [],
-                popupProps: PopupProps.menu(
-                  showSearchBox: (state.apartmentList?.length ?? 0) > 20,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: DropdownSearch<Apartment>(
+                  items: state.apartmentList ?? [],
+                  popupProps: PopupProps.menu(
+                    showSearchBox: (state.apartmentList?.length ?? 0) > 20,
+                  ),
+                  dropdownDecoratorProps: const DropDownDecoratorProps(
+                      dropdownSearchDecoration:
+                          InputDecoration(labelText: 'To apartment')),
+                  itemAsString: (Apartment apartment) =>
+                      '${apartment.building} ${apartment.houseCode ?? ''}',
+                  onChanged: (Apartment? apartment) =>
+                      cubit.setSelectedApartmentId(apartment?.id ?? ''),
                 ),
-                dropdownDecoratorProps: const DropDownDecoratorProps(
-                    dropdownSearchDecoration:
-                        InputDecoration(labelText: 'To apartment')),
-                itemAsString: (Apartment apartment) =>
-                    '${apartment.building} ${apartment.houseCode ?? ''}',
-                onChanged: (Apartment? apartment) =>
-                    cubit.setSelectedApartmentId(apartment?.id ?? ''),
-              ),
-              CustomFormField(
-                keyboardType: const TextInputType.numberWithOptions(),
-                initialValue: state.numberOfInvitations.toString(),
-                onChanged: (value) =>
-                    cubit.updateNumberOfInvitation(int.parse(value)),
-                hintText: 'Number of invitation',
               ),
               CustomFormField(
                 keyboardType: TextInputType.emailAddress,

@@ -48,14 +48,12 @@ class ApartmentRepositoryImpl implements ApartmentRepository {
   Future<Result<ApartmentInvitation>> sendInvitationToApartment(
       {required String apartmentId,
       required String housingCompanyId,
-      required int numberOfTenants,
       List<String>? emails}) async {
     try {
       final invitationModel =
           await apartmentDataSource.sendInvitationToApartment(
               housingCompanyId: housingCompanyId,
               apartmentId: apartmentId,
-              numberOfTenants: numberOfTenants,
               emails: emails);
       return ResultSuccess(ApartmentInvitation.modelToEntity(invitationModel));
     } on ServerException {

@@ -375,7 +375,7 @@ Future<void> init() async {
       serviceLocator(), serviceLocator(), serviceLocator(), serviceLocator()));
   serviceLocator.registerFactory(
       () => InvoiceGroupCubit(serviceLocator(), serviceLocator()));
-  serviceLocator.registerFactory(() => CompanyUserCubit(
+  serviceLocator.registerFactory(() => CompanyUserCubit(serviceLocator(),
       serviceLocator(), serviceLocator(), serviceLocator(), serviceLocator()));
   serviceLocator.registerFactory(() => CheckoutCubit(serviceLocator()));
   serviceLocator.registerFactory(() => AdminCubit(

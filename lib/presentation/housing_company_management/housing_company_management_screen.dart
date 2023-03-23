@@ -197,20 +197,10 @@ class _HousingCompanyManagementScreenState
                                     companySubscriptionScreenPath);
                               },
                               label: Text(
-                                'Manage subscription',
+                                'Subscription',
                                 style: Theme.of(context).textTheme.bodyLarge,
                               ),
                             ),
-                          SettingButton(
-                            onPressed: () {
-                              context.pushFromCurrentLocation(
-                                  housingCompanyUiScreenPath);
-                            },
-                            label: Text(
-                              'Appearance',
-                              style: Theme.of(context).textTheme.bodyLarge,
-                            ),
-                          ),
                           SettingButton(
                             onPressed: () {
                               context.pushFromCurrentLocation(
@@ -223,19 +213,20 @@ class _HousingCompanyManagementScreenState
                           ),
                           SettingButton(
                             onPressed: () {
-                              context.pushFromCurrentLocation(inviteTenantPath);
+                              context.pushFromCurrentLocation(companyUserPath);
                             },
                             label: Text(
-                              'Send invitation to an apartment',
+                              'User management',
                               style: Theme.of(context).textTheme.bodyLarge,
                             ),
                           ),
                           SettingButton(
                             onPressed: () {
-                              context.pushFromCurrentLocation(companyUserPath);
+                              context.pushFromCurrentLocation(
+                                  housingCompanyUiScreenPath);
                             },
                             label: Text(
-                              'User managements',
+                              'Appearance',
                               style: Theme.of(context).textTheme.bodyLarge,
                             ),
                           ),

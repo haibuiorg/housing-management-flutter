@@ -57,8 +57,6 @@ dependencies:
 
   # lottie
   lottie: ^2.2.0
-  # Navigation
-  curved_navigation_bar: ^1.0.3
   # Local cache
   shared_preferences: ^2.0.15
   # Service locator:
@@ -87,7 +85,7 @@ dependencies:
   cloud_firestore: ^4.1.0
   firebase_storage: ^11.0.6
   image_picker: ^0.8.6
-  file_picker: ^5.2.3
+  file_picker: ^5.2.6
   cached_network_image: ^3.2.3
   carousel_slider: ^4.1.1
   photo_view: ^0.14.0

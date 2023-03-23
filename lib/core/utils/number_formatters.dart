@@ -13,27 +13,23 @@ class DecimalTextInputFormatter extends TextInputFormatter {
     TextEditingValue oldValue, // unused.
     TextEditingValue newValue,
   ) {
-    TextSelection newSelection = newValue.selection;
-    String truncated = newValue.text;
+    var regex = RegExp(r'[^0-9\.\,]');
+    final String original = newValue.text.replaceAll(regex, '');
+    String truncated = original.replaceAll(",", ".");
 
-    String value = newValue.text;
+    String value = original.replaceAll(",", ".");
 
     if (value.contains(".") &&
         value.substring(value.indexOf(".") + 1).length > decimalRange) {
       truncated = oldValue.text;
-      newSelection = oldValue.selection;
     } else if (value == ".") {
       truncated = "0.";
-
-      newSelection = newValue.selection.copyWith(
-        baseOffset: min(truncated.length, truncated.length + 1),
-        extentOffset: min(truncated.length, truncated.length + 1),
-      );
     }
 
     return TextEditingValue(
       text: truncated,
-      selection: newSelection,
+      selection:
+          TextSelection.fromPosition(TextPosition(offset: truncated.length)),
       composing: TextRange.empty,
     );
   }

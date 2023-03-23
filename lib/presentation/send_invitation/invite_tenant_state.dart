@@ -10,18 +10,17 @@ class InviteTenantState extends Equatable {
   final List<String>? emails;
   final String? housingCompanyId;
   final String? errorText;
-  final int numberOfInvitations;
   final bool? popNow;
 
-  const InviteTenantState(
-      {this.housingCompany,
-      this.apartmentList,
-      this.selectedApartment,
-      this.emails,
-      this.errorText,
-      this.housingCompanyId,
-      this.popNow,
-      this.numberOfInvitations = 1});
+  const InviteTenantState({
+    this.housingCompany,
+    this.apartmentList,
+    this.selectedApartment,
+    this.emails,
+    this.errorText,
+    this.housingCompanyId,
+    this.popNow,
+  });
 
   InviteTenantState copyWith(
           {HousingCompany? housingCompany,
@@ -29,7 +28,6 @@ class InviteTenantState extends Equatable {
           String? selectedApartment,
           List<String>? emails,
           String? errorText,
-          int? numberOfInvitations,
           bool? popNow,
           String? housingCompanyId}) =>
       InviteTenantState(
@@ -39,7 +37,6 @@ class InviteTenantState extends Equatable {
           housingCompany: housingCompany ?? this.housingCompany,
           apartmentList: apartmentList ?? this.apartmentList,
           selectedApartment: selectedApartment ?? this.selectedApartment,
-          numberOfInvitations: numberOfInvitations ?? this.numberOfInvitations,
           emails: emails ?? this.emails);
 
   @override
@@ -48,7 +45,6 @@ class InviteTenantState extends Equatable {
         apartmentList,
         selectedApartment,
         emails,
-        numberOfInvitations,
         errorText,
         housingCompanyId,
         popNow

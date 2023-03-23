@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,20 +16,19 @@ import 'package:path/path.dart' as p;
 import 'package:carousel_slider/carousel_slider.dart';
 
 class FileSelector extends StatefulWidget {
-  const FileSelector(
-      {super.key,
-      required this.onCompleteUploaded,
-      this.isSingleFile = false,
-      this.isImageOnly = false,
-      this.previewUrl,
-      this.autoUpload = false,
-      this.fileSelectorController});
+  const FileSelector({
+    super.key,
+    required this.onCompleteUploaded,
+    this.isSingleFile = false,
+    this.isImageOnly = false,
+    this.previewUrl,
+    this.autoUpload = false,
+  });
   final String? previewUrl;
   final bool isSingleFile;
   final bool isImageOnly;
   final bool autoUpload;
   final Function(List<String> tempUploadedFiles) onCompleteUploaded;
-  final FileSelectorClearController? fileSelectorController;
 
   @override
   State<FileSelector> createState() => _FileSelectorState();
@@ -36,9 +36,11 @@ class FileSelector extends StatefulWidget {
 
 class _FileSelectorState extends State<FileSelector> {
   late final FileSelectorCubit _cubit;
+  late final FileSelectorClearController fileSelectorController;
   @override
   void initState() {
-    widget.fileSelectorController?.addListener(() {
+    fileSelectorController = FileSelectorClearController();
+    fileSelectorController.addListener(() {
       _cubit.clearSelectedFiles();
     });
     _cubit = serviceLocator<FileSelectorCubit>()..init(widget.autoUpload);
@@ -49,6 +51,7 @@ class _FileSelectorState extends State<FileSelector> {
   void dispose() {
     super.dispose();
     _cubit.close();
+    fileSelectorController.dispose();
   }
 
   @override
@@ -131,11 +134,11 @@ class _FileSelectorState extends State<FileSelector> {
                                                     !(state.selectedFiles![
                                                             itemIndex]! as File)
                                                         .isImage
-                                                ? const AppLottieAnimation(
+                                                ? const SizedBox.shrink()
+                                                : const AppLottieAnimation(
                                                     loadingResource:
                                                         'documents',
-                                                  )
-                                                : const SizedBox.shrink(),
+                                                  ),
                                           ),
                                         ),
                                         Row(
@@ -209,7 +212,16 @@ class _FileSelectorState extends State<FileSelector> {
                               onPressed: widget.isSingleFile &&
                                       (state.selectedFiles?.length ?? 0) > 0
                                   ? null
-                                  : () async {},
+                                  : () async {
+                                      FilePickerResult? result =
+                                          await FilePicker.platform.pickFiles();
+                                      if (result != null) {
+                                        List<Uint8List> files = result.files
+                                            .map((e) => e.bytes!)
+                                            .toList();
+                                        await _cubit.loadFiles(files);
+                                      }
+                                    },
                               icon: const Icon(Icons.file_open),
                             )
                           : const SizedBox.shrink(),

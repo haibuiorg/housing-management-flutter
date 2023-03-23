@@ -127,37 +127,21 @@ class BankAccountBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Dismissible(
-      direction: DismissDirection.endToStart,
-      confirmDismiss: (direction) async {
-        return await _showConfirmDeleteDialog(context, () {
-          Navigator.of(context).pop(true);
-        });
-      },
-      onDismissed: (direction) => onDismiss,
-      key: Key(bankAccount.id),
-      child: Card(
-        elevation: 4,
-        child: Padding(
-          padding:
-              const EdgeInsets.only(left: 16.0, right: 16, top: 8, bottom: 8),
-          child: Column(
-            children: [
-              Align(
-                alignment: Alignment.centerRight,
-                child: IconButton(
-                  icon: const Icon(Icons.close),
-                  onPressed: () => _showConfirmDeleteDialog(context, () {
-                    onDismiss();
-                    Navigator.of(context).pop(true);
-                  }),
-                ),
-              ),
-              Text(bankAccount.bankAccountNumber),
-              Text(bankAccount.swift),
-            ],
-          ),
-        ),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: ListTile(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+            side: const BorderSide(width: 0.5)),
+        trailing: IconButton(
+            icon: const Icon(Icons.close),
+            onPressed: () => _showConfirmDeleteDialog(context, () {
+                  onDismiss();
+                  Navigator.of(context).pop(true);
+                })),
+        onLongPress: () => _showConfirmDeleteDialog(context, onDismiss),
+        title: Text(bankAccount.bankAccountNumber),
+        subtitle: Text(bankAccount.swift),
       ),
     );
   }

@@ -27,13 +27,11 @@ class MessageScreen extends StatefulWidget {
 class _MessageScreenState extends State<MessageScreen> {
   final _bodyController = TextEditingController();
   final _scrollController = ScrollController();
-  late final FileSelectorClearController _fileSelectorController;
   late final MessageCubit _cubit;
 
   @override
   void initState() {
     _cubit = serviceLocator<MessageCubit>();
-    _fileSelectorController = FileSelectorClearController();
     super.initState();
   }
 
@@ -41,7 +39,6 @@ class _MessageScreenState extends State<MessageScreen> {
   void dispose() {
     _bodyController.dispose();
     _scrollController.dispose();
-    _fileSelectorController.dispose();
     _cubit.close();
     super.dispose();
   }
@@ -108,65 +105,67 @@ class _MessageScreenState extends State<MessageScreen> {
                           : const SizedBox.shrink();
                     }),
               ),
-              Container(
-                decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.tertiaryContainer,
-                    borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(16),
-                        topRight: Radius.circular(16))),
-                child: Padding(
-                  padding:
-                      const EdgeInsets.only(left: 16.0, right: 16, bottom: 32),
-                  child: Column(
-                    children: [
-                      FileSelector(
-                        fileSelectorController: _fileSelectorController,
-                        onCompleteUploaded:
-                            BlocProvider.of<MessageCubit>(context)
-                                .updatePendingStorageItem,
-                        autoUpload: true,
-                      ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Expanded(
-                            flex: 2,
-                            child: Padding(
-                              padding: const EdgeInsets.only(right: 8.0),
-                              child: TextFormField(
-                                controller: _bodyController,
-                                minLines: 3,
-                                maxLines: 10,
-                                autofocus: true,
-                                enabled: state.conversation?.joined == true,
-                                keyboardType: TextInputType.multiline,
-                                decoration: const InputDecoration(
-                                  hintText: 'Message',
-                                  border: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(16.0)),
+              SingleChildScrollView(
+                keyboardDismissBehavior:
+                    ScrollViewKeyboardDismissBehavior.onDrag,
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Theme.of(context).cardColor,
+                      borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(8),
+                          topRight: Radius.circular(8))),
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.only(left: 8.0, right: 8, bottom: 8),
+                    child: Column(
+                      children: [
+                        FileSelector(
+                          onCompleteUploaded:
+                              BlocProvider.of<MessageCubit>(context)
+                                  .updatePendingStorageItem,
+                          autoUpload: true,
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Expanded(
+                              flex: 2,
+                              child: Padding(
+                                padding: const EdgeInsets.only(right: 8.0),
+                                child: TextFormField(
+                                  controller: _bodyController,
+                                  minLines: 3,
+                                  maxLines: 10,
+                                  autofocus: true,
+                                  enabled: state.conversation?.joined == true,
+                                  keyboardType: TextInputType.multiline,
+                                  decoration: const InputDecoration(
+                                    hintText: 'Message',
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(16.0)),
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                          OutlinedButton(
-                              onPressed: state.conversation?.joined == true
-                                  ? () {
-                                      BlocProvider.of<MessageCubit>(context)
-                                          .sendMessage(_bodyController.text);
-                                      _bodyController.clear();
-                                      _fileSelectorController.clearFiles();
-                                    }
-                                  : () {
-                                      _showJoinConversationChannelDialog();
-                                    },
-                              child: Text(state.conversation?.joined == true
-                                  ? 'Send'
-                                  : 'Join')),
-                        ],
-                      ),
-                    ],
+                            ElevatedButton(
+                                onPressed: state.conversation?.joined == true
+                                    ? () {
+                                        BlocProvider.of<MessageCubit>(context)
+                                            .sendMessage(_bodyController.text);
+                                        _bodyController.clear();
+                                      }
+                                    : () {
+                                        _showJoinConversationChannelDialog();
+                                      },
+                                child: Text(state.conversation?.joined == true
+                                    ? 'Send'
+                                    : 'Join')),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               )

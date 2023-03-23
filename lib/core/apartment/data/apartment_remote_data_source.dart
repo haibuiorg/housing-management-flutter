@@ -54,13 +54,11 @@ class ApartmentRemoteDataSource implements ApartmentDataSource {
   Future<ApartmentInvitationModel> sendInvitationToApartment(
       {required String apartmentId,
       required String housingCompanyId,
-      required int numberOfTenants,
       List<String>? emails}) async {
     try {
       final Map<String, dynamic> data = {
         "housing_company_id": housingCompanyId,
         "apartment_id": apartmentId,
-        "number_of_tenants": numberOfTenants,
       };
       if (emails != null) {
         data["emails"] = emails;

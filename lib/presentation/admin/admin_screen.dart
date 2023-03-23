@@ -29,6 +29,36 @@ class _AdminScreenState extends State<AdminScreen> {
     const ConversationListScreen(),
     const SubscriptionPlanListView(),
   ];
+  final List<Tab> _tab = [
+    const Tab(
+      child: Text(
+        'Contact Leads',
+        maxLines: 2,
+        overflow: TextOverflow.ellipsis,
+      ),
+    ),
+    const Tab(
+      child: Text(
+        'Housing Companies',
+        maxLines: 2,
+        overflow: TextOverflow.ellipsis,
+      ),
+    ),
+    const Tab(
+      child: Text(
+        'Conversations',
+        maxLines: 2,
+        overflow: TextOverflow.ellipsis,
+      ),
+    ),
+    const Tab(
+      child: Text(
+        'Subscription Plans',
+        maxLines: 2,
+        overflow: TextOverflow.ellipsis,
+      ),
+    ),
+  ];
 
   @override
   void initState() {
@@ -80,17 +110,7 @@ class _AdminScreenState extends State<AdminScreen> {
                   bottom: PreferredSize(
                     preferredSize: const Size.fromHeight(56.0),
                     child: TabBar(
-                      tabs: [
-                        for (final widget in _widgetOptions)
-                          Tab(
-                            height: 52,
-                            child: Text(
-                              widget.toStringShort(),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                      ],
+                      tabs: _tab,
                     ),
                   ),
                 ),

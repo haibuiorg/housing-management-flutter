@@ -46,10 +46,6 @@ class InviteTenantCubit extends Cubit<InviteTenantState> {
     emit(state.copyWith(selectedApartment: id));
   }
 
-  updateNumberOfInvitation(int numberOfInvitations) {
-    emit(state.copyWith(numberOfInvitations: numberOfInvitations));
-  }
-
   updateEmails(String value) {
     value = value.replaceAll(" ", "").replaceAll(";", "/").replaceAll(",", "/");
 
@@ -63,7 +59,6 @@ class InviteTenantCubit extends Cubit<InviteTenantState> {
         SendInvitationToApartmentParams(
             housingCompanyId: state.housingCompanyId ?? '',
             apartmentId: state.selectedApartment ?? '',
-            numberOfTenants: state.numberOfInvitations,
             emails: state.emails));
 
     if (sendInvitationResult is ResultSuccess<ApartmentInvitation>) {

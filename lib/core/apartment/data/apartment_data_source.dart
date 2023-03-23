@@ -28,7 +28,6 @@ abstract class ApartmentDataSource {
   Future<ApartmentInvitationModel> sendInvitationToApartment(
       {required String apartmentId,
       required String housingCompanyId,
-      required int numberOfTenants,
       List<String>? emails});
 
   Future<ApartmentModel> joinApartment({

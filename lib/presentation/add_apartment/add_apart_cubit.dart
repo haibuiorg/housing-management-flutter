@@ -68,6 +68,9 @@ class AddApartmentCubit extends Cubit<AddApartmentState> {
         houseCodes: state.houseCodes));
     if (addApartmentResult is ResultSuccess<List<Apartment>>) {
       emit(state.copyWith(addedApartments: addApartmentResult.data));
+    } else {
+      emit(state.copyWith(
+          errorText: 'Error adding apartment. Check your subscription limit'));
     }
   }
 }

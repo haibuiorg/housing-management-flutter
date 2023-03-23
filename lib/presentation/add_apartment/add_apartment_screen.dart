@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:priorli/presentation/add_apartment/add_apart_state.dart';
+import 'package:priorli/presentation/apartments/apartment_screen.dart';
 import 'package:priorli/presentation/shared/app_lottie_animation.dart';
 import 'package:priorli/presentation/shared/custom_form_field.dart';
 import 'package:priorli/presentation/shared/full_width_title.dart';
 import 'package:priorli/service_locator.dart';
 
+import '../../core/utils/number_formatters.dart';
 import '../../go_router_navigation.dart';
 import 'add_apart_cubit.dart';
 
@@ -23,8 +25,13 @@ class AddApartmentScreen extends StatelessWidget {
       child: BlocConsumer<AddApartmentCubit, AddApartmentState>(
           listener: ((context, state) {
         if (state.addedApartments != null) {
-          Navigator.of(context)
-              .popUntil(ModalRoute.withName(housingCompanyScreenPathName));
+          context.pushFromCurrentLocation(
+              '$apartmentScreenPath/${state.addedApartments?.first.id}}');
+        }
+        if (state.errorText != null) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(state.errorText ?? ''),
+          ));
         }
       }), builder: (context, state) {
         return (state.housingCompany?.isUserManager == true)
@@ -49,12 +56,13 @@ class AddApartmentScreen extends StatelessWidget {
                   CustomFormField(
                     hintText: 'Number of apartments/houses in this Building',
                     keyboardType: const TextInputType.numberWithOptions(),
-                    onChanged: (value) => cubit.updateHouseCode(int.parse(
-                      value,
-                    )),
+                    onChanged: (value) => cubit.updateHouseCode(int.tryParse(
+                          value,
+                        ) ??
+                        1),
                   ),
                   FullWidthTitle(
-                    title: 'Autofill apartment numebers',
+                    title: 'Autofill apartment numbers',
                     action: Switch(
                         value: state.automaticHouseCodeInput != false,
                         onChanged: (onChanged) => cubit

@@ -10,6 +10,9 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
       userId: json['user_id'] as String,
       phone: json['phone'] as String,
       email: json['email'] as String,
+      apartments: (json['apartments'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
       roles: json['roles'] as List<dynamic>?,
       addresses: (json['addresses'] as List<dynamic>?)
           ?.map((e) => AddressModel.fromJson(e as Map<String, dynamic>))
@@ -32,4 +35,5 @@ Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
       'email_verified': instance.emailVerified,
       'addresses': instance.addresses,
       'country_code': instance.countryCode,
+      'apartments': instance.apartments,
     };

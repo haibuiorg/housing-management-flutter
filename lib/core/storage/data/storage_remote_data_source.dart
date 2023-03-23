@@ -1,4 +1,3 @@
-
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
@@ -37,6 +36,10 @@ class StorageRemoteDataSource implements StorageDataSource {
               .putData(
                 file,
               )
+              .onError((error, stackTrace) {
+              print(error);
+              throw error!;
+            })
           : await storage
               .ref(
                   '/users/$userId/temps/${DateTime.now().millisecondsSinceEpoch}_${p.basename(file.path)}')

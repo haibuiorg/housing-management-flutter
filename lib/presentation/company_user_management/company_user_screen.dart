@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:priorli/go_router_navigation.dart';
 import 'package:priorli/presentation/company_user_management/manager_creation_form.dart';
 import 'package:priorli/presentation/shared/full_width_title.dart';
 import 'package:priorli/service_locator.dart';
 
 import '../../core/user/entities/user.dart';
+import '../send_invitation/invite_tenant_screen.dart';
+import '../shared/setting_button.dart';
 import 'company_user_cubit.dart';
 import 'company_user_state.dart';
 
@@ -59,6 +62,15 @@ class _CompanyUserSreenState extends State<CompanyUserSreen> {
                     title: 'Tenants',
                   ),
                   _createDataTable(state.userList ?? [], state.userListLimit),
+                  SettingButton(
+                    onPressed: () {
+                      context.pushFromCurrentLocation(inviteTenantPath);
+                    },
+                    label: Text(
+                      'Send invitation to an apartment',
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                  ),
                   FullWidthTitle(
                     title: 'Managers',
                     action: state.company?.isUserOwner == true
@@ -128,8 +140,14 @@ class UserDataTableSource extends DataTableSource {
       DataCell(FittedBox(child: Text(user.email))),
       DataCell(FittedBox(child: Text(user.firstName))),
       DataCell(FittedBox(child: Text(user.lastName))),
-      DataCell(FittedBox(child: Text(user.phone))),
-      DataCell(FittedBox(child: Text(user.apartments?.toString() ?? 'None'))),
+      DataCell(Text(user.phone)),
+      DataCell(FittedBox(
+          child: Text(user.apartments?.isNotEmpty == true
+              ? user.apartments!
+                  .toString()
+                  .replaceAll("[", "")
+                  .replaceAll("]", ". ")
+              : 'None'))),
     ]);
   }
 

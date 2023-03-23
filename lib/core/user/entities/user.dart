@@ -35,6 +35,7 @@ class User extends Equatable {
         lastName: userModel.lastName,
         roles: userModel.roles?.map((e) => e.toString()).toList() ?? [],
         avatarUrl: userModel.avatarUrl,
+        apartments: userModel.apartments,
         countryCode: userModel.countryCode ?? 'fi',
         emailVerified: userModel.emailVerified);
   }

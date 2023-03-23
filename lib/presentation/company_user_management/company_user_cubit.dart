@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:priorli/core/apartment/usecases/get_apartments.dart';
 import 'package:priorli/core/base/result.dart';
 import 'package:priorli/core/housing/entities/housing_company.dart';
 import 'package:priorli/core/housing/usecases/add_company_manager.dart';
@@ -6,6 +7,7 @@ import 'package:priorli/core/housing/usecases/get_housing_company.dart';
 import 'package:priorli/core/housing/usecases/get_housing_company_managers.dart';
 import 'package:priorli/core/housing/usecases/get_housing_company_users.dart';
 
+import '../../core/apartment/entities/apartment.dart';
 import '../../core/user/entities/user.dart';
 import 'company_user_state.dart';
 
@@ -14,8 +16,13 @@ class CompanyUserCubit extends Cubit<CompanyUserState> {
   final GetHousingCompanyManagers _getHousingCompanyManagers;
   final AddCompanyManager _addCompanyManager;
   final GetHousingCompany _getHousingCompany;
-  CompanyUserCubit(this._getHousingCompanyUsers, this._addCompanyManager,
-      this._getHousingCompanyManagers, this._getHousingCompany)
+  final GetApartments _getApartments;
+  CompanyUserCubit(
+      this._getHousingCompanyUsers,
+      this._addCompanyManager,
+      this._getHousingCompanyManagers,
+      this._getHousingCompany,
+      this._getApartments)
       : super(const CompanyUserState());
 
   Future<void> init({
@@ -31,6 +38,11 @@ class CompanyUserCubit extends Cubit<CompanyUserState> {
     if (!companyResult.data.isUserManager) {
       return;
     }
+    final apartmentResult =
+        await _getApartments(GetApartmentParams(housingCompanyId: companyId));
+    if (apartmentResult is ResultSuccess<List<Apartment>>) {
+      emit(state.copyWith(apartmentList: apartmentResult.data));
+    }
     getCompanyManager(companyId);
     getCompanyUser(companyId);
   }
@@ -39,8 +51,18 @@ class CompanyUserCubit extends Cubit<CompanyUserState> {
     final companyUserResult = await _getHousingCompanyUsers(
         GetHousingCompanyParams(housingCompanyId: companyId));
     if (companyUserResult is ResultSuccess<List<User>>) {
+      final List<User> newList = [];
+      for (var user in companyUserResult.data) {
+        final hasApartment = state.apartmentList?.where((apartment) =>
+            apartment.tenants.any((resident) => resident == user.userId));
+        final User processedUser = user.copyWith(
+            apartments: hasApartment
+                ?.map((e) => e.building + (e.houseCode ?? ''))
+                .toList());
+        newList.add(processedUser);
+      }
       emit(state.copyWith(
-        userList: companyUserResult.data,
+        userList: newList,
       ));
     }
   }
@@ -49,9 +71,17 @@ class CompanyUserCubit extends Cubit<CompanyUserState> {
     final managerResult = await _getHousingCompanyManagers(
         GetHousingCompanyParams(housingCompanyId: companyId));
     if (managerResult is ResultSuccess<List<User>>) {
-      emit(state.copyWith(
-        managerList: managerResult.data,
-      ));
+      final List<User> newList = [];
+      for (var user in managerResult.data) {
+        final hasApartment = state.apartmentList?.where((apartment) =>
+            apartment.tenants.any((resident) => resident == user.userId));
+        final User processedUser = user.copyWith(
+            apartments: hasApartment
+                ?.map((e) => e.building + (e.houseCode ?? ''))
+                .toList());
+        newList.add(processedUser);
+      }
+      emit(state.copyWith(managerList: newList));
     }
   }
 

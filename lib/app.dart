@@ -35,16 +35,16 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> {
   _defaultLightColorScheme(String? colorValue) => ColorScheme.fromSeed(
-        seedColor: HexColor.fromHex(appSeedColor),
-        primary: HexColor.fromHex(colorValue ?? appPrimaryColor),
+        seedColor: HexColor.fromHex(colorValue ?? appSeedColor),
+        primary: HexColor.fromHex(appPrimaryColor),
         secondary: HexColor.fromHex(appSecondaryColor),
         background: HexColor.fromHex(appBackgroundColor),
         primaryContainer: HexColor.fromHex(appPrimaryContainerColor),
       );
 
   _defaultDarkColorScheme(String? colorValue) => ColorScheme.fromSeed(
-      seedColor: HexColor.fromHex(appSeedColorDark),
-      primary: HexColor.fromHex(colorValue ?? appPrimaryColorDark),
+      seedColor: HexColor.fromHex(colorValue ?? appSeedColorDark),
+      primary: HexColor.fromHex(appPrimaryColorDark),
       secondary: HexColor.fromHex(appSecondaryColor),
       background: HexColor.fromHex(appBackgroundColorDark),
       primaryContainer: HexColor.fromHex(appPrimaryContainerColorDark),
@@ -122,6 +122,25 @@ class _AppState extends State<App> {
             debugShowCheckedModeBanner: false,
             routerConfig: appRouter,
             theme: ThemeData(
+              elevatedButtonTheme: ElevatedButtonThemeData(
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: HexColor.fromHex(appPrimaryColor),
+                    foregroundColor:
+                        HexColor.fromHex(appPrimaryContainerColorDark)),
+              ),
+              textButtonTheme: TextButtonThemeData(
+                style: TextButton.styleFrom(
+                    foregroundColor:
+                        HexColor.fromHex(appPrimaryContainerColorDark)),
+              ),
+              outlinedButtonTheme: OutlinedButtonThemeData(
+                style: OutlinedButton.styleFrom(
+                    side: BorderSide(
+                        width: 1.0,
+                        color: HexColor.fromHex(appPrimaryContainerColorDark)),
+                    foregroundColor:
+                        HexColor.fromHex(appPrimaryContainerColorDark)),
+              ),
               fontFamily: 'Lato',
               pageTransitionsTheme: PageTransitionsTheme(
                 builders: kIsWeb
@@ -143,6 +162,12 @@ class _AppState extends State<App> {
             ),
             darkTheme: ThemeData(
               fontFamily: 'Lato',
+              elevatedButtonTheme: ElevatedButtonThemeData(
+                style: ElevatedButton.styleFrom(
+                    backgroundColor:
+                        HexColor.fromHex(appPrimaryContainerColorDark),
+                    foregroundColor: HexColor.fromHex(appPrimaryColor)),
+              ),
               pageTransitionsTheme: PageTransitionsTheme(
                 builders: kIsWeb
                     ? {

@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_snake_navigationbar/flutter_snake_navigationbar.dart';
 import 'package:go_router/go_router.dart';
+import 'package:priorli/core/utils/color_extension.dart';
+import 'package:priorli/core/utils/constants.dart';
 import 'package:priorli/presentation/admin/admin_screen.dart';
 import 'package:priorli/presentation/home/home_screen.dart';
 import 'package:priorli/presentation/main/main_cubit.dart';
@@ -168,10 +170,10 @@ class _DefaultUIState extends State<DefaultUI> {
                 behaviour: SnakeBarBehaviour.floating,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(25)),
-                backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+                backgroundColor: HexColor.fromHex(appPrimaryContainerColorDark),
                 currentIndex: state.selectedTabIndex ?? 0,
                 padding: const EdgeInsets.all(16),
-                snakeViewColor: Theme.of(context).colorScheme.background,
+                snakeViewColor: HexColor.fromHex(appBackgroundColorDark),
                 selectedItemColor: Theme.of(context).colorScheme.primary,
                 unselectedItemColor: Theme.of(context).colorScheme.primary,
                 items: [
@@ -200,6 +202,10 @@ class _DefaultUIState extends State<DefaultUI> {
                                 color: Theme.of(context).colorScheme.primary),
                         selectedIconTheme: IconThemeData(
                           color: Theme.of(context).colorScheme.primary,
+                        ),
+                        selectedItemDecoration: BoxDecoration(
+                          color: HexColor.fromHex(appPrimaryContainerColorDark),
+                          borderRadius: BorderRadius.circular(8),
                         ),
                       ),
                       extendedTheme: const SidebarXTheme(width: 200),

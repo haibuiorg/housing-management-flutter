@@ -123,24 +123,25 @@ GoRouter createAppRouter() {
                         },
                         routes: [
                           GoRoute(
-                            path: companyUserPath,
-                            builder:
-                                (BuildContext context, GoRouterState state) {
-                              return CompanyUserSreen(
-                                companyId: state.params['companyId'] ?? '',
-                              );
-                            },
-                          ),
-                          GoRoute(
-                            path: inviteTenantPath,
-                            builder:
-                                (BuildContext context, GoRouterState state) {
-                              return InviteTenantScreen(
-                                housingCompanyId:
-                                    state.params['companyId'] ?? '',
-                              );
-                            },
-                          ),
+                              path: companyUserPath,
+                              builder:
+                                  (BuildContext context, GoRouterState state) {
+                                return CompanyUserSreen(
+                                  companyId: state.params['companyId'] ?? '',
+                                );
+                              },
+                              routes: [
+                                GoRoute(
+                                  path: inviteTenantPath,
+                                  builder: (BuildContext context,
+                                      GoRouterState state) {
+                                    return InviteTenantScreen(
+                                      housingCompanyId:
+                                          state.params['companyId'] ?? '',
+                                    );
+                                  },
+                                ),
+                              ]),
                           GoRoute(
                             path: companySubscriptionScreenPath,
                             builder:
