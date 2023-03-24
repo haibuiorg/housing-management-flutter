@@ -29,4 +29,6 @@ abstract class InvoiceDataSource {
     int? limit,
     int? lastCreatedOn,
   });
+  Future<InvoiceModel> sendInvoiceManually(
+      {required String invoiceId, required List<String> emails});
 }

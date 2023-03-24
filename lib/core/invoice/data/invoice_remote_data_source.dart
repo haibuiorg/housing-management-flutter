@@ -109,4 +109,16 @@ class InvoiceRemoteDataSource implements InvoiceDataSource {
       throw ServerException(error: error);
     }
   }
+
+  @override
+  Future<InvoiceModel> sendInvoiceManually(
+      {required String invoiceId, required List<String> emails}) async {
+    try {
+      final result =
+          await client.post('/invoice/$invoiceId', data: {'emails': emails});
+      return InvoiceModel.fromJson(result.data);
+    } catch (error) {
+      throw ServerException(error: error);
+    }
+  }
 }

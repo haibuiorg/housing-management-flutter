@@ -5,6 +5,7 @@ import 'package:priorli/core/housing/usecases/get_housing_company.dart';
 import 'package:priorli/core/invoice/usecases/get_company_invoices.dart';
 import 'package:priorli/core/invoice/usecases/get_invoice_detail.dart';
 import 'package:priorli/core/invoice/usecases/get_personal_invoices.dart';
+import 'package:priorli/core/invoice/usecases/send_invoice_manually.dart';
 import 'package:priorli/presentation/invoice/invoice_list_state.dart';
 
 import '../../core/invoice/entities/invoice.dart';
@@ -14,8 +15,13 @@ class InvoiceListCubit extends Cubit<InvoiceListState> {
   final GetPersonalInvoices _getPersonalInvoices;
   final GetCompanyInvoices _getCompanyInvoices;
   final GetInvoiceDetail _getInvoiceDetail;
-  InvoiceListCubit(this._getHousingCompany, this._getPersonalInvoices,
-      this._getCompanyInvoices, this._getInvoiceDetail)
+  final SendInvoiceManually _sendInvoiceManually;
+  InvoiceListCubit(
+      this._getHousingCompany,
+      this._getPersonalInvoices,
+      this._getCompanyInvoices,
+      this._getInvoiceDetail,
+      this._sendInvoiceManually)
       : super(const InvoiceListState());
   Future<void> init(
       {String? companyId,
@@ -59,5 +65,15 @@ class InvoiceListCubit extends Cubit<InvoiceListState> {
       return getInvoiceDetailResult.data;
     }
     return null;
+  }
+
+  Future<void> resendInvoice(Invoice invoice, String text) async {
+    final sendInvoiceManuallyResult = await _sendInvoiceManually(
+        SendInvoiceManuallyParams(invoiceId: invoice.id, emails: [text]));
+    if (sendInvoiceManuallyResult is ResultSuccess<Invoice>) {}
+  }
+
+  void clearMessage() {
+    emit(state.copyWith(message: null));
   }
 }

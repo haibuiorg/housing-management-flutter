@@ -11,7 +11,6 @@ class Subscription extends Equatable {
   final String companyId;
   final bool isActive;
   final int quantity;
-  final int usedActiveUsers;
   final bool latestInvoicePaid;
   final String latestInvoiceUrl;
   final String? paymentServiceSubscriptionId;
@@ -21,7 +20,6 @@ class Subscription extends Equatable {
       {required this.subscriptionPlanId,
       required this.id,
       required this.quantity,
-      required this.usedActiveUsers,
       required this.latestInvoicePaid,
       required this.latestInvoiceUrl,
       this.detail,
@@ -41,7 +39,6 @@ class Subscription extends Equatable {
       createdOn: model.created_on,
       endedOn: model.ended_on,
       quantity: model.quantity,
-      usedActiveUsers: model.used_active_users,
       latestInvoicePaid: model.latest_invoice_paid,
       latestInvoiceUrl: model.latest_invoice_url,
       detail: model.detail,
@@ -61,7 +58,6 @@ class Subscription extends Equatable {
         createdBy,
         companyId,
         quantity,
-        usedActiveUsers,
         latestInvoicePaid,
         latestInvoiceUrl
       ];

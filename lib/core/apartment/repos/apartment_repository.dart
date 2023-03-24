@@ -50,4 +50,13 @@ abstract class ApartmentRepository {
     required String housingCompanyId,
     required String apartmentId,
   });
+  Future<Result<List<ApartmentInvitation>>> getApartmentInvitations(
+      {required String apartmentId,
+      required String housingCompanyId,
+      //pending, expired, accepted
+      required String status});
+  Future<Result<ApartmentInvitation>> resentApartmentInvitation({
+    required String invitationId,
+    required String housingCompanyId,
+  });
 }

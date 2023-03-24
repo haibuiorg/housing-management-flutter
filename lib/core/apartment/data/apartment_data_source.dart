@@ -29,6 +29,13 @@ abstract class ApartmentDataSource {
       {required String apartmentId,
       required String housingCompanyId,
       List<String>? emails});
+  Future<List<ApartmentInvitationModel>> getApartmentInvitations(
+      {required String apartmentId,
+      required String housingCompanyId,
+      //pending, expired, accepted
+      required String status});
+  Future<ApartmentInvitationModel> resentApartmentInvitation(
+      {required String invitationId, required String housingCompanyId});
 
   Future<ApartmentModel> joinApartment({
     required String invitationCode,

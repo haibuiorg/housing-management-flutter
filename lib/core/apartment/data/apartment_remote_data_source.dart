@@ -3,6 +3,7 @@ import 'package:priorli/core/apartment/data/apartment_data_source.dart';
 import 'package:priorli/core/apartment/model/apartment_invitation_model.dart';
 import 'package:priorli/core/apartment/model/apartment_model.dart';
 import 'package:priorli/core/storage/models/storage_item_model.dart';
+import 'package:priorli/core/utils/constants.dart';
 
 import '../../base/exceptions.dart';
 
@@ -63,7 +64,7 @@ class ApartmentRemoteDataSource implements ApartmentDataSource {
       if (emails != null) {
         data["emails"] = emails;
       }
-      final result = await client.post('$_path/invite', data: data);
+      final result = await client.post('/invitations', data: data);
       return ApartmentInvitationModel.fromJson(result.data);
     } catch (error) {
       throw ServerException(error: error);
@@ -222,6 +223,43 @@ class ApartmentRemoteDataSource implements ApartmentDataSource {
       final result =
           await client.put('/apartment/document/$documentId', data: data);
       return StorageItemModel.fromJson(result.data);
+    } catch (error) {
+      throw ServerException(error: error);
+    }
+  }
+
+  @override
+  Future<List<ApartmentInvitationModel>> getApartmentInvitations(
+      {required String apartmentId,
+      required String housingCompanyId,
+      required String status}) async {
+    try {
+      final Map<String, dynamic> data = {
+        "housing_company_id": housingCompanyId,
+        "apartment_id": apartmentId,
+        "status": status
+      };
+
+      final result = await client.get('/invitations', queryParameters: data);
+      return (result.data as List<dynamic>)
+          .map((e) => ApartmentInvitationModel.fromJson(e))
+          .toList();
+    } catch (error) {
+      throw ServerException(error: error);
+    }
+  }
+
+  @override
+  Future<ApartmentInvitationModel> resentApartmentInvitation(
+      {required String invitationId, required String housingCompanyId}) async {
+    try {
+      final Map<String, dynamic> data = {
+        "invitation_id": invitationId,
+        "housing_company_id": housingCompanyId,
+      };
+
+      final result = await client.post('/invitations/resend', data: data);
+      return ApartmentInvitationModel.fromJson(result.data);
     } catch (error) {
       throw ServerException(error: error);
     }

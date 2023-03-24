@@ -192,4 +192,36 @@ class ApartmentRepositoryImpl implements ApartmentRepository {
       return ResultFailure(ServerFailure());
     }
   }
+
+  @override
+  Future<Result<List<ApartmentInvitation>>> getApartmentInvitations(
+      {required String apartmentId,
+      required String housingCompanyId,
+      required String status}) async {
+    try {
+      final invitationListModel =
+          await apartmentDataSource.getApartmentInvitations(
+              apartmentId: apartmentId,
+              housingCompanyId: housingCompanyId,
+              status: status);
+      return ResultSuccess(invitationListModel
+          .map((e) => ApartmentInvitation.modelToEntity(e))
+          .toList());
+    } on ServerException {
+      return ResultFailure(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Result<ApartmentInvitation>> resentApartmentInvitation(
+      {required String invitationId, required String housingCompanyId}) async {
+    try {
+      final invitationModel =
+          await apartmentDataSource.resentApartmentInvitation(
+              invitationId: invitationId, housingCompanyId: housingCompanyId);
+      return ResultSuccess(ApartmentInvitation.modelToEntity(invitationModel));
+    } on ServerException {
+      return ResultFailure(ServerFailure());
+    }
+  }
 }

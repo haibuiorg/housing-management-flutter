@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:priorli/core/invoice/entities/invoice.dart';
+import 'package:priorli/core/utils/string_extension.dart';
 import 'package:priorli/core/utils/time_utils.dart';
 import 'package:priorli/presentation/invoice/invoice_list_cubit.dart';
 import 'package:priorli/presentation/invoice/invoice_list_state.dart';
@@ -51,7 +54,15 @@ class _InvoiceListScreenState extends State<InvoiceListScreen> {
   Widget build(BuildContext context) {
     return BlocProvider<InvoiceListCubit>(
       create: (_) => _cubit,
-      child: BlocBuilder<InvoiceListCubit, InvoiceListState>(
+      child: BlocConsumer<InvoiceListCubit, InvoiceListState>(
+        listener: (context, state) {
+          if (state.message != null) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(state.message!),
+            ));
+            _cubit.clearMessage();
+          }
+        },
         builder: (context, state) {
           return Scaffold(
             appBar: AppBar(title: const Text('Invoices')),
@@ -79,6 +90,15 @@ class _InvoiceListScreenState extends State<InvoiceListScreen> {
                                 bottomLeft: Radius.circular(16),
                                 bottomRight: Radius.circular(16))),
                         child: InkWell(
+                          onLongPress: () {
+                            showDialog(
+                                context: context,
+                                builder: (builder) {
+                                  return ResendInvoiceDialog(
+                                    invoice: invoice,
+                                  );
+                                });
+                          },
                           onTap: () {
                             _cubit.getInvoiceDetail(invoice.id).then((value) {
                               if (value?.invoiceUrl?.isNotEmpty == true) {
@@ -165,6 +185,60 @@ class _InvoiceListScreenState extends State<InvoiceListScreen> {
           );
         },
       ),
+    );
+  }
+}
+
+class ResendInvoiceDialog extends StatefulWidget {
+  const ResendInvoiceDialog({super.key, required this.invoice});
+  final Invoice invoice;
+
+  @override
+  State<ResendInvoiceDialog> createState() => _ResendInvoiceDialogState();
+}
+
+class _ResendInvoiceDialogState extends State<ResendInvoiceDialog> {
+  final _emailController = TextEditingController();
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Resend invoice'),
+      content: Column(
+        children: [
+          const Text('Send invoice to this email address:'),
+          TextFormField(
+            validator: (value) {
+              if (value?.isValidEmail != true) {
+                return 'Please enter email address';
+              }
+              return null;
+            },
+            controller: _emailController,
+            decoration: const InputDecoration(
+              hintText: 'Email address',
+            ),
+          )
+        ],
+      ),
+      actions: [
+        TextButton(
+            onPressed: () {
+              BlocProvider.of<InvoiceListCubit>(context)
+                  .resendInvoice(widget.invoice, _emailController.text)
+                  .then((value) {
+                Navigator.of(context).pop();
+              });
+            },
+            child: const Text('Cancel')),
+        TextButton(onPressed: () {}, child: const Text('Delete'))
+      ],
     );
   }
 }

@@ -18,6 +18,10 @@ class ApartmentInvitationModel extends Equatable {
   final String housingCompanyId;
   @JsonKey(name: 'claimed_by')
   final List<String>? claimedBy;
+  @JsonKey(name: 'email_sent')
+  final int emailSent;
+  @JsonKey(name: 'invite_retry_limit')
+  final int inviteRetryLimit;
 
   const ApartmentInvitationModel(
       {required this.invitationCode,
@@ -26,6 +30,8 @@ class ApartmentInvitationModel extends Equatable {
       required this.validUntil,
       required this.apartmentId,
       required this.housingCompanyId,
+      required this.emailSent,
+      required this.inviteRetryLimit,
       this.claimedBy});
 
   factory ApartmentInvitationModel.fromJson(Map<String, dynamic> json) =>
@@ -39,6 +45,8 @@ class ApartmentInvitationModel extends Equatable {
         validUntil,
         apartmentId,
         housingCompanyId,
-        claimedBy
+        claimedBy,
+        emailSent,
+        inviteRetryLimit
       ];
 }

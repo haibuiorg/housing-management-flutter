@@ -12,7 +12,6 @@ SubscriptionModel _$SubscriptionModelFromJson(Map<String, dynamic> json) =>
       id: json['id'] as String,
       created_on: json['created_on'] as int,
       quantity: json['quantity'] as int,
-      used_active_users: json['used_active_users'] as int,
       latest_invoice_paid: json['latest_invoice_paid'] as bool,
       latest_invoice_url: json['latest_invoice_url'] as String,
       detail: json['detail'] as Map<String, dynamic>?,
@@ -36,7 +35,6 @@ Map<String, dynamic> _$SubscriptionModelToJson(SubscriptionModel instance) =>
       'is_active': instance.is_active,
       'company_id': instance.company_id,
       'quantity': instance.quantity,
-      'used_active_users': instance.used_active_users,
       'latest_invoice_url': instance.latest_invoice_url,
       'latest_invoice_paid': instance.latest_invoice_paid,
       'payment_service_subscription_id':

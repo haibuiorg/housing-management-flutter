@@ -30,4 +30,6 @@ abstract class InvoiceRepository {
     int? limit,
     int? lastCreatedOn,
   });
+  Future<Result<Invoice>> sendInvoiceManually(
+      {required String invoiceId, required List<String> emails});
 }

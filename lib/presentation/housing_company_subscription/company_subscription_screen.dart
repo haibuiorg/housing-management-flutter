@@ -246,7 +246,7 @@ class SubscriptionBox extends StatelessWidget {
               ? subscriptionPlans.first.name
               : 'Unknown plan'),
           subtitle: Text(
-              '${subscription.quantity - subscription.usedActiveUsers} / ${subscription.quantity} accounts available${subscription.latestInvoicePaid ? '' : '\n(Invoice not paid - click to pay!)'}'),
+              'For ${subscription.quantity} apartments ${subscription.latestInvoicePaid ? '' : '\n(Invoice not paid - click to pay!)'}'),
         ),
       );
     });
