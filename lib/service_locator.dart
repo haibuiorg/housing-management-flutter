@@ -62,6 +62,7 @@ import 'package:priorli/core/invoice/usecases/delete_invoice.dart';
 import 'package:priorli/core/invoice/usecases/get_company_invoices.dart';
 import 'package:priorli/core/invoice/usecases/get_invoice_detail.dart';
 import 'package:priorli/core/invoice/usecases/get_personal_invoices.dart';
+import 'package:priorli/core/invoice/usecases/send_invoice_manually.dart';
 import 'package:priorli/core/messaging/data/messaging_remote_data_source.dart';
 import 'package:priorli/core/messaging/repos/messaging_repository.dart';
 import 'package:priorli/core/messaging/repos/messaging_repository_impl.dart';
@@ -637,6 +638,8 @@ Future<void> init() async {
       () => GetInvoiceDetail(invoiceRepository: serviceLocator()));
   serviceLocator.registerLazySingleton<GetInvoiceGroups>(
       () => GetInvoiceGroups(invoiceRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<SendInvoiceManually>(
+      () => SendInvoiceManually(invoiceRepository: serviceLocator()));
 
   serviceLocator.registerLazySingleton<AddCompanyManager>(
       () => AddCompanyManager(housingCompanyRepository: serviceLocator()));

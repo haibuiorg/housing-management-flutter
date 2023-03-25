@@ -211,6 +211,7 @@ class _ResendInvoiceDialogState extends State<ResendInvoiceDialog> {
     return AlertDialog(
       title: const Text('Resend invoice'),
       content: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           const Text('Send invoice to this email address:'),
           TextFormField(
@@ -230,14 +231,18 @@ class _ResendInvoiceDialogState extends State<ResendInvoiceDialog> {
       actions: [
         TextButton(
             onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text('Cancel')),
+        TextButton(
+            onPressed: () {
               BlocProvider.of<InvoiceListCubit>(context)
                   .resendInvoice(widget.invoice, _emailController.text)
                   .then((value) {
                 Navigator.of(context).pop();
               });
             },
-            child: const Text('Cancel')),
-        TextButton(onPressed: () {}, child: const Text('Delete'))
+            child: const Text('Send'))
       ],
     );
   }

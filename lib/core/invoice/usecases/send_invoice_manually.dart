@@ -8,7 +8,7 @@ import '../repos/invoice_repository.dart';
 class SendInvoiceManually extends UseCase<Invoice, SendInvoiceManuallyParams> {
   final InvoiceRepository invoiceRepository;
 
-  SendInvoiceManually(this.invoiceRepository);
+  SendInvoiceManually({required this.invoiceRepository});
 
   @override
   Future<Result<Invoice>> call(SendInvoiceManuallyParams params) async {
