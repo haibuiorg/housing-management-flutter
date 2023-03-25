@@ -96,6 +96,9 @@ class _InvoiceListScreenState extends State<InvoiceListScreen> {
                                 builder: (builder) {
                                   return ResendInvoiceDialog(
                                     invoice: invoice,
+                                    onResend: (String email) {
+                                      _cubit.resendInvoice(invoice, email);
+                                    },
                                   );
                                 });
                           },
@@ -190,8 +193,9 @@ class _InvoiceListScreenState extends State<InvoiceListScreen> {
 }
 
 class ResendInvoiceDialog extends StatefulWidget {
-  const ResendInvoiceDialog({super.key, required this.invoice});
+  const ResendInvoiceDialog({super.key, required this.invoice, this.onResend});
   final Invoice invoice;
+  final Function(String emails)? onResend;
 
   @override
   State<ResendInvoiceDialog> createState() => _ResendInvoiceDialogState();
@@ -236,11 +240,9 @@ class _ResendInvoiceDialogState extends State<ResendInvoiceDialog> {
             child: const Text('Cancel')),
         TextButton(
             onPressed: () {
-              BlocProvider.of<InvoiceListCubit>(context)
-                  .resendInvoice(widget.invoice, _emailController.text)
-                  .then((value) {
-                Navigator.of(context).pop();
-              });
+              if (_emailController.text.isValidEmail) {
+                widget.onResend?.call(_emailController.text);
+              }
             },
             child: const Text('Send'))
       ],
