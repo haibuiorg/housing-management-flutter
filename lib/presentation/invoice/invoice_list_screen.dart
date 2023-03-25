@@ -97,7 +97,9 @@ class _InvoiceListScreenState extends State<InvoiceListScreen> {
                                   return ResendInvoiceDialog(
                                     invoice: invoice,
                                     onResend: (String email) {
-                                      _cubit.resendInvoice(invoice, email);
+                                      _cubit.resendInvoice(invoice, email).then(
+                                          (value) =>
+                                              Navigator.of(builder).pop());
                                     },
                                   );
                                 });
@@ -203,10 +205,12 @@ class ResendInvoiceDialog extends StatefulWidget {
 
 class _ResendInvoiceDialogState extends State<ResendInvoiceDialog> {
   final _emailController = TextEditingController();
+  bool isSending = false;
 
   @override
   void dispose() {
     _emailController.dispose();
+    isSending = false;
     super.dispose();
   }
 
@@ -218,18 +222,20 @@ class _ResendInvoiceDialogState extends State<ResendInvoiceDialog> {
         mainAxisSize: MainAxisSize.min,
         children: [
           const Text('Send invoice to this email address:'),
-          TextFormField(
-            validator: (value) {
-              if (value?.isValidEmail != true) {
-                return 'Please enter email address';
-              }
-              return null;
-            },
-            controller: _emailController,
-            decoration: const InputDecoration(
-              hintText: 'Email address',
-            ),
-          )
+          !isSending
+              ? TextFormField(
+                  validator: (value) {
+                    if (value?.isValidEmail != true) {
+                      return 'Please enter email address';
+                    }
+                    return null;
+                  },
+                  controller: _emailController,
+                  decoration: const InputDecoration(
+                    hintText: 'Email address',
+                  ),
+                )
+              : const CircularProgressIndicator()
         ],
       ),
       actions: [
@@ -241,6 +247,9 @@ class _ResendInvoiceDialogState extends State<ResendInvoiceDialog> {
         TextButton(
             onPressed: () {
               if (_emailController.text.isValidEmail) {
+                setState(() {
+                  isSending = true;
+                });
                 widget.onResend?.call(_emailController.text);
               }
             },
