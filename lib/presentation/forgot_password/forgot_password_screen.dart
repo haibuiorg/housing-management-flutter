@@ -7,6 +7,8 @@ import 'package:priorli/presentation/shared/app_lottie_animation.dart';
 import 'package:priorli/service_locator.dart';
 import '../shared/custom_form_field.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 const forgotPasswordPath = '/forgotPassword';
 
 class ForgotPasswordScreen extends StatefulWidget {
@@ -47,10 +49,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           showModalBottomSheet(
               context: context,
               builder: (context) {
-                return const Padding(
-                  padding: EdgeInsets.all(32),
-                  child: Text(
-                      'If email provided is correct an email will be sent to you for resetting password instruction'),
+                return Padding(
+                  padding: const EdgeInsets.all(32),
+                  child:
+                      Text(AppLocalizations.of(context).reset_password_success),
                 );
               });
           _cubit.initState();
@@ -58,7 +60,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       }, builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
-            title: const Text('Forgot password?'),
+            title: Text(AppLocalizations.of(context).reset_password),
           ),
           body: Padding(
             padding: EdgeInsets.only(
@@ -78,21 +80,21 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     )),
                 const Spacer(),
                 Text(
-                  'Forgot your password?',
+                  AppLocalizations.of(context).forgot_password,
                   style: Theme.of(context).textTheme.headlineSmall,
                   textAlign: TextAlign.center,
                 ),
                 Container(
                   margin: const EdgeInsets.only(top: 16),
                   child: Text(
-                    'Enter your email address for resetting password',
+                    AppLocalizations.of(context).reset_password_instruction,
                     style: Theme.of(context).textTheme.titleMedium,
                     textAlign: TextAlign.center,
                   ),
                 ),
                 const Spacer(),
                 CustomFormField(
-                  hintText: 'Email',
+                  hintText: AppLocalizations.of(context).email,
                   textEditingController: _emailController,
                   autoValidate: true,
                   keyboardType: TextInputType.emailAddress,
@@ -104,7 +106,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   },
                   textInputAction: TextInputAction.next,
                   validator: (val) {
-                    return (!val!.isValidEmail) ? 'Enter valid email' : null;
+                    return (!val!.isValidEmail)
+                        ? AppLocalizations.of(context).email_address_error
+                        : null;
                   },
                 ),
                 Container(
@@ -115,7 +119,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       onPressed: _emailController.text.isValidEmail
                           ? _submitResetPassword
                           : null,
-                      child: const Text('Send')),
+                      child: Text(AppLocalizations.of(context).reset_password)),
                 ),
                 const Spacer(),
               ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'admin_cubit.dart';
 import 'admin_state.dart';
@@ -26,7 +27,8 @@ class AdminCompanyListView extends StatelessWidget {
                 tileColor: Theme.of(context).cardColor,
                 shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(10))),
-                title: Text('Company ${state.companyList![index].name}'),
+                title: Text(AppLocalizations.of(context)
+                    .company_with_name(state.companyList![index].name)),
               ),
             );
           });

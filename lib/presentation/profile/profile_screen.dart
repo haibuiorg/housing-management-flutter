@@ -7,6 +7,7 @@ import 'package:priorli/presentation/shared/setting_button.dart';
 import 'package:priorli/user_cubit.dart';
 import 'package:priorli/user_state.dart';
 import 'package:responsive_framework/responsive_framework.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../account/account_screen.dart';
 import '../help/help_screen.dart';
@@ -52,13 +53,13 @@ class SettingScreen extends StatelessWidget {
               onPressed: () {
                 GoRouter.of(context).push(notificationCenterPath);
               },
-              label: const Text('Notification Center'),
+              label: Text(AppLocalizations.of(context).notification_center),
             ),
             SettingButton(
               onPressed: () {
                 GoRouter.of(context).push(helpPath);
               },
-              label: const Text('Help'),
+              label: Text(AppLocalizations.of(context).help),
             ),
             const Spacer(),
           ],

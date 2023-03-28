@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'admin_cubit.dart';
 import 'admin_state.dart';
@@ -29,11 +30,12 @@ class ContactLeadListView extends StatelessWidget {
                       : Theme.of(context).cardColor,
                   shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(10))),
-                  title: Text('Name ${state.contactLeadList![index].name} \n'
-                      'Email ${state.contactLeadList![index].email} \n'
-                      'Phone ${state.contactLeadList![index].phone}'),
-                  subtitle:
-                      Text('Message: ${state.contactLeadList![index].message}'),
+                  title: Text(AppLocalizations.of(context).contact_lead_detail(
+                      state.contactLeadList![index].name,
+                      state.contactLeadList![index].email,
+                      state.contactLeadList![index].phone)),
+                  subtitle: Text(AppLocalizations.of(context)
+                      .message(state.contactLeadList![index].message)),
                   leading: state.contactLeadList![index].type == 'contact_form'
                       ? const Icon(Icons.contact_mail_rounded)
                       : state.contactLeadList![index].type == 'demo_form'

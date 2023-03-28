@@ -4,6 +4,8 @@ import 'package:priorli/presentation/guest_invitation/guest_invitation_state.dar
 import 'package:priorli/presentation/shared/app_user_circle_avatar.dart';
 import 'package:priorli/service_locator.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import '../../core/user/entities/user.dart';
 import 'guest_invitation_cubit.dart';
 
@@ -75,7 +77,7 @@ class _GuestInvitationState extends State<GuestInvitation> {
                                       .toList() ??
                                   []);
                         },
-                        child: const Text('Save'))
+                        child: Text(AppLocalizations.of(context).save))
                   ],
           ),
           body: ListView.builder(
@@ -98,15 +100,17 @@ class _GuestInvitationState extends State<GuestInvitation> {
                           padding: const EdgeInsets.symmetric(horizontal: 8),
                           child: (state.selectedUsers ?? [])
                                   .contains(state.userList?[index].userId)
-                              ? const Text('Accepted')
+                              ? Text(AppLocalizations.of(context).accepted)
                               : (state.initialUsers ?? [])
                                       .contains(state.userList?[index].userId)
                                   ? Row(
                                       children: [
-                                        const Padding(
-                                          padding: EdgeInsets.symmetric(
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
                                               horizontal: 8.0),
-                                          child: Text('Invited'),
+                                          child: Text(
+                                              AppLocalizations.of(context)
+                                                  .invited),
                                         ),
                                         IconButton(
                                             onPressed: () {
@@ -117,7 +121,8 @@ class _GuestInvitationState extends State<GuestInvitation> {
                                       ],
                                     )
                                   : OutlinedButton(
-                                      child: const Text('Send invitation'),
+                                      child: Text(AppLocalizations.of(context)
+                                          .send_invitation),
                                       onPressed: () {
                                         _cubit.addAdditionInvitees(index);
                                       },

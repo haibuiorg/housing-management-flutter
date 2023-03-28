@@ -16,6 +16,7 @@ import '../events/event_screen.dart';
 import '../housing_company_management/housing_company_management_screen.dart';
 import 'components/event_data_source.dart';
 import 'components/generate_feature_card_list.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 const housingCompanyScreenPath = 'housing_company';
 
@@ -89,7 +90,8 @@ class _HousingCompanyScreenState extends State<HousingCompanyScreen> {
                         color: Theme.of(context).colorScheme.background),
                     child: FittedBox(
                       child: Text(
-                        state.housingCompany?.name ?? 'Housing company',
+                        state.housingCompany?.name ??
+                            AppLocalizations.of(context).housing_companies,
                       ),
                     ),
                   ),
@@ -175,14 +177,14 @@ class CalendarBox extends StatelessWidget {
             child: Column(
               children: [
                 FullWidthTitle(
-                  title: 'Events',
+                  title: AppLocalizations.of(context).event,
                   action: TextButton(
                     onPressed: state.housingCompany?.isUserManager == true
                         ? () {
                             context.pushFromCurrentLocation(eventScreenPath);
                           }
                         : null,
-                    child: const Text('Add'),
+                    child: Text(AppLocalizations.of(context).add),
                   ),
                 ),
                 Expanded(
@@ -233,8 +235,8 @@ class AnnouncementBox extends StatelessWidget {
         builder: (context, state) {
       return Column(
         children: [
-          const FullWidthTitle(
-            title: 'Announcements',
+          FullWidthTitle(
+            title: AppLocalizations.of(context).announcement,
           ),
           SizedBox(
             width: double.infinity,
@@ -262,7 +264,7 @@ class AnnouncementBox extends StatelessWidget {
               onPressed: () {
                 context.pushFromCurrentLocation(announcementPath);
               },
-              child: const Text('More'))
+              child: Text(AppLocalizations.of(context).more)),
         ],
       );
     });

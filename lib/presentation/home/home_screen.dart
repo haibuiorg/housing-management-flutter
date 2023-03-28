@@ -5,6 +5,7 @@ import 'package:priorli/presentation/create_housing_company/create_housing_compa
 import 'package:priorli/presentation/home/home_state.dart';
 import 'package:priorli/presentation/join_apartment/join_apartment_screen.dart';
 import 'package:priorli/presentation/shared/app_lottie_animation.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../service_locator.dart';
 import 'home_cubit.dart';
@@ -56,8 +57,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         onPressed: () {
                           GoRouter.of(context).push(createCompanyPath);
                         },
-                        child: const Text(
-                          'Create a new company or community',
+                        child: Text(
+                          AppLocalizations.of(context)
+                              .create_a_housing_community,
                           textAlign: TextAlign.center,
                         )),
                   ),
@@ -70,7 +72,11 @@ class _HomeScreenState extends State<HomeScreen> {
                         onPressed: () {
                           GoRouter.of(context).push(joinApartmentPath);
                         },
-                        child: const Text('Join with Invitation Code')),
+                        child: Text(
+                          AppLocalizations.of(context)
+                              .join_apartment_with_invitation_code,
+                          textAlign: TextAlign.center,
+                        )),
                   ),
                 ],
               ));

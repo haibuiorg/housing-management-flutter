@@ -10,6 +10,7 @@ import 'package:priorli/presentation/shared/app_webview.dart';
 import 'package:priorli/presentation/shared/custom_form_field.dart';
 import 'package:priorli/service_locator.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 const helpPath = '/faq';
 
@@ -58,7 +59,7 @@ class _HelpScreenState extends State<HelpScreen> {
       }, builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
-            title: const Text('Help'),
+            title: Text(AppLocalizations.of(context).help),
           ),
           body: Column(
             children: [
@@ -151,13 +152,13 @@ class _SupportConversationDialogState extends State<SupportConversationDialog> {
             CustomFormField(
               keyboardType: TextInputType.name,
               textCapitalization: TextCapitalization.sentences,
-              hintText: 'Support subject',
+              hintText: AppLocalizations.of(context).support_subject,
               textEditingController: _textEditingController,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text('Country'),
+                Text(AppLocalizations.of(context).country),
                 Wrap(
                   crossAxisAlignment: WrapCrossAlignment.center,
                   spacing: 8,
@@ -188,7 +189,7 @@ class _SupportConversationDialogState extends State<SupportConversationDialog> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text('Language'),
+                Text(AppLocalizations.of(context).language),
                 Wrap(
                   crossAxisAlignment: WrapCrossAlignment.center,
                   spacing: 8,

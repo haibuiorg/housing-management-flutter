@@ -8,6 +8,7 @@ import 'package:priorli/presentation/housing_company_ui/housing_company_ui_scree
 import 'package:priorli/presentation/housing_company_ui/housing_company_ui_screen_state.dart';
 import 'package:priorli/service_locator.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../core/utils/constants.dart';
 import '../shared/full_width_title.dart';
 
@@ -46,7 +47,7 @@ class _HousingCompanyUiScreenState extends State<HousingCompanyUiScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Appearance'),
+        title: Text(AppLocalizations.of(context).company_branding),
       ),
       body: BlocProvider<HousingCompanyUiScreenCubit>(
         create: (_) => _cubit,
@@ -54,8 +55,8 @@ class _HousingCompanyUiScreenState extends State<HousingCompanyUiScreen> {
             HousingCompanyUiScreenState>(builder: (context, state) {
           return SingleChildScrollView(
             child: Column(children: [
-              const FullWidthTitle(
-                title: 'Company logo',
+              FullWidthTitle(
+                title: AppLocalizations.of(context).company_logo,
               ),
               InkWell(
                 onTap: () => showDialog(
@@ -90,8 +91,8 @@ class _HousingCompanyUiScreenState extends State<HousingCompanyUiScreen> {
                         ),
                       ),
               ),
-              const FullWidthTitle(
-                title: 'Cover photo',
+              FullWidthTitle(
+                title: AppLocalizations.of(context).cover_photo,
               ),
               Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -134,8 +135,8 @@ class _HousingCompanyUiScreenState extends State<HousingCompanyUiScreen> {
                   ),
                 ),
               ),
-              const FullWidthTitle(
-                title: 'Company primary color',
+              FullWidthTitle(
+                title: AppLocalizations.of(context).primary_color,
               ),
               InkWell(
                 onTap: () => showDialog(

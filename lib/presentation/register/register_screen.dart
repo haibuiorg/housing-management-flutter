@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:priorli/core/utils/string_extension.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import '../../auth_cubit.dart';
 import '../shared/custom_form_field.dart';
 
@@ -47,7 +49,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       appBar: AppBar(
         centerTitle: true,
         elevation: 4,
-        title: const Text('Register'),
+        title: Text(AppLocalizations.of(context).register),
       ),
       floatingActionButton: FloatingActionButton(
           onPressed: () => _register(context),
@@ -59,7 +61,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           children: [
             CustomFormField(
               textEditingController: _emailController,
-              hintText: 'Email',
+              hintText: AppLocalizations.of(context).email,
               autoValidate: true,
               keyboardType: TextInputType.emailAddress,
               icon: const Icon(
@@ -67,12 +69,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
               textInputAction: TextInputAction.next,
               validator: (val) {
-                return (!val!.isValidEmail) ? 'Enter valid email' : null;
+                return (!val!.isValidEmail)
+                    ? AppLocalizations.of(context).email_address_error
+                    : null;
               },
             ),
             CustomFormField(
               autoValidate: true,
-              hintText: 'Password',
+              hintText: AppLocalizations.of(context).password_title,
               obscureText: _isObscured,
               textInputAction: TextInputAction.next,
               icon: const Icon(
@@ -80,7 +84,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
               textEditingController: _passwordController,
               validator: (val) {
-                return !val!.isValidPassword ? 'Enter valid password' : null;
+                return !val!.isValidPassword
+                    ? AppLocalizations.of(context).password_error
+                    : null;
               },
               onChanged: (_) => setState(() {}),
               decoration: InputDecoration(
@@ -95,7 +101,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       })),
             ),
             CustomFormField(
-              hintText: 'First name',
+              hintText: AppLocalizations.of(context).first_name,
               textInputAction: TextInputAction.next,
               icon: const Icon(
                 Icons.badge_outlined,
@@ -103,7 +109,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               textEditingController: _firstNameController,
             ),
             CustomFormField(
-              hintText: 'Last name',
+              hintText: AppLocalizations.of(context).last_name,
               textInputAction: TextInputAction.next,
               icon: const Icon(
                 Icons.badge_outlined,
@@ -111,7 +117,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               textEditingController: _lastNameController,
             ),
             CustomFormField(
-              hintText: 'Phone number',
+              hintText: AppLocalizations.of(context).phone_number,
               textInputAction: TextInputAction.go,
               icon: const Icon(
                 Icons.phone_iphone_outlined,

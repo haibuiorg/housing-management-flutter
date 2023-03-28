@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:priorli/core/subscription/entities/payment_product_item.dart';
 import 'package:priorli/core/subscription/entities/subscription_plan.dart';
 import 'package:priorli/presentation/shared/full_width_title.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../core/utils/number_formatters.dart';
 import '../../core/utils/string_extension.dart';
@@ -20,8 +21,9 @@ class SubscriptionPlanListView extends StatelessWidget {
       return Scaffold(
         body: CustomScrollView(
           slivers: [
-            const SliverToBoxAdapter(
-              child: FullWidthTitle(title: 'Subscription plans'),
+            SliverToBoxAdapter(
+              child: FullWidthTitle(
+                  title: AppLocalizations.of(context).subscription_plans),
             ),
             SliverList.builder(
                 itemCount: state.subscriptionPlanList?.length ?? 0,
@@ -77,10 +79,12 @@ class SubscriptionPlanListView extends StatelessWidget {
                                       .then((value) => Navigator.pop(builder)));
                         });
                   },
-                  child: const Text('Add subscription plan')),
+                  child:
+                      Text(AppLocalizations.of(context).add_subscription_plan)),
             ),
-            const SliverToBoxAdapter(
-              child: FullWidthTitle(title: 'Payment products'),
+            SliverToBoxAdapter(
+              child: FullWidthTitle(
+                  title: AppLocalizations.of(context).payment_products),
             ),
             SliverList.builder(
                 itemCount: state.paymentProductItems?.length ?? 0,
@@ -111,7 +115,8 @@ class SubscriptionPlanListView extends StatelessWidget {
                           );
                         });
                   },
-                  child: const Text('Add payment product plan')),
+                  child:
+                      Text(AppLocalizations.of(context).add_payment_product)),
             ),
           ],
         ),
@@ -132,15 +137,17 @@ class SubscriptionTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: ListTile(
-        title: Text('Plan ${subscriptionPlan.name}'),
-        subtitle: Text('Price ${subscriptionPlan.price}'),
+        title:
+            Text(AppLocalizations.of(context).plan_name(subscriptionPlan.name)),
+        subtitle: Text(AppLocalizations.of(context).price_value(
+            formatCurrency(subscriptionPlan.price, subscriptionPlan.currency))),
         trailing: OutlinedButton.icon(
           icon: const Icon(Icons.delete_forever_rounded),
           onPressed: () {
             BlocProvider.of<AdminCubit>(context)
                 .deleteSubscription(subscriptionPlan.id);
           },
-          label: const Text('Remove'),
+          label: Text(AppLocalizations.of(context).remove),
         ),
       ),
     );
@@ -154,21 +161,23 @@ class PaymentProductTile extends StatelessWidget {
   });
 
   final PaymentProductItem paymentProductItem;
-
   @override
   Widget build(BuildContext context) {
     return Card(
       child: ListTile(
-        title: Text('Product: ${paymentProductItem.name}\n'
-            'Price: ${formatCurrency(paymentProductItem.amount, paymentProductItem.currencyCode)}'),
-        subtitle: Text('Description ${paymentProductItem.description}'),
+        title: Text(AppLocalizations.of(context).product_detail(
+            paymentProductItem.name,
+            formatCurrency(
+                paymentProductItem.amount, paymentProductItem.currencyCode))),
+        subtitle: Text(AppLocalizations.of(context)
+            .description_text(paymentProductItem.description)),
         trailing: OutlinedButton.icon(
           icon: const Icon(Icons.delete_forever_rounded),
           onPressed: () {
             BlocProvider.of<AdminCubit>(context)
                 .removePaymentProductItem(paymentProductItem.id);
           },
-          label: const Text('Remove'),
+          label: Text(AppLocalizations.of(context).remove),
         ),
       ),
     );
@@ -232,7 +241,7 @@ class _PaymentProductDialogState extends State<PaymentProductDialog> {
           maxLines: 1,
           // ignore: prefer_const_constructors
           decoration: InputDecoration(
-            hintText: 'Price',
+            hintText: AppLocalizations.of(context).price_title,
             border: const OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(8.0)),
             ),
@@ -245,9 +254,9 @@ class _PaymentProductDialogState extends State<PaymentProductDialog> {
           maxLines: 1,
           autofocus: true,
           onChanged: _checkIfAllFilled,
-          decoration: const InputDecoration(
-            hintText: 'Description',
-            border: OutlineInputBorder(
+          decoration: InputDecoration(
+            hintText: AppLocalizations.of(context).description_title,
+            border: const OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(8.0)),
             ),
           ),
@@ -262,7 +271,7 @@ class _PaymentProductDialogState extends State<PaymentProductDialog> {
                     );
                   }
                 : null,
-            child: const Text('Add payment product')),
+            child: Text(AppLocalizations.of(context).add_payment_product)),
       ],
     );
   }
@@ -373,7 +382,7 @@ class _SubscriptionPlanDialogState extends State<SubscriptionPlanDialog> {
                             _isMonthly = true;
                           });
                         },
-                        label: const Text('Monthly price'),
+                        label: Text(AppLocalizations.of(context).monthly_price),
                         selected: _isMonthly,
                       ),
                       ChoiceChip(
@@ -383,7 +392,8 @@ class _SubscriptionPlanDialogState extends State<SubscriptionPlanDialog> {
                             });
                           },
                           selected: !_isMonthly,
-                          label: const Text('Yearly price')),
+                          label:
+                              Text(AppLocalizations.of(context).yearly_price)),
                     ],
                   ),
                 ),
@@ -398,8 +408,8 @@ class _SubscriptionPlanDialogState extends State<SubscriptionPlanDialog> {
                     controller: _priceController,
                     maxLines: 1,
                     decoration: InputDecoration(
-                      hintText:
-                          'Price value in ${widget.currencyCode.toUpperCase()}',
+                      hintText: AppLocalizations.of(context)
+                          .price_value_in(widget.currencyCode.toUpperCase()),
                       border: const OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(8.0)),
                       ),
@@ -418,8 +428,8 @@ class _SubscriptionPlanDialogState extends State<SubscriptionPlanDialog> {
                       keyboardType:
                           const TextInputType.numberWithOptions(decimal: true),
                       decoration: InputDecoration(
-                        hintText:
-                            'Additional cost per invoice ${widget.currencyCode.toUpperCase()}',
+                        hintText: AppLocalizations.of(context).cost_per_invoice(
+                            widget.currencyCode.toUpperCase()),
                         border: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(8.0)),
                         ),
@@ -436,9 +446,10 @@ class _SubscriptionPlanDialogState extends State<SubscriptionPlanDialog> {
                       ],
                       keyboardType:
                           const TextInputType.numberWithOptions(decimal: true),
-                      decoration: const InputDecoration(
-                        hintText: 'Max messaging channels',
-                        border: OutlineInputBorder(
+                      decoration: InputDecoration(
+                        hintText:
+                            AppLocalizations.of(context).max_messaging_channels,
+                        border: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(8.0)),
                         ),
                       ),
@@ -454,9 +465,10 @@ class _SubscriptionPlanDialogState extends State<SubscriptionPlanDialog> {
                       ],
                       keyboardType:
                           const TextInputType.numberWithOptions(decimal: true),
-                      decoration: const InputDecoration(
-                        hintText: 'Max announcements',
-                        border: OutlineInputBorder(
+                      decoration: InputDecoration(
+                        hintText:
+                            AppLocalizations.of(context).max_announcements,
+                        border: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(8.0)),
                         ),
                       ),
@@ -472,9 +484,10 @@ class _SubscriptionPlanDialogState extends State<SubscriptionPlanDialog> {
                       ],
                       keyboardType:
                           const TextInputType.numberWithOptions(decimal: true),
-                      decoration: const InputDecoration(
-                        hintText: 'Max invoice number',
-                        border: OutlineInputBorder(
+                      decoration: InputDecoration(
+                        hintText:
+                            AppLocalizations.of(context).max_invoice_number,
+                        border: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(8.0)),
                         ),
                       ),
@@ -484,7 +497,8 @@ class _SubscriptionPlanDialogState extends State<SubscriptionPlanDialog> {
                   children: [
                     Expanded(
                       child: CheckboxListTile(
-                          title: const Text('SMS notification'),
+                          title: Text(
+                              AppLocalizations.of(context).sms_notification),
                           value: _notificationTypes.contains('sms'),
                           onChanged: (onChanged) {
                             setState(() {
@@ -498,7 +512,8 @@ class _SubscriptionPlanDialogState extends State<SubscriptionPlanDialog> {
                     ),
                     Expanded(
                       child: CheckboxListTile(
-                          title: const Text('Email notification'),
+                          title: Text(
+                              AppLocalizations.of(context).email_notification),
                           value: _notificationTypes.contains('email'),
                           onChanged: (onChanged) {
                             setState(() {
@@ -513,7 +528,8 @@ class _SubscriptionPlanDialogState extends State<SubscriptionPlanDialog> {
                   ],
                 ),
                 CheckboxListTile(
-                    title: const Text('Document translation'),
+                    title:
+                        Text(AppLocalizations.of(context).document_translation),
                     value: _translation,
                     onChanged: (onChanged) {
                       setState(() {
@@ -521,7 +537,8 @@ class _SubscriptionPlanDialogState extends State<SubscriptionPlanDialog> {
                       });
                     }),
                 CheckboxListTile(
-                    title: const Text('Has apartment document'),
+                    title: Text(
+                        AppLocalizations.of(context).has_apartment_documents),
                     value: _hasApartmentDocument,
                     onChanged: (onChanged) {
                       setState(() {
@@ -551,7 +568,8 @@ class _SubscriptionPlanDialogState extends State<SubscriptionPlanDialog> {
                                   notificationTypes: _notificationTypes);
                             }
                           : null,
-                      child: const Text('Create new subscription plan')),
+                      child: Text(AppLocalizations.of(context)
+                          .create_new_subscription_plan)),
                 )
               ]),
         ),

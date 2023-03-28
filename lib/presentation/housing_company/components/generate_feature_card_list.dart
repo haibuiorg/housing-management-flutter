@@ -25,13 +25,15 @@ import '../housing_company_state.dart';
 import 'apartment_tile.dart';
 import 'poll_chart.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 List<Widget> createFeatureWidgetList(
         BuildContext context, HousingCompanyState state) =>
     [
       Column(
         children: [
-          const FullWidthTitle(
-            title: 'Communication channels',
+          FullWidthTitle(
+            title: AppLocalizations.of(context).communication_topic,
           ),
           Expanded(
             child: ListView.builder(
@@ -66,13 +68,13 @@ List<Widget> createFeatureWidgetList(
                           });
                     }
                   : null,
-              child: const Text('Start new channels'))
+              child: Text(AppLocalizations.of(context).start_new_channel))
         ],
       ),
       Column(
         children: [
           FullWidthTitle(
-            title: 'Water consumption',
+            title: AppLocalizations.of(context).water_consumption,
             action: InkWell(
                 onTap: () {
                   context.pushFromCurrentLocation(
@@ -119,7 +121,7 @@ List<Widget> createFeatureWidgetList(
       Column(
         children: [
           FullWidthTitle(
-            title: 'Apartments',
+            title: AppLocalizations.of(context).apartment,
             action: OutlinedButton.icon(
               onPressed: state.housingCompany?.isUserManager == true
                   ? () {
@@ -127,7 +129,7 @@ List<Widget> createFeatureWidgetList(
                     }
                   : null,
               icon: const Icon(Icons.add_home),
-              label: const Text('Add'),
+              label: Text(AppLocalizations.of(context).add),
             ),
           ),
           Expanded(
@@ -155,8 +157,8 @@ List<Widget> createFeatureWidgetList(
       ),
       Column(
         children: [
-          const FullWidthTitle(
-            title: 'Document',
+          FullWidthTitle(
+            title: AppLocalizations.of(context).documents,
           ),
           Expanded(
             child: ListView.builder(
@@ -191,20 +193,20 @@ List<Widget> createFeatureWidgetList(
               onPressed: () {
                 context.pushFromCurrentLocation(documentListScreenPath);
               },
-              child: const Text('More'))
+              child: Text(AppLocalizations.of(context).more))
         ],
       ),
       Column(
         children: [
           FullWidthTitle(
-            title: 'Polls',
+            title: AppLocalizations.of(context).polls,
             action: TextButton(
               onPressed: state.housingCompany?.isUserManager == true
                   ? () {
                       context.pushFromCurrentLocation(pollScreenPath);
                     }
                   : null,
-              child: const Text('Create new poll'),
+              child: Text(AppLocalizations.of(context).create_new_poll),
             ),
           ),
           Expanded(
@@ -235,13 +237,14 @@ List<Widget> createFeatureWidgetList(
                   );
                 }),
           ),
-          TextButton(onPressed: () {}, child: const Text('More'))
+          TextButton(
+              onPressed: () {}, child: Text(AppLocalizations.of(context).more))
         ],
       ),
       Column(
         children: [
-          const FullWidthTitle(
-            title: 'Fault report',
+          FullWidthTitle(
+            title: AppLocalizations.of(context).fault_report,
           ),
           Expanded(
             child: ListView.builder(
@@ -271,13 +274,13 @@ List<Widget> createFeatureWidgetList(
         Column(
           children: [
             FullWidthTitle(
-              title: 'Invoice',
+              title: AppLocalizations.of(context).invoices,
               action: TextButton.icon(
                   onPressed: () {
                     context.pushFromCurrentLocation(invoiceCreationPath);
                   },
                   icon: const Icon(Icons.receipt),
-                  label: const Text('New invoice')),
+                  label: Text(AppLocalizations.of(context).new_invoice)),
             ),
             Expanded(
               child: ListView.builder(
@@ -301,13 +304,13 @@ List<Widget> createFeatureWidgetList(
                 onPressed: () {
                   context.pushFromCurrentLocation(invoiceGroupPath);
                 },
-                child: const Text('More'))
+                child: Text(AppLocalizations.of(context).more))
           ],
         ),
-      const Column(
+      Column(
         children: [
           FullWidthTitle(
-            title: 'Renovation requests',
+            title: AppLocalizations.of(context).renovation_requests,
           )
         ],
       ),

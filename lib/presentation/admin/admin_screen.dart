@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:priorli/app.dart';
 import 'package:priorli/core/country/entities/country.dart';
 import 'package:priorli/presentation/admin/admin_cubit.dart';
 import 'package:priorli/presentation/admin/admin_state.dart';
 import 'package:priorli/presentation/conversation_list/conversation_list_screen.dart';
 import 'package:priorli/service_locator.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'housing_company_widgets.dart';
 import 'sale_management_widgets.dart';
@@ -29,36 +31,36 @@ class _AdminScreenState extends State<AdminScreen> {
     const ConversationListScreen(),
     const SubscriptionPlanListView(),
   ];
-  final List<Tab> _tab = [
-    const Tab(
-      child: Text(
-        'Contact Leads',
-        maxLines: 2,
-        overflow: TextOverflow.ellipsis,
-      ),
-    ),
-    const Tab(
-      child: Text(
-        'Housing Companies',
-        maxLines: 2,
-        overflow: TextOverflow.ellipsis,
-      ),
-    ),
-    const Tab(
-      child: Text(
-        'Conversations',
-        maxLines: 2,
-        overflow: TextOverflow.ellipsis,
-      ),
-    ),
-    const Tab(
-      child: Text(
-        'Subscription Plans',
-        maxLines: 2,
-        overflow: TextOverflow.ellipsis,
-      ),
-    ),
-  ];
+  List<Tab> _tab(BuildContext context) => [
+        Tab(
+          child: Text(
+            AppLocalizations.of(context).contact_lead,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+        Tab(
+          child: Text(
+            AppLocalizations.of(context).housing_companies,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+        Tab(
+          child: Text(
+            AppLocalizations.of(context).conversations,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+        Tab(
+          child: Text(
+            AppLocalizations.of(context).subscription_plans,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      ];
 
   @override
   void initState() {
@@ -90,7 +92,7 @@ class _AdminScreenState extends State<AdminScreen> {
                   snap: false,
                   forceElevated: innerBoxIsScrolled,
                   shadowColor: Theme.of(context).colorScheme.primaryContainer,
-                  title: const Text('Admin'),
+                  title: Text(AppLocalizations.of(context)!.admin),
                   actions: [
                     DropdownButton<String>(
                       value: state.selectedCountryCode,
@@ -110,7 +112,7 @@ class _AdminScreenState extends State<AdminScreen> {
                   bottom: PreferredSize(
                     preferredSize: const Size.fromHeight(56.0),
                     child: TabBar(
-                      tabs: _tab,
+                      tabs: _tab(context),
                     ),
                   ),
                 ),

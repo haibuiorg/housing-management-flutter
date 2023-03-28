@@ -5,8 +5,8 @@ import 'package:priorli/presentation/file_selector/file_selector.dart';
 import 'package:priorli/presentation/message/message_cubit.dart';
 import 'package:priorli/presentation/message/message_state.dart';
 import 'package:priorli/service_locator.dart';
-import '../file_selector/file_selector_clear_controller.dart';
 import 'message_item.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 const messagePath = '/message';
 
@@ -47,16 +47,15 @@ class _MessageScreenState extends State<MessageScreen> {
     showDialog(
         context: context,
         builder: (builder) => AlertDialog(
-              title: const Text('Join this channel'),
-              content: const Text(
-                  'Do you want to join this channel and start discussion'),
+              title: Text(AppLocalizations.of(context).join_this_channel),
+              content: Text(AppLocalizations.of(context).join_channel_confirm),
               actions: [
                 OutlinedButton(
                     onPressed: () {
                       _cubit.joinConversation();
                       Navigator.pop(builder, true);
                     },
-                    child: const Text('Sure!'))
+                    child: Text(AppLocalizations.of(context).sure)),
               ],
             ));
   }
@@ -85,8 +84,8 @@ class _MessageScreenState extends State<MessageScreen> {
       }, builder: (context, state) {
         return Scaffold(
             appBar: AppBar(
-                title:
-                    Text(state.conversation?.name.capitalize() ?? 'Message')),
+                title: Text(state.conversation?.name.capitalize() ??
+                    AppLocalizations.of(context).messages)),
             body: Column(children: [
               Expanded(
                 flex: 2,
@@ -139,9 +138,10 @@ class _MessageScreenState extends State<MessageScreen> {
                                   autofocus: true,
                                   enabled: state.conversation?.joined == true,
                                   keyboardType: TextInputType.multiline,
-                                  decoration: const InputDecoration(
-                                    hintText: 'Message',
-                                    border: OutlineInputBorder(
+                                  decoration: InputDecoration(
+                                    hintText: AppLocalizations.of(context)
+                                        .message_title,
+                                    border: const OutlineInputBorder(
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(16.0)),
                                     ),
@@ -160,8 +160,8 @@ class _MessageScreenState extends State<MessageScreen> {
                                         _showJoinConversationChannelDialog();
                                       },
                                 child: Text(state.conversation?.joined == true
-                                    ? 'Send'
-                                    : 'Join')),
+                                    ? AppLocalizations.of(context).send
+                                    : AppLocalizations.of(context).join)),
                           ],
                         ),
                       ],

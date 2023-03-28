@@ -4,6 +4,7 @@ import 'package:priorli/presentation/announcement/announcement_cubit.dart';
 import 'package:priorli/presentation/announcement/announcement_state.dart';
 import 'package:priorli/presentation/file_selector/file_selector.dart';
 import 'package:priorli/service_locator.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'announcement_item.dart';
 
@@ -84,7 +85,7 @@ class _AnnouncementScreenState extends State<AnnouncementScreen> {
                   )
                 : null,
             appBar: AppBar(
-              title: const Text('Announcement'),
+              title: Text(AppLocalizations.of(context).announcement),
             ),
             body: RefreshIndicator(
               onRefresh: () => cubit.init(widget.housingCompanyId),
@@ -167,7 +168,7 @@ class _AnnouncementDialogState extends State<AnnouncementDialog> {
                   ),
                 ),
                 Text(
-                  'Make announcement to housing company',
+                  AppLocalizations.of(context).make_annoucement_title,
                   style: Theme.of(context).textTheme.titleLarge,
                   textAlign: TextAlign.center,
                 ),
@@ -178,8 +179,8 @@ class _AnnouncementDialogState extends State<AnnouncementDialog> {
                     maxLines: 1,
                     autofocus: true,
                     onChanged: _checkIfAllFilled,
-                    decoration: const InputDecoration(
-                      hintText: 'Title',
+                    decoration: InputDecoration(
+                      hintText: AppLocalizations.of(context).title,
                     ),
                   ),
                 ),
@@ -188,8 +189,8 @@ class _AnnouncementDialogState extends State<AnnouncementDialog> {
                   child: TextFormField(
                     controller: _subtitleController,
                     maxLines: 1,
-                    decoration: const InputDecoration(
-                      hintText: 'Subtitle',
+                    decoration: InputDecoration(
+                      hintText: AppLocalizations.of(context).subtitle,
                     ),
                     onChanged: _checkIfAllFilled,
                   ),
@@ -199,9 +200,9 @@ class _AnnouncementDialogState extends State<AnnouncementDialog> {
                   minLines: 5,
                   maxLines: 20,
                   keyboardType: TextInputType.multiline,
-                  decoration: const InputDecoration(
-                    hintText: 'Content',
-                    border: OutlineInputBorder(
+                  decoration: InputDecoration(
+                    hintText: AppLocalizations.of(context).content,
+                    border: const OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(16.0)),
                     ),
                   ),
@@ -224,7 +225,7 @@ class _AnnouncementDialogState extends State<AnnouncementDialog> {
                             _sendEmail = !_sendEmail;
                           });
                         }),
-                    const Text('Also send email'),
+                    Text(AppLocalizations.of(context).also_send_email),
                     const Spacer(),
                     OutlinedButton(
                         onPressed: _isAllFilled
@@ -237,7 +238,7 @@ class _AnnouncementDialogState extends State<AnnouncementDialog> {
                                     uploadedDocuments: _uploadedDocuments);
                               }
                             : null,
-                        child: const Text('Submit'))
+                        child: Text(AppLocalizations.of(context).submit))
                   ],
                 ),
               ]),

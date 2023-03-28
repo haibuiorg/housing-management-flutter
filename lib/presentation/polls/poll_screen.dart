@@ -6,6 +6,8 @@ import 'package:priorli/presentation/polls/poll_screen_cubit.dart';
 import 'package:priorli/presentation/polls/poll_screen_state.dart';
 import 'package:priorli/service_locator.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import '../shared/app_lottie_animation.dart';
 
 const pollScreenPath = 'polls';
@@ -54,7 +56,7 @@ class _PollScreenState extends State<PollScreen> {
               return state.isInitializing
                   ? Scaffold(
                       appBar: AppBar(
-                        title: const Text('Poll loading'),
+                        title: Text(AppLocalizations.of(context).poll_loading),
                       ),
                       body: const AppLottieAnimation(
                         loadingResource: 'vote',

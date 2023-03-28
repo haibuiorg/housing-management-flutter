@@ -1,3 +1,626 @@
 {
-    "email": "Sähköposti"
+   "account_management":"Tilinhallinta",
+   "save":"Tallenna",
+   "notification_setting":"Ilmoitusasetukset",
+   "change_password":"Vaihda salasana",
+   "terms_of_use":"Käyttöehdot",
+   "privacy_policies":"Tietosuojakäytännöt",
+   "logout":"Kirjaudu ulos",
+   "logout_confirm":"Haluatko varmasti kirjautua ulos?",
+   "cancel":"Peruuta",
+   "ok":"OK",
+   "password_change_failed":"Salasanan vaihto epäonnistui",
+   "password_change_failed_detail":"Jotain meni pieleen salasanassasi, varmista, että syötät oikean salasanan ja uuden salasanan on oltava tarpeeksi vahva",
+   "password_change_success":"Salasanan vaihto onnistui",
+   "password_change_success_detail":"Kun salasana on vaihdettu onnistuneesti, sinut kirjataan ulos!",
+   "password_change_title":"Haluatko vaihtaa salasanan?",
+   "password_change_subtitle":"Syötä vanha salasana ja uusi salasana",
+   "confirm":"Vahvista",
+   "change":"Vaihda",
+   "admin":"Ylläpitäjä",
+   "company_with_name":"Yhtiö {companyName}",
+   "@company_with_name":{
+      "description":"Yhtiö, jolla on nimi",
+      "placeholders":{
+         "companyName":{
+            "type":"String",
+            "example":"As Oy"
+         }
+      }
+   },
+   "name":"Nimi: {name}",
+   "@name":{
+      "description":"Paikkamerkki nimelle",
+      "placeholders":{
+         "name":{
+            "type":"String",
+            "example":"Hai"
+         }
+      }
+   },
+   "message":"Viesti: {message}",
+   "@message":{
+      "description":"Paikkamerkki viestille",
+      "placeholders":{
+         "message":{
+            "type":"String",
+            "example":"Hai"
+         }
+      }
+   },
+   "add_subscription_plan":"Lisää tilauspaketti",
+   "add_payment_product_plan":"Lisää maksutuote paketti",
+   "plan_name":"Paketti: {name}",
+   "@plan_name":{
+      "description":"Paikkamerkki paketin nimelle",
+      "placeholders":{
+         "name":{
+            "type":"String",
+            "example":"Hai"
+         }
+      }
+   },
+   "price_value":"Hinta: {price}",
+   "@price_value":{
+      "description":"Paikkamerkki hinnalle",
+      "placeholders":{
+         "price":{
+            "type":"String",
+            "example":"3 €"
+         }
+      }
+   },
+   "description_text":"Kuvaus: {description}",
+   "@description_text":{
+      "description":"Paikkamerkki kuvaukselle",
+      "placeholders":{
+         "description":{
+            "type":"String",
+            "example":"Hai"
+         }
+      }
+   },
+   "remove":"Poista",
+   "product_name":"Tuote: {productName}",
+   "@product_name":{
+      "description":"Paikkamerkki tuotteen nimelle",
+      "placeholders":{
+         "productName":{
+            "type":"String",
+            "example":"Hai"
+         }
+      }
+   },
+   "add_payment_product":"Lisää maksutuote",
+   "monthly_price":"Kuukausihinta",
+   "yearly_price":"Vuosihinta",
+   "sms_notification":"SMS-ilmoitus",
+   "email_notification":"Sähköposti-ilmoitus",
+   "document_translation":"Dokumentin käännös",
+   "has_apartment_documents":"Onko asuntokirjat",
+   "create_new_subscription_plan":"Luo uusi tilauspaketti",
+   "announcement":"Ilmoitus",
+   "also_send_email":"Lähetä myös sähköposti",
+   "submit":"Lähetä",
+   "water_invoices":"Vesilaskut",
+   "more":"Lisää",
+   "fault_report":"Vikailmoitus",
+   "archived_invoices":"Arkistoidut laskut",
+   "add_water_consumption":"Lisää vedenkulutus",
+   "register_with_code":"Rekisteröidy koodilla",
+   "register":"Rekisteröidy",
+   "add_manager":"Lisää hallinnoijia",
+   "email":"Sähköposti",
+   "first_name":"Etunimi",
+   "last_name":"Sukunimi",
+   "phone_number":"Puhelinnumero",
+   "apartment":"Huoneisto",
+   "add":"Lisää",
+   "create_a_housing_community":"Luo asuinyhteisö",
+   "what_is_your_housing_community_name":"Mikä on asuinyhteisösi nimi?",
+   "documents":"Dokumentit",
+   "load_more":"Lataa lisää",
+   "remove_event_confirm":"Haluatko varmasti poistaa tämän tapahtuman?",
+   "remove_event":"Poista tapahtuma",
+   "accepted":"Hyväksytty",
+   "declined":"Hylätty",
+   "maybe":"Ehkä",
+   "upload":"Lataa",
+   "forgot_password":"Unohditko salasanan",
+   "send":"Lähetä",
+   "invited":"Kutsuttu",
+   "send_invitation":"Lähetä kutsu",
+   "help":"Apua",
+   "country":"Maa",
+   "language":"Kieli",
+   "join_with_invitation_code":"Liity kutsukoodilla",
+   "create_new_channel":"Luo uusi kanava",
+   "start_new_channel":"Aloita uusi aihe",
+   "channel_name":"Kanavan nimi",
+   "polls":"Kyselyt",
+   "communication_topic":"Viestintäaihe",
+   "renovation_requests":"Remonttipyynnöt",
+   "new_invoice":"Uusi lasku",
+   "manange":"Hallinnoi",
+   "no_data":"Ei tietoja",
+   "payments":"Maksut",
+   "add_bank_account":"Lisää pankkitili",
+   "subscribe_to":"Tilaa {name}",
+   "@subscribe_to":{
+      "description":"Paikkamerkki tilaamiselle",
+      "placeholders":{
+         "name":{
+            "type":"String",
+            "example":"Hai"
+         }
+      }
+   },
+   "subscription":"Tilaus",
+   "appearance":"Ulkoasu",
+   "send_invoice":"Lähetä lasku",
+   "invoice_created":"Lasku luotu",
+   "send_new_invoice":"Lähetä uusi lasku",
+   "add_item":"Lisää kohde",
+   "payment_terms":"Maksuehdot",
+   "send_email":"Lähetä sähköposti",
+   "invoice_groupd":"Laskuryhmä",
+   "invoices":"Laskut",
+   "resend_invoice":"Lähetä lasku uudelleen",
+   "send_invoice_to":"Lähetä lasku osoitteeseen {email}",
+   "@send_invoice_to":{
+      "description":"Paikkamerkki laskun lähettämiselle",
+      "placeholders":{
+         "email":{
+            "type":"String",
+            "example":"Hai"
+         }
+      }
+   },
+   "join_apartment_with_invitation_code":"Liity huoneistoon kutsukoodilla",
+   "login_failed":"Kirjautuminen epäonnistui",
+   "login":"Kirjaudu",
+   "thatsok":"Se on OK",
+   "join_this_channel":"Liity tähän kanavaan",
+   "join_channel_confirm":"Haluatko varmasti liittyä tähän kanavaan?",
+   "join":"Liity",
+   "sure":"Totta kai!",
+   "notification_center":"Ilmoituskeskus",
+   "vote_option_error":"Sinun on valittava vähintään yksi vaihtoehto",
+   "create_new_poll":"Luo uusi kysely",
+   "add_vote_option":"Lisää äänestysvaihtoehto",
+   "anonymous_poll":"Anonyymi kysely",
+   "participant_add_option":"Osallistuja voi lisätä vaihtoehtoja",
+   "remove_poll_confirm":"Haluatko varmasti poistaa tämän kyselyn?",
+   "remove_option":"Poista tämä vaihtoehto",
+   "clear":"Tyhjennä",
+   "multipl_options":"Osallistuja voi valita useita vaihtoehtoja",
+   "manage_participants":"Hallitse osallistujia",
+   "remove_poll":"Poista kysely",
+   "poll_loading":"Kysely latautuu...",
+   "dark_theme":"Tumma teema",
+   "confirm_date_time":"Vahvista päivämäärä & aika",
+   "download":"Lataa",
+   "water_consumption":"Vedenkulutus",
+   "current_water_price":"Nykyinen vesihinta",
+   "add_new_water_price":"Lisää uusi vesihinta",
+   "water_price_history":"Vesihinnan historia",
+   "current_water_bill":"Nykyinen vesilaskukausi",
+   "start_new_water_bill":"Aloita uusi vesilaskukausi",
+   "start":"Aloita",
+   "contact_us":"Ota yhteyttä",
+   "send_me_demo_account":"Lähetä minulle demotili",
+   "message_sent":"Viesti lähetetty",
+   "message_sent_error":"Viestin lähettäminen epäonnistui",
+   "name_title":"Nimi",
+   "price_title":"Hinta",
+   "price_value_in":"Hinta (arvo) {currency}",
+   "@price_value_in":{
+      "description":"Hinta valuutassa",
+      "placeholders":{
+         "currency":{
+            "type":"String",
+            "example":"€"
+         }
+      }
+   },
+   "cost_per_invoice":"Lisäkustannus per lasku {value}",
+   "@cost_per_invoice":{
+      "description":"Lisäkustannus per lasku",
+      "placeholders":{
+         "value":{
+            "type":"String",
+            "example":"€"
+         }
+      }
+   },
+   "max_messaging_channels":"Maksimi viestintäkanavat",
+   "max_announcements":"Maksimi ilmoitukset",
+   "max_invoice_number":"Maksimi laskun numero",
+   "title":"Otsikko",
+   "subtitle":"Alaotsikko",
+   "content":"Sisältö",
+   "create_apartment_question":"Kuinka monta tiliä haluat luoda?",
+   "quantity":"Määrä",
+   "email_address_error":"Virheellinen sähköpostiosoite",
+   "message_title":"Viesti",
+   "name_error":"Virheellinen nimi",
+   "phone_error":"Virheellinen puhelinnumero",
+   "old_password":"Vanha salasana",
+   "new_password":"Uusi salasana",
+   "building_name":"Rakennuksen nimi",
+   "number_of_apartment_in_building":"Asuntojen lukumäärä rakennuksessa",
+   "aparment_house_number":"Asunnon/talon numero",
+   "building_number":"Rakennuksen numero",
+   "consumption_value":"Kulutusarvo",
+   "invitation_code_from_manager":"Kutsukoodi isännöitsijältä",
+   "create_a_password":"Luo salasana",
+   "company_name_title":"Yrityksen nimi",
+   "event_name":"Tapahtuman nimi",
+   "event_description":"Tapahtuman kuvaus",
+   "support_subject":"Tukiaihe",
+   "street_address_line1":"Katuosoite rivi 1",
+   "street_address_line2":"Katuosoite rivi 2",
+   "city":"Kaupunki",
+   "postal_code":"Postinumero",
+   "business_id":"Y-tunnus",
+   "iban":"IBAN",
+   "iban_error":"Virheellinen IBAN",
+   "bic_swift":"BIC/SWIFT",
+   "bic_swift_error":"Virheellinen BIC/SWIFT",
+   "invoice_name":"Laskun nimi",
+   "item_name":"Tuotteen nimi",
+   "description_title":"Kuvaus",
+   "tax_rate":"Verokanta",
+   "total_title":"Yhteensä",
+   "item_description":"Tuotteen kuvaus",
+   "unit_price":"Yksikköhinta",
+   "total_value":"Yhteensä: {value}",
+   "@total_value":{
+      "description":"Kokonaisarvo",
+      "placeholders":{
+         "value":{
+            "type":"String",
+            "example":"€"
+         }
+      }
+   },
+   "code_title":"Koodi",
+   "password_title":"Salasana",
+   "password_error":"Virheellinen salasana",
+   "poll_name":"Kyselyn nimi",
+   "poll_description":"Kyselyn kuvaus",
+   "vote_option_title":"Vaihtoehto osallistujille",
+   "vote_option_value":"Vaihtoehto: {value}",
+   "@vote_option_value":{
+      "description":"Vaihtoehdon arvo",
+      "placeholders":{
+         "value":{
+            "type":"String",
+            "example":"1"
+         }
+      }
+   },
+   "voting_poll_detail":"Äänestyskyselyn tiedot",
+   "vote_ends_by":"Äänestys päättyy {time}",
+   "@vote_ends_by":{
+      "description":"Äänestys päättyy ajassa",
+      "placeholders":{
+         "time":{
+            "type":"String",
+            "example":"12:00"
+         }
+      }
+   },
+   "your_vote_title":"Äänesi:",
+   "participants_name":"Osallistujat: {names}",
+   "@participants_name":{
+      "description":"Osallistujien nimet",
+      "placeholders":{
+         "names":{
+            "type":"String",
+            "example":"John, Jane"
+         }
+      }
+   },
+   "ended_by_time":"Päättynyt {time}",
+   "@ended_by_time":{
+      "description":"Päättynyt ajassa",
+      "placeholders":{
+         "time":{
+            "type":"String",
+            "example":"12:00"
+         }
+      }
+   },
+   "ended_by_title":"Päättäjä:",
+   "participants_select_multiple":"Osallistujat voivat valita useita vaihtoehtoja",
+   "voting_option_description":"Äänestysvaihtoehdon kuvaus",
+   "email_list_hint":"Sähköpostiosoitteet kutsun lähettämiseen (erottele ; tai ,)",
+   "total_basic_fee_with_value":"Yhteensä perusmaksu: {value}",
+   "@total_basic_fee_with_value":{
+      "description":"Yhteensä perusmaksu arvolla",
+      "placeholders":{
+         "value":{
+            "type":"String",
+            "example":"€"
+         }
+      }
+   },
+   "total_reading":"Yhteensä lukema",
+   "total_reading_with_value":"Yhteensä lukema: {value}",
+   "@total_reading_with_value":{
+      "description":"Yhteensä lukema arvolla",
+      "placeholders":{
+         "value":{
+            "type":"String",
+            "example":"1"
+         }
+      }
+   },
+   "per_cube":"kuutiota kohti",
+   "basic_fee":"Perusmaksu",
+   "basic_fee_with_value":"Perusmaksu: {value}",
+   "@basic_fee_with_value":{
+      "description":"Perusmaksu arvolla",
+      "placeholders":{
+         "value":{
+            "type":"String",
+            "example":"€"
+         }
+      }
+   },
+   "contact_lead":"Yhteyshenkilö",
+   "housing_companies":"Asuntoyhtiöt",
+   "conversations":"Keskustelut",
+   "messages":"Viestit",
+   "subscription_plans":"Tilaussuunnitelmat",
+   "contact_lead_detail":"Nimi {name}\nSähköposti {email}\nPuhelin {phone}",
+   "@contact_lead_detail":{
+      "description":"Yhteyshenkilön tiedot",
+      "placeholders":{
+         "name":{
+            "type":"String",
+            "example":"John"
+         },
+         "email":{
+            "type":"String",
+            "example":"@john.doe"
+         },
+         "phone":{
+            "type":"String",
+            "example":"John"
+         }
+      }
+   },
+   "payment_products":"Maksutuotteet",
+   "product_detail":"Tuote: {name}\nHinta: {price}",
+   "@product_detail":{
+      "description":"Tuotteen tiedot",
+      "placeholders":{
+         "name":{
+            "type":"String",
+            "example":"John"
+         },
+         "price":{
+            "type":"String",
+            "example":"€"
+         }
+      }
+   },
+   "make_annoucement_title":"Tee ilmoitus kaikille asukkaille",
+   "water_invoice_for":"Vesilasku {month} kuukaudelle",
+   "@water_invoice_for":{
+      "description":"Vesilasku kuukaudelle",
+      "placeholders":{
+         "month":{
+            "type":"String",
+            "example":"tammikuu"
+         }
+      }
+   },
+   "remove_this_apartment":"Poista tämä asunto",
+   "period":"Jakso",
+   "year":"Vuosi",
+   "period_with_value":"Jakso: {value}",
+   "@period_with_value":{
+      "description":"Jakso arvolla",
+      "placeholders":{
+         "value":{
+            "type":"String",
+            "example":"tammikuu"
+         }
+      }
+   },
+   "year_with_value":"Vuosi: {value}",
+   "@year_with_value":{
+      "description":"Vuosi arvolla",
+      "placeholders":{
+         "value":{
+            "type":"String",
+            "example":"2019"
+         }
+      }
+   },
+   "progess_with_value":"Edistyminen: {value}",
+   "price_per_cube":"Hinta kuutiota kohden",
+   "price_per_cube_with_value":"Hinta kuutiota kohden: {value}",
+   "@price_per_cube_with_value":{
+      "description":"Hinta kuutiota kohden arvolla",
+      "placeholders":{
+         "value":{
+            "type":"String",
+            "example":"€"
+         }
+      }
+   },
+   "consumption_this_period":"Kulutus tällä jaksolla",
+   "not_yet_updated":"Ei vielä päivitetty",
+   "invoice_this_period":"Lasku tältä jaksolta",
+   "add_consumption_value":"Lisää kulutusarvo",
+   "invalid_code_or_email":"Virheellinen koodi tai sähköposti",
+   "none":"Ei mitään",
+   "start_at_title":"Alkaa",
+   "start_at_time":"Alkaa klo {time}",
+   "@start_at_time":{
+      "description":"Alkaa ajankohtana",
+      "placeholders":{
+         "time":{
+            "type":"String",
+            "example":"12:00"
+         }
+      }
+   },
+   "until_title":"Kunnes",
+   "until_time":"Kunnes klo {time}",
+   "@until_time":{
+      "description":"Kunnes ajankohtana",
+      "placeholders":{
+         "time":{
+            "type":"String",
+            "example":"12:00"
+         }
+      }
+   },
+   "repeat_until_time":"Toista kunnes klo {time}",
+   "@repeat_until_time":{
+      "description":"Toista kunnes ajankohtana",
+      "placeholders":{
+         "time":{
+            "type":"String",
+            "example":"12:00"
+         }
+      }
+   },
+   "edit":"Muokkaa",
+   "loading":"Ladataan",
+   "event_detail":"Tapahtuman tiedot",
+   "create_an_event":"Luo tapahtuma",
+   "reset_password_success":"Jos sähköpostiosoite on oikea, sinulle lähetetään sähköposti salasanan vaihtamisohjeilla",
+   "reset_password":"Nollaa salasana",
+   "reset_password_instruction":"Anna sähköpostiosoitteesi nollataksesi salasanasi",
+   "event":"Tapahtumakalenteri",
+   "remove_company_confirm":"Haluatko varmasti poistaa tämän yrityksen?",
+   "country_with_name":"Maa: {name}",
+   "@country_with_name":{
+      "description":"Maa nimellä",
+      "placeholders":{
+         "name":{
+            "type":"String",
+            "example":"Suomi"
+         }
+      }
+   },
+   "payment_bank_account":"Maksutili",
+   "user_management":"Käyttäjähallinta",
+   "company_branding":"Yrityksen brändäys",
+   "delete_housing_company":"Poista asuntoyhtiö",
+   "delete_bank_account":"Poista pankkitili",
+   "delete_bank_account_confirm":"Haluatko varmasti poistaa tämän pankkitilin?",
+   "subscribe_quantity_question":"Kuinka monta asuntoa haluat luoda?",
+   "company_credit_amount":"Yrityksen luotto: {amount}",
+   "@company_credit_amount":{
+      "description":"Yrityksen luottomäärä",
+      "placeholders":{
+         "amount":{
+            "type":"String",
+            "example":"€"
+         }
+      }
+   },
+   "current_subscription":"Nykyinen tilaus",
+   "available_subscriptions":"Saatavilla olevat tilaukset",
+   "subscription_detail":"Tilaus: {quantity} asuntoa",
+   "active":"Aktiivinen",
+   "subscription_unpaid":"(Lasku ei maksettu - klikkaa maksamaan!)",
+   "company_logo":"Yrityksen logo",
+   "cover_photo":"Kansikuva",
+   "primary_color":"Ensisijainen väri",
+   "invoice_sent":"Lasku lähetetty",
+   "reference_number_title":"Viitenumero: ",
+   "status_title":"Tila: ",
+   "items_title":"Tuotteet: ",
+   "amount_title":"Määrä: ",
+   "payment_due":"Maksun erääntyminen",
+   "payment_due_date":"Maksun eräpäivä: {date}",
+   "@payment_due_date":{
+      "description":"Maksun eräpäivä",
+      "placeholders":{
+         "date":{
+            "type":"String",
+            "example":"12.12.2018"
+         }
+      }
+   },
+   "bank_accounts":"Pankkitilit",
+   "receivers":"Vastaanottajat {name}",
+   "@receivers":{
+      "description":"Vastaanottajat",
+      "placeholders":{
+         "name":{
+            "type":"String",
+            "example":"John"
+         }
+      }
+   },
+   "item_with_name":"Tuote: {name}",
+   "@item_with_name":{
+      "description":"Tuote nimellä",
+      "placeholders":{
+         "name":{
+            "type":"String",
+            "example":"John"
+         }
+      }
+   },
+   "item_with_description":"Kuvaus: {description}",
+   "@item_with_description":{
+      "description":"Tuote kuvauksella",
+      "placeholders":{
+         "description":{
+            "type":"String",
+            "example":"John"
+         }
+      }
+   },
+   "quantity_with_value":"Määrä: {value}",
+   "@quantity_with_value":{
+      "description":"Määrä arvolla",
+      "placeholders":{
+         "value":{
+            "type":"String",
+            "example":"John"
+         }
+      }
+   },
+   "tax_rate_with_value":"Verokanta: {value}",
+   "@tax_rate_with_value":{
+      "description":"Verokanta arvolla",
+      "placeholders":{
+         "value":{
+            "type":"String",
+            "example":"John"
+         }
+      }
+   },
+   "select_apartment":"Valitse asunto",
+   "incomplete_water_period":"Varoitus! Nykyinen jakso ei ole valmis!",
+   "notification_permission_message": "Haluatko saada ilmoituksen, kun on uusia tärkeitä tiedotteita tai kun jokin vaatii toimiasi?",
+   "settings": "Asetukset",
+   "admin_panel": "Ylläpito",
+   "from_compamies": "Yrityksiltä",
+   "fault_reports": "Vikailmoitukset",
+   "support_requests": "Tukipyynnöt",
+   "get_more_apartments": "Hanki lisää asuntoja",
+   "subscribe": "Tilaa",
+   "add_apartment": "Lisää asunto kohteeseen {name}",
+   "@add_apartment": {
+      "description": "Lisää asunto",
+      "placeholders": {
+         "name": {
+            "type": "String",
+            "example": "John"
+            }
+         }
+   },
+   "autofill_apartment_number": "Täytä asunnon numero automaattisesti"
 }

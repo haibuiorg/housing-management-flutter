@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:priorli/core/utils/string_extension.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../auth_cubit.dart';
 import '../shared/app_lottie_animation.dart';
@@ -44,15 +45,16 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               context: context,
               builder: (builder) {
                 return AlertDialog(
-                  title: const Text('Password did not change'),
-                  content: const Text(
-                      'Something wrong with your password, please make sure you enter correct password and new password must be strong enough'),
+                  title:
+                      Text(AppLocalizations.of(context).password_change_failed),
+                  content: Text(AppLocalizations.of(context)
+                      .password_change_failed_detail),
                   actions: [
                     TextButton(
                         onPressed: () {
                           Navigator.of(builder).pop();
                         },
-                        child: const Text('OK'))
+                        child: Text(AppLocalizations.of(context).ok))
                   ],
                 );
               });
@@ -69,13 +71,14 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     height: 100,
                     child: Column(
                       children: [
-                        const Text('Successfully change password'),
+                        Text(AppLocalizations.of(context)
+                            .password_change_success),
                         TextButton(
                             onPressed: () {
                               Navigator.pop(builder);
                               BlocProvider.of<AuthCubit>(context).logOut();
                             },
-                            child: const Text('OK'))
+                            child: Text(AppLocalizations.of(context).ok))
                       ],
                     ),
                   ),
@@ -88,7 +91,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Change password'),
+        title: Text(AppLocalizations.of(context).change_password),
         actions: [
           TextButton(
             onPressed: _oldPasswordController.text.isValidPassword &&
@@ -98,22 +101,22 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                         context: context,
                         builder: (builder) {
                           return AlertDialog(
-                            title: const Text('Confirm'),
-                            content: const Text(
-                                'When password successfully change, you will be logged out!'),
+                            title: Text(AppLocalizations.of(context).confirm),
+                            content: Text(AppLocalizations.of(context)
+                                .password_change_success_detail),
                             actions: [
                               TextButton(
                                   onPressed: () {
                                     _submitChangePassword();
                                     Navigator.pop(builder, true);
                                   },
-                                  child: const Text('OK'))
+                                  child: Text(AppLocalizations.of(context).ok)),
                             ],
                           );
                         });
                   }
                 : null,
-            child: const Text('Change'),
+            child: Text(AppLocalizations.of(context).change),
           )
         ],
       ),
@@ -127,20 +130,20 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   loadingResource: 'change_password',
                 )),
             Text(
-              'Want to change your password?',
+              AppLocalizations.of(context).password_change_title,
               style: Theme.of(context).textTheme.headlineSmall,
               textAlign: TextAlign.center,
             ),
             Container(
               margin: const EdgeInsets.only(top: 16),
               child: Text(
-                'Enter your old password and new password',
+                AppLocalizations.of(context).password_change_subtitle,
                 style: Theme.of(context).textTheme.bodyLarge,
                 textAlign: TextAlign.center,
               ),
             ),
             CustomFormField(
-              hintText: 'Old password',
+              hintText: AppLocalizations.of(context).old_password,
               textEditingController: _oldPasswordController,
               autoValidate: true,
               obscureText: _isOldEmailObscure,
@@ -159,11 +162,13 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       })),
               textInputAction: TextInputAction.next,
               validator: (val) {
-                return (!val!.isValidPassword) ? 'Enter valid password' : null;
+                return (!val!.isValidPassword)
+                    ? AppLocalizations.of(context).password_error
+                    : null;
               },
             ),
             CustomFormField(
-              hintText: 'New password',
+              hintText: AppLocalizations.of(context).new_password,
               textEditingController: _newPasswordController,
               autoValidate: true,
               onChanged: (value) {
@@ -183,7 +188,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               textInputAction: TextInputAction.next,
               validator: (val) {
                 return (!val!.isValidPassword)
-                    ? 'Enter longer and stronger password'
+                    ? AppLocalizations.of(context).password_error
                     : null;
               },
             ),

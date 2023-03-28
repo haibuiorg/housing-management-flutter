@@ -7,6 +7,7 @@ import 'package:priorli/presentation/join_apartment/join_apartment_state.dart';
 import 'package:priorli/presentation/shared/custom_form_field.dart';
 import 'package:priorli/service_locator.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../apartments/apartment_screen.dart';
 import '../housing_company/housing_company_screen.dart';
 
@@ -46,18 +47,20 @@ class _JoinApartmentScreenState extends State<JoinApartmentScreen> {
             },
             builder: (context, state) => Scaffold(
                   appBar: AppBar(
-                    title: const Text('Join an apartment with invitation code'),
+                    title: Text(AppLocalizations.of(context)
+                        .join_apartment_with_invitation_code),
                   ),
                   body: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         CustomFormField(
-                          hintText: 'Code',
+                          hintText: AppLocalizations.of(context).code_title,
                           icon: const Icon(
                             Icons.abc,
                           ),
-                          helperText: 'Invitation code from company',
+                          helperText: AppLocalizations.of(context)
+                              .invitation_code_from_manager,
                           initialValue: '${state.code}',
                           onChanged: (code) => _cubit.onTypingCode(code),
                         ),
@@ -65,7 +68,7 @@ class _JoinApartmentScreenState extends State<JoinApartmentScreen> {
                             onPressed: state.code?.isNotEmpty == true
                                 ? () => _cubit.joinWithCode()
                                 : null,
-                            child: const Text('Confirm'))
+                            child: Text(AppLocalizations.of(context).confirm)),
                       ]),
                 )));
   }

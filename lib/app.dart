@@ -16,6 +16,7 @@ import 'package:priorli/presentation/main/main_screen.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:priorli/user_cubit.dart';
 import 'package:responsive_framework/responsive_framework.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'auth_cubit.dart';
 import 'core/utils/color_extension.dart';
@@ -116,6 +117,9 @@ class _AppState extends State<App> {
         return DynamicColorBuilder(
             builder: (lightColorScheme, darkColorScheme) {
           return MaterialApp.router(
+            locale: Locale(state.languageCode ?? 'fi'),
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
             onGenerateTitle: (context) {
               return 'Priorli dashboard';
             },
@@ -198,7 +202,6 @@ class _AppState extends State<App> {
                     BlocConsumer<AuthCubit, AuthState>(
                         listener: (context, state) {
                       final currentLocation = appRouter.location;
-                      print(currentLocation);
                       if (!state.isLoggedIn) {
                         if (currentLocation == loginPath ||
                             currentLocation == registerPath ||

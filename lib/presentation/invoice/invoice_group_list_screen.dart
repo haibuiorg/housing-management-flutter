@@ -6,6 +6,8 @@ import 'package:priorli/presentation/shared/app_lottie_animation.dart';
 import 'package:priorli/presentation/shared/setting_button.dart';
 import 'package:priorli/service_locator.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 const invoiceGroupPath = 'invoice_group';
 
 class InvoiceGroupListScreen extends StatefulWidget {
@@ -48,7 +50,7 @@ class _InvoiceGroupListScreenState extends State<InvoiceGroupListScreen> {
               builder: (context, state) {
                 return Scaffold(
                   appBar: AppBar(
-                    title: const Text('Invoice group'),
+                    title: Text(AppLocalizations.of(context).invoice_groupd),
                   ),
                   floatingActionButton: state.company?.isUserManager == true
                       ? FloatingActionButton(
@@ -79,7 +81,8 @@ class _InvoiceGroupListScreenState extends State<InvoiceGroupListScreen> {
                                     onPressed: () {
                                       _cubit.loadMore();
                                     },
-                                    child: const Text('Load more'));
+                                    child: Text(AppLocalizations.of(context)
+                                        .load_more));
                           })
                       : const Center(
                           child: SizedBox(

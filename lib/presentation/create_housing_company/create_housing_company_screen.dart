@@ -6,6 +6,7 @@ import 'package:priorli/presentation/create_housing_company/create_housing_compa
 import 'package:priorli/presentation/create_housing_company/create_housing_company_state.dart';
 import 'package:priorli/presentation/shared/custom_form_field.dart';
 import 'package:priorli/service_locator.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../housing_company/housing_company_screen.dart';
 
@@ -38,20 +39,22 @@ class CreateHousingCompanyScreen extends StatelessWidget {
                   : null,
               child: const Icon(Icons.navigate_next)),
           appBar: AppBar(
-            title: const Text('Create a housing community'),
+            title:
+                Text(AppLocalizations.of(context).create_a_housing_community),
           ),
           body: Padding(
             padding: const EdgeInsets.all(8.0),
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              const Text('What is your housing commmunity called?'),
+              Text(AppLocalizations.of(context)
+                  .what_is_your_housing_community_name),
               CustomFormField(
                 validator: (p0) =>
                     (state.errorText != null) ? state.errorText : null,
                 onChanged: (value) =>
                     BlocProvider.of<CreateHousingCompanyCubit>(context)
                         .onTypingName(value),
-                hintText: 'Company name',
+                hintText: AppLocalizations.of(context).name_title,
                 textCapitalization: TextCapitalization.words,
               ),
               Wrap(

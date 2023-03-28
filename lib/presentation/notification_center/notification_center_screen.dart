@@ -5,6 +5,7 @@ import 'package:priorli/presentation/notification_center/notification_center_cub
 import 'package:priorli/presentation/notification_center/notification_center_state.dart';
 import 'package:priorli/service_locator.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'widget/notification_center_item.dart';
 
 const notificationCenterPath = '/notification_center';
@@ -45,7 +46,7 @@ class _NotificationCenterScreenState extends State<NotificationCenterScreen> {
       create: (_) => cubit,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Notification center'),
+          title: Text(AppLocalizations.of(context).notification_center),
         ),
         body: BlocBuilder<NotificationCenterCubit, NotificationCenterState>(
             builder: (context, state) {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:priorli/presentation/shared/custom_form_field.dart';
 import 'package:responsive_framework/responsive_framework.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ManagerCreationForm extends StatefulWidget {
   const ManagerCreationForm({
@@ -68,7 +69,7 @@ class _ManagerCreationFormState extends State<ManagerCreationForm> {
               ResponsiveRowColumnItem(
                 rowFlex: 2,
                 child: CustomFormField(
-                  hintText: 'Email',
+                  hintText: AppLocalizations.of(context).email,
                   textEditingController: _emailController,
                   keyboardType: TextInputType.emailAddress,
                 ),
@@ -76,7 +77,7 @@ class _ManagerCreationFormState extends State<ManagerCreationForm> {
               ResponsiveRowColumnItem(
                 rowFlex: 2,
                 child: CustomFormField(
-                  hintText: 'First name',
+                  hintText: AppLocalizations.of(context).first_name,
                   textEditingController: _firstNameController,
                   keyboardType: TextInputType.name,
                 ),
@@ -84,7 +85,7 @@ class _ManagerCreationFormState extends State<ManagerCreationForm> {
               ResponsiveRowColumnItem(
                 rowFlex: 1,
                 child: CustomFormField(
-                  hintText: 'Last name',
+                  hintText: AppLocalizations.of(context).last_name,
                   textEditingController: _lastnameController,
                   keyboardType: TextInputType.name,
                 ),
@@ -92,7 +93,7 @@ class _ManagerCreationFormState extends State<ManagerCreationForm> {
               ResponsiveRowColumnItem(
                 rowFlex: 1,
                 child: CustomFormField(
-                  hintText: 'Phone',
+                  hintText: AppLocalizations.of(context).phone_number,
                   textEditingController: _phoneController,
                   keyboardType: TextInputType.phone,
                   inputFormatters: [
@@ -109,7 +110,7 @@ class _ManagerCreationFormState extends State<ManagerCreationForm> {
                       rowFit: FlexFit.loose,
                       child: TextButton(
                         onPressed: _submit,
-                        child: const Text('Add'),
+                        child: Text(AppLocalizations.of(context).add),
                       )),
                   valueWhen: [
                     Condition.largerThan(
@@ -118,7 +119,7 @@ class _ManagerCreationFormState extends State<ManagerCreationForm> {
                           rowFit: FlexFit.loose,
                           child: TextButton(
                             onPressed: _submit,
-                            child: const Text('Add'),
+                            child: Text(AppLocalizations.of(context).add),
                           ),
                         )),
                     Condition.smallerThan(

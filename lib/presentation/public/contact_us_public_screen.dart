@@ -4,6 +4,8 @@ import 'package:priorli/presentation/public/contact_us_public_cubit.dart';
 import 'package:priorli/service_locator.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import '../../core/utils/color_extension.dart';
 import '../../core/utils/constants.dart';
 

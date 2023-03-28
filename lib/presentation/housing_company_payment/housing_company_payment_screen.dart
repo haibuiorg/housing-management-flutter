@@ -7,6 +7,7 @@ import 'package:priorli/presentation/housing_company_payment/housing_company_pay
 import 'package:iban/iban.dart';
 import '../../service_locator.dart';
 import '../shared/custom_form_field.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 const housingCompanyPaymentPath = 'payment';
 
@@ -75,7 +76,7 @@ class _HousingCompanyPaymentScreenState
                 }),
             appBar: AppBar(
               centerTitle: true,
-              title: const Text('Payments'),
+              title: Text(AppLocalizations.of(context).payment_bank_account),
             ),
             body: ListView.builder(
                 itemCount: state.bankAccountList?.length ?? 0,
@@ -110,14 +111,16 @@ class BankAccountBox extends StatelessWidget {
       context: context,
       builder: (BuildContext builder) {
         return AlertDialog(
-          title: const Text("Confirm"),
+          title: Text(AppLocalizations.of(context).delete_bank_account),
           content:
-              const Text("Are you sure you wish to delete this bank account?"),
+              Text(AppLocalizations.of(context).delete_bank_account_confirm),
           actions: [
-            OutlinedButton(onPressed: onDismiss, child: const Text("Delete")),
+            OutlinedButton(
+                onPressed: onDismiss,
+                child: Text(AppLocalizations.of(context).remove)),
             TextButton(
               onPressed: () => Navigator.of(builder).pop(false),
-              child: const Text("Cancel"),
+              child: Text(AppLocalizations.of(context).cancel),
             ),
           ],
         );
@@ -181,12 +184,12 @@ class _AddBankAccountDialogState extends State<AddBankAccountDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Add new bank account detail'),
+      title: Text(AppLocalizations.of(context).add_bank_account),
       content: Column(mainAxisSize: MainAxisSize.min, children: [
         CustomFormField(
           autofocus: false,
           autoValidate: true,
-          hintText: "IBAN",
+          hintText: AppLocalizations.of(context).iban,
           textEditingController: _bankAccountNumberController,
           keyboardType: TextInputType.text,
           onChanged: (value) {
@@ -196,14 +199,14 @@ class _AddBankAccountDialogState extends State<AddBankAccountDialog> {
           validator: (val) {
             return val?.trim().isNotEmpty == true &&
                     !isValid(val!, sanitize: true)
-                ? 'Enter valid Iban'
+                ? AppLocalizations.of(context).iban_error
                 : null;
           },
         ),
         CustomFormField(
           autofocus: false,
           autoValidate: true,
-          hintText: "BIC/SWIFT",
+          hintText: AppLocalizations.of(context).bic_swift,
           onChanged: (value) {
             didChange();
           },
@@ -211,7 +214,9 @@ class _AddBankAccountDialogState extends State<AddBankAccountDialog> {
           keyboardType: TextInputType.text,
           textInputAction: TextInputAction.done,
           validator: (val) {
-            return !val!.isValidBic ? 'Enter valid Bic or Swift code' : null;
+            return !val!.isValidBic
+                ? AppLocalizations.of(context).bic_swift_error
+                : null;
           },
         ),
       ]),
@@ -224,7 +229,7 @@ class _AddBankAccountDialogState extends State<AddBankAccountDialog> {
                         swift: _swiftController.text);
                   }
                 : null,
-            child: const Text('Submit'))
+            child: Text(AppLocalizations.of(context).add)),
       ],
     );
   }

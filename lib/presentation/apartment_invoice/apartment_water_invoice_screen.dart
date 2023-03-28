@@ -5,6 +5,7 @@ import 'package:priorli/presentation/shared/pdf_viewer.dart';
 import 'package:priorli/service_locator.dart';
 import '../shared/setting_button.dart';
 import 'apartment_water_invoice_cubit.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 const apartmentWaterInvoice = 'water_bill';
 
@@ -64,7 +65,7 @@ class _ApartmentWaterInvoiceScreenState
       }, builder: (context, state) {
         return Scaffold(
             appBar: AppBar(
-              title: const Text('Water invoices'),
+              title: Text(AppLocalizations.of(context).water_invoices),
             ),
             body: Padding(
               padding: EdgeInsets.only(
@@ -77,18 +78,19 @@ class _ApartmentWaterInvoiceScreenState
                       ? state.waterBillList![0].year.toString()
                       : DateTime.now().year.toString()),
                   Expanded(
-                      child: ListView.builder(
-                          itemCount: state.waterBillList?.length ?? 0,
-                          itemBuilder: (context, index) => SettingButton(
-                                icon: Icon(
-                                  Icons.file_open_rounded,
-                                  color: Theme.of(context).colorScheme.tertiary,
-                                ),
-                                onPressed: (() =>
-                                    cubit.getWaterBillLink(index)),
-                                label: Text(
-                                    'Water invoice for period ${state.waterBillList?[index].period}/${state.waterBillList?[index].year}'),
-                              ))),
+                    child: ListView.builder(
+                        itemCount: state.waterBillList?.length ?? 0,
+                        itemBuilder: (context, index) => SettingButton(
+                            icon: Icon(
+                              Icons.file_open_rounded,
+                              color: Theme.of(context).colorScheme.tertiary,
+                            ),
+                            onPressed: (() => cubit.getWaterBillLink(index)),
+                            label: Text(
+                              AppLocalizations.of(context).water_invoice_for(
+                                  '${state.waterBillList?[index].period}/${state.waterBillList?[index].year}'),
+                            ))),
+                  )
                 ],
               ),
             ));

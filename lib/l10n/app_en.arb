@@ -1,6 +1,629 @@
 {
+    "account_management": "Account Management",
+    "save": "Save",
+    "notification_setting": "Notification Setting",
+    "change_password": "Change Password",
+    "terms_of_use": "Terms of Use",
+    "privacy_policies": "Privacy Policies",
+    "logout": "Logout",
+    "logout_confirm": "Are you sure you want to logout?",
+    "cancel": "Cancel",
+    "ok": "OK",
+    "password_change_failed": "Password change failed",
+    "password_change_failed_detail": "Something wrong with your password, please make sure you enter correct password and new password must be strong enough",
+    "password_change_success": "Password change success",
+    "password_change_success_detail": "When password successfully change, you will be logged out!",
+    "password_change_title": "Want to change your password?",
+    "password_change_subtitle": "Enter your old password and new password",
+    "confirm": "Confirm",
+    "change": "Change",
+    "admin": "Admin",
+    "company_with_name": "Company {companyName}",
+    "@company_with_name": {
+        "description": "A company with a name",
+        "placeholders": {
+          "companyName": {
+            "type": "String",
+            "example": "As Oy"
+            }
+          }
+    },
+    "name": "Name: {name}",
+    "@name": {
+        "description": "Placeholder for name",
+        "placeholders": {
+          "name": {
+            "type": "String",
+            "example": "Hai"
+            }
+          }
+    },
+    "message": "Message: {message}",
+    "@message": {
+        "description": "Placeholder for name",
+        "placeholders": {
+          "message": {
+            "type": "String",
+            "example": "Hai"
+            }
+          }
+    },
+    "add_subscription_plan": "Add Subscription Plan",
+    "add_payment_product_plan": "Add Payment Product Plan",
+    "plan_name": "Plan: {name}",
+    "@plan_name": {
+        "description": "Placeholder for plan name",
+        "placeholders": {
+          "name": {
+            "type": "String",
+            "example": "Hai"
+            }
+          }
+    },
+    "price_value": "Price: {price}",
+    "@price_value": {
+        "description": "Placeholder for price",
+        "placeholders": {
+          "price": {
+            "type": "String",
+            "example": "3 €"
+            }
+          }
+    },
+    "description_text": "Description: {description}",
+    "@description_text": {
+        "description": "Placeholder for plan name",
+        "placeholders": {
+          "description": {
+            "type": "String",
+            "example": "Hai"
+            }
+          }
+    },
+    "remove": "Remove",
+    "product_name": "Product: {productName}",
+    "@product_name": {
+        "description": "Placeholder for productName name",
+        "placeholders": {
+          "productName": {
+            "type": "String",
+            "example": "Hai"
+            }
+          }
+    },
+    "add_payment_product": "Add Payment Product",
+    "monthly_price": "Monthly Price",
+    "yearly_price": "Yearly Price",
+    "sms_notification": "SMS Notification",
+    "email_notification": "Email Notification",
+    "document_translation": "Document Translation",
+    "has_apartment_documents": "Has Apartment Documents",
+    "create_new_subscription_plan": "Create New Subscription Plan",
+    "announcement": "Announcement",
+    "also_send_email": "Also send email",
+    "submit": "Submit",
+    "water_invoices": "Water Invoices",
+    "more": "More",
+    "fault_report": "Fault Report",
+    "archived_invoices": "Archived Invoices",
+    "add_water_consumption": "Add Water Consumption",
+    "register_with_code": "Register with code",
+    "register": "Register",
+    "add_manager": "Add Managers",
     "email": "Email",
-    "@email": {
-      "description": "Email"
-    }
+    "first_name": "First Name",
+    "last_name": "Last Name",
+    "phone_number": "Phone Number",
+    "apartment": "Apartment",
+    "add": "Add",
+    "create_a_housing_community": "Create a Housing Community",
+    "what_is_your_housing_community_name": "What is your housing community name?",
+    "documents": "Documents",
+    "load_more": "Load More",
+    "remove_event_confirm": "Are you sure you want to remove this event?",
+    "remove_event": "Remove Event",
+    "accepted": "Accepted",
+    "declined": "Declined",
+    "maybe": "Maybe",
+    "upload": "Upload",
+    "forgot_password": "Forgot Password",
+    "send": "Send",
+    "invited": "Invited",
+    "send_invitation": "Send Invitation",
+    "help": "Help",
+    "country": "Country",
+    "language": "Language",
+    "join_with_invitation_code": "Join with invitation code",
+    "create_new_channel": "Create New Channel",
+    "start_new_channel": "Start New Topic",
+    "channel_name": "Channel Name",
+    "polls": "Polls",
+    "communication_topic": "Communication Topic",
+    "renovation_requests": "Renovation Requests",
+    "new_invoice": "New Invoice",
+    "manange": "Manage",
+    "no_data": "No data",
+    "payments": "Payments",
+    "add_bank_account": "Add Bank Account",
+    "subscribe_to": "Subscribe to {name}",
+    "@subscribe_to": {
+        "description": "Placeholder for subscribe to",
+        "placeholders": {
+          "name": {
+            "type": "String",
+            "example": "Hai"
+            }
+          }
+    },
+    "subscription": "Subscription",
+    "appearance": "Appearance",
+    "send_invoice": "Send Invoice",
+    "invoice_created": "Invoice created",
+    "send_new_invoice": "Send new invoice",
+    "add_item": "Add Item",
+    "payment_terms": "Payment Terms",
+    "send_email": "Send Email",
+    "invoice_groupd": "Invoice Group",
+    "invoices": "Invoices",
+    "resend_invoice": "Resend Invoice",
+    "send_invoice_to": "Send invoice to {email}",
+    "@send_invoice_to": {
+        "description": "Placeholder for send invoice to",
+        "placeholders": {
+          "email": {
+            "type": "String",
+            "example": "Hai"
+            }
+          }
+    },
+
+    "join_apartment_with_invitation_code": "Join apartment with invitation code",
+    "login_failed": "Login failed",
+    "login": "Login",
+    "thatsok": "That's OK",
+    "join_this_channel": "Join this channel",
+    "join_channel_confirm": "Are you sure you want to join this channel?",
+    "join": "Join",
+    "sure": "Sure!",
+    "notification_center": "Notification Center",
+    "vote_option_error": "You must select at least one option",
+    "create_new_poll": "Create New Poll",
+    "add_vote_option": "Add Vote Option",
+    "anonymous_poll": "Anonymous Poll",
+    "participant_add_option": "Participant can add options",
+    "remove_poll_confirm": "Are you sure you want to remove this poll?",
+    "remove_option": "Remove this option",
+    "clear": "Clear",
+    "multipl_options": "Participant can select multiple options",
+    "manage_participants": "Manage Participants",
+    "remove_poll": "Remove Poll",
+    "poll_loading": "Poll loading...",
+    "dark_theme": "Dark Theme",
+    "confirm_date_time": "Confirm Date & Time",
+    "download": "Download",
+    "water_consumption": "Water Consumption",
+    "current_water_price": "Current Water Price",
+    "add_new_water_price": "Add New Water Price",
+    "water_price_history": "Water Price History",
+    "current_water_bill": "Current Water Bill Period",
+    "start_new_water_bill": "Start New Water Bill Period",
+    "start": "Start",
+    "contact_us": "Contact Us",
+    "send_me_demo_account": "Send me a demo account",
+    "message_sent": "Message sent",
+    "message_sent_error": "Message sent error",
+    "name_title": "Name",
+    "price_title": "Price",
+    "price_value_in": "Price (value) in {currency}",
+    "@price_value_in": {
+        "description": "Price value in currency",
+        "placeholders": {
+          "currency": {
+            "type": "String",
+            "example": "€"
+            }
+          }
+    },
+    "cost_per_invoice": "Additional cost per invoice {value}",
+    "@cost_per_invoice": {
+        "description": "Additional cost per invoice",
+        "placeholders": {
+          "value": {
+            "type": "String",
+            "example": "€"
+            }
+          }
+    },
+    "max_messaging_channels": "Max messaging channels",
+    "max_announcements": "Max announcements",
+    "max_invoice_number": "Max invoice number",
+    "title": "Title",
+    "subtitle": "Subtitle",
+    "content": "Content",
+    "create_apartment_question": "How many account do you want to create?",
+    "quantity": "Quantity",
+    "email_address_error": "Invalid email address",
+    "message_title": "Message",
+    "name_error": "Invalid name",
+    "phone_error": "Invalid phone number",
+    "old_password": "Old Password",
+    "new_password": "New Password",
+    "building_name": "Building Name",
+    "number_of_apartment_in_building": "Number of apartments in building",
+    "aparment_house_number": "Apartment/house number",
+    "building_number": "Building number",
+    "consumption_value": "Consumption value",
+    "invitation_code_from_manager": "Invitation code from manager",
+    "create_a_password": "Create a password",
+    "company_name_title": "Company name",
+    "event_name": "Event name",
+    "event_description": "Event description",
+    "support_subject": "Support subject",
+    "street_address_line1": "Street address line 1",
+    "street_address_line2": "Street address line 2",
+    "city": "City",
+    "postal_code": "Postal code",
+    "business_id": "Business ID",
+    "iban": "IBAN",
+    "iban_error": "Invalid IBAN",
+    "bic_swift": "BIC/SWIFT",
+    "bic_swift_error": "Invalid BIC/SWIFT",
+    "invoice_name": "Invoice name",
+    "item_name": "Item name",
+    "description_title": "Description",
+    "tax_rate": "Tax rate",
+    "total_title": "Total",
+    "item_description": "Item description",
+    "unit_price": "Unit price",
+    "total_value": "Total: {value}",
+    "@total_value": {
+        "description": "Total value",
+        "placeholders": {
+          "value": {
+            "type": "String",
+            "example": "€"
+            }
+          }
+    },
+    "code_title": "Code",
+    "password_title": "Password",
+    "password_error": "Invalid password",
+    "poll_name": "Poll name",
+    "poll_description": "Poll description",
+    "vote_option_title": "Option for participants",
+    "vote_option_value": "Option: {value}",
+    "@vote_option_value": {
+        "description": "Option value",
+        "placeholders": {
+          "value": {
+            "type": "String",
+            "example": "1"
+            }
+          }
+    },
+    "voting_poll_detail": "Voting poll detail",
+    "vote_ends_by": "Vote ends by {time}",
+    "@vote_ends_by": {
+        "description": "Vote ends by time",
+        "placeholders": {
+          "time": {
+            "type": "String",
+            "example": "12:00"
+            }
+          }
+    },
+    "your_vote_title": "Your vote:",
+    "participants_name": "Participants: {names}",
+    "@participants_name": {
+        "description": "Participants names",
+        "placeholders": {
+          "names": {
+            "type": "String",
+            "example": "John, Jane"
+            }
+          }
+    },
+    "ended_by_time": "Ended by {time}",
+    "@ended_by_time": {
+        "description": "Ended by time",
+        "placeholders": {
+          "time": {
+            "type": "String",
+            "example": "12:00"
+            }
+          }
+    },
+    "ended_by_title": "Ended by:",
+    "participants_select_multiple": "Participants can select multiple options",
+    "voting_option_description": "Voting option description",
+    "email_list_hint": "Emails to send invitation to (separate with ; or ,)",
+    "total_basic_fee_with_value": "Total basic fee: {value}",
+    "@total_basic_fee_with_value": {
+        "description": "Total basic fee with value",
+        "placeholders": {
+          "value": {
+            "type": "String",
+            "example": "€"
+            }
+          }
+    },
+    "total_reading": "Total reading",
+    "total_reading_with_value": "Total reading: {value}",
+    "@total_reading_with_value": {
+        "description": "Total reading with value",
+        "placeholders": {
+          "value": {
+            "type": "String",
+            "example": "1"
+            }
+          }
+    },
+    "per_cube": "per cube",
+    "basic_fee": "Basic fee",
+    "basic_fee_with_value": "Basic fee: {value}",
+    "@basic_fee_with_value": {
+        "description": "Basic fee with value",
+        "placeholders": {
+          "value": {
+            "type": "String",
+            "example": "€"
+            }
+          }
+    },
+    "contact_lead": "Contact lead",
+    "housing_companies": "Housing Companies",
+    "conversations": "Conversations",
+    "messages": "Messages",
+    "subscription_plans": "Subscription Plans",
+    "contact_lead_detail" : "Name {name}\nEmail {email}\nPhone {phone}",
+    "@contact_lead_detail" : {
+        "description": "Contact lead detail",
+        "placeholders": {
+          "name": {
+            "type": "String",
+            "example": "John"
+            },
+          "email": {
+            "type": "String",
+            "example": "@john.doe"
+          },
+          "phone": {
+            "type": "String",
+            "example": "John"
+            }
+          }
+    },
+    "payment_products": "Payment products",
+    "product_detail": "Product: {name}\nPrice: {price}",
+    "@product_detail" : {
+        "description": "Product detail",
+        "placeholders": {
+          "name": {
+            "type": "String",
+            "example": "John"
+            },
+          "price": {
+            "type": "String",
+            "example": "€"
+          }
+          }
+    },
+    "make_annoucement_title": "Make an announcement to all residents",
+    "water_invoice_for": "Water invoice for {month}",
+    "@water_invoice_for" : {
+        "description": "Water invoice for month",
+        "placeholders": {
+          "month": {
+            "type": "String",
+            "example": "January"
+            }
+          }
+    },
+    "remove_this_apartment": "Remove this apartment",
+    "period": "Period",
+    "year": "Year",
+    "period_with_value": "Period: {value}",
+    "@period_with_value": {
+        "description": "Period with value",
+        "placeholders": {
+          "value": {
+            "type": "String",
+            "example": "January"
+            }
+          }
+    },
+    "year_with_value": "Year: {value}",
+    "@year_with_value": {
+        "description": "Year with value",
+        "placeholders": {
+          "value": {
+            "type": "String",
+            "example": "2019"
+            }
+          }
+    },
+    "progess_with_value": "Progress: {value}",
+    "price_per_cube": "Price per cube",
+    "price_per_cube_with_value": "Price per cube: {value}",
+    "@price_per_cube_with_value": {
+      "description": "Price per cube with value",
+      "placeholders": {
+        "value" : {
+          "type": "String",
+          "example": "€"
+          }
+        }
+    },
+    "consumption_this_period": "Consumption this period",
+    "not_yet_updated": "Not yet updated",
+    "invoice_this_period": "Invoice this period",
+    "add_consumption_value": "Add consumption value",
+    "invalid_code_or_email": "Invalid code or email",
+    "none": "None",
+    "start_at_title": "Start at",
+    "start_at_time": "Start at {time}",
+    "@start_at_time" : {
+        "description": "Start at time",
+        "placeholders": {
+          "time": {
+            "type": "String",
+            "example": "12:00"
+            }
+          }
+    },
+    "until_title": "Until",
+    "until_time": "Until {time}",
+    "@until_time" : {
+        "description": "Until time",
+        "placeholders": {
+          "time": {
+            "type": "String",
+            "example": "12:00"
+            }
+          }
+    },
+    "repeat_until_time": "Repeat until {time}",
+    "@repeat_until_time" : {
+        "description": "Repeat until time",
+        "placeholders": {
+          "time": {
+            "type": "String",
+            "example": "12:00"
+            }
+          }
+    },
+    "edit": "Edit",
+    "loading": "Loading",
+    "event_detail": "Event Detail",
+    "create_an_event": "Create an event",
+    "reset_password_success": "If email provided is correct an email will be sent to you for resetting password instruction",
+    "reset_password": "Reset password",
+    "reset_password_instruction": "Please enter your email address to reset your password",
+    "event": "Event calendar",
+    "remove_company_confirm": "Are you sure you want to remove this company?",
+    "country_with_name": "Country: {name}",
+    "@country_with_name" : {
+        "description": "Country with name",
+        "placeholders": {
+          "name": {
+            "type": "String",
+            "example": "Finland"
+            }
+          }
+    },
+    "payment_bank_account": "Payment bank account",
+    "user_management": "User management",
+    "company_branding": "Company branding",
+    "delete_housing_company": "Remove housing company",
+    "delete_bank_account": "Remove bank account",
+    "delete_bank_account_confirm": "Are you sure you want to remove this bank account?",
+    "subscribe_quantity_question": "How many apartment do you want to create?",
+    "company_credit_amount": "Company credit: {amount}",
+    "@company_credit_amount" : {
+        "description": "Company credit amount",
+        "placeholders": {
+          "amount": {
+            "type": "String",
+            "example": "€"
+            }
+          }
+    },
+    "current_subscription": "Current subscription",
+    "available_subscriptions": "Available subscriptions",
+    "subscription_detail": "Subscription for: {quantity} apartments",
+    "active": "Active",
+    "subscription_unpaid": "(Invoice not paid - click to pay!)",
+    "company_logo": "Company logo",
+    "cover_photo": "Cover photo",
+    "primary_color": "Primary color",
+    "invoice_sent": "Invoice sent",
+    "reference_number_title": "Reference number: ",
+    "status_title": "Status: ",
+    "items_title": "Items: ",
+    "amount_title": "Amount: ",
+    "payment_due": "Payment due",
+    "payment_due_date": "Payment due date: {date}",
+    "@payment_due_date" : {
+        "description": "Payment due date",
+        "placeholders": {
+          "date": {
+            "type": "String",
+            "example": "12.12.2018"
+            }
+          }
+    },
+    "bank_accounts": "Bank accounts",
+    "receivers": "Receivers {name}",
+    "@receivers" : {
+        "description": "Receivers",
+        "placeholders": {
+          "name": {
+            "type": "String",
+            "example": "John"
+            }
+          }
+    },
+    "item_with_name": "Item: {name}",
+    "@item_with_name" : {
+        "description": "Item with name",
+        "placeholders": {
+          "name": {
+            "type": "String",
+            "example": "John"
+            }
+          }
+    },
+    "item_with_description": "Description: {description}",
+    "@item_with_description" : {
+        "description": "Item with description",
+        "placeholders": {
+          "description": {
+            "type": "String",
+            "example": "John"
+            }
+          }
+    },
+    "quantity_with_value": "Quantity: {value}",
+    "@quantity_with_value" : {
+        "description": "Quantity with value",
+        "placeholders": {
+          "value": {
+            "type": "String",
+            "example": "John"
+            }
+          }
+    },
+    "tax_rate_with_value": "Tax rate: {value}",
+    "@tax_rate_with_value" : {
+        "description": "Tax rate with value",
+        "placeholders": {
+          "value": {
+            "type": "String",
+            "example": "John"
+            }
+          }
+    },
+    "select_apartment": "Select apartment",
+    "incomplete_water_period": "Warning! Current period is not completed!",
+
+    
+    "notification_permission_message": "Do you want to receive notification when there are new important announcements or when something require your action?",
+    "settings": "Settings",
+    "admin_panel": "Admin",
+    "from_compamies": "From companies",
+    "fault_reports": "Fault reports",
+    "support_requests": "Support requests",
+    "get_more_apartments": "Get more apartments",
+    "subscribe": "Subscribe",
+    "add_apartment": "Add apartment to {name}",
+    "@add_apartment" : {
+        "description": "Add apartment",
+        "placeholders": {
+          "name": {
+            "type": "String",
+            "example": "John"
+            }
+          }
+    },
+    "autofill_apartment_number": "Autofill apartment number"
 }

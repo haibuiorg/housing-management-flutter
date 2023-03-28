@@ -4,6 +4,7 @@ import 'package:priorli/go_router_navigation.dart';
 import 'package:priorli/presentation/company_user_management/manager_creation_form.dart';
 import 'package:priorli/presentation/shared/full_width_title.dart';
 import 'package:priorli/service_locator.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../core/user/entities/user.dart';
 import '../send_invitation/invite_tenant_screen.dart';
@@ -99,7 +100,8 @@ class _CompanyUserSreenState extends State<CompanyUserSreen> {
                                     );
                                   });
                             },
-                            child: const Text('Add new manager'))
+                            child:
+                                Text(AppLocalizations.of(context).add_manager))
                         : null,
                   ),
                   _createDataTable(
@@ -119,12 +121,21 @@ class _CompanyUserSreenState extends State<CompanyUserSreen> {
   }
 
   List<DataColumn> _createColumns() {
-    return const [
-      DataColumn(label: FittedBox(child: Text('Email'))),
-      DataColumn(label: FittedBox(child: Text('First name'))),
-      DataColumn(label: FittedBox(child: Text('Last name'))),
-      DataColumn(label: FittedBox(child: Text('Phone number'))),
-      DataColumn(label: FittedBox(child: Text('Apartment'))),
+    return [
+      DataColumn(
+          label: FittedBox(child: Text(AppLocalizations.of(context).email))),
+      DataColumn(
+          label:
+              FittedBox(child: Text(AppLocalizations.of(context).first_name))),
+      DataColumn(
+          label:
+              FittedBox(child: Text(AppLocalizations.of(context).last_name))),
+      DataColumn(
+          label: FittedBox(
+              child: Text(AppLocalizations.of(context).phone_number))),
+      DataColumn(
+          label:
+              FittedBox(child: Text(AppLocalizations.of(context).apartment))),
     ];
   }
 }
@@ -147,7 +158,7 @@ class UserDataTableSource extends DataTableSource {
                   .toString()
                   .replaceAll("[", "")
                   .replaceAll("]", ". ")
-              : 'None'))),
+              : '--'))),
     ]);
   }
 

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class PdfViewer extends StatefulWidget {
   const PdfViewer({super.key, required this.link});
   final String link;
@@ -38,7 +40,7 @@ class _PdfViewerState extends State<PdfViewer> {
                   await launchUrl(Uri.parse(widget.link));
                 },
                 icon: const Icon(Icons.download),
-                label: const Text('Download')),
+                label: Text(AppLocalizations.of(context).download)),
           ),
         ),
         SizedBox(

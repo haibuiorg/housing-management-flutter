@@ -20,6 +20,8 @@ import '../account/account_screen.dart';
 import '../conversation_list/conversation_list_screen.dart';
 import 'package:sidebarx/sidebarx.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 const mainPath = '/';
 
 class MainScreen extends StatefulWidget {
@@ -67,8 +69,8 @@ class _MainScreenState extends State<MainScreen> {
         showDialog(
             context: context,
             builder: (builder) => AlertDialog(
-                  content: const Text(
-                      'Do you want to receive notification when there are new important announcements or when something require your action?'),
+                  content: Text(AppLocalizations.of(context)
+                      .notification_permission_message),
                   actions: [
                     OutlinedButton(
                         onPressed: () {
@@ -76,7 +78,7 @@ class _MainScreenState extends State<MainScreen> {
                               .requestPermissionToSendNotifications();
                           Navigator.pop(builder, true);
                         },
-                        child: const Text('That\'s ok'))
+                        child: Text(AppLocalizations.of(context).thatsok)),
                   ],
                 ));
       }
@@ -238,21 +240,22 @@ class _DefaultUIState extends State<DefaultUI> {
                       items: [
                         SidebarXItem(
                           icon: (Icons.home),
-                          label: ('Housing companies'),
+                          label:
+                              (AppLocalizations.of(context).housing_companies),
                           onTap: () => widget.onItemTapped(0, context),
                         ),
                         SidebarXItem(
                             icon: (Icons.feed),
-                            label: ('Messages'),
+                            label: (AppLocalizations.of(context).messages),
                             onTap: () => widget.onItemTapped(1, context)),
                         SidebarXItem(
                             icon: (Icons.settings),
-                            label: ('Settings'),
+                            label: (AppLocalizations.of(context).settings),
                             onTap: () => widget.onItemTapped(2, context)),
                         if (widget.isAdmin)
                           SidebarXItem(
                               icon: (Icons.admin_panel_settings),
-                              label: ('Admin'),
+                              label: (AppLocalizations.of(context).admin_panel),
                               onTap: () => widget.onItemTapped(3, context)),
                       ]),
                   Expanded(child: widget.child)

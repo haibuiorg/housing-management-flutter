@@ -15,6 +15,8 @@ import 'package:priorli/service_locator.dart';
 import 'package:path/path.dart' as p;
 import 'package:carousel_slider/carousel_slider.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class FileSelector extends StatefulWidget {
   const FileSelector({
     super.key,
@@ -272,7 +274,8 @@ class _FileSelectorState extends State<FileSelector> {
                               padding: const EdgeInsets.all(8.0),
                               child: OutlinedButton.icon(
                                 icon: const Icon(Icons.upload_file_rounded),
-                                label: const Text('Upload'),
+                                label:
+                                    Text(AppLocalizations.of(context).upload),
                                 onPressed: (state.selectedFiles?.length ?? 0) >
                                         0
                                     ? (() => BlocProvider.of<FileSelectorCubit>(

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:priorli/presentation/shared/setting_button.dart';
 import '../../setting_cubit.dart';
 import '../../setting_state.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AppPreferences extends StatelessWidget {
   const AppPreferences({super.key});
@@ -16,7 +17,7 @@ class AppPreferences extends StatelessWidget {
         children: [
           if (languageList?.isNotEmpty == true)
             SettingButton(
-              label: const Text('Language'),
+              label: Text(AppLocalizations.of(context).language),
               icon: DropdownButton<String>(
                 enableFeedback: true,
                 dropdownColor: Theme.of(context).colorScheme.primaryContainer,
@@ -40,7 +41,7 @@ class AppPreferences extends StatelessWidget {
               ),
             ),
           SettingButton(
-            label: const Text('Dark mode'),
+            label: Text(AppLocalizations.of(context).dark_theme),
             icon: Switch(
                 value: state.brightness == Brightness.dark,
                 onChanged: (onChanged) {

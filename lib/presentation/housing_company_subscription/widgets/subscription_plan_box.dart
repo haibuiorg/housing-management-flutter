@@ -4,6 +4,8 @@ import '../../../core/subscription/entities/subscription_plan.dart';
 import '../../../core/utils/string_extension.dart';
 import '../../shared/full_width_pair_text.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class SubscriptionPlanBox extends StatelessWidget {
   const SubscriptionPlanBox({
     super.key,
@@ -41,32 +43,34 @@ class SubscriptionPlanBox extends StatelessWidget {
                 ),
               ),
               FullWidthPairText(
-                label: 'Price: ',
+                label: AppLocalizations.of(context).price_title,
                 content: formatCurrency(
                     subscriptionPlan.price, subscriptionPlan.currency),
                 isBoldContent: true,
               ),
               FullWidthPairText(
-                label: 'Additional invoice cost: ',
+                label: AppLocalizations.of(context).cost_per_invoice(''),
                 content: formatCurrency(subscriptionPlan.additionalInvoiceCost,
                     subscriptionPlan.currency),
                 isBoldContent: true,
               ),
               FullWidthPairText(
-                  label: 'Max messaging channels: ',
+                  label: AppLocalizations.of(context).max_messaging_channels,
                   content: subscriptionPlan.maxMessagingChannels.toString()),
               FullWidthPairText(
-                  label: 'Max invoice number:',
+                  label: AppLocalizations.of(context).max_invoice_number,
                   content: subscriptionPlan.maxInvoiceNumber.toString()),
               FullWidthPairText(
-                  label: 'Max announcement number:',
+                  label: AppLocalizations.of(context).max_announcements,
                   content: subscriptionPlan.maxAnnouncement.toString()),
               Align(
                   alignment: Alignment.center,
                   child: OutlinedButton(
                       onPressed: onPressed,
                       child: Text(
-                        isCurrentPlan ? 'Get more accounts' : 'Get it now',
+                        isCurrentPlan
+                            ? AppLocalizations.of(context).get_more_apartments
+                            : AppLocalizations.of(context).subscribe,
                         maxLines: 1,
                       )))
             ],

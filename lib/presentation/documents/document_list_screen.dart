@@ -6,6 +6,8 @@ import 'package:priorli/presentation/file_selector/file_selector.dart';
 import 'package:priorli/presentation/shared/setting_button.dart';
 import 'package:priorli/service_locator.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import '../shared/app_gallery.dart';
 
 const documentListScreenPath = 'documents';
@@ -55,7 +57,7 @@ class _DocumentListScreenState extends State<DocumentListScreen> {
               builder: (context, state) {
                 return Scaffold(
                   appBar: AppBar(
-                    title: const Text('Documents'),
+                    title: Text(AppLocalizations.of(context).documents),
                   ),
                   floatingActionButton: state.addDocument == true
                       ? FloatingActionButton(
@@ -105,7 +107,8 @@ class _DocumentListScreenState extends State<DocumentListScreen> {
                                 onPressed: () {
                                   _cubit.loadMore();
                                 },
-                                child: const Text('Load more'));
+                                child: Text(
+                                    AppLocalizations.of(context).load_more));
                       }),
                 );
               }),

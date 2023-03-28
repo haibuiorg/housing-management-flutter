@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import '../../shared/custom_form_field.dart';
 
 class CreateNewChannelDialog extends StatefulWidget {
@@ -28,17 +30,17 @@ class _CreateNewChannelDialogState extends State<CreateNewChannelDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Create new channel'),
+      title: Text(AppLocalizations.of(context).create_new_channel),
       content: CustomFormField(
         textEditingController: _channelName,
-        hintText: 'Channel name',
+        hintText: AppLocalizations.of(context).channel_name,
       ),
       actions: [
         OutlinedButton(
             onPressed: () {
               widget.onConfirmed(_channelName.text);
             },
-            child: const Text('Confirm'))
+            child: Text(AppLocalizations.of(context).confirm)),
       ],
     );
   }

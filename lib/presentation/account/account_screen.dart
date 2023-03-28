@@ -8,6 +8,7 @@ import 'package:priorli/presentation/shared/app_user_circle_avatar.dart';
 import 'package:priorli/service_locator.dart';
 import 'package:priorli/user_state.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../auth_cubit.dart';
 import '../../user_cubit.dart';
@@ -69,7 +70,7 @@ class _AccountScreenState extends State<AccountScreen> {
               icon: const Icon(Icons.close),
               onPressed: () => Navigator.of(context).pop(),
             ),
-            title: const Text('Account management'),
+            title: Text(AppLocalizations.of(context).account_management),
             actions: [
               TextButton(
                 onPressed: state.user != state.pendingUser
@@ -82,7 +83,7 @@ class _AccountScreenState extends State<AccountScreen> {
                         _cubit.updateUser(user);
                       }
                     : null,
-                child: const Text('Save'),
+                child: Text(AppLocalizations.of(context).save),
               )
             ],
           ),
@@ -117,14 +118,14 @@ class _AccountScreenState extends State<AccountScreen> {
                 ),
                 CustomFormField(
                   textEditingController: _firstNameController,
-                  hintText: 'First name',
+                  hintText: AppLocalizations.of(context).first_name,
                   autofocus: false,
                   onChanged: (value) => BlocProvider.of<AccountCubit>(context)
                       .updateFirstName(value),
                   keyboardType: TextInputType.name,
                 ),
                 CustomFormField(
-                  hintText: 'Last name',
+                  hintText: AppLocalizations.of(context).last_name,
                   textEditingController: _lastNameController,
                   autofocus: false,
                   onChanged: (value) => BlocProvider.of<AccountCubit>(context)
@@ -132,7 +133,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   keyboardType: TextInputType.name,
                 ),
                 CustomFormField(
-                  hintText: 'Phone number',
+                  hintText: AppLocalizations.of(context).phone_number,
                   textEditingController: _phoneController,
                   autofocus: false,
                   onChanged: (value) =>
@@ -140,20 +141,20 @@ class _AccountScreenState extends State<AccountScreen> {
                   keyboardType: TextInputType.streetAddress,
                 ),
                 /*SettingButton(
-                  label: const Text('Notification setting'),
+                  label: Text(AppLocalizations.of(context).notification_setting)),
                   onPressed: () {
                     //GoRouter.of(context).push(paymentPath);
                   },
                 ),*/
                 SettingButton(
-                  label: const Text('Change password'),
+                  label: Text(AppLocalizations.of(context).change_password),
                   onPressed: () {
                     GoRouter.of(context).push(changePasswordPath);
                   },
                 ),
                 SettingButton(
                   icon: const Icon(Icons.open_in_new_outlined),
-                  label: const Text('Terms of use'),
+                  label: Text(AppLocalizations.of(context).terms_of_use),
                   onPressed: state.legalDocuments
                               ?.where((element) => element.type == 'terms') !=
                           null
@@ -168,7 +169,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 ),
                 SettingButton(
                   icon: const Icon(Icons.open_in_new_outlined),
-                  label: const Text('Privacy policies'),
+                  label: Text(AppLocalizations.of(context).privacy_policies),
                   onPressed: state.legalDocuments?.where(
                               (element) => element.type == 'policies') !=
                           null
@@ -188,26 +189,26 @@ class _AccountScreenState extends State<AccountScreen> {
                         context: context,
                         builder: (builder) {
                           return AlertDialog(
-                            title: const Text('Do you want to log out?'),
-                            content: Text(
-                                'Are you sure want to log out of user: ${state.user?.firstName} ${state.user?.lastName}'),
+                            title: Text(
+                                AppLocalizations.of(context).logout_confirm),
                             actions: [
                               TextButton(
                                   onPressed: () {
                                     Navigator.of(builder).pop();
                                   },
-                                  child: const Text('Cancel')),
+                                  child: Text(
+                                      AppLocalizations.of(context).cancel)),
                               TextButton(
                                   onPressed: () {
                                     BlocProvider.of<AuthCubit>(context)
                                         .logOut();
                                   },
-                                  child: const Text('OK'))
+                                  child: Text(AppLocalizations.of(context).ok))
                             ],
                           );
                         });
                   },
-                  label: const Text('Logout'),
+                  label: Text(AppLocalizations.of(context).logout),
                   icon: const Icon(Icons.logout),
                 ),
               ]),

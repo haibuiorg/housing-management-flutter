@@ -12,6 +12,8 @@ import '../shared/date_time_selector.dart';
 import '../shared/full_width_pair_text.dart';
 import '../shared/setting_button.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class EventDetail extends StatefulWidget {
   const EventDetail(
       {super.key,
@@ -84,18 +86,18 @@ class _EventDetailState extends State<EventDetail> {
     showDialog(
         context: context,
         builder: (context) => AlertDialog(
-              content: const Text('Are you sure want to remove this event'),
+              content: Text(AppLocalizations.of(context).remove_event_confirm),
               actions: [
                 TextButton(
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    child: const Text('Cancel')),
+                    child: Text(AppLocalizations.of(context).cancel)),
                 OutlinedButton(
                     onPressed: () {
                       widget.onDelete();
                     },
-                    child: const Text('Ok'))
+                    child: Text(AppLocalizations.of(context).remove))
               ],
             ));
   }
@@ -145,14 +147,15 @@ class _EventDetailState extends State<EventDetail> {
                   children: [
                     CustomFormField(
                       textEditingController: _nameController,
-                      hintText: 'Event name',
-                      helperText: 'Event name',
+                      hintText: AppLocalizations.of(context).event_name,
+                      helperText: AppLocalizations.of(context).event_name,
                       enabled: _editable,
                     ),
                     CustomFormField(
                       textEditingController: _descriptionController,
-                      hintText: 'Event description',
-                      helperText: 'Event description',
+                      hintText: AppLocalizations.of(context).event_description,
+                      helperText:
+                          AppLocalizations.of(context).event_description,
                       enabled: _editable,
                     ),
                     _editable
@@ -169,11 +172,13 @@ class _EventDetailState extends State<EventDetail> {
                                 ),
                               );
                             },
-                            label: Text(
-                                'Start at ${getFormattedDateTime(_startTime.millisecondsSinceEpoch)}'),
+                            label: Text(AppLocalizations.of(context)
+                                .start_at_time(getFormattedDateTime(
+                                    _startTime.millisecondsSinceEpoch))),
                           )
                         : FullWidthPairText(
-                            label: 'Start at',
+                            label:
+                                (AppLocalizations.of(context).start_at_title),
                             content: getFormattedDateTime(
                                 _startTime.millisecondsSinceEpoch)),
                     _editable
@@ -190,17 +195,20 @@ class _EventDetailState extends State<EventDetail> {
                                 ),
                               );
                             },
-                            label: Text(
-                                'Until ${getFormattedDateTime(_endTime.millisecondsSinceEpoch)}'),
+                            label: Text(AppLocalizations.of(context).until_time(
+                                getFormattedDateTime(
+                                    _endTime.millisecondsSinceEpoch))),
                           )
                         : FullWidthPairText(
-                            label: 'Until',
+                            label: AppLocalizations.of(context).until_title,
                             content: getFormattedDateTime(
                                 _endTime.millisecondsSinceEpoch)),
                     _repeat != null
                         ? SettingButton(
-                            label: Text(
-                                'Repeat until: ${getFormattedDateTime(_repeatUntil?.millisecondsSinceEpoch ?? _endTime.millisecondsSinceEpoch)}'),
+                            label: Text(AppLocalizations.of(context)
+                                .repeat_until_time(getFormattedDateTime(
+                                    _repeatUntil?.millisecondsSinceEpoch ??
+                                        _endTime.millisecondsSinceEpoch))),
                             onPressed: () {
                               showModalBottomSheet(
                                 context: context,
@@ -302,10 +310,13 @@ class _EventDetailState extends State<EventDetail> {
                   children: [
                     OutlinedButton(
                         onPressed: _editable ? _saveEdit : _startEdit,
-                        child: Text(_editable ? 'Save' : 'Edit')),
+                        child: Text(_editable
+                            ? AppLocalizations.of(context).save
+                            : AppLocalizations.of(context).edit)),
                     _editable
                         ? TextButton(
-                            onPressed: _clearEdit, child: const Text('Clear'))
+                            onPressed: _clearEdit,
+                            child: Text(AppLocalizations.of(context).clear))
                         : const SizedBox.shrink()
                   ],
                 ),
@@ -313,7 +324,7 @@ class _EventDetailState extends State<EventDetail> {
             ],
           ),
           SettingButton(
-            label: const Text('Manage guests'),
+            label: Text(AppLocalizations.of(context).manage_participants),
             onPressed: () {
               showModalBottomSheet(
                 context: context,
@@ -329,7 +340,8 @@ class _EventDetailState extends State<EventDetail> {
             },
           ),
           TextButton(
-              onPressed: _showRemoveEvent, child: const Text('Remove event'))
+              onPressed: _showRemoveEvent,
+              child: Text(AppLocalizations.of(context).remove_event))
         ]),
       ),
     );

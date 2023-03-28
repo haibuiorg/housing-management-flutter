@@ -12,7 +12,7 @@ import '../company_user_management/company_user_screen.dart';
 import '../housing_company_payment/housing_company_payment_screen.dart';
 import '../housing_company_subscription/company_subscription_screen.dart';
 import '../housing_company_ui/housing_company_ui_screen.dart';
-import '../send_invitation/invite_tenant_screen.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../shared/setting_button.dart';
 import 'housing_company_management_cubit.dart';
 import 'housing_company_management_state.dart';
@@ -60,14 +60,15 @@ class _HousingCompanyManagementScreenState
       context: context,
       builder: (BuildContext builder) {
         return AlertDialog(
-          title: const Text("Confirm"),
-          content: const Text(
-              "Are you sure you wish to delete this housing company?"),
+          title: Text(AppLocalizations.of(context).remove),
+          content: Text(AppLocalizations.of(context).remove_company_confirm),
           actions: [
-            OutlinedButton(onPressed: onDismiss, child: const Text("Delete")),
+            OutlinedButton(
+                onPressed: onDismiss,
+                child: Text(AppLocalizations.of(context).confirm)),
             TextButton(
               onPressed: () => Navigator.of(builder).pop(false),
-              child: const Text("Cancel"),
+              child: Text(AppLocalizations.of(context).cancel),
             ),
           ],
         );
@@ -111,10 +112,14 @@ class _HousingCompanyManagementScreenState
                               cubit.saveNewCompanyDetail();
                             }
                           : null,
-                      child: const Text('Save'),
+                      child: Text(
+                        AppLocalizations.of(context).save,
+                      ),
                     )
                   ],
-                  title: const Text('Manage'),
+                  title: Text(
+                    AppLocalizations.of(context).manange,
+                  ),
                 ),
                 body: Column(
                   children: [
@@ -123,14 +128,16 @@ class _HousingCompanyManagementScreenState
                         child: Column(children: [
                           CustomFormField(
                             textEditingController: _companyName,
-                            hintText: 'Company name',
+                            hintText:
+                                AppLocalizations.of(context).company_name_title,
                             autofocus: false,
                             onChanged: (value) =>
                                 cubit.updateCompanyName(value),
                             keyboardType: TextInputType.name,
                           ),
                           CustomFormField(
-                            hintText: 'Street address 1',
+                            hintText: AppLocalizations.of(context)
+                                .street_address_line1,
                             textEditingController: _streetAddress1,
                             autofocus: false,
                             onChanged: (value) =>
@@ -138,7 +145,8 @@ class _HousingCompanyManagementScreenState
                             keyboardType: TextInputType.streetAddress,
                           ),
                           CustomFormField(
-                            hintText: 'Street address 2',
+                            hintText: AppLocalizations.of(context)
+                                .street_address_line2,
                             textEditingController: _streetAddress2,
                             autofocus: false,
                             onChanged: (value) =>
@@ -146,14 +154,14 @@ class _HousingCompanyManagementScreenState
                             keyboardType: TextInputType.streetAddress,
                           ),
                           CustomFormField(
-                            hintText: 'Postal code',
+                            hintText: AppLocalizations.of(context).postal_code,
                             textEditingController: _postalCode,
                             autofocus: false,
                             onChanged: (value) => cubit.updatePostalCode(value),
                             keyboardType: TextInputType.streetAddress,
                           ),
                           CustomFormField(
-                            hintText: 'City',
+                            hintText: AppLocalizations.of(context).city,
                             textEditingController: _city,
                             autofocus: false,
                             onChanged: (value) => cubit.updateCity(value),
@@ -165,7 +173,10 @@ class _HousingCompanyManagementScreenState
                             child: Row(
                               children: [
                                 Text(
-                                  'Country: ',
+                                  AppLocalizations.of(context)
+                                      .country_with_name(state
+                                              .housingCompany?.countryCode ??
+                                          AppLocalizations.of(context).no_data),
                                   style: Theme.of(context).textTheme.bodyLarge,
                                 ),
                                 state.housingCompany?.countryCode != null
@@ -176,12 +187,13 @@ class _HousingCompanyManagementScreenState
                                             .textTheme
                                             .displaySmall,
                                       )
-                                    : const Text('No data')
+                                    : Text(
+                                        AppLocalizations.of(context).no_data),
                               ],
                             ),
                           ),
                           CustomFormField(
-                            hintText: 'Business Id',
+                            hintText: AppLocalizations.of(context).business_id,
                             textEditingController: _businessId,
                             autofocus: false,
                             onChanged: (value) => cubit.updateCity(value),
@@ -197,7 +209,7 @@ class _HousingCompanyManagementScreenState
                                     companySubscriptionScreenPath);
                               },
                               label: Text(
-                                'Subscription',
+                                AppLocalizations.of(context).subscription,
                                 style: Theme.of(context).textTheme.bodyLarge,
                               ),
                             ),
@@ -207,7 +219,7 @@ class _HousingCompanyManagementScreenState
                                   housingCompanyPaymentPath);
                             },
                             label: Text(
-                              'Payment and bank account detail',
+                              AppLocalizations.of(context).payment_bank_account,
                               style: Theme.of(context).textTheme.bodyLarge,
                             ),
                           ),
@@ -216,7 +228,7 @@ class _HousingCompanyManagementScreenState
                               context.pushFromCurrentLocation(companyUserPath);
                             },
                             label: Text(
-                              'User management',
+                              AppLocalizations.of(context).user_management,
                               style: Theme.of(context).textTheme.bodyLarge,
                             ),
                           ),
@@ -226,7 +238,7 @@ class _HousingCompanyManagementScreenState
                                   housingCompanyUiScreenPath);
                             },
                             label: Text(
-                              'Appearance',
+                              AppLocalizations.of(context).company_branding,
                               style: Theme.of(context).textTheme.bodyLarge,
                             ),
                           ),
@@ -237,7 +249,8 @@ class _HousingCompanyManagementScreenState
                               });
                             },
                             label: Text(
-                              'Delete this company',
+                              AppLocalizations.of(context)
+                                  .delete_housing_company,
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyLarge

@@ -16,6 +16,8 @@ import '../shared/date_time_selector.dart';
 import '../shared/full_width_pair_text.dart';
 import '../shared/setting_button.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class PollDetail extends StatefulWidget {
   const PollDetail(
       {super.key,
@@ -116,20 +118,20 @@ class _PollDetailState extends State<PollDetail> {
     showDialog(
         context: context,
         builder: (builder) => AlertDialog(
-              content: const Text('Are you sure want to remove this poll'),
+              content: Text(AppLocalizations.of(context).remove_poll_confirm),
               actions: [
                 TextButton(
                     onPressed: () {
                       Navigator.pop(builder, true);
                     },
-                    child: const Text('Cancel')),
+                    child: Text(AppLocalizations.of(context).cancel)),
                 OutlinedButton(
                     onPressed: () {
                       widget.onDelete(pollId: widget.poll.id);
-                      Navigator.popUntil(builder,
-                          ModalRoute.withName(housingCompanyScreenPathName));
+                      Navigator.pop(builder, true);
+                      Navigator.pop(context, true);
                     },
-                    child: const Text('Ok'))
+                    child: Text(AppLocalizations.of(context).ok))
               ],
             ));
   }
@@ -140,20 +142,20 @@ class _PollDetailState extends State<PollDetail> {
     showDialog(
         context: context,
         builder: (builder) => AlertDialog(
-              content: const Text('Are you sure want to remove this option'),
+              content: Text(AppLocalizations.of(context).remove_option),
               actions: [
                 TextButton(
                     onPressed: () {
                       Navigator.pop(builder);
                     },
-                    child: const Text('Cancel')),
+                    child: Text(AppLocalizations.of(context).cancel)),
                 OutlinedButton(
                     onPressed: () {
                       widget.onRemoveVotingOption(
                           pollId: widget.poll.id, votingOptionId: id);
                       Navigator.pop(builder, true);
                     },
-                    child: const Text('Ok'))
+                    child: Text(AppLocalizations.of(context).ok))
               ],
             ));
   }
@@ -185,17 +187,20 @@ class _PollDetailState extends State<PollDetail> {
       body: SingleChildScrollView(
         child: Column(mainAxisSize: MainAxisSize.min, children: [
           FullWidthTitle(
-            title: 'Poll detail:',
+            title: AppLocalizations.of(context).voting_poll_detail,
             action: Expanded(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   OutlinedButton(
                       onPressed: _editable ? _saveEdit : _startEdit,
-                      child: Text(_editable ? 'Save' : 'Edit')),
+                      child: Text(_editable
+                          ? AppLocalizations.of(context).save
+                          : AppLocalizations.of(context).edit)),
                   _editable
                       ? TextButton(
-                          onPressed: _clearEdit, child: const Text('Clear'))
+                          onPressed: _clearEdit,
+                          child: Text(AppLocalizations.of(context).clear))
                       : const SizedBox.shrink()
                 ],
               ),
@@ -203,15 +208,15 @@ class _PollDetailState extends State<PollDetail> {
           ),
           CustomFormField(
             textEditingController: _nameController,
-            hintText: 'Event name',
-            helperText: 'Event name',
+            hintText: AppLocalizations.of(context).event_name,
+            helperText: AppLocalizations.of(context).event_name,
             enabled: _editable,
             autofocus: false,
           ),
           CustomFormField(
             textEditingController: _descriptionController,
-            hintText: 'Event description',
-            helperText: 'Event description',
+            hintText: AppLocalizations.of(context).event_description,
+            helperText: AppLocalizations.of(context).event_description,
             enabled: _editable,
             autofocus: false,
           ),
@@ -229,16 +234,16 @@ class _PollDetailState extends State<PollDetail> {
                       ),
                     );
                   },
-                  label: Text(
-                      'Ended by ${getFormattedDateTime(_endedOn.millisecondsSinceEpoch)}'),
+                  label: Text(AppLocalizations.of(context).ended_by_time(
+                      getFormattedDateTime(_endedOn.millisecondsSinceEpoch))),
                 )
               : FullWidthPairText(
-                  label: 'Ended by',
+                  label: AppLocalizations.of(context).ended_by_title,
                   content:
                       getFormattedDateTime(_endedOn.millisecondsSinceEpoch)),
           CheckboxListTile(
               enabled: false,
-              title: const Text('Annonymous poll'),
+              title: Text(AppLocalizations.of(context).anonymous_poll),
               value: _annonymous,
               onChanged: (value) {
                 setState(() {
@@ -247,7 +252,7 @@ class _PollDetailState extends State<PollDetail> {
               }),
           CheckboxListTile(
               enabled: _editable,
-              title: const Text('Participant can add voting options to poll'),
+              title: Text(AppLocalizations.of(context).participant_add_option),
               value: _expandable,
               onChanged: (value) {
                 setState(() {
@@ -256,8 +261,8 @@ class _PollDetailState extends State<PollDetail> {
               }),
           CheckboxListTile(
               enabled: _editable,
-              title:
-                  const Text('Participant can select multiple voting options'),
+              title: Text(
+                  AppLocalizations.of(context).participants_select_multiple),
               value: _multiple,
               onChanged: (value) {
                 setState(() {
@@ -280,8 +285,8 @@ class _PollDetailState extends State<PollDetail> {
             }),
           ),
           const Divider(),
-          const FullWidthTitle(
-            title: 'Voting options',
+          FullWidthTitle(
+            title: AppLocalizations.of(context).vote_option_title,
           ),
           BlocBuilder<PollScreenCubit, PollScreenState>(
               builder: (context, state) {
@@ -301,8 +306,8 @@ class _PollDetailState extends State<PollDetail> {
                             state.poll?.votingOptions[index].id.toString() ??
                                 '');
                       },
-                      child: const Text(
-                        'Remove this option',
+                      child: Text(
+                        AppLocalizations.of(context).remove_option,
                       ))
                 ]);
               }),
@@ -310,10 +315,12 @@ class _PollDetailState extends State<PollDetail> {
           }),
           TextButton(
               onPressed: _addVotingOption,
-              child: const Text('Add another voting option')),
+              child: Text(
+                AppLocalizations.of(context).add_vote_option,
+              )),
           const Divider(),
-          const FullWidthTitle(
-            title: 'Your vote:',
+          FullWidthTitle(
+            title: AppLocalizations.of(context).your_vote_title,
           ),
           BlocBuilder<PollScreenCubit, PollScreenState>(
               builder: (context, state) {
@@ -349,7 +356,7 @@ class _PollDetailState extends State<PollDetail> {
           }),
           const Divider(),
           SettingButton(
-            label: const Text('Manage participants'),
+            label: Text(AppLocalizations.of(context).manage_participants),
             onPressed: () {
               showModalBottomSheet(
                 context: context,
@@ -364,7 +371,8 @@ class _PollDetailState extends State<PollDetail> {
             },
           ),
           TextButton(
-              onPressed: _showRemovePoll, child: const Text('Remove poll'))
+              onPressed: _showRemovePoll,
+              child: Text(AppLocalizations.of(context).remove_poll)),
         ]),
       ),
     );
@@ -401,14 +409,14 @@ class _AddPollOptionAlerDialogState extends State<AddPollOptionAlerDialog> {
     return AlertDialog(
       content: CustomFormField(
         textEditingController: _descriptionController,
-        hintText: 'Voting option description',
+        hintText: AppLocalizations.of(context).voting_option_description,
       ),
       actions: [
         OutlinedButton(
             onPressed: () {
               widget.onSubmit(_descriptionController.text);
             },
-            child: const Text('Confirm'))
+            child: Text(AppLocalizations.of(context).add_vote_option)),
       ],
     );
   }

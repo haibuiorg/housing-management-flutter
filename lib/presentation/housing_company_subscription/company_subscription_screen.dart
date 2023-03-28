@@ -10,6 +10,7 @@ import 'package:priorli/service_locator.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'widgets/subscription_plan_box.dart';
 
 const companySubscriptionScreenPath = 'company_subscription';
@@ -45,18 +46,19 @@ class _CompanySubscriptionScreenState extends State<CompanySubscriptionScreen> {
         context: context,
         builder: (builder) {
           return AlertDialog(
-            title: Text('Subscribe to ${plan.name}'),
+            title: Text(AppLocalizations.of(context).subscribe_to(plan.name)),
             content: TextFormField(
               controller: _con,
-              decoration: const InputDecoration(
-                hintText: 'How many account do you want to create?',
-                labelText: 'Quantity',
+              decoration: InputDecoration(
+                hintText:
+                    AppLocalizations.of(context).subscribe_quantity_question,
+                labelText: AppLocalizations.of(context).quantity,
               ),
             ),
             actions: [
               TextButton(
                   onPressed: () => Navigator.pop(builder),
-                  child: const Text('Cancel')),
+                  child: Text(AppLocalizations.of(context).cancel)),
               TextButton(
                   onPressed: () async {
                     _cubit
@@ -66,7 +68,7 @@ class _CompanySubscriptionScreenState extends State<CompanySubscriptionScreen> {
                         .then((value) => launchUrl(Uri.parse(value!)))
                         .then((value) => Navigator.pop(builder));
                   },
-                  child: const Text('Ok')),
+                  child: Text(AppLocalizations.of(context).confirm)),
             ],
           );
         });
@@ -78,7 +80,7 @@ class _CompanySubscriptionScreenState extends State<CompanySubscriptionScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Subscription'),
+        title: Text(AppLocalizations.of(context).subscription),
       ),
       body: BlocProvider<CompanySubscriptionCubit>(
         create: (_) => _cubit,
@@ -97,8 +99,9 @@ class _CompanySubscriptionScreenState extends State<CompanySubscriptionScreen> {
             slivers: [
               SliverToBoxAdapter(
                 child: FullWidthTitle(
-                  title:
-                      'Company credit: ${formatCurrency(state.company?.creditAmount, state.company?.currencyCode)}',
+                  title: AppLocalizations.of(context).company_credit_amount(
+                      formatCurrency(state.company?.creditAmount,
+                          state.company?.currencyCode)),
                 ),
               ),
               SliverList.builder(
@@ -124,9 +127,9 @@ class _CompanySubscriptionScreenState extends State<CompanySubscriptionScreen> {
                       ),
                     );
                   }),
-              const SliverToBoxAdapter(
+              SliverToBoxAdapter(
                 child: FullWidthTitle(
-                  title: 'Current subscriptions',
+                  title: AppLocalizations.of(context).current_subscription,
                 ),
               ),
               SliverGrid.builder(
@@ -141,9 +144,9 @@ class _CompanySubscriptionScreenState extends State<CompanySubscriptionScreen> {
                       subscription: companySubscriptions[index],
                     );
                   }),
-              const SliverToBoxAdapter(
+              SliverToBoxAdapter(
                 child: FullWidthTitle(
-                  title: 'Available subscriptions',
+                  title: AppLocalizations.of(context).available_subscriptions,
                 ),
               ),
               SliverToBoxAdapter(
@@ -160,7 +163,8 @@ class _CompanySubscriptionScreenState extends State<CompanySubscriptionScreen> {
                               yearly = false;
                             });
                           },
-                          label: const Text('Monthly price'),
+                          label:
+                              Text(AppLocalizations.of(context).monthly_price),
                           selected: !yearly,
                         ),
                       ),
@@ -173,7 +177,8 @@ class _CompanySubscriptionScreenState extends State<CompanySubscriptionScreen> {
                               });
                             },
                             selected: yearly,
-                            label: const Text('Yearly price')),
+                            label: Text(
+                                AppLocalizations.of(context).yearly_price)),
                       ),
                     ],
                   ),
@@ -246,7 +251,8 @@ class SubscriptionBox extends StatelessWidget {
               ? subscriptionPlans.first.name
               : 'Unknown plan'),
           subtitle: Text(
-              'For ${subscription.quantity} apartments ${subscription.latestInvoicePaid ? '' : '\n(Invoice not paid - click to pay!)'}'),
+              '${AppLocalizations.of(context).subscription_detail(subscription.quantity)}\n${subscription.latestInvoicePaid ? AppLocalizations.of(context).active : AppLocalizations.of(context).subscription_unpaid}'),
+          //'For ${subscription.quantity} apartments.${subscription.latestInvoicePaid ? '' : '\n(Invoice not paid - click to pay!)'}'),
         ),
       );
     });

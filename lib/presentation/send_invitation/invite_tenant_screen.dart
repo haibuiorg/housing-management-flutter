@@ -5,6 +5,7 @@ import 'package:priorli/presentation/send_invitation/invite_tenant_state.dart';
 import 'package:priorli/presentation/shared/custom_form_field.dart';
 import 'package:priorli/service_locator.dart';
 import 'package:dropdown_search/dropdown_search.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'invite_tenant_cubit.dart';
 
@@ -34,7 +35,7 @@ class InviteTenantScreen extends StatelessWidget {
                   : null,
               child: const Icon(Icons.chevron_right_outlined)),
           appBar: AppBar(
-            title: const Text('Send invitation'),
+            title: Text(AppLocalizations.of(context).send_invitation),
           ),
           body: SingleChildScrollView(
               child: Column(
@@ -46,9 +47,10 @@ class InviteTenantScreen extends StatelessWidget {
                   popupProps: PopupProps.menu(
                     showSearchBox: (state.apartmentList?.length ?? 0) > 20,
                   ),
-                  dropdownDecoratorProps: const DropDownDecoratorProps(
-                      dropdownSearchDecoration:
-                          InputDecoration(labelText: 'To apartment')),
+                  dropdownDecoratorProps: DropDownDecoratorProps(
+                      dropdownSearchDecoration: InputDecoration(
+                          labelText:
+                              AppLocalizations.of(context).select_apartment)),
                   itemAsString: (Apartment apartment) =>
                       '${apartment.building} ${apartment.houseCode ?? ''}',
                   onChanged: (Apartment? apartment) =>
@@ -58,7 +60,7 @@ class InviteTenantScreen extends StatelessWidget {
               CustomFormField(
                 keyboardType: TextInputType.emailAddress,
                 onChanged: (value) => cubit.updateEmails(value),
-                hintText: 'Emails to send invitation to (separate with ; or ,)',
+                hintText: AppLocalizations.of(context).email_list_hint,
               ),
             ],
           )),

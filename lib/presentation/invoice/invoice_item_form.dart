@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:priorli/presentation/shared/custom_form_field.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class InvoiceItemForm extends StatefulWidget {
   const InvoiceItemForm({
     super.key,
@@ -87,21 +89,21 @@ class _InvoiceItemFormState extends State<InvoiceItemForm> {
             ResponsiveRowColumnItem(
               rowFlex: 2,
               child: CustomFormField(
-                hintText: 'Item name',
+                hintText: AppLocalizations.of(context).item_name,
                 textEditingController: _nameController,
               ),
             ),
             ResponsiveRowColumnItem(
               rowFlex: 2,
               child: CustomFormField(
-                hintText: 'Item Description',
+                hintText: AppLocalizations.of(context).item_description,
                 textEditingController: _descriptionController,
               ),
             ),
             ResponsiveRowColumnItem(
               rowFlex: 1,
               child: CustomFormField(
-                hintText: 'Unit price',
+                hintText: AppLocalizations.of(context).unit_price,
                 textEditingController: _priceController,
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                 onChanged: (_) => _calculateTotal(),
@@ -110,7 +112,7 @@ class _InvoiceItemFormState extends State<InvoiceItemForm> {
             ResponsiveRowColumnItem(
               rowFlex: 1,
               child: CustomFormField(
-                hintText: 'Quantity',
+                hintText: AppLocalizations.of(context).quantity,
                 textEditingController: _quantityController,
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                 onChanged: (_) => _calculateTotal(),
@@ -119,7 +121,7 @@ class _InvoiceItemFormState extends State<InvoiceItemForm> {
             ResponsiveRowColumnItem(
               rowFlex: 1,
               child: CustomFormField(
-                hintText: 'Tax percentage',
+                hintText: AppLocalizations.of(context).tax_rate,
                 textEditingController: _taxController,
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                 onChanged: (_) => _calculateTotal(),
@@ -128,7 +130,8 @@ class _InvoiceItemFormState extends State<InvoiceItemForm> {
             ResponsiveRowColumnItem(
                 rowFlex: 1,
                 child: Text(
-                  'Total: $_total',
+                  AppLocalizations.of(context)
+                      .total_value(_total.toStringAsFixed(2)),
                 )),
           ],
         ),
@@ -139,7 +142,7 @@ class _InvoiceItemFormState extends State<InvoiceItemForm> {
                   rowFit: FlexFit.loose,
                   child: TextButton(
                     onPressed: _submit,
-                    child: const Text('Add'),
+                    child: Text(AppLocalizations.of(context).add_item),
                   ))
               : ResponsiveRowColumnItem(
                   rowFit: FlexFit.loose,

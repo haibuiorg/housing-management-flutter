@@ -13,6 +13,8 @@ import 'package:priorli/presentation/shared/popover.dart';
 import 'package:priorli/service_locator.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 const invoiceListPath = 'invoices';
 
 class InvoiceListScreen extends StatefulWidget {
@@ -65,7 +67,7 @@ class _InvoiceListScreenState extends State<InvoiceListScreen> {
         },
         builder: (context, state) {
           return Scaffold(
-            appBar: AppBar(title: const Text('Invoices')),
+            appBar: AppBar(title: Text(AppLocalizations.of(context).invoices)),
             body: Padding(
                 padding: EdgeInsets.only(
                     left: 16,
@@ -137,14 +139,17 @@ class _InvoiceListScreenState extends State<InvoiceListScreen> {
                                   title: invoice.invoiceName,
                                 ),
                                 FullWidthPairText(
-                                    label: 'Payment date',
+                                    label: AppLocalizations.of(context)
+                                        .payment_due,
                                     content:
                                         getFormattedDate(invoice.paymentDate)),
                                 FullWidthPairText(
-                                    label: 'Refence number:',
+                                    label: AppLocalizations.of(context)
+                                        .reference_number_title,
                                     content: invoice.referenceNumber),
                                 FullWidthPairText(
-                                    label: 'Status:',
+                                    label: AppLocalizations.of(context)
+                                        .status_title,
                                     content: invoice.status.name),
                                 Divider(
                                   height: 4,
@@ -154,8 +159,9 @@ class _InvoiceListScreenState extends State<InvoiceListScreen> {
                                       .colorScheme
                                       .onTertiaryContainer,
                                 ),
-                                const FullWidthPairText(
-                                  label: 'Items:',
+                                FullWidthPairText(
+                                  label:
+                                      AppLocalizations.of(context).items_title,
                                 ),
                                 Expanded(
                                   child: SingleChildScrollView(
@@ -181,7 +187,8 @@ class _InvoiceListScreenState extends State<InvoiceListScreen> {
                                       .onTertiaryContainer,
                                 ),
                                 FullWidthPairText(
-                                    label: 'Amount',
+                                    label: AppLocalizations.of(context)
+                                        .amount_title,
                                     content: invoice.subtotal.toString()),
                               ]),
                         ),
@@ -217,22 +224,21 @@ class _ResendInvoiceDialogState extends State<ResendInvoiceDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Resend invoice'),
+      title: Text(AppLocalizations.of(context).resend_invoice),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Text('Send invoice to this email address:'),
           !isSending
               ? TextFormField(
                   validator: (value) {
                     if (value?.isValidEmail != true) {
-                      return 'Please enter email address';
+                      return AppLocalizations.of(context).email_address_error;
                     }
                     return null;
                   },
                   controller: _emailController,
-                  decoration: const InputDecoration(
-                    hintText: 'Email address',
+                  decoration: InputDecoration(
+                    hintText: AppLocalizations.of(context).email,
                   ),
                 )
               : const CircularProgressIndicator()
@@ -243,7 +249,7 @@ class _ResendInvoiceDialogState extends State<ResendInvoiceDialog> {
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: const Text('Cancel')),
+            child: Text(AppLocalizations.of(context).cancel)),
         TextButton(
             onPressed: () {
               if (_emailController.text.isValidEmail) {
@@ -253,7 +259,7 @@ class _ResendInvoiceDialogState extends State<ResendInvoiceDialog> {
                 widget.onResend?.call(_emailController.text);
               }
             },
-            child: const Text('Send'))
+            child: Text(AppLocalizations.of(context).send))
       ],
     );
   }

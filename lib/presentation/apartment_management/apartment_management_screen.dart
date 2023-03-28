@@ -6,6 +6,7 @@ import 'package:priorli/presentation/shared/custom_form_field.dart';
 import 'package:priorli/service_locator.dart';
 import '../../go_router_navigation.dart';
 import '../shared/setting_button.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ApartmentManagementScreen extends StatefulWidget {
   const ApartmentManagementScreen(
@@ -85,7 +86,7 @@ class _ApartmentManagementScreenState extends State<ApartmentManagementScreen> {
                           cubit.saveNewApartmentInfo();
                         }
                       : null,
-                  child: const Text('Save'),
+                  child: Text(AppLocalizations.of(context).save),
                 )
               ],
             ),
@@ -101,14 +102,15 @@ class _ApartmentManagementScreenState extends State<ApartmentManagementScreen> {
                       child: Column(children: [
                         CustomFormField(
                           textEditingController: _apartmentName,
-                          hintText: 'Building name',
+                          hintText: AppLocalizations.of(context).building_name,
                           autofocus: false,
                           onChanged: (value) =>
                               cubit.updateAparmentBuildingName(value),
                           keyboardType: TextInputType.name,
                         ),
                         CustomFormField(
-                          hintText: 'Number',
+                          hintText:
+                              AppLocalizations.of(context).building_number,
                           textEditingController: _houseCode,
                           autofocus: false,
                           onChanged: (value) =>
@@ -124,7 +126,7 @@ class _ApartmentManagementScreenState extends State<ApartmentManagementScreen> {
                           () => cubit.deleteThisApartment());
                     },
                     label: Text(
-                      'Delete this apartment',
+                      AppLocalizations.of(context).remove_this_apartment,
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           color: Theme.of(context).colorScheme.error),
                     ),

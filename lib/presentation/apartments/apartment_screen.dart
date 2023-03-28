@@ -9,6 +9,7 @@ import 'package:priorli/presentation/shared/full_width_title.dart';
 import 'package:priorli/presentation/shared/setting_button.dart';
 import 'package:priorli/service_locator.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../core/utils/string_extension.dart';
 import '../apartment_invoice/apartment_water_invoice_screen.dart';
@@ -82,18 +83,18 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
                 onPressed: () {
                   context.pushFromCurrentLocation(manageScreenPath);
                 },
-                child: const Text('More'),
+                child: Text(AppLocalizations.of(context).more),
               )
             ],
             title: Text(
-                '${state.apartment?.building ?? 'Apartment'} ${state.apartment?.houseCode ?? ''}'),
+                '${state.apartment?.building ?? AppLocalizations.of(context).apartment} ${state.apartment?.houseCode ?? ''}'),
           ),
           body: CustomScrollView(
             slivers: [
               SliverToBoxAdapter(
                 child: Column(children: [
-                  const FullWidthTitle(
-                    title: 'Water consumption',
+                  FullWidthTitle(
+                    title: AppLocalizations.of(context).water_consumption,
                   ),
                   Padding(
                     padding: const EdgeInsets.all(16.0),
@@ -117,27 +118,27 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
                     onPressed: () {
                       context.pushFromCurrentLocation(apartmentWaterInvoice);
                     },
-                    label: const Text('Archived invoices'),
+                    label: Text(AppLocalizations.of(context).archived_invoices),
                   ),
                   FullWidthPairText(
-                    label: 'Period',
+                    label: AppLocalizations.of(context).period,
                     content:
                         state.latestWaterConsumption?.period.toString() ?? '',
                   ),
                   FullWidthPairText(
-                    label: 'Year',
+                    label: AppLocalizations.of(context).year,
                     content:
                         state.latestWaterConsumption?.year.toString() ?? '',
                   ),
                   FullWidthPairText(
-                    label: 'Basic fee',
+                    label: AppLocalizations.of(context).basic_fee,
                     content: formatCurrency(
                         ((state.latestWaterConsumption?.basicFee ?? 0) /
                             (state.housingCompany?.apartmentCount ?? 1)),
                         state.housingCompany?.currencyCode),
                   ),
                   FullWidthPairText(
-                    label: 'Price per cube',
+                    label: AppLocalizations.of(context).price_per_cube,
                     content: formatCurrency(
                         state.latestWaterConsumption?.pricePerCube,
                         state.housingCompany?.currencyCode),
@@ -146,7 +147,8 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
                       ? Column(
                           children: [
                             FullWidthPairText(
-                              label: 'Your consumption this period',
+                              label: AppLocalizations.of(context)
+                                  .consumption_this_period,
                               content: state.yearlyWaterBills
                                       ?.where((element) =>
                                           element.period ==
@@ -158,10 +160,11 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
                                       .first
                                       .consumption
                                       .toStringAsFixed(2) ??
-                                  'Not yet updated',
+                                  AppLocalizations.of(context).not_yet_updated,
                             ),
                             FullWidthPairText(
-                                label: 'Your invoice this period',
+                                label: AppLocalizations.of(context)
+                                    .invoice_this_period,
                                 content: formatCurrency(
                                     state.yearlyWaterBills
                                         ?.where((element) =>
@@ -176,9 +179,10 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
                                     state.housingCompany?.currencyCode)),
                           ],
                         )
-                      : const FullWidthPairText(
-                          label: 'Your consumption this period',
-                          content: 'Not yet updated',
+                      : FullWidthPairText(
+                          label: AppLocalizations.of(context)
+                              .consumption_this_period,
+                          content: AppLocalizations.of(context).not_yet_updated,
                         ),
                   OutlinedButton(
                       onPressed: hasConsumptionValue ||
@@ -197,10 +201,10 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
                                         },
                                       ));
                             },
-                      child:
-                          const Text('Add water consumption for this period')),
-                  const FullWidthTitle(
-                    title: 'Documents',
+                      child: Text(
+                          AppLocalizations.of(context).add_water_consumption)),
+                  FullWidthTitle(
+                    title: AppLocalizations.of(context).documents,
                   ),
                 ]),
               ),
@@ -238,10 +242,10 @@ class _ApartmentScreenState extends State<ApartmentScreen> {
                       onPressed: () {
                         context.pushFromCurrentLocation(documentListScreenPath);
                       },
-                      child: const Text('More'))),
+                      child: Text(AppLocalizations.of(context).more))),
               SliverToBoxAdapter(
                 child: SettingButton(
-                  label: const Text('Fault report'),
+                  label: Text(AppLocalizations.of(context).fault_report),
                   onPressed: () {
                     showBottomSheet(
                         context: context,
@@ -293,11 +297,11 @@ class _ConsumptionValueDialogState extends State<ConsumptionValueDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Add consumption value for this period'),
+      title: Text(AppLocalizations.of(context).add_consumption_value),
       content: Column(mainAxisSize: MainAxisSize.min, children: [
         CustomFormField(
           keyboardType: const TextInputType.numberWithOptions(decimal: true),
-          hintText: 'Consumption value',
+          hintText: AppLocalizations.of(context).consumption_value,
           textEditingController: _consumptionController,
         )
       ]),
@@ -309,7 +313,7 @@ class _ConsumptionValueDialogState extends State<ConsumptionValueDialog> {
               );
               Navigator.pop(context, true);
             },
-            child: const Text('Submit'))
+            child: Text(AppLocalizations.of(context).submit))
       ],
     );
   }
@@ -361,7 +365,7 @@ class _FaultReportDialogState extends State<FaultReportDialog> {
                   ),
                 ),
                 Text(
-                  'Make announcement to housing company',
+                  AppLocalizations.of(context).fault_report,
                   style: Theme.of(context).textTheme.titleLarge,
                   textAlign: TextAlign.center,
                 ),
@@ -371,8 +375,8 @@ class _FaultReportDialogState extends State<FaultReportDialog> {
                     controller: _titleController,
                     maxLines: 1,
                     autofocus: true,
-                    decoration: const InputDecoration(
-                      hintText: 'Title',
+                    decoration: InputDecoration(
+                      hintText: AppLocalizations.of(context).title,
                     ),
                   ),
                 ),
@@ -381,9 +385,9 @@ class _FaultReportDialogState extends State<FaultReportDialog> {
                   minLines: 5,
                   maxLines: 20,
                   keyboardType: TextInputType.multiline,
-                  decoration: const InputDecoration(
-                    hintText: 'Content',
-                    border: OutlineInputBorder(
+                  decoration: InputDecoration(
+                    hintText: AppLocalizations.of(context).content,
+                    border: const OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(16.0)),
                     ),
                   ),
@@ -405,7 +409,7 @@ class _FaultReportDialogState extends State<FaultReportDialog> {
                             _sendEmail = !_sendEmail;
                           });
                         }),
-                    const Text('Also send email'),
+                    Text(AppLocalizations.of(context).also_send_email),
                     const Spacer(),
                     OutlinedButton(
                         onPressed: () {
@@ -415,7 +419,7 @@ class _FaultReportDialogState extends State<FaultReportDialog> {
                               title: _titleController.text,
                               uploadedDocuments: _uploadedDocuments);
                         },
-                        child: const Text('Submit'))
+                        child: Text(AppLocalizations.of(context).submit))
                   ],
                 ),
               ]),

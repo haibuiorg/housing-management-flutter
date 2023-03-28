@@ -7,6 +7,8 @@ import 'package:priorli/presentation/shared/custom_form_field.dart';
 import 'package:priorli/presentation/shared/full_width_title.dart';
 import 'package:priorli/service_locator.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import '../../core/utils/number_formatters.dart';
 import '../../go_router_navigation.dart';
 import 'add_apart_cubit.dart';
@@ -44,17 +46,19 @@ class AddApartmentScreen extends StatelessWidget {
                         : () => cubit.addApartments(),
                     child: const Icon(Icons.chevron_right_outlined)),
                 appBar: AppBar(
-                  title: Text(
-                      'Add apartments to ${state.housingCompany?.name ?? 'housing company'}'),
+                  title: Text(AppLocalizations.of(context).add_apartment(
+                      state.housingCompany?.name ??
+                          AppLocalizations.of(context).housing_companies)),
                 ),
                 body: Column(children: [
                   CustomFormField(
                     textCapitalization: TextCapitalization.sentences,
-                    hintText: 'Building name',
+                    hintText: AppLocalizations.of(context).building_name,
                     onChanged: (value) => cubit.updateBuilding(value),
                   ),
                   CustomFormField(
-                    hintText: 'Number of apartments/houses in this Building',
+                    hintText: AppLocalizations.of(context)
+                        .number_of_apartment_in_building,
                     keyboardType: const TextInputType.numberWithOptions(),
                     onChanged: (value) => cubit.updateHouseCode(int.tryParse(
                           value,
@@ -62,7 +66,8 @@ class AddApartmentScreen extends StatelessWidget {
                         1),
                   ),
                   FullWidthTitle(
-                    title: 'Autofill apartment numbers',
+                    title:
+                        AppLocalizations.of(context).autofill_apartment_number,
                     action: Switch(
                         value: state.automaticHouseCodeInput != false,
                         onChanged: (onChanged) => cubit
@@ -76,7 +81,8 @@ class AddApartmentScreen extends StatelessWidget {
                               : 0,
                           itemBuilder: ((context, index) {
                             return CustomFormField(
-                              hintText: 'Apartment/House number',
+                              hintText: AppLocalizations.of(context)
+                                  .aparment_house_number,
                               keyboardType:
                                   const TextInputType.numberWithOptions(),
                               onChanged: (value) =>

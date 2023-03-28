@@ -7,6 +7,8 @@ import 'package:priorli/presentation/code_register/code_register_state.dart';
 import 'package:priorli/presentation/shared/custom_form_field.dart';
 import 'package:priorli/service_locator.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 const codeRegisterPath = '/code_register';
 
 class CodeRegisterScreen extends StatefulWidget {
@@ -41,14 +43,15 @@ class _CodeRegisterScreenState extends State<CodeRegisterScreen> {
         child: BlocBuilder<CodeRegisterCubit, CodeRegisterState>(
             builder: (context, state) => Scaffold(
                   appBar: AppBar(
-                    title: const Text('Register with code'),
+                    title:
+                        Text(AppLocalizations.of(context).register_with_code),
                   ),
                   body: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         CustomFormField(
-                            hintText: 'Email',
+                            hintText: AppLocalizations.of(context).email,
                             autofocus: true,
                             initialValue: '${state.email}',
                             autoValidate: true,
@@ -59,22 +62,25 @@ class _CodeRegisterScreenState extends State<CodeRegisterScreen> {
                             textInputAction: TextInputAction.next,
                             validator: (val) {
                               return (!val!.isValidEmail)
-                                  ? 'Enter valid email'
+                                  ? AppLocalizations.of(context)
+                                      .email_address_error
                                   : null;
                             },
                             onChanged: (email) => _cubit.onTypingEmail(email)),
                         CustomFormField(
-                          hintText: 'Code',
+                          hintText: AppLocalizations.of(context).code_title,
                           icon: const Icon(
                             Icons.abc,
                           ),
-                          helperText: 'Invitation code from company',
+                          helperText: AppLocalizations.of(context)
+                              .invitation_code_from_manager,
                           initialValue: state.code ?? '',
                           onChanged: (code) => _cubit.onTypingCode(code),
                         ),
                         CustomFormField(
                           autoValidate: true,
-                          hintText: 'Create a password',
+                          hintText:
+                              AppLocalizations.of(context).create_a_password,
                           onChanged: (password) {
                             setState(() {});
                             _cubit.onTypingPassword(password);
@@ -95,7 +101,7 @@ class _CodeRegisterScreenState extends State<CodeRegisterScreen> {
                                   })),
                           validator: (val) {
                             return !val!.isValidPassword
-                                ? 'Enter valid password'
+                                ? AppLocalizations.of(context).password_error
                                 : null;
                           },
                         ),
@@ -110,12 +116,13 @@ class _CodeRegisterScreenState extends State<CodeRegisterScreen> {
                                     .then((success) => {
                                           if (!success)
                                             ScaffoldMessenger.of(context)
-                                                .showSnackBar(const SnackBar(
-                                                    content: Text(
-                                                        'Invalid code or email')))
+                                                .showSnackBar(SnackBar(
+                                                    content: Text(AppLocalizations
+                                                            .of(context)
+                                                        .invalid_code_or_email)))
                                         })
                                 : null,
-                            child: const Text('Register'))
+                            child: Text(AppLocalizations.of(context).register))
                       ]),
                 )));
   }

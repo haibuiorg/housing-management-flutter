@@ -6,6 +6,7 @@ import 'package:priorli/presentation/events/event_screen_cubit.dart';
 import 'package:priorli/presentation/events/event_screen_state.dart';
 import 'package:priorli/presentation/shared/app_lottie_animation.dart';
 import 'package:priorli/service_locator.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../go_router_navigation.dart';
 import 'event_creation_form.dart';
@@ -64,10 +65,10 @@ class _EventScreenState extends State<EventScreen> {
           return Scaffold(
             appBar: AppBar(
               title: Text(state.isInitializing
-                  ? 'Loading'
+                  ? AppLocalizations.of(context).loading
                   : state.event != null
-                      ? 'Event detail'
-                      : 'Create an event'),
+                      ? AppLocalizations.of(context).event_detail
+                      : AppLocalizations.of(context).create_an_event),
             ),
             bottomSheet: state.event == null
                 ? null
@@ -82,7 +83,8 @@ class _EventScreenState extends State<EventScreen> {
                             children: [
                               ChoiceChip(
                                 labelPadding: const EdgeInsets.all(2.0),
-                                label: const Text('Accepted'),
+                                label:
+                                    Text(AppLocalizations.of(context).accepted),
                                 selected: (state.event?.accepted ?? [])
                                     .contains(state.userId),
                                 onSelected: (value) {
@@ -93,7 +95,7 @@ class _EventScreenState extends State<EventScreen> {
                               ),
                               ChoiceChip(
                                 labelPadding: const EdgeInsets.all(2.0),
-                                label: const Text('Maybe'),
+                                label: Text(AppLocalizations.of(context).maybe),
                                 selected: !(state.event?.accepted ?? [])
                                         .contains(state.userId) &&
                                     !(state.event?.declined ?? [])
@@ -106,7 +108,8 @@ class _EventScreenState extends State<EventScreen> {
                               ),
                               ChoiceChip(
                                 labelPadding: const EdgeInsets.all(2.0),
-                                label: const Text('Decline'),
+                                label:
+                                    Text(AppLocalizations.of(context).declined),
                                 selected: (state.event?.declined ?? [])
                                     .contains(state.userId),
                                 onSelected: (value) {

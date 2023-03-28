@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class DateTimePicker extends StatefulWidget {
   const DateTimePicker(
       {super.key, required this.onConfirmTime, this.initialDate});
@@ -59,7 +61,7 @@ class _DateTimePickerState extends State<DateTimePicker> {
                   widget.onConfirmTime(dateFrom);
                   Navigator.pop(context);
                 },
-                child: const Text('Confirm date time'))
+                child: Text(AppLocalizations.of(context).confirm_date_time))
           ],
         ),
       ],

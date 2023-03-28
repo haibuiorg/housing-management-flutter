@@ -6,6 +6,8 @@ import 'package:priorli/presentation/conversation_list/conversation_list_state.d
 import 'package:priorli/presentation/shared/full_width_title.dart';
 import 'package:priorli/service_locator.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import '../message/message_screen.dart';
 import '../shared/conversation_item.dart';
 
@@ -48,9 +50,9 @@ class _ConversationListScreenState extends State<ConversationListScreen> {
                 clipBehavior: Clip.none,
                 slivers: [
                   if (state.conversationList?.isNotEmpty == true)
-                    const SliverToBoxAdapter(
+                    SliverToBoxAdapter(
                         child: FullWidthTitle(
-                      title: 'Messages from companies',
+                      title: AppLocalizations.of(context).from_compamies,
                     )),
                   SliverList(
                       delegate: SliverChildBuilderDelegate(
@@ -70,9 +72,9 @@ class _ConversationListScreenState extends State<ConversationListScreen> {
                     childCount: state.conversationList?.length ?? 0,
                   )),
                   if (state.faultConversationList?.isNotEmpty == true)
-                    const SliverToBoxAdapter(
+                    SliverToBoxAdapter(
                         child: FullWidthTitle(
-                      title: 'Fault reports',
+                      title: AppLocalizations.of(context).fault_reports,
                     )),
                   SliverList(
                       delegate: SliverChildBuilderDelegate(
@@ -92,9 +94,9 @@ class _ConversationListScreenState extends State<ConversationListScreen> {
                     childCount: state.faultConversationList?.length ?? 0,
                   )),
                   if (state.supportConversationList?.isNotEmpty == true)
-                    const SliverToBoxAdapter(
+                    SliverToBoxAdapter(
                       child: FullWidthTitle(
-                        title: 'Support messages',
+                        title: AppLocalizations.of(context).support_requests,
                       ),
                     ),
                   SliverList(

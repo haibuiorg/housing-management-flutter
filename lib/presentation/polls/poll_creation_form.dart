@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:priorli/core/poll/entities/poll_type.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../core/user/entities/user.dart';
 import '../../core/utils/time_utils.dart';
@@ -72,13 +73,13 @@ class _PollCreationFormState extends State<PollCreationForm> {
       showDialog(
           context: context,
           builder: (builder) => AlertDialog(
-                content: const Text('Must have at least 1 voting option'),
+                content: Text(AppLocalizations.of(context).vote_option_error),
                 actions: [
                   OutlinedButton(
                       onPressed: () {
                         Navigator.pop(builder);
                       },
-                      child: const Text('Ok'))
+                      child: Text(AppLocalizations.of(context).ok))
                 ],
               ));
       return;
@@ -130,20 +131,20 @@ class _PollCreationFormState extends State<PollCreationForm> {
               child: const Icon(Icons.check_rounded),
             ),
       appBar: AppBar(
-        title: const Text('Create new poll'),
+        title: Text(AppLocalizations.of(context).create_new_poll),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
             CustomFormField(
-              hintText: 'Poll name',
+              hintText: AppLocalizations.of(context).poll_name,
               onChanged: (_) {
                 _checkValidation();
               },
               textEditingController: _nameController,
             ),
             CustomFormField(
-              hintText: 'Poll description',
+              hintText: AppLocalizations.of(context).poll_description,
               onChanged: (_) {
                 _checkValidation();
               },
@@ -154,8 +155,9 @@ class _PollCreationFormState extends State<PollCreationForm> {
               spacing: 8,
               children: List.generate(_votingOptionControllers.length, (index) {
                 return CustomFormField(
-                  hintText: 'Option: ${index + 1}',
-                  helperText: 'Option for participant',
+                  hintText: AppLocalizations.of(context)
+                      .vote_option_value((index + 1).toString()),
+                  helperText: AppLocalizations.of(context).vote_option_title,
                   textEditingController: _votingOptionControllers[index],
                   decoration: InputDecoration(
                       suffixIcon: IconButton(
@@ -168,10 +170,10 @@ class _PollCreationFormState extends State<PollCreationForm> {
             ),
             TextButton(
                 onPressed: _addVotingOption,
-                child: const Text('Add another voting option')),
+                child: Text(AppLocalizations.of(context).add_vote_option)),
             SettingButton(
-              label: Text(
-                  'Poll end by ${getFormattedDateTime(_endedOn.millisecondsSinceEpoch)}'),
+              label: Text(AppLocalizations.of(context).vote_ends_by(
+                  getFormattedDateTime(_endedOn.microsecondsSinceEpoch))),
               onPressed: () {
                 showModalBottomSheet(
                   context: context,
@@ -187,7 +189,9 @@ class _PollCreationFormState extends State<PollCreationForm> {
             ),
             SettingButton(
               label: Text(
-                  'Guests: ${_displayName.isEmpty ? 'None' : _displayName}'),
+                AppLocalizations.of(context).participants_name(
+                    _displayName.isEmpty ? '--' : _displayName.join(', ')),
+              ),
               onPressed: () {
                 showModalBottomSheet(
                   context: context,
@@ -208,7 +212,7 @@ class _PollCreationFormState extends State<PollCreationForm> {
               },
             ),
             CheckboxListTile(
-                title: const Text('Annonymous poll'),
+                title: Text(AppLocalizations.of(context).anonymous_poll),
                 value: _annonymous,
                 onChanged: (value) {
                   setState(() {
@@ -216,7 +220,8 @@ class _PollCreationFormState extends State<PollCreationForm> {
                   });
                 }),
             CheckboxListTile(
-                title: const Text('Participant can add voting options to poll'),
+                title:
+                    Text(AppLocalizations.of(context).participant_add_option),
                 value: _expandable,
                 onChanged: (value) {
                   setState(() {
@@ -224,8 +229,8 @@ class _PollCreationFormState extends State<PollCreationForm> {
                   });
                 }),
             CheckboxListTile(
-                title: const Text(
-                    'Participant can select multiple voting options'),
+                title: Text(
+                    AppLocalizations.of(context).participants_select_multiple),
                 value: _multiple,
                 onChanged: (value) {
                   setState(() {

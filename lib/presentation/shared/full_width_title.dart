@@ -19,6 +19,8 @@ class FullWidthTitle extends StatelessWidget {
               textScaleFactor: 1,
               style: Theme.of(context).textTheme.titleMedium,
               textAlign: TextAlign.left,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 2,
             ),
           ),
           action ?? const SizedBox.shrink()
