@@ -206,7 +206,7 @@ class _AppState extends State<App> {
                         if (currentLocation == loginPath ||
                             currentLocation == registerPath ||
                             currentLocation == contactUsPublicScreenRoute ||
-                            currentLocation == codeRegisterPath) {
+                            currentLocation.contains(codeRegisterPath)) {
                           return;
                         }
                         appRouter.go(loginPath);
