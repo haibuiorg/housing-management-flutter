@@ -219,7 +219,7 @@ class _AppState extends State<App> {
                       } else {
                         if (currentLocation == loginPath ||
                             currentLocation == registerPath ||
-                            currentLocation == codeRegisterPath) {
+                            currentLocation.contains(codeRegisterPath)) {
                           appRouter.go(homePath);
                         }
                         if (widget.initialLink != null &&
