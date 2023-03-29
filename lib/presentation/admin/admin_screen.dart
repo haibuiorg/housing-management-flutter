@@ -92,7 +92,7 @@ class _AdminScreenState extends State<AdminScreen> {
                   snap: false,
                   forceElevated: innerBoxIsScrolled,
                   shadowColor: Theme.of(context).colorScheme.primaryContainer,
-                  title: Text(AppLocalizations.of(context)!.admin),
+                  title: Text(AppLocalizations.of(context).admin),
                   actions: [
                     DropdownButton<String>(
                       value: state.selectedCountryCode,
