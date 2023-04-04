@@ -113,10 +113,24 @@ class InvoiceRepositoryImpl extends InvoiceRepository {
 
   @override
   Future<Result<Invoice>> sendInvoiceManually(
-      {required String invoiceId, required List<String> emails}) async {
+      {required String invoiceId,
+      required List<String> emails,
+      String? name,
+      String? streetAddress1,
+      String? streetAddress2,
+      String? postalCode,
+      String? city,
+      String? countryCode}) async {
     try {
       final model = await invoiceRemoteDataSource.sendInvoiceManually(
-          invoiceId: invoiceId, emails: emails);
+          invoiceId: invoiceId,
+          emails: emails,
+          name: name,
+          streetAddress1: streetAddress1,
+          streetAddress2: streetAddress2,
+          postalCode: postalCode,
+          city: city,
+          countryCode: countryCode);
       return ResultSuccess(Invoice.modelToEntity(model));
     } on ServerException {
       return ResultFailure(ServerFailure());

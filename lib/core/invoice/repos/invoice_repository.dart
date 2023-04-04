@@ -31,5 +31,12 @@ abstract class InvoiceRepository {
     int? lastCreatedOn,
   });
   Future<Result<Invoice>> sendInvoiceManually(
-      {required String invoiceId, required List<String> emails});
+      {required String invoiceId,
+      required List<String> emails,
+      String? name,
+      String? streetAddress1,
+      String? streetAddress2,
+      String? postalCode,
+      String? city,
+      String? countryCode});
 }

@@ -67,9 +67,26 @@ class InvoiceListCubit extends Cubit<InvoiceListState> {
     return null;
   }
 
-  Future<void> resendInvoice(Invoice invoice, String text) async {
+  Future<void> resendInvoice({
+    required Invoice invoice,
+    required String emails,
+    String? name,
+    String? streetAddress1,
+    String? streetAddress2,
+    String? postalCode,
+    String? city,
+    String? countryCode,
+  }) async {
     final sendInvoiceManuallyResult = await _sendInvoiceManually(
-        SendInvoiceManuallyParams(invoiceId: invoice.id, emails: [text]));
+        SendInvoiceManuallyParams(
+            invoiceId: invoice.id,
+            emails: [emails],
+            name: name,
+            streetAddress1: streetAddress1,
+            streetAddress2: streetAddress2,
+            postalCode: postalCode,
+            city: city,
+            countryCode: countryCode));
     if (sendInvoiceManuallyResult is ResultSuccess<Invoice>) {}
   }
 

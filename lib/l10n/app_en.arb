@@ -625,5 +625,25 @@
             }
           }
     },
-    "autofill_apartment_number": "Autofill apartment number"
+    "autofill_apartment_number": "Autofill apartment number",
+    "optional_field": "{field} (optional)",
+    "@optional_field" : {
+        "description": "Optional field",
+        "placeholders": {
+          "field": {
+            "type": "String",
+            "example": "John"
+            }
+          }
+    },
+    "required_field": "{field} (required)",
+    "@required_field" : {
+        "description": "required field",
+        "placeholders": {
+          "field": {
+            "type": "String",
+            "example": "John"
+            }
+          }
+    }
 }

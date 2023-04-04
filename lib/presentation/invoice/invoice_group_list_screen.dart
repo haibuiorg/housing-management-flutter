@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:priorli/presentation/invoice/invoice_group_cubit.dart';
 import 'package:priorli/presentation/invoice/invoice_group_state.dart';
 import 'package:priorli/presentation/shared/app_lottie_animation.dart';
@@ -7,6 +8,9 @@ import 'package:priorli/presentation/shared/setting_button.dart';
 import 'package:priorli/service_locator.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '../housing_company/housing_company_screen.dart';
+import 'invoice_list_screen.dart';
 
 const invoiceGroupPath = 'invoice_group';
 
@@ -68,7 +72,10 @@ class _InvoiceGroupListScreenState extends State<InvoiceGroupListScreen> {
                                       borderRadius: BorderRadius.circular(8),
                                     ),
                                     child: SettingButton(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        context.push(
+                                            '/$housingCompanyScreenPath/${widget.companyId}/company/$invoiceListPath/${state.invoiceGroupList?[index].id}');
+                                      },
                                       label: Text(
                                         state.invoiceGroupList?[index]
                                                 .invoiceName ??

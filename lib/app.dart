@@ -1,4 +1,5 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:country_picker/country_picker.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -118,7 +119,10 @@ class _AppState extends State<App> {
             builder: (lightColorScheme, darkColorScheme) {
           return MaterialApp.router(
             locale: Locale(state.languageCode ?? 'fi'),
-            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            localizationsDelegates: const [
+              ...AppLocalizations.localizationsDelegates,
+              CountryLocalizations.delegate
+            ],
             supportedLocales: AppLocalizations.supportedLocales,
             onGenerateTitle: (context) {
               return 'Priorli dashboard';

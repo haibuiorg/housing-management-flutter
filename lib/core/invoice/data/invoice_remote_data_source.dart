@@ -112,10 +112,26 @@ class InvoiceRemoteDataSource implements InvoiceDataSource {
 
   @override
   Future<InvoiceModel> sendInvoiceManually(
-      {required String invoiceId, required List<String> emails}) async {
+      {required String invoiceId,
+      required List<String> emails,
+      String? name,
+      String? streetAddress1,
+      String? streetAddress2,
+      String? postalCode,
+      String? city,
+      String? countryCode}) async {
     try {
-      final result =
-          await client.post('/invoice/$invoiceId', data: {'emails': emails});
+      final data = {
+        'emails': emails,
+        'new_receiver_name': name,
+        'street_address_1': streetAddress1,
+        'street_address_2': streetAddress2,
+        'postal_code': postalCode,
+        'city': city,
+        'country_code': countryCode
+      };
+      data.removeWhere((key, value) => value == null);
+      final result = await client.post('/invoice/$invoiceId', data: data);
       return InvoiceModel.fromJson(result.data);
     } catch (error) {
       throw ServerException(error: error);

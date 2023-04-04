@@ -1,3 +1,5 @@
+import 'package:flag/flag_enum.dart';
+import 'package:flag/flag_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,7 +9,6 @@ import 'package:priorli/presentation/main/main_screen.dart';
 import 'package:priorli/presentation/shared/app_lottie_animation.dart';
 import 'package:priorli/presentation/shared/custom_form_field.dart';
 import 'package:priorli/service_locator.dart';
-import 'package:flutter_emoji/flutter_emoji.dart';
 import '../company_user_management/company_user_screen.dart';
 import '../housing_company_payment/housing_company_payment_screen.dart';
 import '../housing_company_subscription/company_subscription_screen.dart';
@@ -180,12 +181,13 @@ class _HousingCompanyManagementScreenState
                                   style: Theme.of(context).textTheme.bodyLarge,
                                 ),
                                 state.housingCompany?.countryCode != null
-                                    ? Text(
-                                        EmojiParser().emojify(
-                                            ':flag-${state.housingCompany?.countryCode}:'),
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .displaySmall,
+                                    ? Flag.fromString(
+                                        state.housingCompany?.countryCode ??
+                                            'fi',
+                                        height: 24,
+                                        width: 24,
+                                        flagSize: FlagSize.size_1x1,
+                                        borderRadius: 4,
                                       )
                                     : Text(
                                         AppLocalizations.of(context).no_data),

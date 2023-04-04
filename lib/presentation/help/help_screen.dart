@@ -1,6 +1,7 @@
+import 'package:flag/flag_enum.dart';
+import 'package:flag/flag_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_emoji/flutter_emoji.dart';
 import 'package:go_router/go_router.dart';
 import 'package:priorli/core/utils/string_extension.dart';
 import 'package:priorli/presentation/help/help_cubit.dart';
@@ -166,12 +167,12 @@ class _SupportConversationDialogState extends State<SupportConversationDialog> {
                       (index) {
                     return ChoiceChip(
                       labelPadding: const EdgeInsets.all(2.0),
-                      label: Text(
-                        state.supportCountries?[index].countryCode.isNotEmpty ==
-                                true
-                            ? EmojiParser().emojify(
-                                ':flag-${state.supportCountries?[index].countryCode}:')
-                            : '',
+                      label: Flag.fromString(
+                        state.supportCountries?[index].countryCode ?? 'fi',
+                        height: 24,
+                        width: 24,
+                        flagSize: FlagSize.size_1x1,
+                        borderRadius: 4,
                       ),
                       selected: state.supportCountries?[index].countryCode
                               .toLowerCase() ==

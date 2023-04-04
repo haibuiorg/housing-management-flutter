@@ -69,7 +69,6 @@ dependencies:
   dio: ^4.0.6
   http: ^0.13.4
   dynamic_color: ^1.5.2
-  flutter_emoji: ^2.0.0
   go_router: ^6.2.0
   google_maps_flutter_web: ^0.4.0+1
   # chart
@@ -85,6 +84,8 @@ dependencies:
   universal_io: ^2.0.4
   firebase_dynamic_links: ^5.0.7
   dropdown_search: ^5.0.3
+  country_picker: ^2.0.20
+  flag: ^6.0.0
   syncfusion_flutter_pdfviewer: ^20.3.58
   cloud_firestore: ^4.1.0
   firebase_storage: ^11.0.6

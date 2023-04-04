@@ -21,12 +21,18 @@ class AddressModel extends Equatable {
   final String id;
   final String? country_code;
   final String? city;
+  final String owner_type;
+  final String owner_id;
+  final String? address_type;
 
   const AddressModel(
       {this.street_address_1,
       this.street_address_2,
       this.postal_code,
       required this.id,
+      required this.owner_type,
+      required this.owner_id,
+      this.address_type,
       this.city,
       this.country_code});
 
@@ -34,6 +40,15 @@ class AddressModel extends Equatable {
       _$AddressModelFromJson(json);
 
   @override
-  List<Object?> get props =>
-      [street_address_1, street_address_2, postal_code, id, country_code, city];
+  List<Object?> get props => [
+        street_address_1,
+        street_address_2,
+        postal_code,
+        id,
+        country_code,
+        city,
+        owner_type,
+        owner_id,
+        address_type
+      ];
 }

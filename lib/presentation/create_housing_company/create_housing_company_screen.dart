@@ -1,6 +1,7 @@
+import 'package:country_picker/country_picker.dart';
+import 'package:flag/flag.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_emoji/flutter_emoji.dart';
 import 'package:go_router/go_router.dart';
 import 'package:priorli/presentation/create_housing_company/create_housing_company_cubit.dart';
 import 'package:priorli/presentation/create_housing_company/create_housing_company_state.dart';
@@ -64,11 +65,29 @@ class CreateHousingCompanyScreen extends StatelessWidget {
                     List.generate(state.countryList?.length ?? 0, (index) {
                   return ChoiceChip(
                     labelPadding: const EdgeInsets.all(2.0),
-                    label: Text(
-                      state.countryList?[index].countryCode.isNotEmpty == true
-                          ? EmojiParser().emojify(
-                              ':flag-${state.countryList?[index].countryCode}:')
-                          : '',
+                    label: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Flag.fromString(
+                          state.countryList?[index].countryCode.toLowerCase() ??
+                              'fi',
+                          height: 24,
+                          width: 24,
+                          flagSize: FlagSize.size_1x1,
+                          borderRadius: 4,
+                        ),
+                        SizedBox.fromSize(
+                          size: const Size(4, 4),
+                        ),
+                        Text(CountryLocalizations.of(context)?.countryName(
+                                countryCode: state
+                                        .countryList?[index].countryCode
+                                        .toLowerCase() ??
+                                    'fi') ??
+                            state.countryList?[index].countryCode
+                                .toLowerCase() ??
+                            'fi'),
+                      ],
                     ),
                     selected:
                         state.countryList?[index].countryCode.toLowerCase() ==
