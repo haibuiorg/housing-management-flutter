@@ -14,18 +14,22 @@ class CreateHousingCompany
   @override
   Future<Result<HousingCompany>> call(CreateHousingCompanyParams params) {
     return housingCompanyRepository.createHousingCompany(
-        name: params.name, countryCode: params.countryCode);
+        name: params.name,
+        countryCode: params.countryCode,
+        businessId: params.businessId);
   }
 }
 
 class CreateHousingCompanyParams extends Equatable {
   final String name;
   final String countryCode;
+  final String? businessId;
 
   const CreateHousingCompanyParams({
     required this.name,
     required this.countryCode,
+    this.businessId,
   });
   @override
-  List<Object?> get props => [name, countryCode];
+  List<Object?> get props => [name, countryCode, businessId];
 }

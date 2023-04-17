@@ -100,14 +100,12 @@ class ApartmentCubit extends Cubit<ApartmentState> {
   }
 
   Future<void> addLatestConsumptionValue(double consumption) async {
-    final addConsumptionResult = await _addConsumptionValue(
-        AddConsumptionValueParams(
-            housingCompanyId: state.apartment?.housingCompanyId ?? '',
-            waterConsumptionId: state.latestWaterConsumption?.id ?? '',
-            apartmentId: state.apartment?.id,
-            consumption: consumption,
-            buiding: state.apartment?.building ?? ''));
-    emit(state.copyWith());
+    await _addConsumptionValue(AddConsumptionValueParams(
+        housingCompanyId: state.apartment?.housingCompanyId ?? '',
+        waterConsumptionId: state.latestWaterConsumption?.id ?? '',
+        apartmentId: state.apartment?.id,
+        consumption: consumption,
+        buiding: state.apartment?.building ?? ''));
   }
 
   Future<void> createNewFaultReport(

@@ -60,8 +60,10 @@ import 'package:priorli/core/invoice/repos/invoice_repository_impl.dart';
 import 'package:priorli/core/invoice/usecases/create_new_invoices.dart';
 import 'package:priorli/core/invoice/usecases/delete_invoice.dart';
 import 'package:priorli/core/invoice/usecases/get_company_invoices.dart';
+import 'package:priorli/core/invoice/usecases/get_company_payment_product_items.dart';
 import 'package:priorli/core/invoice/usecases/get_invoice_detail.dart';
 import 'package:priorli/core/invoice/usecases/get_personal_invoices.dart';
+import 'package:priorli/core/invoice/usecases/remove_company_payment_product_item.dart';
 import 'package:priorli/core/invoice/usecases/send_invoice_manually.dart';
 import 'package:priorli/core/messaging/data/messaging_remote_data_source.dart';
 import 'package:priorli/core/messaging/repos/messaging_repository.dart';
@@ -194,9 +196,11 @@ import 'core/housing/usecases/get_housing_companies.dart';
 import 'core/housing/usecases/get_housing_company.dart';
 import 'core/housing/usecases/get_housing_company_users.dart';
 import 'core/housing/usecases/update_housing_company_info.dart';
+import 'core/invoice/usecases/add_company_payment_product_item.dart';
 import 'core/invoice/usecases/get_invoice_groups.dart';
 import 'core/messaging/data/messaging_data_source.dart';
 import 'core/payment/usecases/add_bank_account.dart';
+import 'core/payment/usecases/setup_connect_payment_account.dart';
 import 'core/settings/data/setting_data_source.dart';
 import 'core/settings/data/setting_local_data_source.dart';
 import 'core/settings/repo/setting_repository.dart';
@@ -263,8 +267,7 @@ Future<void> init() async {
       serviceLocator(),
       serviceLocator(),
       serviceLocator()));
-  serviceLocator.registerFactory(
-      () => HomeCubit(serviceLocator(), serviceLocator(), serviceLocator()));
+  serviceLocator.registerFactory(() => HomeCubit(serviceLocator()));
   serviceLocator.registerFactory(
       () => CreateHousingCompanyCubit(serviceLocator(), serviceLocator()));
   serviceLocator.registerFactory(() => HousingCompanyCubit(
@@ -307,7 +310,7 @@ Future<void> init() async {
   serviceLocator.registerFactory(() => ApartmentWaterInvoiceCubit(
       serviceLocator(), serviceLocator(), serviceLocator()));
   serviceLocator.registerFactory(() => HousingCompanyPaymentCubit(
-      serviceLocator(), serviceLocator(), serviceLocator()));
+      serviceLocator(), serviceLocator(), serviceLocator(), serviceLocator()));
   serviceLocator
       .registerFactory(() => NotificationCenterCubit(serviceLocator()));
   serviceLocator.registerFactory(() =>
@@ -339,10 +342,8 @@ Future<void> init() async {
       serviceLocator(),
       serviceLocator(),
       serviceLocator()));
-  serviceLocator.registerFactory(
-      () => DocumentScreenCubit(serviceLocator(), serviceLocator()));
-  serviceLocator.registerFactory(
-      () => AnnouncementItemCubit(serviceLocator(), serviceLocator()));
+  serviceLocator.registerFactory(() => DocumentScreenCubit());
+  serviceLocator.registerFactory(() => AnnouncementItemCubit(serviceLocator()));
   serviceLocator.registerFactory(
       () => HousingCompanyUiScreenCubit(serviceLocator(), serviceLocator()));
   serviceLocator
@@ -370,8 +371,8 @@ Future<void> init() async {
       serviceLocator(),
       serviceLocator(),
       serviceLocator()));
-  serviceLocator.registerFactory(
-      () => InvoiceCreationCubit(serviceLocator(), serviceLocator()));
+  serviceLocator.registerFactory(() => InvoiceCreationCubit(
+      serviceLocator(), serviceLocator(), serviceLocator(), serviceLocator()));
   serviceLocator.registerFactory(() => InvoiceListCubit(serviceLocator(),
       serviceLocator(), serviceLocator(), serviceLocator(), serviceLocator()));
   serviceLocator.registerFactory(
@@ -491,6 +492,8 @@ Future<void> init() async {
       () => RemoveBankAccount(paymentRepository: serviceLocator()));
   serviceLocator.registerLazySingleton<GetAllBankAccounts>(
       () => GetAllBankAccounts(paymentRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<SetupConnectPaymentAccount>(
+      () => SetupConnectPaymentAccount(paymentRepository: serviceLocator()));
 
   // apartment
   serviceLocator.registerLazySingleton<AddApartments>(
@@ -640,6 +643,12 @@ Future<void> init() async {
       () => GetInvoiceGroups(invoiceRepository: serviceLocator()));
   serviceLocator.registerLazySingleton<SendInvoiceManually>(
       () => SendInvoiceManually(invoiceRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<GetCompanyPaymentProductItems>(
+      () => GetCompanyPaymentProductItems(repository: serviceLocator()));
+  serviceLocator.registerLazySingleton<RemoveCompanyPaymentProductItem>(
+      () => RemoveCompanyPaymentProductItem(repository: serviceLocator()));
+  serviceLocator.registerLazySingleton<AddCompanyPaymentProductItem>(
+      () => AddCompanyPaymentProductItem(invoiceRepository: serviceLocator()));
 
   serviceLocator.registerLazySingleton<AddCompanyManager>(
       () => AddCompanyManager(housingCompanyRepository: serviceLocator()));

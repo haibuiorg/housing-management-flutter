@@ -642,5 +642,11 @@
             "example": "John"
             }
          }
-    }
+    },
+    "account_type": "Tilin tyyppi",
+   "company": "Yritys",
+   "individual": "Yksityishenkilö",
+   "set_up_payout_account": "Aseta maksutili",
+   "issue_external_invoice": "Lähetä lasku maksettavalla linkillä",
+   "bank_account_name": "Pankkitilin haltijan nimi"
 }

@@ -11,6 +11,7 @@ class PaymentProductItem extends Equatable {
   final bool isActive;
   final String stripeProductId;
   final String stripePriceId;
+  final double taxPercentage;
   final int createdOn;
   final int? updatedon;
 
@@ -25,6 +26,7 @@ class PaymentProductItem extends Equatable {
       required this.stripeProductId,
       required this.stripePriceId,
       required this.createdOn,
+      required this.taxPercentage,
       this.updatedon});
 
   factory PaymentProductItem.modelToEntity(PaymentProductItemModel model) =>
@@ -40,6 +42,7 @@ class PaymentProductItem extends Equatable {
         stripePriceId: model.stripe_price_id,
         createdOn: model.created_on,
         updatedon: model.updated_on,
+        taxPercentage: model.tax_percentage,
       );
 
   @override
@@ -55,5 +58,6 @@ class PaymentProductItem extends Equatable {
         stripePriceId,
         createdOn,
         updatedon,
+        taxPercentage
       ];
 }

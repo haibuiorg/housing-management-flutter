@@ -104,11 +104,13 @@ class SubscriptionPlanListView extends StatelessWidget {
                                 onSubmit: (
                                         {required String name,
                                         required String price,
+                                        required String taxPercentage,
                                         required String description}) =>
                                     BlocProvider.of<AdminCubit>(context)
                                         .addPaymentProduct(
                                             name: name,
                                             price: price,
+                                            taxPercentage: taxPercentage,
                                             description: description)
                                         .then(
                                             (value) => Navigator.pop(builder))),
@@ -190,6 +192,7 @@ class PaymentProductDialog extends StatefulWidget {
     required String name,
     required String price,
     required String description,
+    required String taxPercentage,
   }) onSubmit;
   @override
   State<PaymentProductDialog> createState() => _PaymentProductDialogState();
@@ -198,13 +201,15 @@ class PaymentProductDialog extends StatefulWidget {
 class _PaymentProductDialogState extends State<PaymentProductDialog> {
   final _nameController = TextEditingController();
   final _priceController = TextEditingController();
+  final _taxController = TextEditingController();
   final _descriptionController = TextEditingController();
   bool _isAllFilled = false;
   _checkIfAllFilled(String _) {
     setState(() {
       _isAllFilled = _nameController.text.isNotEmpty &&
           _priceController.text.isNotEmpty &&
-          _descriptionController.text.isNotEmpty;
+          _descriptionController.text.isNotEmpty &&
+          _taxController.text.isNotEmpty;
     });
   }
 
@@ -213,6 +218,7 @@ class _PaymentProductDialogState extends State<PaymentProductDialog> {
     _nameController.dispose();
     _priceController.dispose();
     _descriptionController.dispose();
+    _taxController.dispose();
     super.dispose();
   }
 
@@ -268,6 +274,7 @@ class _PaymentProductDialogState extends State<PaymentProductDialog> {
                       name: _nameController.text,
                       price: _priceController.text,
                       description: _descriptionController.text,
+                      taxPercentage: _taxController.text,
                     );
                   }
                 : null,

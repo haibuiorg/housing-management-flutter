@@ -42,6 +42,7 @@ abstract class SubscriptionDataSource {
     required String description,
     required double price,
     required String countryCode,
+    required double taxPercentage,
   });
   Future<List<PaymentProductItemModel>> getPaymentProductItems(
       {required String countryCode});

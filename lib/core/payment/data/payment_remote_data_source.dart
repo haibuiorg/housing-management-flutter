@@ -13,12 +13,15 @@ class PaymentRemoteDataSource implements PaymentDataSource {
   Future<BankAccountModel> addBankAccount(
       {required String bankAccountNumber,
       required String swift,
-      required String housingCompanyId}) async {
+      required String housingCompanyId,
+      String? bankAccountName}) async {
     final data = {
       'swift': swift,
       'bank_account_number': bankAccountNumber,
       'housing_company_id': housingCompanyId,
+      'account_holder_name': bankAccountName,
     };
+    data.removeWhere((key, value) => value == null);
     try {
       final result = await client.post(_paymentPath, data: data);
       return BankAccountModel.fromJson(result.data as Map<String, dynamic>);
@@ -57,6 +60,19 @@ class PaymentRemoteDataSource implements PaymentDataSource {
       return (result.data as List<dynamic>)
           .map((json) => BankAccountModel.fromJson(json))
           .toList();
+    } catch (error) {
+      throw ServerException(error: error);
+    }
+  }
+
+  @override
+  Future<String> setupConnectPaymentAccount(
+      {required String housingCompanyId}) async {
+    final data = {'housing_company_id': housingCompanyId};
+    try {
+      final result = await client
+          .post('$_paymentPath/setup_payment_connect_account', data: data);
+      return (result.data as Map<String, dynamic>)['url'];
     } catch (error) {
       throw ServerException(error: error);
     }

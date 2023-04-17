@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:priorli/core/utils/constants.dart';
 import 'package:priorli/presentation/code_register/code_register_screen.dart';
 import 'package:priorli/presentation/join_apartment/join_apartment_screen.dart';
@@ -149,7 +150,9 @@ class _AppState extends State<App> {
                     foregroundColor:
                         HexColor.fromHex(appPrimaryContainerColorDark)),
               ),
-              fontFamily: 'Lato',
+              fontFamily:
+                  GoogleFonts.nunito(fontWeight: FontWeight.w700, height: 24)
+                      .fontFamily,
               pageTransitionsTheme: PageTransitionsTheme(
                 builders: kIsWeb
                     ? {
@@ -169,7 +172,9 @@ class _AppState extends State<App> {
               useMaterial3: true,
             ),
             darkTheme: ThemeData(
-              fontFamily: 'Lato',
+              fontFamily:
+                  GoogleFonts.nunito(fontWeight: FontWeight.w700, height: 24)
+                      .fontFamily,
               elevatedButtonTheme: ElevatedButtonThemeData(
                 style: ElevatedButton.styleFrom(
                     backgroundColor:

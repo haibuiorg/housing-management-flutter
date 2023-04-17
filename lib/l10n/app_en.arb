@@ -645,5 +645,11 @@
             "example": "John"
             }
           }
-    }
+    },
+    "account_type": "Account type",
+    "company": "Company",
+    "individual": "Individual",
+    "set_up_payout_account": "Set up payout account",
+    "issue_external_invoice": "Issue invoice with payable link",
+    "bank_account_name": "Bank account holder name"
 }

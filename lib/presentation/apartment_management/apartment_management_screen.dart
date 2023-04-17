@@ -32,17 +32,20 @@ class _ApartmentManagementScreenState extends State<ApartmentManagementScreen> {
     super.dispose();
   }
 
-  _showConfirmDeleteDialog(Function() onDismiss) async {
+  _showConfirmDeleteDialog(
+      Function(BuildContext builderContext) onDismiss) async {
     showDialog(
       context: context,
-      builder: (BuildContext context) {
+      builder: (BuildContext builderContext) {
         return AlertDialog(
           title: const Text("Confirm"),
           content: const Text("Are you sure you wish to delete this apartment"),
           actions: [
-            OutlinedButton(onPressed: onDismiss, child: const Text("Delete")),
+            OutlinedButton(
+                onPressed: onDismiss(builderContext),
+                child: const Text("Delete")),
             TextButton(
-              onPressed: () => Navigator.of(context).pop(false),
+              onPressed: () => Navigator.of(builderContext).pop(false),
               child: const Text("Cancel"),
             ),
           ],
@@ -122,8 +125,9 @@ class _ApartmentManagementScreenState extends State<ApartmentManagementScreen> {
                   ),
                   SettingButton(
                     onPressed: () {
-                      _showConfirmDeleteDialog(
-                          () => cubit.deleteThisApartment());
+                      _showConfirmDeleteDialog((BuildContext builderContext) =>
+                          cubit.deleteThisApartment().then(
+                              (value) => Navigator.of(builderContext).pop()));
                     },
                     label: Text(
                       AppLocalizations.of(context).remove_this_apartment,

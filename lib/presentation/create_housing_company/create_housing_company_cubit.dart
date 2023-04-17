@@ -30,10 +30,13 @@ class CreateHousingCompanyCubit extends Cubit<CreateHousingCompanyState> {
     if (state.companyName?.isEmpty == true || state.companyName == null) {
       return;
     }
+    emit(state.copyWith(isLoading: true));
     final companyResult = await _createHousingCompany(
         CreateHousingCompanyParams(
+            businessId: state.businessId,
             name: state.companyName!,
             countryCode: state.selectedCountryCode ?? 'fi'));
+    emit(state.copyWith(isLoading: false));
     if (companyResult is ResultSuccess<HousingCompany>) {
       emit(state.copyWith(newCompanyId: companyResult.data.id));
     } else {
@@ -44,6 +47,10 @@ class CreateHousingCompanyCubit extends Cubit<CreateHousingCompanyState> {
 
   onTypingName(String s) {
     emit(state.copyWith(companyName: s));
+  }
+
+  onTypingBusinessId(String? s) {
+    emit(state.copyWith(businessId: s));
   }
 
   void selectCountry(String? countryCode) {

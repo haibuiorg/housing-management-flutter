@@ -1,8 +1,9 @@
 import 'package:priorli/core/invoice/models/invoice_group_model.dart';
-import 'package:priorli/core/invoice/models/invoice_item_model.dart';
 import 'package:priorli/core/invoice/models/invoice_model.dart';
 
+import '../../subscription/models/payment_product_item_model.dart';
 import '../entities/invoice_status.dart';
+import '../usecases/create_new_invoices.dart';
 
 abstract class InvoiceDataSource {
   Future<List<InvoiceModel>> createNewInvoices(
@@ -11,8 +12,9 @@ abstract class InvoiceDataSource {
       required String invoiceName,
       required String bankAccountId,
       required int paymentDate,
-      required List<InvoiceItemModel> items,
-      required bool sendEmail});
+      required List<InvoiceItemParams> items,
+      required bool sendEmail,
+      bool? issueExternalInvoice});
   Future<InvoiceModel> deleteInvoice({required String invoiceId});
   Future<List<InvoiceModel>> getInvoices({
     InvoiceStatus? status,
@@ -38,4 +40,18 @@ abstract class InvoiceDataSource {
       String? postalCode,
       String? city,
       String? countryCode});
+  Future<PaymentProductItemModel> addPaymentProductItem({
+    required String companyId,
+    required String name,
+    required String description,
+    required double price,
+    required double taxPercentage,
+  });
+  Future<List<PaymentProductItemModel>> getPaymentProductItems({
+    required String companyId,
+  });
+  Future<bool> deletePaymentProductItem({
+    required String id,
+    required String companyId,
+  });
 }

@@ -56,7 +56,7 @@ class _HousingCompanyManagementScreenState
     super.dispose();
   }
 
-  _showConfirmDeleteDialog(Function() onDismiss) async {
+  _showConfirmDeleteDialog(Function(BuildContext builder) onDismiss) async {
     showDialog(
       context: context,
       builder: (BuildContext builder) {
@@ -65,7 +65,9 @@ class _HousingCompanyManagementScreenState
           content: Text(AppLocalizations.of(context).remove_company_confirm),
           actions: [
             OutlinedButton(
-                onPressed: onDismiss,
+                onPressed: () {
+                  onDismiss(builder);
+                },
                 child: Text(AppLocalizations.of(context).confirm)),
             TextButton(
               onPressed: () => Navigator.of(builder).pop(false),
@@ -99,7 +101,7 @@ class _HousingCompanyManagementScreenState
       child: BlocConsumer<HousingCompanyManagementCubit,
           HousingCompanyManagementState>(listener: (context, state) {
         if (state.housingCompanyDeleted == true) {
-          GoRouter.of(context).go(mainPath);
+          GoRouter.of(context).pushReplacement(mainPath);
         }
       }, builder: (context, state) {
         return state.housingCompany?.isUserManager == true
@@ -246,8 +248,12 @@ class _HousingCompanyManagementScreenState
                           ),
                           SettingButton(
                             onPressed: () async {
-                              _showConfirmDeleteDialog(() {
-                                cubit.deleteThisHousingCompany();
+                              _showConfirmDeleteDialog((BuildContext builder) {
+                                cubit
+                                    .deleteThisHousingCompany()
+                                    .then((value) => {
+                                          Navigator.pop(builder),
+                                        });
                               });
                             },
                             label: Text(

@@ -1,14 +1,14 @@
 import 'package:priorli/core/invoice/entities/invoice_group.dart';
-import 'package:priorli/core/invoice/entities/invoice_item.dart';
 import 'package:priorli/core/invoice/entities/invoice.dart';
 import 'package:priorli/core/base/result.dart';
-import 'package:priorli/core/invoice/models/invoice_item_model.dart';
 import 'package:priorli/core/invoice/repos/invoice_repository.dart';
+import 'package:priorli/core/subscription/entities/payment_product_item.dart';
 
 import '../../base/exceptions.dart';
 import '../../base/failure.dart';
 import '../data/invoice_data_source.dart';
 import '../entities/invoice_status.dart';
+import '../usecases/create_new_invoices.dart';
 
 class InvoiceRepositoryImpl extends InvoiceRepository {
   final InvoiceDataSource invoiceRemoteDataSource;
@@ -21,7 +21,8 @@ class InvoiceRepositoryImpl extends InvoiceRepository {
       required String invoiceName,
       required String bankAccountId,
       required int paymentDate,
-      required List<InvoiceItem> items,
+      required List<InvoiceItemParams> items,
+      bool? issueExternalInvoice,
       required bool sendEmail}) async {
     try {
       final models = await invoiceRemoteDataSource.createNewInvoices(
@@ -30,15 +31,8 @@ class InvoiceRepositoryImpl extends InvoiceRepository {
           invoiceName: invoiceName,
           bankAccountId: bankAccountId,
           paymentDate: paymentDate,
-          items: items
-              .map((e) => InvoiceItemModel(
-                  name: e.name,
-                  description: e.description,
-                  unit_cost: e.unitCost,
-                  quantity: e.quantity,
-                  total: e.total,
-                  tax_percentage: e.taxPercentage))
-              .toList(),
+          issueExternalInvoice: issueExternalInvoice,
+          items: items,
           sendEmail: sendEmail);
       return ResultSuccess(
           models.map((e) => Invoice.modelToEntity(e)).toList());
@@ -132,6 +126,51 @@ class InvoiceRepositoryImpl extends InvoiceRepository {
           city: city,
           countryCode: countryCode);
       return ResultSuccess(Invoice.modelToEntity(model));
+    } on ServerException {
+      return ResultFailure(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Result<PaymentProductItem>> addPaymentProductItem(
+      {required String companyId,
+      required String name,
+      required String description,
+      required double price,
+      required double taxPercentage}) async {
+    try {
+      final model = await invoiceRemoteDataSource.addPaymentProductItem(
+          companyId: companyId,
+          name: name,
+          description: description,
+          price: price,
+          taxPercentage: taxPercentage);
+      return ResultSuccess(PaymentProductItem.modelToEntity(model));
+    } on ServerException {
+      return ResultFailure(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Result<bool>> deletePaymentProductItem(
+      {required String id, required String companyId}) async {
+    try {
+      final model = await invoiceRemoteDataSource.deletePaymentProductItem(
+          id: id, companyId: companyId);
+      return ResultSuccess(model);
+    } on ServerException {
+      return ResultFailure(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Result<List<PaymentProductItem>>> getPaymentProductItems(
+      {required String companyId}) async {
+    try {
+      final models = await invoiceRemoteDataSource.getPaymentProductItems(
+          companyId: companyId);
+      return ResultSuccess(
+          models.map((e) => PaymentProductItem.modelToEntity(e)).toList());
     } on ServerException {
       return ResultFailure(ServerFailure());
     }

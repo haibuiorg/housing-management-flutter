@@ -17,10 +17,13 @@ class HousingCompanyRepositoryImpl extends HousingCompanyRepository {
   });
   @override
   Future<Result<HousingCompany>> createHousingCompany(
-      {required String name, required String countryCode}) async {
+      {required String name,
+      required String countryCode,
+      String? businessId}) async {
     try {
-      final housingCompanyModel = await housingCompanyDataSource
-          .createHousingCompany(name: name, countryCode: countryCode);
+      final housingCompanyModel =
+          await housingCompanyDataSource.createHousingCompany(
+              name: name, countryCode: countryCode, businessId: businessId);
       return ResultSuccess(HousingCompany.modelToEntity(housingCompanyModel));
     } on ServerException {
       return ResultFailure(ServerFailure());

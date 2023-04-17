@@ -6,12 +6,16 @@ abstract class PaymentRepository {
     required String bankAccountNumber,
     required String swift,
     required String housingCompanyId,
+    String? bankAccountName,
   });
   Future<Result<List<BankAccount>>> getAllBankAccounts({
     required String housingCompanyId,
   });
   Future<Result<List<BankAccount>>> removeBankAccount({
     required String bankAccountId,
+    required String housingCompanyId,
+  });
+  Future<Result<String>> setupConnectPaymentAccount({
     required String housingCompanyId,
   });
 }

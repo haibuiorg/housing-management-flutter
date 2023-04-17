@@ -14,7 +14,8 @@ class AddBankAccount extends UseCase<BankAccount, AddBankAccountParams> {
     return paymentRepository.addBankAccount(
         bankAccountNumber: params.bankAccountNumber,
         swift: params.swift,
-        housingCompanyId: params.housingCompanyId);
+        housingCompanyId: params.housingCompanyId,
+        bankAccountName: params.bankAccountName);
   }
 }
 
@@ -22,12 +23,15 @@ class AddBankAccountParams extends Equatable {
   final String housingCompanyId;
   final String swift;
   final String bankAccountNumber;
+  final String? bankAccountName;
 
   const AddBankAccountParams(
       {required this.housingCompanyId,
       required this.swift,
-      required this.bankAccountNumber});
+      required this.bankAccountNumber,
+      this.bankAccountName});
 
   @override
-  List<Object?> get props => [housingCompanyId, swift, bankAccountNumber];
+  List<Object?> get props =>
+      [housingCompanyId, swift, bankAccountNumber, bankAccountName];
 }

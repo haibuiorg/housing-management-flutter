@@ -113,12 +113,16 @@ class _InvoiceCreationFormState extends State<InvoiceCreationForm> {
                     (context, index) {
                   final InvoiceItem invoiceItem = state.invoiceItemList![index];
                   return InvoiceItemRowColumn(
-                    name: invoiceItem.name,
-                    description: invoiceItem.description,
+                    name: invoiceItem.paymentProductItem.name,
+                    description: invoiceItem.paymentProductItem.description,
                     quantity: invoiceItem.quantity.toStringAsFixed(2),
-                    taxPercentage: invoiceItem.taxPercentage.toStringAsFixed(2),
-                    unitCost: invoiceItem.unitCost.toStringAsFixed(2),
-                    total: invoiceItem.total.toStringAsFixed(2),
+                    taxPercentage: invoiceItem.paymentProductItem.taxPercentage
+                        .toStringAsFixed(2),
+                    unitCost: invoiceItem.paymentProductItem.amount
+                        .toStringAsFixed(2),
+                    total: (invoiceItem.quantity *
+                            invoiceItem.paymentProductItem.amount)
+                        .toStringAsFixed(2),
                     onRemove: () {
                       _cubit.removeItem(index);
                     },
@@ -140,7 +144,7 @@ class _InvoiceCreationFormState extends State<InvoiceCreationForm> {
                                   required quantity,
                                   required taxPercentage,
                                   required total}) {
-                                _cubit.addInvoiceItem(
+                                _cubit.addNewInvoiceItem(
                                     name: name,
                                     description: description,
                                     price: price,
@@ -227,11 +231,26 @@ class _InvoiceCreationFormState extends State<InvoiceCreationForm> {
                 ),
               ),
               SliverToBoxAdapter(
-                child: CheckboxListTile(
-                    contentPadding: const EdgeInsets.all(8),
-                    value: state.sendEmail == true,
-                    title: Text(AppLocalizations.of(context).send_email),
-                    onChanged: _cubit.setSendEmail),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: CheckboxListTile(
+                          contentPadding: const EdgeInsets.all(8),
+                          value: state.sendEmail == true,
+                          title: Text(AppLocalizations.of(context).send_email),
+                          onChanged: _cubit.setSendEmail),
+                    ),
+                    Expanded(
+                      child: CheckboxListTile(
+                          contentPadding: const EdgeInsets.all(8),
+                          value: state.issueExternalInvoice == true,
+                          title: Text(AppLocalizations.of(context)
+                              .issue_external_invoice),
+                          onChanged: _cubit.setIssueExternalInvoice),
+                    ),
+                  ],
+                ),
               ),
               SliverToBoxAdapter(
                 child: FullWidthPairText(

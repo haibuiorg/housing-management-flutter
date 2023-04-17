@@ -8,20 +8,13 @@ part of 'invoice_item_model.dart';
 
 InvoiceItemModel _$InvoiceItemModelFromJson(Map<String, dynamic> json) =>
     InvoiceItemModel(
-      name: json['name'] as String,
-      description: json['description'] as String,
-      unit_cost: (json['unit_cost'] as num).toDouble(),
       quantity: (json['quantity'] as num).toDouble(),
-      total: (json['total'] as num).toDouble(),
-      tax_percentage: (json['tax_percentage'] as num).toDouble(),
+      payment_product_item: PaymentProductItemModel.fromJson(
+          json['payment_product_item'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$InvoiceItemModelToJson(InvoiceItemModel instance) =>
     <String, dynamic>{
-      'name': instance.name,
-      'description': instance.description,
-      'unit_cost': instance.unit_cost,
+      'payment_product_item': instance.payment_product_item,
       'quantity': instance.quantity,
-      'total': instance.total,
-      'tax_percentage': instance.tax_percentage,
     };

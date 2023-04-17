@@ -17,6 +17,7 @@ class AddPaymentProduct
     return await repository.addPaymentProductItem(
         name: params.name,
         description: params.description,
+        taxPercentage: params.taxPercentage,
         price: params.price,
         countryCode: params.countryCode);
   }
@@ -27,13 +28,16 @@ class AddPaymentProductParams extends Equatable {
   final String description;
   final double price;
   final String countryCode;
+  final double taxPercentage;
 
   const AddPaymentProductParams(
       {required this.name,
       required this.description,
       required this.price,
+      required this.taxPercentage,
       required this.countryCode});
 
   @override
-  List<Object?> get props => [name, description, price, countryCode];
+  List<Object?> get props =>
+      [name, description, price, countryCode, taxPercentage];
 }

@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:priorli/core/invoice/entities/invoice.dart';
 import 'package:priorli/core/utils/string_extension.dart';
 import 'package:priorli/core/utils/time_utils.dart';
 import 'package:priorli/presentation/invoice/invoice_list_cubit.dart';
 import 'package:priorli/presentation/invoice/invoice_list_state.dart';
 import 'package:priorli/presentation/shared/full_width_pair_text.dart';
-import 'package:priorli/presentation/shared/full_width_title.dart';
 import 'package:priorli/presentation/shared/pdf_viewer.dart';
 import 'package:priorli/presentation/shared/popover.dart';
 import 'package:priorli/service_locator.dart';
@@ -198,8 +196,9 @@ class InvoiceGroupItem extends StatelessWidget {
                     children: List.generate(invoice.items.length, (index) {
                       return FullWidthPairText(
                         label:
-                            '${invoice.items[index].name}: ${invoice.items[index].description}',
-                        content: invoice.items[index].total.toString(),
+                            '${invoice.items[index].paymentProductItem.name}: ${invoice.items[index].paymentProductItem.description}',
+                        content: invoice.items[index].paymentProductItem.amount
+                            .toString(),
                       );
                     }),
                   ),

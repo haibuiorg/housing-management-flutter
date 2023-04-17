@@ -19,6 +19,7 @@ PaymentProductItemModel _$PaymentProductItemModelFromJson(
       stripe_product_id: json['stripe_product_id'] as String,
       stripe_price_id: json['stripe_price_id'] as String,
       created_on: json['created_on'] as int,
+      tax_percentage: (json['tax_percentage'] as num).toDouble(),
       updated_on: json['updated_on'] as int?,
     );
 
@@ -36,4 +37,5 @@ Map<String, dynamic> _$PaymentProductItemModelToJson(
       'stripe_price_id': instance.stripe_price_id,
       'created_on': instance.created_on,
       'updated_on': instance.updated_on,
+      'tax_percentage': instance.tax_percentage,
     };

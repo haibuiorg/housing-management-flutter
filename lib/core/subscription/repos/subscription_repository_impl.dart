@@ -133,14 +133,16 @@ class SubscriptionRepositoryImpl implements SubscriptionRepository {
       {required String name,
       required String description,
       required double price,
-      required String countryCode}) async {
+      required String countryCode,
+      required double taxPercentage}) async {
     try {
       final paymentItemModel =
           await subscriptionRemoteDataSource.addPaymentProductItem(
               name: name,
               description: description,
               price: price,
-              countryCode: countryCode);
+              countryCode: countryCode,
+              taxPercentage: taxPercentage);
       return ResultSuccess(PaymentProductItem.modelToEntity(paymentItemModel));
     } on ServerException {
       return ResultFailure(ServerFailure());

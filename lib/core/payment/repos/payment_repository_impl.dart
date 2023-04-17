@@ -14,10 +14,12 @@ class PaymentRepositoryImpl implements PaymentRepository {
   Future<Result<BankAccount>> addBankAccount(
       {required String bankAccountNumber,
       required String swift,
-      required String housingCompanyId}) async {
+      required String housingCompanyId,
+      String? bankAccountName}) async {
     try {
       final paymentModel = await paymentRemoteDataSource.addBankAccount(
           swift: swift,
+          bankAccountName: bankAccountName,
           bankAccountNumber: bankAccountNumber,
           housingCompanyId: housingCompanyId);
       return ResultSuccess(BankAccount.modelToEntity(paymentModel));
@@ -49,6 +51,18 @@ class PaymentRepositoryImpl implements PaymentRepository {
           bankAccountId: bankAccountId, housingCompanyId: housingCompanyId);
       return ResultSuccess(
           paymentModelList.map((e) => BankAccount.modelToEntity(e)).toList());
+    } on ServerException {
+      return ResultFailure(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Result<String>> setupConnectPaymentAccount(
+      {required String housingCompanyId}) async {
+    try {
+      final paymentModel = await paymentRemoteDataSource
+          .setupConnectPaymentAccount(housingCompanyId: housingCompanyId);
+      return ResultSuccess(paymentModel);
     } on ServerException {
       return ResultFailure(ServerFailure());
     }

@@ -1,4 +1,3 @@
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:priorli/core/base/result.dart';
 import 'package:priorli/core/contact_leads/usecases/get_contact_leads.dart';
@@ -170,6 +169,7 @@ class AdminCubit extends Cubit<AdminState> {
   Future<void> addPaymentProduct(
       {required String name,
       required String price,
+      required String taxPercentage,
       String? description}) async {
     final countryCode = state.selectedCountryCode;
     if (countryCode == null) {
@@ -179,6 +179,7 @@ class AdminCubit extends Cubit<AdminState> {
         AddPaymentProductParams(
             name: name,
             price: double.tryParse(price) ?? 1.99,
+            taxPercentage: double.tryParse(taxPercentage) ?? 24,
             countryCode: countryCode,
             description: description ?? ''));
     if (addPaymentProductResult is ResultSuccess<PaymentProductItem>) {

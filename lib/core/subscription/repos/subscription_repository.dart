@@ -43,12 +43,12 @@ abstract class SubscriptionRepository {
       {required String paymentProductItemId});
   Future<Result<List<PaymentProductItem>>> getPaymentProductItems(
       {required String countryCode});
-  Future<Result<PaymentProductItem>> addPaymentProductItem({
-    required String name,
-    required String description,
-    required double price,
-    required String countryCode,
-  });
+  Future<Result<PaymentProductItem>> addPaymentProductItem(
+      {required String name,
+      required String description,
+      required double price,
+      required String countryCode,
+      required double taxPercentage});
   Future<Result<String>> purchasePaymentProduct({
     required String paymentProductItemId,
     required String companyId,

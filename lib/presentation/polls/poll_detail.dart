@@ -9,7 +9,6 @@ import 'package:priorli/presentation/shared/full_width_title.dart';
 import '../../core/poll/entities/poll.dart';
 import '../../core/user/entities/user.dart';
 import '../../core/utils/time_utils.dart';
-import '../../go_router_navigation.dart';
 import '../guest_invitation/guest_invitation.dart';
 import '../shared/custom_form_field.dart';
 import '../shared/date_time_selector.dart';

@@ -151,12 +151,14 @@ class SubscriptionRemoteDataSource implements SubscriptionDataSource {
       {required String name,
       required String description,
       required double price,
-      required String countryCode}) async {
+      required String countryCode,
+      required double taxPercentage}) async {
     final data = {
       'name': name,
       'description': description,
       'amount': price,
-      'country_code': countryCode
+      'country_code': countryCode,
+      'tax_percentage': taxPercentage,
     };
     try {
       final result = await client.post('/admin/payment_product', data: data);

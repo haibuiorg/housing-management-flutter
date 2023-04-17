@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:priorli/app.dart';
 import 'package:priorli/core/country/entities/country.dart';
 import 'package:priorli/presentation/admin/admin_cubit.dart';
 import 'package:priorli/presentation/admin/admin_state.dart';

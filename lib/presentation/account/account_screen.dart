@@ -5,6 +5,7 @@ import 'package:priorli/core/utils/constants.dart';
 import 'package:priorli/presentation/account/account_cubit.dart';
 import 'package:priorli/presentation/account/account_state.dart';
 import 'package:priorli/presentation/shared/app_user_circle_avatar.dart';
+import 'package:priorli/presentation/shared/full_width_pair_text.dart';
 import 'package:priorli/service_locator.dart';
 import 'package:priorli/user_state.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -116,6 +117,10 @@ class _AccountScreenState extends State<AccountScreen> {
                             ));
                   },
                 ),
+                FullWidthPairText(
+                    label: AppLocalizations.of(context).email,
+                    content: state.user?.email,
+                    isBoldContent: true),
                 CustomFormField(
                   textEditingController: _firstNameController,
                   hintText: AppLocalizations.of(context).first_name,

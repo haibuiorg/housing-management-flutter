@@ -14,11 +14,15 @@ class HousingCompanyRemoteDataSource implements HousingCompanyDataSource {
   HousingCompanyRemoteDataSource(this.client);
   @override
   Future<HousingCompanyModel> createHousingCompany(
-      {required String name, required String countryCode}) async {
+      {required String name,
+      required String countryCode,
+      String? businessId}) async {
     final Map<String, dynamic> data = {
       'name': name,
       'country_code': countryCode,
+      'business_id': businessId,
     };
+    data.removeWhere((key, value) => value == null);
     try {
       final result = await client.post(_path, data: data);
       return HousingCompanyModel.fromJson(result.data as Map<String, dynamic>);

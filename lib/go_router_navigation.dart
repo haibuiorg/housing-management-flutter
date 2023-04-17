@@ -41,7 +41,6 @@ import 'presentation/payment_success/payment_success_screen.dart';
 import 'presentation/register/register_screen.dart';
 import 'presentation/shared/dialog_page.dart';
 
-const mainPathName = 'Main';
 const homePathName = 'Home';
 const housingCompanyScreenPathName = 'Housing company';
 final GlobalKey<NavigatorState> _shellNavigatorKey =

@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:priorli/core/announcement/entities/announcement.dart';
-import 'package:priorli/core/announcement/usecases/edit_announcement.dart';
 import 'package:priorli/core/announcement/usecases/get_announcement.dart';
 import 'package:priorli/core/base/result.dart';
 
@@ -8,8 +7,7 @@ import 'announcement_item_state.dart';
 
 class AnnouncementItemCubit extends Cubit<AnnouncementItemState> {
   final GetAnnouncement _getAnnouncement;
-  final EditAnnouncement _editAnnouncement;
-  AnnouncementItemCubit(this._getAnnouncement, this._editAnnouncement)
+  AnnouncementItemCubit(this._getAnnouncement)
       : super(const AnnouncementItemState());
 
   init(String housingCompanyId, Announcement announcement) async {

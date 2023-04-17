@@ -9,7 +9,6 @@ import 'package:priorli/service_locator.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../core/utils/number_formatters.dart';
 import '../../go_router_navigation.dart';
 import 'add_apart_cubit.dart';
 

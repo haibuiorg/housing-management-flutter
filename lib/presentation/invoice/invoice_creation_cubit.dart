@@ -2,9 +2,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:priorli/core/base/result.dart';
 import 'package:priorli/core/invoice/entities/invoice.dart';
 import 'package:priorli/core/invoice/entities/invoice_item.dart';
+import 'package:priorli/core/invoice/usecases/add_company_payment_product_item.dart';
 import 'package:priorli/core/invoice/usecases/create_new_invoices.dart';
+import 'package:priorli/core/invoice/usecases/get_company_payment_product_items.dart';
 import 'package:priorli/core/payment/entities/bank_account.dart';
 import 'package:priorli/core/payment/usecases/get_all_bank_accounts.dart';
+import 'package:priorli/core/subscription/entities/payment_product_item.dart';
 import 'package:priorli/core/user/entities/user.dart';
 import 'package:priorli/presentation/invoice/invoice_creation_state.dart';
 import 'package:priorli/presentation/invoice/payment_term.dart';
@@ -12,8 +15,11 @@ import 'package:priorli/presentation/invoice/payment_term.dart';
 class InvoiceCreationCubit extends Cubit<InvoiceCreationState> {
   final GetAllBankAccounts _getAllBankAccounts;
   final CreateNewInvoices _createNewInvoices;
+  final GetCompanyPaymentProductItems _getCompanyPaymentProductItems;
+  final AddCompanyPaymentProductItem _addCompanyPaymentProductItem;
 
-  InvoiceCreationCubit(this._getAllBankAccounts, this._createNewInvoices)
+  InvoiceCreationCubit(this._getAllBankAccounts, this._createNewInvoices,
+      this._getCompanyPaymentProductItems, this._addCompanyPaymentProductItem)
       : super(const InvoiceCreationState());
   Future<void> init(String companyId) async {
     final now = DateTime.now();
@@ -29,10 +35,19 @@ class InvoiceCreationCubit extends Cubit<InvoiceCreationState> {
     );
     final getBankAccountResult = await _getAllBankAccounts(
         GetAllBankAccountParams(housingCompanyId: companyId));
-    if (getBankAccountResult is ResultSuccess<List<BankAccount>>) {
+    if (getBankAccountResult is ResultSuccess<List<BankAccount>> &&
+        getBankAccountResult.data.isNotEmpty) {
       emit(state.copyWith(
           bankAccountList: getBankAccountResult.data,
           bankAccountId: getBankAccountResult.data.first.id));
+    }
+    final getPaymentProductItemsResult = await _getCompanyPaymentProductItems(
+        GetCompanyPaymentProductItemsParams(companyId: companyId));
+    if (getPaymentProductItemsResult
+        is ResultSuccess<List<PaymentProductItem>>) {
+      emit(state.copyWith(
+        availableItems: getPaymentProductItemsResult.data,
+      ));
     }
   }
 
@@ -47,9 +62,18 @@ class InvoiceCreationCubit extends Cubit<InvoiceCreationState> {
                 DateTime.now()
                     .add(const Duration(days: 14))
                     .millisecondsSinceEpoch,
-            items: state.invoiceItemList ?? [],
-            sendEmail: state.sendEmail ?? true));
+            items: (state.invoiceItemList ?? [])
+                .map((e) => InvoiceItemParams(
+                    paymentProductId: e.paymentProductItem.id,
+                    quantity: e.quantity))
+                .toList(),
+            sendEmail: state.sendEmail ?? true,
+            issueExternalInvoice: state.issueExternalInvoice));
     return createNewInvoiceResult is ResultSuccess<List<Invoice>>;
+  }
+
+  void setIssueExternalInvoice(bool? value) {
+    emit(state.copyWith(issueExternalInvoice: value));
   }
 
   void setSendEmail(bool? value) {
@@ -60,52 +84,36 @@ class InvoiceCreationCubit extends Cubit<InvoiceCreationState> {
     emit(state.copyWith(receivers: userList));
   }
 
-  void editItem(
-      {required int index,
-      required String name,
-      required String description,
-      required double price,
-      required double quantity,
-      required double taxPercentage,
-      required double total}) {
-    final List<InvoiceItem> list = List.from(state.invoiceItemList ?? []);
-    list.removeAt(index);
-    final item = InvoiceItem(
-        name: name,
-        description: description,
-        unitCost: price,
-        quantity: quantity,
-        total: total,
-        taxPercentage: taxPercentage);
-    list.insert(index, item);
-    emit(state.copyWith(invoiceItemList: list));
-  }
-
   void removeItem(int index) {
     final List<InvoiceItem> list = List.from(state.invoiceItemList ?? []);
-
     list.removeAt(index);
-
     emit(state.copyWith(invoiceItemList: list));
   }
 
-  void addInvoiceItem(
+  Future<void> addNewInvoiceItem(
       {required String name,
       required String description,
       required double price,
       required double quantity,
       required double taxPercentage,
-      required double total}) {
-    final List<InvoiceItem> list = List.from(state.invoiceItemList ?? []);
-    final item = InvoiceItem(
-        name: name,
-        description: description,
-        unitCost: price,
-        quantity: quantity,
-        total: total,
-        taxPercentage: taxPercentage);
-    list.add(item);
-    emit(state.copyWith(invoiceItemList: list));
+      required double total}) async {
+    final addCompanyPaymentProductItemResult =
+        await _addCompanyPaymentProductItem(AddCompanyPaymentProductItemParams(
+      companyId: state.companyId ?? '',
+      name: name,
+      description: description,
+      price: price,
+      taxPercentage: taxPercentage,
+    ));
+    if (addCompanyPaymentProductItemResult
+        is ResultSuccess<PaymentProductItem>) {
+      final List<InvoiceItem> list = List.from(state.invoiceItemList ?? []);
+      final item = InvoiceItem(
+          quantity: quantity,
+          paymentProductItem: addCompanyPaymentProductItemResult.data);
+      list.add(item);
+      emit(state.copyWith(invoiceItemList: list));
+    }
   }
 
   void setPaymentDate(DateTime dateTime) {

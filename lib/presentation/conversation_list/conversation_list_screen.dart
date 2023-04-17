@@ -9,6 +9,7 @@ import 'package:priorli/service_locator.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../message/message_screen.dart';
+import '../shared/app_lottie_animation.dart';
 import '../shared/conversation_item.dart';
 
 const conversationListPath = '/conversations';
@@ -46,81 +47,105 @@ class _ConversationListScreenState extends State<ConversationListScreen> {
             return Scaffold(
                 body: Padding(
               padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-              child: CustomScrollView(
-                clipBehavior: Clip.none,
-                slivers: [
-                  if (state.conversationList?.isNotEmpty == true)
-                    SliverToBoxAdapter(
-                        child: FullWidthTitle(
-                      title: AppLocalizations.of(context).from_compamies,
-                    )),
-                  SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) {
-                      final conversation = state.conversationList?[index];
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: conversation != null
-                            ? ConversationItem(
-                                onPressed: () => GoRouter.of(context).push(
-                                    '$messagePath/${conversation.type}/${conversation.channelId}/${conversation.id}'),
-                                conversation: conversation,
-                              )
-                            : const SizedBox.shrink(),
-                      );
-                    },
-                    childCount: state.conversationList?.length ?? 0,
-                  )),
-                  if (state.faultConversationList?.isNotEmpty == true)
-                    SliverToBoxAdapter(
-                        child: FullWidthTitle(
-                      title: AppLocalizations.of(context).fault_reports,
-                    )),
-                  SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) {
-                      final conversation = state.faultConversationList?[index];
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: conversation != null
-                            ? ConversationItem(
-                                onPressed: () => GoRouter.of(context).push(
-                                    '$messagePath/${conversation.type}/${conversation.channelId}/${conversation.id}'),
-                                conversation: conversation,
-                              )
-                            : const SizedBox.shrink(),
-                      );
-                    },
-                    childCount: state.faultConversationList?.length ?? 0,
-                  )),
-                  if (state.supportConversationList?.isNotEmpty == true)
-                    SliverToBoxAdapter(
-                      child: FullWidthTitle(
-                        title: AppLocalizations.of(context).support_requests,
+              child: state.conversationList?.isEmpty == true &&
+                      state.supportConversationList?.isEmpty == true &&
+                      state.faultConversationList?.isEmpty == true
+                  ? const Center(
+                      child: SizedBox(
+                        width: 300,
+                        height: 300,
+                        child: AppLottieAnimation(
+                          loadingResource: 'message',
+                        ),
                       ),
-                    ),
-                  SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) {
-                      final conversation =
-                          state.supportConversationList?[index];
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: conversation != null
-                            ? ConversationItem(
-                                onPressed: () => GoRouter.of(context).push(
-                                    '$messagePath/${conversation.type}/${conversation.channelId}/${conversation.id}'),
-                                conversation: conversation,
-                              )
-                            : const SizedBox.shrink(),
-                      );
-                    },
-                    childCount: state.supportConversationList?.length ?? 0,
-                  )),
-                ],
-              ),
+                    )
+                  : const MessageListWidget(),
             ));
           }),
+    );
+  }
+}
+
+class MessageListWidget extends StatelessWidget {
+  const MessageListWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ConversationListCubit, ConversationListState>(
+      builder: (context, state) => CustomScrollView(
+        clipBehavior: Clip.none,
+        slivers: [
+          if (state.conversationList?.isNotEmpty == true)
+            SliverToBoxAdapter(
+                child: FullWidthTitle(
+              title: AppLocalizations.of(context).from_compamies,
+            )),
+          SliverList(
+              delegate: SliverChildBuilderDelegate(
+            (BuildContext context, int index) {
+              final conversation = state.conversationList?[index];
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: conversation != null
+                    ? ConversationItem(
+                        onPressed: () => GoRouter.of(context).push(
+                            '$messagePath/${conversation.type}/${conversation.channelId}/${conversation.id}'),
+                        conversation: conversation,
+                      )
+                    : const SizedBox.shrink(),
+              );
+            },
+            childCount: state.conversationList?.length ?? 0,
+          )),
+          if (state.faultConversationList?.isNotEmpty == true)
+            SliverToBoxAdapter(
+                child: FullWidthTitle(
+              title: AppLocalizations.of(context).fault_reports,
+            )),
+          SliverList(
+              delegate: SliverChildBuilderDelegate(
+            (BuildContext context, int index) {
+              final conversation = state.faultConversationList?[index];
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: conversation != null
+                    ? ConversationItem(
+                        onPressed: () => GoRouter.of(context).push(
+                            '$messagePath/${conversation.type}/${conversation.channelId}/${conversation.id}'),
+                        conversation: conversation,
+                      )
+                    : const SizedBox.shrink(),
+              );
+            },
+            childCount: state.faultConversationList?.length ?? 0,
+          )),
+          if (state.supportConversationList?.isNotEmpty == true)
+            SliverToBoxAdapter(
+              child: FullWidthTitle(
+                title: AppLocalizations.of(context).support_requests,
+              ),
+            ),
+          SliverList(
+              delegate: SliverChildBuilderDelegate(
+            (BuildContext context, int index) {
+              final conversation = state.supportConversationList?[index];
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: conversation != null
+                    ? ConversationItem(
+                        onPressed: () => GoRouter.of(context).push(
+                            '$messagePath/${conversation.type}/${conversation.channelId}/${conversation.id}'),
+                        conversation: conversation,
+                      )
+                    : const SizedBox.shrink(),
+              );
+            },
+            childCount: state.supportConversationList?.length ?? 0,
+          )),
+        ],
+      ),
     );
   }
 }

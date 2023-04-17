@@ -25,7 +25,7 @@ abstract class HousingCompanyRepository {
       String? coverImageStorageLink,
       String? logoStorageLink});
   Future<Result<HousingCompany>> createHousingCompany(
-      {required String name, required String countryCode});
+      {required String name, required String countryCode, String? businessId});
 
   Future<Result<List<StorageItem>>> addCompanyDocuments(
       {required List<String> storageItems,

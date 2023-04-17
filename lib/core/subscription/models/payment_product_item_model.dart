@@ -18,6 +18,7 @@ class PaymentProductItemModel extends Equatable {
   final String stripe_price_id;
   final int created_on;
   final int? updated_on;
+  final double tax_percentage;
 
   const PaymentProductItemModel(
       {required this.id,
@@ -30,6 +31,7 @@ class PaymentProductItemModel extends Equatable {
       required this.stripe_product_id,
       required this.stripe_price_id,
       required this.created_on,
+      required this.tax_percentage,
       this.updated_on});
 
   factory PaymentProductItemModel.fromJson(Map<String, dynamic> json) =>
@@ -48,5 +50,6 @@ class PaymentProductItemModel extends Equatable {
         stripe_price_id,
         created_on,
         updated_on,
+        tax_percentage
       ];
 }

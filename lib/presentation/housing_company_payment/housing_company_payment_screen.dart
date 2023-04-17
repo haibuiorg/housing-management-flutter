@@ -5,6 +5,7 @@ import 'package:priorli/core/utils/string_extension.dart';
 import 'package:priorli/presentation/housing_company_payment/housing_company_payment_cubit.dart';
 import 'package:priorli/presentation/housing_company_payment/housing_company_payment_state.dart';
 import 'package:iban/iban.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../service_locator.dart';
 import '../shared/custom_form_field.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -54,45 +55,87 @@ class _HousingCompanyPaymentScreenState
             Navigator.pop(context, true);
             cubit.bankAccountDialogDismissed();
           }
+          if (state.connectPaymentAccountUrl != null) {
+            launchUrl(Uri.parse(state.connectPaymentAccountUrl!));
+          }
         },
         builder: (context, state) {
           return Scaffold(
-            floatingActionButton: FloatingActionButton.small(
-                child: const Icon(Icons.add),
-                onPressed: () {
-                  showDialog(
-                      context: context,
-                      builder: (builder) {
-                        return AddBankAccountDialog(onSubmit: (
-                            {required bankAccountNumber,
-                            required swift}) async {
-                          cubit
-                              .addNewBankAccount(
-                                  bankAccountNumber: bankAccountNumber,
-                                  swift: swift)
-                              .then((value) => Navigator.pop(builder));
-                        });
-                      });
-                }),
             appBar: AppBar(
               centerTitle: true,
               title: Text(AppLocalizations.of(context).payment_bank_account),
             ),
-            body: ListView.builder(
-                itemCount: state.bankAccountList?.length ?? 0,
-                itemBuilder: (context, index) {
-                  return BankAccountBox(
-                    bankAccount: state.bankAccountList?[index] ??
-                        const BankAccount(
-                            swift: '',
-                            bankAccountNumber: '',
-                            id: '',
-                            isDeleted: true,
-                            housingCompanyId: ''),
-                    onDismiss: () => cubit.removeBankAccount(
-                        bankAccountId: state.bankAccountList?[index].id ?? ''),
-                  );
-                }),
+            body: Column(
+              children: [
+                Expanded(
+                  child: RefreshIndicator(
+                    onRefresh: () async {
+                      cubit.init(widget.companyId);
+                    },
+                    child: ListView.builder(
+                        itemCount: state.bankAccountList?.length ?? 0,
+                        itemBuilder: (context, index) {
+                          return BankAccountBox(
+                              bankAccount: state.bankAccountList?[index] ??
+                                  const BankAccount(
+                                      swift: '',
+                                      bankAccountNumber: '',
+                                      id: '',
+                                      isDeleted: true,
+                                      housingCompanyId: ''),
+                              onDismiss: (context) {
+                                cubit
+                                    .removeBankAccount(
+                                        bankAccountId:
+                                            state.bankAccountList?[index].id ??
+                                                '')
+                                    .then((value) =>
+                                        Navigator.of(context).pop(true));
+                              });
+                        }),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      FloatingActionButton.extended(
+                          elevation: 2,
+                          label: Text(
+                              AppLocalizations.of(context).add_bank_account),
+                          icon: const Icon(Icons.add),
+                          onPressed: () {
+                            showDialog(
+                                context: context,
+                                builder: (builder) {
+                                  return AddBankAccountDialog(onSubmit: (
+                                      {required bankAccountNumber,
+                                      required swift,
+                                      String? bankAccountName}) async {
+                                    cubit
+                                        .addNewBankAccount(
+                                            bankAccountNumber:
+                                                bankAccountNumber,
+                                            swift: swift)
+                                        .then(
+                                            (value) => Navigator.pop(builder));
+                                  });
+                                });
+                          }),
+                      FloatingActionButton.extended(
+                          elevation: 2,
+                          label: Text(AppLocalizations.of(context)
+                              .set_up_payout_account),
+                          icon: const Icon(Icons.account_balance_rounded),
+                          onPressed: () {
+                            cubit.setupConnectPaymentAccount();
+                          }),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           );
         },
       ),
@@ -103,10 +146,10 @@ class _HousingCompanyPaymentScreenState
 class BankAccountBox extends StatelessWidget {
   const BankAccountBox(
       {super.key, required this.onDismiss, required this.bankAccount});
-  final Function() onDismiss;
+  final Function(BuildContext context) onDismiss;
   final BankAccount bankAccount;
 
-  _showConfirmDeleteDialog(BuildContext context, Function() onDismiss) async {
+  _showConfirmDeleteDialog(BuildContext context) async {
     showDialog(
       context: context,
       builder: (BuildContext builder) {
@@ -116,7 +159,9 @@ class BankAccountBox extends StatelessWidget {
               Text(AppLocalizations.of(context).delete_bank_account_confirm),
           actions: [
             OutlinedButton(
-                onPressed: onDismiss,
+                onPressed: () {
+                  onDismiss(builder);
+                },
                 child: Text(AppLocalizations.of(context).remove)),
             TextButton(
               onPressed: () => Navigator.of(builder).pop(false),
@@ -138,11 +183,12 @@ class BankAccountBox extends StatelessWidget {
             side: const BorderSide(width: 0.5)),
         trailing: IconButton(
             icon: const Icon(Icons.close),
-            onPressed: () => _showConfirmDeleteDialog(context, () {
-                  onDismiss();
-                  Navigator.of(context).pop(true);
-                })),
-        onLongPress: () => _showConfirmDeleteDialog(context, onDismiss),
+            onPressed: () => _showConfirmDeleteDialog(
+                  context,
+                )),
+        onLongPress: () => _showConfirmDeleteDialog(
+          context,
+        ),
         title: Text(bankAccount.bankAccountNumber),
         subtitle: Text(bankAccount.swift),
       ),
@@ -155,6 +201,7 @@ class AddBankAccountDialog extends StatefulWidget {
   final Function({
     required String bankAccountNumber,
     required String swift,
+    String? bankAccountName,
   }) onSubmit;
 
   @override
@@ -162,6 +209,7 @@ class AddBankAccountDialog extends StatefulWidget {
 }
 
 class _AddBankAccountDialogState extends State<AddBankAccountDialog> {
+  final _bankAccountNameController = TextEditingController();
   final _bankAccountNumberController = TextEditingController();
   final _swiftController = TextEditingController();
   bool _valid = false;
@@ -178,6 +226,7 @@ class _AddBankAccountDialogState extends State<AddBankAccountDialog> {
   void dispose() {
     _bankAccountNumberController.dispose();
     _swiftController.dispose();
+    _bankAccountNameController.dispose();
     super.dispose();
   }
 
@@ -186,6 +235,17 @@ class _AddBankAccountDialogState extends State<AddBankAccountDialog> {
     return AlertDialog(
       title: Text(AppLocalizations.of(context).add_bank_account),
       content: Column(mainAxisSize: MainAxisSize.min, children: [
+        CustomFormField(
+          autofocus: false,
+          autoValidate: true,
+          hintText: AppLocalizations.of(context).bank_account_name,
+          textEditingController: _bankAccountNameController,
+          keyboardType: TextInputType.text,
+          onChanged: (value) {
+            didChange();
+          },
+          textInputAction: TextInputAction.next,
+        ),
         CustomFormField(
           autofocus: false,
           autoValidate: true,

@@ -4,7 +4,6 @@ import 'package:priorli/core/base/usecase.dart';
 import 'package:priorli/core/invoice/repos/invoice_repository.dart';
 
 import '../entities/invoice.dart';
-import '../entities/invoice_item.dart';
 
 class CreateInvoicesParams extends Equatable {
   final String companyId;
@@ -12,8 +11,9 @@ class CreateInvoicesParams extends Equatable {
   final String invoiceName;
   final String bankAccountId;
   final int paymentDate;
-  final List<InvoiceItem> items;
+  final List<InvoiceItemParams> items;
   final bool sendEmail;
+  final bool? issueExternalInvoice;
 
   const CreateInvoicesParams(
       {required this.companyId,
@@ -22,6 +22,7 @@ class CreateInvoicesParams extends Equatable {
       required this.bankAccountId,
       required this.paymentDate,
       required this.items,
+      this.issueExternalInvoice,
       required this.sendEmail});
 
   @override
@@ -32,8 +33,20 @@ class CreateInvoicesParams extends Equatable {
         bankAccountId,
         paymentDate,
         items,
-        sendEmail
+        sendEmail,
+        issueExternalInvoice
       ];
+}
+
+class InvoiceItemParams extends Equatable {
+  final String paymentProductId;
+  final double quantity;
+
+  const InvoiceItemParams(
+      {required this.paymentProductId, required this.quantity});
+
+  @override
+  List<Object?> get props => [paymentProductId, quantity];
 }
 
 class CreateNewInvoices extends UseCase<List<Invoice>, CreateInvoicesParams> {
@@ -50,6 +63,7 @@ class CreateNewInvoices extends UseCase<List<Invoice>, CreateInvoicesParams> {
         bankAccountId: params.bankAccountId,
         paymentDate: params.paymentDate,
         items: params.items,
+        issueExternalInvoice: params.issueExternalInvoice,
         sendEmail: params.sendEmail);
   }
 }

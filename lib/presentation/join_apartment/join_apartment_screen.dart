@@ -38,7 +38,7 @@ class _JoinApartmentScreenState extends State<JoinApartmentScreen> {
               if (state.addedToApartment?.id.isNotEmpty == true &&
                   state.addedToApartment?.housingCompanyId.isNotEmpty == true) {
                 Navigator.of(context)
-                    .popUntil(ModalRoute.withName(mainPathName));
+                    .popUntil(ModalRoute.withName(homePathName));
                 GoRouter.of(context).push(
                     '/$housingCompanyScreenPath/${state.addedToApartment?.housingCompanyId}');
                 GoRouter.of(context).push(

@@ -210,28 +210,39 @@ class _DefaultUIState extends State<DefaultUI> {
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                      extendedTheme: const SidebarXTheme(width: 200),
+                      extendedTheme: const SidebarXTheme(
+                          width: 300,
+                          padding: EdgeInsets.symmetric(horizontal: 16),
+                          selectedItemTextPadding:
+                              EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          itemTextPadding:
+                              EdgeInsets.symmetric(horizontal: 16)),
                       controller: _controller,
                       headerBuilder: (context, extended) {
                         return Container(
-                          margin: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
                             color:
-                                Theme.of(context).colorScheme.primaryContainer,
-                            shape: BoxShape.circle,
+                                HexColor.fromHex(appPrimaryContainerColorDark),
+                            borderRadius: BorderRadius.circular(150),
                           ),
-                          child: InkWell(
-                            onTap: () => GoRouter.of(context).push(accountPath),
-                            child: Padding(
-                              padding: const EdgeInsets.all(16.0),
+                          margin: EdgeInsets.all(extended ? 32 : 8.0),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(32),
+                            child: InkWell(
+                              onTap: () =>
+                                  GoRouter.of(context).push(accountPath),
                               child: BlocBuilder<UserCubit, UserState>(
                                   builder: (context, userState) {
                                 return userState.user?.avatarUrl?.isNotEmpty ==
                                         true
                                     ? Image.network(
                                         userState.user?.avatarUrl ?? '',
+                                        fit: BoxFit.contain,
                                       )
-                                    : Image.asset('assets/images/avatar.png');
+                                    : Image.asset(
+                                        'assets/images/avatar.png',
+                                        fit: BoxFit.contain,
+                                      );
                               }),
                             ),
                           ),
