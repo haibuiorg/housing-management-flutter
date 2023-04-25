@@ -199,6 +199,14 @@ class HousingCompanyCubit extends Cubit<HousingCompanyState> {
     return [];
   }
 
+  Future<void> startNewChannel(String name) async {
+    await _startConversation(StartConversationParams(
+        userId: state.user?.userId ?? '',
+        messageType: messageTypeCommunity,
+        name: name,
+        channelId: state.housingCompany?.id ?? ''));
+  }
+
   _messageListener(List<Conversation> conversationList) {
     emit(state.copyWith(
         faultReportList: conversationList
@@ -207,14 +215,6 @@ class HousingCompanyCubit extends Cubit<HousingCompanyState> {
         conversationList: conversationList
             .where((element) => element.type == messageTypeCommunity)
             .toList()));
-  }
-
-  Future<void> startNewChannel(String name) async {
-    await _startConversation(StartConversationParams(
-        userId: state.user?.userId ?? '',
-        messageType: messageTypeCommunity,
-        name: name,
-        channelId: state.housingCompany?.id ?? ''));
   }
 
   @override

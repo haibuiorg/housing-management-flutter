@@ -1,13 +1,14 @@
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:priorli/core/apartment/entities/apartment.dart';
 import 'package:priorli/core/apartment/usecases/get_apartment.dart';
-import 'package:priorli/core/apartment/usecases/get_apartment_document.dart';
-import 'package:priorli/core/apartment/usecases/get_apartment_document_list.dart';
 import 'package:priorli/core/base/result.dart';
 import 'package:priorli/core/fault_report/usecases/create_fault_report.dart';
 import 'package:priorli/core/housing/entities/housing_company.dart';
 import 'package:priorli/core/housing/usecases/get_housing_company.dart';
 import 'package:priorli/core/messaging/entities/conversation.dart';
+import 'package:priorli/core/messaging/usecases/get_company_conversation_lists.dart';
 import 'package:priorli/core/water_usage/entities/water_bill.dart';
 import 'package:priorli/core/water_usage/entities/water_consumption.dart';
 import 'package:priorli/core/water_usage/usecases/add_consumption_value.dart';
@@ -16,7 +17,9 @@ import 'package:priorli/core/water_usage/usecases/get_water_bill.dart';
 import 'package:priorli/core/water_usage/usecases/get_water_bill_by_year.dart';
 import 'package:priorli/presentation/apartments/apartment_state.dart';
 
-import '../../core/storage/entities/storage_item.dart';
+import '../../core/user/entities/user.dart';
+import '../../core/utils/constants.dart';
+import '../../core/utils/user_utils.dart';
 import '../../core/water_usage/usecases/get_water_consumption.dart';
 
 class ApartmentCubit extends Cubit<ApartmentState> {
@@ -24,28 +27,57 @@ class ApartmentCubit extends Cubit<ApartmentState> {
   final GetApartment _getApartment;
   final GetWaterBillByYear _getWaterBillByYear;
   final GetHousingCompany _getHousingCompany;
-  final GetApartmentDocument _getApartmentDocument;
-  final GetApartmentDocumentList _getApartmentDocumentList;
   final GetLatestWaterConsumption _getLatestWaterConsumption;
   final CreateFaultReport _createFaultReport;
+  final GetCompanyConversationList _getCompanyConversationList;
+  StreamSubscription? _conversationSubscription;
 
   ApartmentCubit(
       this._addConsumptionValue,
       this._getApartment,
       this._getWaterBillByYear,
+      this._getCompanyConversationList,
       this._getLatestWaterConsumption,
       this._getHousingCompany,
-      this._getApartmentDocument,
-      this._getApartmentDocumentList,
       this._createFaultReport)
       : super(const ApartmentState());
 
-  Future<void> init(String housingCompanyId, String apartmentId) async {
-    getApartmentResult(housingCompanyId, apartmentId);
+  Future<void> init(
+      String housingCompanyId, String apartmentId, User? user) async {
+    emit(state.copyWith(isLoading: true));
     getWaterBillByYear(housingCompanyId, apartmentId);
     getLatestWaterConsumption(housingCompanyId);
-    getCompanyData(housingCompanyId);
-    getApartmentDocument(housingCompanyId, apartmentId);
+    await getApartmentResult(housingCompanyId, apartmentId);
+    await getCompanyData(housingCompanyId);
+    if (user != null) {
+      emit(state.copyWith(
+          ownerView: isUserAdmin(user) ||
+              state.apartment?.owners?.contains(user.userId) == true ||
+              state.housingCompany?.isUserManager == true ||
+              state.housingCompany?.isUserOwner == true));
+    }
+    emit(state.copyWith(isLoading: false));
+    _conversationSubscription?.cancel();
+    _conversationSubscription = _getCompanyConversationList(
+            GetCompanyConversationParams(
+                companyId: housingCompanyId, userId: user?.userId ?? ''))
+        .listen(_messageListener);
+  }
+
+  _messageListener(List<Conversation> conversationList) {
+    emit(state.copyWith(
+      faultReportList: conversationList
+          .where((element) =>
+              element.type == messageTypeFaultReport &&
+              element.apartmentId == state.apartment?.id)
+          .toList(),
+    ));
+  }
+
+  @override
+  Future<void> close() {
+    _conversationSubscription?.cancel();
+    return super.close();
   }
 
   Future<void> getCompanyData(String housingCompanyId) async {
@@ -53,16 +85,6 @@ class ApartmentCubit extends Cubit<ApartmentState> {
         GetHousingCompanyParams(housingCompanyId: housingCompanyId));
     if (getHousingCompanyResult is ResultSuccess<HousingCompany>) {
       emit(state.copyWith(housingCompany: getHousingCompanyResult.data));
-    }
-  }
-
-  Future<void> getApartmentDocument(
-      String housingCompanyId, String apartmentId) async {
-    final apartmentDocumentResult = await _getApartmentDocumentList(
-        GetApartmentDocumentListParams(
-            housingCompanyId: housingCompanyId, apartmentId: apartmentId));
-    if (apartmentDocumentResult is ResultSuccess<List<StorageItem>>) {
-      emit(state.copyWith(documentList: apartmentDocumentResult.data));
     }
   }
 
@@ -100,12 +122,14 @@ class ApartmentCubit extends Cubit<ApartmentState> {
   }
 
   Future<void> addLatestConsumptionValue(double consumption) async {
+    emit(state.copyWith(isLoading: true));
     await _addConsumptionValue(AddConsumptionValueParams(
         housingCompanyId: state.apartment?.housingCompanyId ?? '',
         waterConsumptionId: state.latestWaterConsumption?.id ?? '',
         apartmentId: state.apartment?.id,
         consumption: consumption,
         buiding: state.apartment?.building ?? ''));
+    emit(state.copyWith(isLoading: false));
   }
 
   Future<void> createNewFaultReport(
@@ -124,17 +148,5 @@ class ApartmentCubit extends Cubit<ApartmentState> {
     if (faultReportResult is ResultSuccess<Conversation>) {
       emit(state.copyWith(newFaultReport: faultReportResult.data));
     }
-  }
-
-  Future<StorageItem?> getDocument(String id) async {
-    final getCompanyDocumentResult = await _getApartmentDocument(
-        GetApartmentDocumentParams(
-            housingCompanyId: state.housingCompany?.id ?? '',
-            documentId: id,
-            apartmentId: state.apartment?.id ?? ''));
-    if (getCompanyDocumentResult is ResultSuccess<StorageItem>) {
-      return getCompanyDocumentResult.data;
-    }
-    return null;
   }
 }

@@ -11,6 +11,8 @@ class InviteTenantState extends Equatable {
   final String? housingCompanyId;
   final String? errorText;
   final bool? popNow;
+  final bool? isLoading;
+  final bool? setAsApartmentOwner;
 
   const InviteTenantState({
     this.housingCompany,
@@ -20,6 +22,8 @@ class InviteTenantState extends Equatable {
     this.errorText,
     this.housingCompanyId,
     this.popNow,
+    this.isLoading,
+    this.setAsApartmentOwner,
   });
 
   InviteTenantState copyWith(
@@ -29,9 +33,13 @@ class InviteTenantState extends Equatable {
           List<String>? emails,
           String? errorText,
           bool? popNow,
+          bool? setAsApartmentOwner,
+          bool? isLoading,
           String? housingCompanyId}) =>
       InviteTenantState(
           popNow: popNow ?? this.popNow,
+          isLoading: isLoading ?? this.isLoading,
+          setAsApartmentOwner: setAsApartmentOwner ?? this.setAsApartmentOwner,
           housingCompanyId: housingCompanyId ?? this.housingCompanyId,
           errorText: errorText ?? this.errorText,
           housingCompany: housingCompany ?? this.housingCompany,
@@ -43,6 +51,8 @@ class InviteTenantState extends Equatable {
   List<Object?> get props => [
         housingCompany,
         apartmentList,
+        isLoading,
+        setAsApartmentOwner,
         selectedApartment,
         emails,
         errorText,

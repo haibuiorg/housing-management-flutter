@@ -53,7 +53,7 @@ class _AppState extends State<App> {
       primaryContainer: HexColor.fromHex(appPrimaryContainerColorDark),
       brightness: Brightness.dark);
   late final GoRouter appRouter;
-  bool showDownloadDialog = isIOSWeb || isAndroidWeb;
+  bool showDownloadDialog = false; //isIOSWeb || isAndroidWeb;
 
   @override
   void initState() {

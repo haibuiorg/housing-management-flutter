@@ -6,6 +6,8 @@ import 'package:priorli/core/housing/usecases/add_company_manager.dart';
 import 'package:priorli/core/housing/usecases/get_housing_company.dart';
 import 'package:priorli/core/housing/usecases/get_housing_company_managers.dart';
 import 'package:priorli/core/housing/usecases/get_housing_company_users.dart';
+import 'package:priorli/core/housing/usecases/remove_housing_company_manager.dart';
+import 'package:priorli/core/housing/usecases/remove_tenant_from_company.dart';
 
 import '../../core/apartment/entities/apartment.dart';
 import '../../core/user/entities/user.dart';
@@ -17,12 +19,17 @@ class CompanyUserCubit extends Cubit<CompanyUserState> {
   final AddCompanyManager _addCompanyManager;
   final GetHousingCompany _getHousingCompany;
   final GetApartments _getApartments;
+  final RemoveHousingCompanyManager _removeHousingCompanyManager;
+  final RemoveTenantFromCompany _removeTenantFromCompany;
+
   CompanyUserCubit(
       this._getHousingCompanyUsers,
       this._addCompanyManager,
       this._getHousingCompanyManagers,
       this._getHousingCompany,
-      this._getApartments)
+      this._getApartments,
+      this._removeHousingCompanyManager,
+      this._removeTenantFromCompany)
       : super(const CompanyUserState());
 
   Future<void> init({
@@ -54,7 +61,8 @@ class CompanyUserCubit extends Cubit<CompanyUserState> {
       final List<User> newList = [];
       for (var user in companyUserResult.data) {
         final hasApartment = state.apartmentList?.where((apartment) =>
-            apartment.tenants.any((resident) => resident == user.userId));
+            apartment.tenants?.any((resident) => resident == user.userId) ??
+            false);
         final User processedUser = user.copyWith(
             apartments: hasApartment
                 ?.map((e) => e.building + (e.houseCode ?? ''))
@@ -74,7 +82,8 @@ class CompanyUserCubit extends Cubit<CompanyUserState> {
       final List<User> newList = [];
       for (var user in managerResult.data) {
         final hasApartment = state.apartmentList?.where((apartment) =>
-            apartment.tenants.any((resident) => resident == user.userId));
+            apartment.tenants?.any((resident) => resident == user.userId) ??
+            false);
         final User processedUser = user.copyWith(
             apartments: hasApartment
                 ?.map((e) => e.building + (e.houseCode ?? ''))

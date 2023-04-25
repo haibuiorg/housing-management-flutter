@@ -236,35 +236,41 @@ GoRouter createAppRouter() {
                         },
                         routes: [
                           GoRoute(
-                            path: documentListScreenPath,
-                            builder:
-                                (BuildContext context, GoRouterState state) {
-                              return DocumentListScreen(
-                                companyId: state.params['companyId'] ?? '',
-                                apartmentId: state.params['apartmentId'] ?? '',
-                              );
-                            },
-                          ),
-                          GoRoute(
-                            path: manageScreenPath,
-                            builder:
-                                (BuildContext context, GoRouterState state) {
-                              return ApartmentManagementScreen(
-                                companyId: state.params['companyId'] ?? '',
-                                apartmentId: state.params['apartmentId'] ?? '',
-                              );
-                            },
-                          ),
-                          GoRoute(
-                            path: apartmentWaterInvoice,
-                            builder:
-                                (BuildContext context, GoRouterState state) {
-                              return ApartmentWaterInvoiceScreen(
-                                companyId: state.params['companyId'] ?? '',
-                                apartmentId: state.params['apartmentId'] ?? '',
-                              );
-                            },
-                          )
+                              path: manageScreenPath,
+                              builder:
+                                  (BuildContext context, GoRouterState state) {
+                                return ApartmentManagementScreen(
+                                  companyId: state.params['companyId'] ?? '',
+                                  apartmentId:
+                                      state.params['apartmentId'] ?? '',
+                                );
+                              },
+                              routes: [
+                                GoRoute(
+                                  path: apartmentWaterInvoice,
+                                  builder: (BuildContext context,
+                                      GoRouterState state) {
+                                    return ApartmentWaterInvoiceScreen(
+                                      companyId:
+                                          state.params['companyId'] ?? '',
+                                      apartmentId:
+                                          state.params['apartmentId'] ?? '',
+                                    );
+                                  },
+                                ),
+                                GoRoute(
+                                  path: documentListScreenPath,
+                                  builder: (BuildContext context,
+                                      GoRouterState state) {
+                                    return DocumentListScreen(
+                                      companyId:
+                                          state.params['companyId'] ?? '',
+                                      apartmentId:
+                                          state.params['apartmentId'] ?? '',
+                                    );
+                                  },
+                                ),
+                              ]),
                         ])
                   ]),
             ],

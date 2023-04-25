@@ -17,7 +17,7 @@ class FullWidthTitle extends StatelessWidget {
             child: Text(
               title ?? '',
               textScaleFactor: 1,
-              style: Theme.of(context).textTheme.titleMedium,
+              style: Theme.of(context).textTheme.titleLarge,
               textAlign: TextAlign.left,
               overflow: TextOverflow.ellipsis,
               maxLines: 2,

@@ -1,3 +1,5 @@
+import 'package:priorli/core/user/entities/user.dart';
+
 import '../../base/result.dart';
 import '../../storage/entities/storage_item.dart';
 import '../entities/apartment.dart';
@@ -17,6 +19,7 @@ abstract class ApartmentRepository {
   Future<Result<Apartment>> editApartmentInfo(
       {required String housingCompanyId,
       required String apartmentId,
+      List<String>? ownersIds,
       String? building,
       String? houseCode});
   Future<Result<Apartment>> deleteUserApartment(
@@ -24,6 +27,7 @@ abstract class ApartmentRepository {
   Future<Result<ApartmentInvitation>> sendInvitationToApartment(
       {required String apartmentId,
       required String housingCompanyId,
+      required bool setAsApartmentOwner,
       List<String>? emails});
   Future<Result<Apartment>> joinApartment({
     required String invitationCode,
@@ -58,5 +62,18 @@ abstract class ApartmentRepository {
   Future<Result<ApartmentInvitation>> resentApartmentInvitation({
     required String invitationId,
     required String housingCompanyId,
+  });
+  Future<Result<List<ApartmentInvitation>>> cancelApartmentInvitation({
+    required List<String> invitationIds,
+    required String housingCompanyId,
+  });
+  Future<Result<bool>> removeTenantFromApartment({
+    required String housingCompanyId,
+    required String apartmentId,
+    required String removedUserId,
+  });
+  Future<Result<List<User>>> getApartmentTenants({
+    required String housingCompanyId,
+    required String apartmentId,
   });
 }

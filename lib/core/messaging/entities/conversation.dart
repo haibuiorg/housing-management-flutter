@@ -12,6 +12,7 @@ class Conversation extends Equatable {
   final String type;
   final bool seen;
   final bool joined;
+  final String? apartmentId;
 
   const Conversation(
       {required this.id,
@@ -21,16 +22,18 @@ class Conversation extends Equatable {
       required this.type,
       required this.seen,
       required this.joined,
+      this.apartmentId,
       required this.userIds});
 
   @override
   List<Object?> get props =>
-      [id, status, name, channelId, userIds, type, joined];
+      [id, status, name, channelId, userIds, type, joined, apartmentId];
 
   factory Conversation.modelToEntity(
           {required ConversationModel conversationModel,
           String? userId = ''}) =>
       Conversation(
+          apartmentId: conversationModel.apartment_id,
           type: conversationModel.type ?? messageTypeSupport,
           id: conversationModel.id ?? '',
           name: conversationModel.name ?? '',

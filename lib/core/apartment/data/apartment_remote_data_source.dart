@@ -3,6 +3,7 @@ import 'package:priorli/core/apartment/data/apartment_data_source.dart';
 import 'package:priorli/core/apartment/model/apartment_invitation_model.dart';
 import 'package:priorli/core/apartment/model/apartment_model.dart';
 import 'package:priorli/core/storage/models/storage_item_model.dart';
+import 'package:priorli/core/user/models/user_model.dart';
 
 import '../../base/exceptions.dart';
 
@@ -54,15 +55,16 @@ class ApartmentRemoteDataSource implements ApartmentDataSource {
   Future<ApartmentInvitationModel> sendInvitationToApartment(
       {required String apartmentId,
       required String housingCompanyId,
+      required bool setAsApartmentOwner,
       List<String>? emails}) async {
     try {
       final Map<String, dynamic> data = {
         "housing_company_id": housingCompanyId,
         "apartment_id": apartmentId,
+        "set_as_apartment_owner": setAsApartmentOwner,
+        "emails": emails
       };
-      if (emails != null) {
-        data["emails"] = emails;
-      }
+      data.removeWhere((key, value) => value == null);
       final result = await client.post('/invitations', data: data);
       return ApartmentInvitationModel.fromJson(result.data);
     } catch (error) {
@@ -105,19 +107,18 @@ class ApartmentRemoteDataSource implements ApartmentDataSource {
   Future<ApartmentModel> editApartmentInfo(
       {required String housingCompanyId,
       required String apartmentId,
+      List<String>? ownersIds,
       String? building,
       String? houseCode}) async {
     try {
       final Map<String, dynamic> data = {
         "housing_company_id": housingCompanyId,
         "apartment_id": apartmentId,
+        "owners": ownersIds,
+        "building": building,
+        "house_code": houseCode
       };
-      if (building != null) {
-        data['building'] = building;
-      }
-      if (houseCode != null) {
-        data['house_code'] = houseCode;
-      }
+      data.removeWhere((key, value) => value == null);
       final result = await client.put('/apartment', data: data);
       return ApartmentModel.fromJson(result.data);
     } catch (error) {
@@ -259,6 +260,62 @@ class ApartmentRemoteDataSource implements ApartmentDataSource {
 
       final result = await client.post('/invitations/resend', data: data);
       return ApartmentInvitationModel.fromJson(result.data);
+    } catch (error) {
+      throw ServerException(error: error);
+    }
+  }
+
+  @override
+  Future<List<ApartmentInvitationModel>> cancelApartmentInvitation(
+      {required List<String> invitationIds,
+      required String housingCompanyId}) async {
+    try {
+      final Map<String, dynamic> data = {
+        "invitation_ids": invitationIds,
+        "housing_company_id": housingCompanyId,
+      };
+
+      final result = await client.delete('/invitations', data: data);
+      return (result.data as List<dynamic>)
+          .map((e) => ApartmentInvitationModel.fromJson(e))
+          .toList();
+    } catch (error) {
+      throw ServerException(error: error);
+    }
+  }
+
+  @override
+  Future<bool> removeTenantFromApartment(
+      {required String housingCompanyId,
+      required String apartmentId,
+      required String removedUserId}) async {
+    try {
+      final Map<String, dynamic> data = {
+        "housing_company_id": housingCompanyId,
+        "apartment_id": apartmentId,
+        "removed_user_id": removedUserId,
+      };
+
+      await client.delete('/apartment/tenant', data: data);
+      return true;
+    } catch (error) {
+      throw ServerException(error: error);
+    }
+  }
+
+  @override
+  Future<List<UserModel>> getApartmentTenants(
+      {required String housingCompanyId, required String apartmentId}) async {
+    try {
+      final Map<String, dynamic> data = {
+        "housing_company_id": housingCompanyId,
+        "apartment_id": apartmentId,
+      };
+      final result =
+          await client.get('/apartment/tenants', queryParameters: data);
+      return (result.data as List<dynamic>)
+          .map((e) => UserModel.fromJson(e))
+          .toList();
     } catch (error) {
       throw ServerException(error: error);
     }

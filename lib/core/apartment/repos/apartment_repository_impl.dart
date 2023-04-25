@@ -1,4 +1,5 @@
 import 'package:priorli/core/storage/entities/storage_item.dart';
+import 'package:priorli/core/user/entities/user.dart';
 
 import '../../base/exceptions.dart';
 import '../../base/failure.dart';
@@ -48,12 +49,14 @@ class ApartmentRepositoryImpl implements ApartmentRepository {
   Future<Result<ApartmentInvitation>> sendInvitationToApartment(
       {required String apartmentId,
       required String housingCompanyId,
+      required bool setAsApartmentOwner,
       List<String>? emails}) async {
     try {
       final invitationModel =
           await apartmentDataSource.sendInvitationToApartment(
               housingCompanyId: housingCompanyId,
               apartmentId: apartmentId,
+              setAsApartmentOwner: setAsApartmentOwner,
               emails: emails);
       return ResultSuccess(ApartmentInvitation.modelToEntity(invitationModel));
     } on ServerException {
@@ -89,6 +92,7 @@ class ApartmentRepositoryImpl implements ApartmentRepository {
   Future<Result<Apartment>> editApartmentInfo(
       {required String housingCompanyId,
       required String apartmentId,
+      List<String>? ownersIds,
       String? building,
       String? houseCode}) async {
     try {
@@ -96,6 +100,7 @@ class ApartmentRepositoryImpl implements ApartmentRepository {
           housingCompanyId: housingCompanyId,
           apartmentId: apartmentId,
           building: building,
+          ownersIds: ownersIds,
           houseCode: houseCode);
       return ResultSuccess(Apartment.modelToEntity(apartmentModel));
     } on ServerException {
@@ -220,6 +225,51 @@ class ApartmentRepositoryImpl implements ApartmentRepository {
           await apartmentDataSource.resentApartmentInvitation(
               invitationId: invitationId, housingCompanyId: housingCompanyId);
       return ResultSuccess(ApartmentInvitation.modelToEntity(invitationModel));
+    } on ServerException {
+      return ResultFailure(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Result<List<ApartmentInvitation>>> cancelApartmentInvitation(
+      {required List<String> invitationIds,
+      required String housingCompanyId}) async {
+    try {
+      final invitationListModel =
+          await apartmentDataSource.cancelApartmentInvitation(
+              invitationIds: invitationIds, housingCompanyId: housingCompanyId);
+      return ResultSuccess(invitationListModel
+          .map((e) => ApartmentInvitation.modelToEntity(e))
+          .toList());
+    } on ServerException {
+      return ResultFailure(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Result<bool>> removeTenantFromApartment(
+      {required String housingCompanyId,
+      required String apartmentId,
+      required String removedUserId}) async {
+    try {
+      final isRemoved = await apartmentDataSource.removeTenantFromApartment(
+          housingCompanyId: housingCompanyId,
+          apartmentId: apartmentId,
+          removedUserId: removedUserId);
+      return ResultSuccess(isRemoved);
+    } on ServerException {
+      return ResultFailure(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Result<List<User>>> getApartmentTenants(
+      {required String housingCompanyId, required String apartmentId}) async {
+    try {
+      final userListModel = await apartmentDataSource.getApartmentTenants(
+          housingCompanyId: housingCompanyId, apartmentId: apartmentId);
+      return ResultSuccess(
+          userListModel.map((e) => User.modelToEntity(e)).toList());
     } on ServerException {
       return ResultFailure(ServerFailure());
     }

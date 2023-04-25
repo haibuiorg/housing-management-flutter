@@ -16,6 +16,14 @@ abstract class HousingCompanyDataSource {
       String? firstName,
       String? lastName,
       String? phoneNumber});
+  Future<List<UserModel>> removeHousingCompanyManager({
+    required String housingCompanyId,
+    required String removedUserId,
+  });
+  Future<bool> removeTenantFromCompany({
+    required String housingCompanyId,
+    required String removedUserId,
+  });
   Future<HousingCompanyModel> updateHousingCompanyInfo(
       {String? name,
       required String housingCompanyId,

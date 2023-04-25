@@ -651,5 +651,16 @@
     "individual": "Individual",
     "set_up_payout_account": "Set up payout account",
     "issue_external_invoice": "Issue invoice with payable link",
-    "bank_account_name": "Bank account holder name"
+    "bank_account_name": "Bank account holder name",
+    "set_as_apartment_owner": "Set as apartment owner",
+    "remove_this_apartment_dialog_content": "Are you sure you wish to delete this apartment",
+    "send_apartment_invitation": "Send invitation for joining apartment",
+    "tenants": "Tenants",
+    "managers": "Managers",
+    "owners": "Owners", 
+    "pending_fault_reports": "Pending fault reports",
+    "new_fault_report": "New fault report",
+    "tenant_management": "Tenant management",
+    "invite_tenants": "Invite tenants",
+    "accounts_and_payments": "Accounts and payments"
 }

@@ -11,7 +11,8 @@ class ApartmentModel extends Equatable {
   final String building;
   @JsonKey(name: 'house_code')
   final String? houseCode;
-  final List<String> tenants;
+  final List<String>? tenants;
+  final List<String>? owners;
   @JsonKey(name: 'is_deleted')
   final bool? isDeleted;
 
@@ -21,12 +22,13 @@ class ApartmentModel extends Equatable {
       required this.building,
       this.isDeleted,
       this.houseCode,
-      required this.tenants});
+      this.tenants,
+      this.owners});
 
   factory ApartmentModel.fromJson(Map<String, dynamic> json) =>
       _$ApartmentModelFromJson(json);
 
   @override
   List<Object?> get props =>
-      [housingCompanyId, id, building, houseCode, tenants, isDeleted];
+      [housingCompanyId, id, building, houseCode, tenants, owners, isDeleted];
 }

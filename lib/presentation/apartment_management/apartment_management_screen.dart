@@ -5,6 +5,8 @@ import 'package:priorli/presentation/apartment_management/apartment_management_s
 import 'package:priorli/presentation/shared/custom_form_field.dart';
 import 'package:priorli/service_locator.dart';
 import '../../go_router_navigation.dart';
+import '../apartment_invoice/apartment_water_invoice_screen.dart';
+import '../documents/document_list_screen.dart';
 import '../shared/setting_button.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -38,15 +40,16 @@ class _ApartmentManagementScreenState extends State<ApartmentManagementScreen> {
       context: context,
       builder: (BuildContext builderContext) {
         return AlertDialog(
-          title: const Text("Confirm"),
-          content: const Text("Are you sure you wish to delete this apartment"),
+          title: Text(AppLocalizations.of(context).remove_this_apartment),
+          content: Text(AppLocalizations.of(context)
+              .remove_this_apartment_dialog_content),
           actions: [
             OutlinedButton(
                 onPressed: onDismiss(builderContext),
-                child: const Text("Delete")),
+                child: Text(AppLocalizations.of(context).remove)),
             TextButton(
               onPressed: () => Navigator.of(builderContext).pop(false),
-              child: const Text("Cancel"),
+              child: Text(AppLocalizations.of(context).cancel),
             ),
           ],
         );
@@ -122,6 +125,27 @@ class _ApartmentManagementScreenState extends State<ApartmentManagementScreen> {
                         ),
                       ]),
                     ),
+                  ),
+                  SettingButton(
+                    onPressed: () {},
+                    label: Text(
+                        AppLocalizations.of(context).accounts_and_payments),
+                  ),
+                  SettingButton(
+                    onPressed: () {},
+                    label: Text(AppLocalizations.of(context).tenant_management),
+                  ),
+                  SettingButton(
+                    onPressed: () {
+                      context.pushFromCurrentLocation(apartmentWaterInvoice);
+                    },
+                    label: Text(AppLocalizations.of(context).archived_invoices),
+                  ),
+                  SettingButton(
+                    onPressed: () {
+                      context.pushFromCurrentLocation(documentListScreenPath);
+                    },
+                    label: Text(AppLocalizations.of(context).documents),
                   ),
                   SettingButton(
                     onPressed: () {

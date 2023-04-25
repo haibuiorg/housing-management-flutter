@@ -55,12 +55,14 @@ class _CompanyUserSreenState extends State<CompanyUserSreen> {
       child: BlocBuilder<CompanyUserCubit, CompanyUserState>(
           builder: (context, state) {
         return Scaffold(
-            appBar: AppBar(),
+            appBar: AppBar(
+              title: Text(AppLocalizations.of(context).user_management),
+            ),
             body: SingleChildScrollView(
               child: Column(
                 children: [
-                  const FullWidthTitle(
-                    title: 'Tenants',
+                  FullWidthTitle(
+                    title: AppLocalizations.of(context).tenants,
                   ),
                   _createDataTable(state.userList ?? [], state.userListLimit),
                   SettingButton(
@@ -68,12 +70,12 @@ class _CompanyUserSreenState extends State<CompanyUserSreen> {
                       context.pushFromCurrentLocation(inviteTenantPath);
                     },
                     label: Text(
-                      'Send invitation to an apartment',
+                      AppLocalizations.of(context).send_apartment_invitation,
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
                   ),
                   FullWidthTitle(
-                    title: 'Managers',
+                    title: AppLocalizations.of(context).managers,
                     action: state.company?.isUserOwner == true
                         ? ElevatedButton(
                             onPressed: () {
@@ -117,7 +119,7 @@ class _CompanyUserSreenState extends State<CompanyUserSreen> {
     return PaginatedDataTable(
         rowsPerPage: limit ?? 5,
         columns: _createColumns(),
-        source: UserDataTableSource(userList));
+        source: CompanyUserDataTableSource(userList));
   }
 
   List<DataColumn> _createColumns() {
@@ -140,10 +142,10 @@ class _CompanyUserSreenState extends State<CompanyUserSreen> {
   }
 }
 
-class UserDataTableSource extends DataTableSource {
+class CompanyUserDataTableSource extends DataTableSource {
   final List<User> userList;
 
-  UserDataTableSource(this.userList);
+  CompanyUserDataTableSource(this.userList);
   @override
   DataRow? getRow(int index) {
     final user = userList[index];

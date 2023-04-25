@@ -13,10 +13,16 @@ import 'package:priorli/core/announcement/usecases/get_announcement.dart';
 import 'package:priorli/core/announcement/usecases/get_announcement_list.dart';
 import 'package:priorli/core/announcement/usecases/make_annoucement.dart';
 import 'package:priorli/core/apartment/usecases/add_apartment_documents.dart';
+import 'package:priorli/core/apartment/usecases/cancel_apartment_invitations.dart';
 import 'package:priorli/core/apartment/usecases/delete_apartment.dart';
+import 'package:priorli/core/apartment/usecases/edit_apartment_owner.dart';
 import 'package:priorli/core/apartment/usecases/get_apartment_document.dart';
 import 'package:priorli/core/apartment/usecases/get_apartment_document_list.dart';
+import 'package:priorli/core/apartment/usecases/get_apartment_tenants.dart';
+import 'package:priorli/core/apartment/usecases/get_pending_apartment_invitation.dart';
 import 'package:priorli/core/apartment/usecases/join_apartment.dart';
+import 'package:priorli/core/apartment/usecases/remove_tenant_from_apartment.dart';
+import 'package:priorli/core/apartment/usecases/resend_apartment_invitation.dart';
 import 'package:priorli/core/contact_leads/data/contact_lead_remote_data_source.dart';
 import 'package:priorli/core/contact_leads/repos/contact_lead_repo.dart';
 import 'package:priorli/core/contact_leads/repos/contact_lead_repo_impl.dart';
@@ -52,6 +58,8 @@ import 'package:priorli/core/housing/usecases/delete_housing_company.dart';
 import 'package:priorli/core/housing/usecases/get_company_document.dart';
 import 'package:priorli/core/housing/usecases/get_company_document_list.dart';
 import 'package:priorli/core/housing/usecases/get_housing_company_managers.dart';
+import 'package:priorli/core/housing/usecases/remove_housing_company_manager.dart';
+import 'package:priorli/core/housing/usecases/remove_tenant_from_company.dart';
 import 'package:priorli/core/housing/usecases/update_company_document.dart';
 import 'package:priorli/core/invoice/data/invoice_data_source.dart';
 import 'package:priorli/core/invoice/data/invoice_remote_data_source.dart';
@@ -303,10 +311,17 @@ Future<void> init() async {
       serviceLocator(),
       serviceLocator(),
       serviceLocator(),
-      serviceLocator(),
       serviceLocator()));
   serviceLocator.registerFactory(() => ApartmentManagementCubit(
-      serviceLocator(), serviceLocator(), serviceLocator()));
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator()));
   serviceLocator.registerFactory(() => ApartmentWaterInvoiceCubit(
       serviceLocator(), serviceLocator(), serviceLocator()));
   serviceLocator.registerFactory(() => HousingCompanyPaymentCubit(
@@ -377,8 +392,14 @@ Future<void> init() async {
       serviceLocator(), serviceLocator(), serviceLocator(), serviceLocator()));
   serviceLocator.registerFactory(
       () => InvoiceGroupCubit(serviceLocator(), serviceLocator()));
-  serviceLocator.registerFactory(() => CompanyUserCubit(serviceLocator(),
-      serviceLocator(), serviceLocator(), serviceLocator(), serviceLocator()));
+  serviceLocator.registerFactory(() => CompanyUserCubit(
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator()));
   serviceLocator.registerFactory(() => CheckoutCubit(serviceLocator()));
   serviceLocator.registerFactory(() => AdminCubit(
       serviceLocator(),
@@ -484,6 +505,10 @@ Future<void> init() async {
       () => DeleteHousingCompany(housingCompanyRepository: serviceLocator()));
   serviceLocator.registerLazySingleton<GetHousingCompanyUsers>(
       () => GetHousingCompanyUsers(housingCompanyRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<RemoveHousingCompanyManager>(
+      () => RemoveHousingCompanyManager(serviceLocator()));
+  serviceLocator.registerLazySingleton<RemoveTenantFromCompany>(
+      () => RemoveTenantFromCompany(serviceLocator()));
 
   // payment
   serviceLocator.registerLazySingleton<AddBankAccount>(
@@ -508,6 +533,18 @@ Future<void> init() async {
       () => EditApartment(apartmentRepository: serviceLocator()));
   serviceLocator.registerLazySingleton<SendInvitationToApartment>(
       () => SendInvitationToApartment(apartmentRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<ResendApartmentInvitation>(
+      () => ResendApartmentInvitation(serviceLocator()));
+  serviceLocator.registerLazySingleton<CancelApartmentInvitation>(
+      () => CancelApartmentInvitation(serviceLocator()));
+  serviceLocator.registerLazySingleton<RemoveTenantFromApartment>(
+      () => RemoveTenantFromApartment(serviceLocator()));
+  serviceLocator.registerLazySingleton<GetPendingApartmentInvitations>(
+      () => GetPendingApartmentInvitations(serviceLocator()));
+  serviceLocator.registerLazySingleton<GetApartmentTenants>(
+      () => GetApartmentTenants(serviceLocator()));
+  serviceLocator.registerLazySingleton<EditApartmentOwner>(
+      () => EditApartmentOwner(serviceLocator()));
   serviceLocator.registerLazySingleton<JoinApartment>(
       () => JoinApartment(apartmentRepository: serviceLocator()));
 

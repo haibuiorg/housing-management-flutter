@@ -16,6 +16,7 @@ ConversationModel _$ConversationModelFromJson(Map<String, dynamic> json) =>
       name: json['name'] as String?,
       status: json['status'] as String?,
       is_archived: json['is_archived'] as bool?,
+      apartment_id: json['apartment_id'] as String?,
       last_message_not_seen_by:
           (json['last_message_not_seen_by'] as List<dynamic>?)
               ?.map((e) => e as String)
@@ -32,5 +33,6 @@ Map<String, dynamic> _$ConversationModelToJson(ConversationModel instance) =>
       'status': instance.status,
       'type': instance.type,
       'is_archived': instance.is_archived,
+      'apartment_id': instance.apartment_id,
       'last_message_not_seen_by': instance.last_message_not_seen_by,
     };

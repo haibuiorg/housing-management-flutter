@@ -14,7 +14,7 @@ class ResendApartmentInvitation
   @override
   Future<Result<ApartmentInvitation>> call(
       ResendApartmentInvitationParams params) async {
-    return await repository.resentApartmentInvitation(
+    return repository.resentApartmentInvitation(
         housingCompanyId: params.housingCompanyId,
         invitationId: params.invitationId);
   }

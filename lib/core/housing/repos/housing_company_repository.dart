@@ -62,4 +62,12 @@ abstract class HousingCompanyRepository {
       String? phoneNumber});
   Future<Result<List<HousingCompany>>> adminGetCompanies(
       {required int lastCreatedOn, required int limit});
+  Future<Result<List<User>>> removeHousingCompanyManager({
+    required String housingCompanyId,
+    required String removedUserId,
+  });
+  Future<Result<bool>> removeTenantFromCompany({
+    required String housingCompanyId,
+    required String removedUserId,
+  });
 }

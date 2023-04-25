@@ -236,4 +236,34 @@ class HousingCompanyRepositoryImpl extends HousingCompanyRepository {
       return ResultFailure(ServerFailure());
     }
   }
+
+  @override
+  Future<Result<List<User>>> removeHousingCompanyManager(
+      {required String housingCompanyId, required String removedUserId}) async {
+    try {
+      final userModels =
+          await housingCompanyDataSource.removeHousingCompanyManager(
+        housingCompanyId: housingCompanyId,
+        removedUserId: removedUserId,
+      );
+      return ResultSuccess(
+          userModels.map((e) => User.modelToEntity(e)).toList());
+    } on ServerException {
+      return ResultFailure(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Result<bool>> removeTenantFromCompany(
+      {required String housingCompanyId, required String removedUserId}) async {
+    try {
+      final isRemoved = await housingCompanyDataSource.removeTenantFromCompany(
+        housingCompanyId: housingCompanyId,
+        removedUserId: removedUserId,
+      );
+      return ResultSuccess(isRemoved);
+    } on ServerException {
+      return ResultFailure(ServerFailure());
+    }
+  }
 }

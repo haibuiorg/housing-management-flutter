@@ -280,4 +280,37 @@ class HousingCompanyRemoteDataSource implements HousingCompanyDataSource {
       throw ServerException(error: error);
     }
   }
+
+  @override
+  Future<List<UserModel>> removeHousingCompanyManager(
+      {required String housingCompanyId, required String removedUserId}) async {
+    try {
+      final Map<String, dynamic> data = {
+        'housing_company_id': housingCompanyId,
+        'removed_user_id': removedUserId,
+      };
+      final result =
+          await client.delete('/housing_company_manager', data: data);
+      return (result.data as List<dynamic>)
+          .map((e) => UserModel.fromJson(e))
+          .toList();
+    } catch (error) {
+      throw ServerException(error: error);
+    }
+  }
+
+  @override
+  Future<bool> removeTenantFromCompany(
+      {required String housingCompanyId, required String removedUserId}) async {
+    try {
+      final Map<String, dynamic> data = {
+        'housing_company_id': housingCompanyId,
+        'removed_user_id': removedUserId,
+      };
+      final result = await client.delete('/housing_company/tenant', data: data);
+      return result.data;
+    } catch (error) {
+      throw ServerException(error: error);
+    }
+  }
 }

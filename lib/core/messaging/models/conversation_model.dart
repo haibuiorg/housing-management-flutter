@@ -14,6 +14,7 @@ class ConversationModel extends Equatable {
   final String? status;
   final String? type;
   final bool? is_archived;
+  final String? apartment_id;
   final List<String>? last_message_not_seen_by;
 
   const ConversationModel(
@@ -23,6 +24,7 @@ class ConversationModel extends Equatable {
       this.name,
       this.status,
       this.is_archived,
+      this.apartment_id,
       this.last_message_not_seen_by,
       this.type});
 
@@ -36,6 +38,7 @@ class ConversationModel extends Equatable {
         user_ids,
         name,
         status,
+        apartment_id,
         type,
         last_message_not_seen_by,
         is_archived

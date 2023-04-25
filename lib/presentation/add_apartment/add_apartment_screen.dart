@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:priorli/presentation/add_apartment/add_apart_state.dart';
 import 'package:priorli/presentation/apartments/apartment_screen.dart';
 import 'package:priorli/presentation/shared/app_lottie_animation.dart';
@@ -10,6 +11,7 @@ import 'package:priorli/service_locator.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../go_router_navigation.dart';
+import '../housing_company/housing_company_screen.dart';
 import 'add_apart_cubit.dart';
 
 const addApartmentPath = 'add_apartment';
@@ -26,8 +28,8 @@ class AddApartmentScreen extends StatelessWidget {
       child: BlocConsumer<AddApartmentCubit, AddApartmentState>(
           listener: ((context, state) {
         if (state.addedApartments != null) {
-          context.pushFromCurrentLocation(
-              '$apartmentScreenPath/${state.addedApartments?.first.id}}');
+          context.pushReplacement(
+              '/$housingCompanyScreenPath/${state.addedApartments?.first.housingCompanyId}/$apartmentScreenPath/${state.addedApartments?.first.id}}');
         }
         if (state.errorText != null) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(

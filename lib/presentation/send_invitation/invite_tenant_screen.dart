@@ -11,14 +11,31 @@ import 'invite_tenant_cubit.dart';
 
 const inviteTenantPath = 'invite';
 
-class InviteTenantScreen extends StatelessWidget {
+class InviteTenantScreen extends StatefulWidget {
   const InviteTenantScreen({super.key, required this.housingCompanyId});
   final String housingCompanyId;
 
   @override
+  State<InviteTenantScreen> createState() => _InviteTenantScreenState();
+}
+
+class _InviteTenantScreenState extends State<InviteTenantScreen> {
+  late final InviteTenantCubit cubit;
+
+  @override
+  void initState() {
+    super.initState();
+    cubit = serviceLocator<InviteTenantCubit>()..init(widget.housingCompanyId);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    cubit.close();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final cubit = serviceLocator<InviteTenantCubit>();
-    cubit.init(housingCompanyId);
     return BlocProvider(
       create: (context) => cubit,
       child: BlocConsumer<InviteTenantCubit, InviteTenantState>(
@@ -27,44 +44,57 @@ class InviteTenantScreen extends StatelessWidget {
           Navigator.pop(context, true);
         }
       }, builder: (context, state) {
-        return Scaffold(
-          floatingActionButton: OutlinedButton(
-              onPressed: state.emails?.isNotEmpty == true &&
-                      state.selectedApartment?.isNotEmpty == true
-                  ? () async => cubit.sendInvitation()
-                  : null,
-              child: const Icon(Icons.chevron_right_outlined)),
-          appBar: AppBar(
-            title: Text(AppLocalizations.of(context).send_invitation),
-          ),
-          body: SingleChildScrollView(
-              child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: DropdownSearch<Apartment>(
-                  items: state.apartmentList ?? [],
-                  popupProps: PopupProps.menu(
-                    showSearchBox: (state.apartmentList?.length ?? 0) > 20,
-                  ),
-                  dropdownDecoratorProps: DropDownDecoratorProps(
-                      dropdownSearchDecoration: InputDecoration(
-                          labelText:
-                              AppLocalizations.of(context).select_apartment)),
-                  itemAsString: (Apartment apartment) =>
-                      '${apartment.building} ${apartment.houseCode ?? ''}',
-                  onChanged: (Apartment? apartment) =>
-                      cubit.setSelectedApartmentId(apartment?.id ?? ''),
+        return state.isLoading == true
+            ? const Center(
+                child: CircularProgressIndicator(),
+              )
+            : Scaffold(
+                floatingActionButton: OutlinedButton(
+                    onPressed: state.emails?.isNotEmpty == true &&
+                            state.selectedApartment?.isNotEmpty == true
+                        ? () async => cubit.sendInvitation()
+                        : null,
+                    child: const Icon(Icons.chevron_right_outlined)),
+                appBar: AppBar(
+                  title: Text(AppLocalizations.of(context).send_invitation),
                 ),
-              ),
-              CustomFormField(
-                keyboardType: TextInputType.emailAddress,
-                onChanged: (value) => cubit.updateEmails(value),
-                hintText: AppLocalizations.of(context).email_list_hint,
-              ),
-            ],
-          )),
-        );
+                body: SingleChildScrollView(
+                    child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: DropdownSearch<Apartment>(
+                        items: state.apartmentList ?? [],
+                        popupProps: PopupProps.menu(
+                          showSearchBox:
+                              (state.apartmentList?.length ?? 0) > 20,
+                        ),
+                        dropdownDecoratorProps: DropDownDecoratorProps(
+                            dropdownSearchDecoration: InputDecoration(
+                                labelText: AppLocalizations.of(context)
+                                    .select_apartment)),
+                        itemAsString: (Apartment apartment) =>
+                            '${apartment.building} ${apartment.houseCode ?? ''}',
+                        onChanged: (Apartment? apartment) =>
+                            cubit.setSelectedApartmentId(apartment?.id ?? ''),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: CustomFormField(
+                        keyboardType: TextInputType.emailAddress,
+                        onChanged: (value) => cubit.updateEmails(value),
+                        hintText: AppLocalizations.of(context).email_list_hint,
+                      ),
+                    ),
+                    CheckboxListTile(
+                        title: Text(AppLocalizations.of(context)
+                            .set_as_apartment_owner),
+                        value: state.setAsApartmentOwner == true,
+                        onChanged: cubit.setAsApartmentOwner),
+                  ],
+                )),
+              );
       }),
     );
   }

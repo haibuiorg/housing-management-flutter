@@ -19,8 +19,10 @@ class InviteTenantCubit extends Cubit<InviteTenantState> {
       : super(const InviteTenantState());
 
   Future<void> init(String housingCompanyId) async {
-    _getHousingCompanyData(housingCompanyId);
-    _getAparmentData(housingCompanyId);
+    emit(state.copyWith(isLoading: true));
+    await _getHousingCompanyData(housingCompanyId);
+    await _getAparmentData(housingCompanyId);
+    emit(state.copyWith(isLoading: false));
   }
 
   Future<void> _getHousingCompanyData(String housingCompanyId) async {
@@ -55,14 +57,20 @@ class InviteTenantCubit extends Cubit<InviteTenantState> {
   }
 
   Future<void> sendInvitation() async {
+    emit(state.copyWith(isLoading: true));
     final sendInvitationResult = await _sendInvitationToApartment(
         SendInvitationToApartmentParams(
+            setAsApartmentOwner: state.setAsApartmentOwner ?? false,
             housingCompanyId: state.housingCompanyId ?? '',
             apartmentId: state.selectedApartment ?? '',
             emails: state.emails));
-
+    emit(state.copyWith(isLoading: false));
     if (sendInvitationResult is ResultSuccess<ApartmentInvitation>) {
       emit(state.copyWith(popNow: true));
     }
+  }
+
+  setAsApartmentOwner(bool? setOwner) {
+    emit(state.copyWith(setAsApartmentOwner: setOwner));
   }
 }

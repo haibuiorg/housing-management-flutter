@@ -7,7 +7,8 @@ class Apartment extends Equatable {
   final String building;
   final String? houseCode;
   final bool isDeleted;
-  final List<String> tenants;
+  final List<String>? tenants;
+  final List<String>? owners;
 
   const Apartment(
       {required this.housingCompanyId,
@@ -15,7 +16,8 @@ class Apartment extends Equatable {
       required this.building,
       this.houseCode,
       required this.isDeleted,
-      required this.tenants});
+      this.tenants,
+      this.owners});
 
   factory Apartment.modelToEntity(ApartmentModel apartmentModel) => Apartment(
       housingCompanyId: apartmentModel.housingCompanyId,
@@ -23,6 +25,7 @@ class Apartment extends Equatable {
       building: apartmentModel.building,
       isDeleted: apartmentModel.isDeleted ?? false,
       houseCode: apartmentModel.houseCode,
+      owners: apartmentModel.owners,
       tenants: apartmentModel.tenants);
 
   Apartment copyWith(
@@ -30,11 +33,13 @@ class Apartment extends Equatable {
           String? id,
           String? building,
           String? houseCode,
+          List<String>? owners,
           bool? isDeleted,
           List<String>? tenants}) =>
       Apartment(
           housingCompanyId: housingCompanyId ?? this.housingCompanyId,
           id: id ?? this.id,
+          owners: owners ?? this.owners,
           houseCode: houseCode ?? this.houseCode,
           building: building ?? this.building,
           isDeleted: isDeleted ?? this.isDeleted,
@@ -42,5 +47,5 @@ class Apartment extends Equatable {
 
   @override
   List<Object?> get props =>
-      [housingCompanyId, id, building, houseCode, tenants, isDeleted];
+      [housingCompanyId, id, building, houseCode, owners, tenants, isDeleted];
 }

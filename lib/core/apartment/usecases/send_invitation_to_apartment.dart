@@ -16,6 +16,7 @@ class SendInvitationToApartment
     return apartmentRepository.sendInvitationToApartment(
         housingCompanyId: params.housingCompanyId,
         apartmentId: params.apartmentId,
+        setAsApartmentOwner: params.setAsApartmentOwner,
         emails: params.emails);
   }
 }
@@ -23,11 +24,16 @@ class SendInvitationToApartment
 class SendInvitationToApartmentParams extends Equatable {
   final String housingCompanyId;
   final String apartmentId;
+  final bool setAsApartmentOwner;
   final List<String>? emails;
 
   const SendInvitationToApartmentParams(
-      {required this.housingCompanyId, required this.apartmentId, this.emails});
+      {required this.housingCompanyId,
+      required this.apartmentId,
+      this.emails,
+      required this.setAsApartmentOwner});
 
   @override
-  List<Object?> get props => [housingCompanyId, apartmentId, emails];
+  List<Object?> get props =>
+      [housingCompanyId, apartmentId, emails, setAsApartmentOwner];
 }
