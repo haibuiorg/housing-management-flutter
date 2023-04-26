@@ -40,7 +40,7 @@ class _PdfViewerState extends State<PdfViewer> {
                   await launchUrl(Uri.parse(widget.link));
                 },
                 icon: const Icon(Icons.download),
-                label: Text(AppLocalizations.of(context).download)),
+                label: Text(AppLocalizations.of(context)!.download)),
           ),
         ),
         SizedBox(

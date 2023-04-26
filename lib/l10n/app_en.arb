@@ -662,5 +662,15 @@
     "new_fault_report": "New fault report",
     "tenant_management": "Tenant management",
     "invite_tenants": "Invite tenants",
-    "accounts_and_payments": "Accounts and payments"
+    "accounts_and_payments": "Accounts and payments",
+    "show_messages_in": "Show messages in:",
+    "language_code": "{ code, select, fi{Finnish} en{English} other{{code}} }",
+    "@language_code": {
+      "description": "A language code translation",
+      "placeholders": {
+        "code": {
+          "type": "String"
+        }
+      }
+    }
 }

@@ -56,13 +56,13 @@ class _CompanyUserSreenState extends State<CompanyUserSreen> {
           builder: (context, state) {
         return Scaffold(
             appBar: AppBar(
-              title: Text(AppLocalizations.of(context).user_management),
+              title: Text(AppLocalizations.of(context)!.user_management),
             ),
             body: SingleChildScrollView(
               child: Column(
                 children: [
                   FullWidthTitle(
-                    title: AppLocalizations.of(context).tenants,
+                    title: AppLocalizations.of(context)!.tenants,
                   ),
                   _createDataTable(state.userList ?? [], state.userListLimit),
                   SettingButton(
@@ -70,12 +70,12 @@ class _CompanyUserSreenState extends State<CompanyUserSreen> {
                       context.pushFromCurrentLocation(inviteTenantPath);
                     },
                     label: Text(
-                      AppLocalizations.of(context).send_apartment_invitation,
+                      AppLocalizations.of(context)!.send_apartment_invitation,
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
                   ),
                   FullWidthTitle(
-                    title: AppLocalizations.of(context).managers,
+                    title: AppLocalizations.of(context)!.managers,
                     action: state.company?.isUserOwner == true
                         ? ElevatedButton(
                             onPressed: () {
@@ -103,7 +103,7 @@ class _CompanyUserSreenState extends State<CompanyUserSreen> {
                                   });
                             },
                             child:
-                                Text(AppLocalizations.of(context).add_manager))
+                                Text(AppLocalizations.of(context)!.add_manager))
                         : null,
                   ),
                   _createDataTable(
@@ -125,19 +125,19 @@ class _CompanyUserSreenState extends State<CompanyUserSreen> {
   List<DataColumn> _createColumns() {
     return [
       DataColumn(
-          label: FittedBox(child: Text(AppLocalizations.of(context).email))),
+          label: FittedBox(child: Text(AppLocalizations.of(context)!.email))),
       DataColumn(
           label:
-              FittedBox(child: Text(AppLocalizations.of(context).first_name))),
+              FittedBox(child: Text(AppLocalizations.of(context)!.first_name))),
       DataColumn(
           label:
-              FittedBox(child: Text(AppLocalizations.of(context).last_name))),
+              FittedBox(child: Text(AppLocalizations.of(context)!.last_name))),
       DataColumn(
           label: FittedBox(
-              child: Text(AppLocalizations.of(context).phone_number))),
+              child: Text(AppLocalizations.of(context)!.phone_number))),
       DataColumn(
           label:
-              FittedBox(child: Text(AppLocalizations.of(context).apartment))),
+              FittedBox(child: Text(AppLocalizations.of(context)!.apartment))),
     ];
   }
 }

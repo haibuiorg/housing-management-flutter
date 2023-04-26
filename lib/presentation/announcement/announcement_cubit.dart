@@ -19,12 +19,13 @@ class AnnouncementCubit extends Cubit<AnnouncementState> {
   ) : super(const AnnouncementState());
 
   Future<void> init(String housingCompanyId) async {
+    emit(state.copyWith(isLoading: true));
     final getAnnouncementListResult = await _getAnnouncementList(
         GetAnnouncementListParams(
             housingCompanyId: housingCompanyId,
             lastAnnouncementTime: DateTime.now().millisecondsSinceEpoch,
             total: state.total ?? 10));
-
+    emit(state.copyWith(isLoading: false));
     if (getAnnouncementListResult is ResultSuccess<List<Announcement>>) {
       emit(state.copyWith(
           announcementList: getAnnouncementListResult.data,
@@ -36,11 +37,12 @@ class AnnouncementCubit extends Cubit<AnnouncementState> {
   }
 
   Future<void> getHousingCompanyData(String housingCompanyId) async {
+    emit(state.copyWith(isLoading: true));
     final getHousingCompanyResult =
         await _getHousingCompany(GetHousingCompanyParams(
       housingCompanyId: housingCompanyId,
     ));
-
+    emit(state.copyWith(isLoading: false));
     if (getHousingCompanyResult is ResultSuccess<HousingCompany>) {
       emit(state.copyWith(
           isManager: getHousingCompanyResult.data.isUserManager == true));
@@ -58,6 +60,7 @@ class AnnouncementCubit extends Cubit<AnnouncementState> {
       List<String>? storageItems,
       required bool sendEmail,
       required String body}) async {
+    emit(state.copyWith(isLoading: true));
     final makeAnnouncementResult = await _makeAnnouncement(
         MakeAnnouncementParams(
             sendEmail: sendEmail,
@@ -66,21 +69,26 @@ class AnnouncementCubit extends Cubit<AnnouncementState> {
             title: title,
             subtitle: subtitle,
             body: body));
+    emit(state.copyWith(isLoading: false));
     if (makeAnnouncementResult is ResultSuccess<Announcement>) {
       final List<Announcement> currentList =
           List.from(state.announcementList ?? []);
       currentList.insert(0, makeAnnouncementResult.data);
       emit(state.copyWith(announcementList: currentList));
+    } else {
+      emit(state.copyWith(error: 'Error making announcement'));
     }
   }
 
   Future<void> loadMore() async {
+    emit(state.copyWith(isLoading: true));
     final getAnnouncementListResult = await _getAnnouncementList(
         GetAnnouncementListParams(
             housingCompanyId: state.housingCompanyId ?? '',
             lastAnnouncementTime: state.announcementList?.last.createdOn ??
                 DateTime.now().millisecondsSinceEpoch,
             total: state.total ?? 10));
+    emit(state.copyWith(isLoading: false));
     if (getAnnouncementListResult is ResultSuccess<List<Announcement>>) {
       final List<Announcement> currentList =
           List.from(state.announcementList ?? []);
@@ -89,5 +97,9 @@ class AnnouncementCubit extends Cubit<AnnouncementState> {
         announcementList: currentList,
       ));
     }
+  }
+
+  void clearError() {
+    emit(state.copyWith(error: null));
   }
 }

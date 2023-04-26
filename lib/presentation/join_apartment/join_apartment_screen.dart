@@ -47,7 +47,7 @@ class _JoinApartmentScreenState extends State<JoinApartmentScreen> {
             },
             builder: (context, state) => Scaffold(
                   appBar: AppBar(
-                    title: Text(AppLocalizations.of(context)
+                    title: Text(AppLocalizations.of(context)!
                         .join_apartment_with_invitation_code),
                   ),
                   body: Column(
@@ -55,11 +55,11 @@ class _JoinApartmentScreenState extends State<JoinApartmentScreen> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         CustomFormField(
-                          hintText: AppLocalizations.of(context).code_title,
+                          hintText: AppLocalizations.of(context)!.code_title,
                           icon: const Icon(
                             Icons.abc,
                           ),
-                          helperText: AppLocalizations.of(context)
+                          helperText: AppLocalizations.of(context)!
                               .invitation_code_from_manager,
                           initialValue: '${state.code}',
                           onChanged: (code) => _cubit.onTypingCode(code),
@@ -68,7 +68,7 @@ class _JoinApartmentScreenState extends State<JoinApartmentScreen> {
                             onPressed: state.code?.isNotEmpty == true
                                 ? () => _cubit.joinWithCode()
                                 : null,
-                            child: Text(AppLocalizations.of(context).confirm)),
+                            child: Text(AppLocalizations.of(context)!.confirm)),
                       ]),
                 )));
   }

@@ -77,7 +77,7 @@ class _GuestInvitationState extends State<GuestInvitation> {
                                       .toList() ??
                                   []);
                         },
-                        child: Text(AppLocalizations.of(context).save))
+                        child: Text(AppLocalizations.of(context)!.save))
                   ],
           ),
           body: ListView.builder(
@@ -100,7 +100,7 @@ class _GuestInvitationState extends State<GuestInvitation> {
                           padding: const EdgeInsets.symmetric(horizontal: 8),
                           child: (state.selectedUsers ?? [])
                                   .contains(state.userList?[index].userId)
-                              ? Text(AppLocalizations.of(context).accepted)
+                              ? Text(AppLocalizations.of(context)!.accepted)
                               : (state.initialUsers ?? [])
                                       .contains(state.userList?[index].userId)
                                   ? Row(
@@ -109,7 +109,7 @@ class _GuestInvitationState extends State<GuestInvitation> {
                                           padding: const EdgeInsets.symmetric(
                                               horizontal: 8.0),
                                           child: Text(
-                                              AppLocalizations.of(context)
+                                              AppLocalizations.of(context)!
                                                   .invited),
                                         ),
                                         IconButton(
@@ -121,7 +121,7 @@ class _GuestInvitationState extends State<GuestInvitation> {
                                       ],
                                     )
                                   : OutlinedButton(
-                                      child: Text(AppLocalizations.of(context)
+                                      child: Text(AppLocalizations.of(context)!
                                           .send_invitation),
                                       onPressed: () {
                                         _cubit.addAdditionInvitees(index);

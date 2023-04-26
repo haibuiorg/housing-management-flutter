@@ -91,7 +91,7 @@ class _HousingCompanyScreenState extends State<HousingCompanyScreen> {
                     child: FittedBox(
                       child: Text(
                         state.housingCompany?.name ??
-                            AppLocalizations.of(context).housing_companies,
+                            AppLocalizations.of(context)!.housing_companies,
                       ),
                     ),
                   ),
@@ -177,14 +177,14 @@ class CalendarBox extends StatelessWidget {
             child: Column(
               children: [
                 FullWidthTitle(
-                  title: AppLocalizations.of(context).event,
+                  title: AppLocalizations.of(context)!.event,
                   action: TextButton(
                     onPressed: state.housingCompany?.isUserManager == true
                         ? () {
                             context.pushFromCurrentLocation(eventScreenPath);
                           }
                         : null,
-                    child: Text(AppLocalizations.of(context).add),
+                    child: Text(AppLocalizations.of(context)!.add),
                   ),
                 ),
                 Expanded(
@@ -236,7 +236,7 @@ class AnnouncementBox extends StatelessWidget {
       return Column(
         children: [
           FullWidthTitle(
-            title: AppLocalizations.of(context).announcement,
+            title: AppLocalizations.of(context)!.announcement,
           ),
           SizedBox(
             width: double.infinity,
@@ -264,7 +264,7 @@ class AnnouncementBox extends StatelessWidget {
               onPressed: () {
                 context.pushFromCurrentLocation(announcementPath);
               },
-              child: Text(AppLocalizations.of(context).more)),
+              child: Text(AppLocalizations.of(context)!.more)),
         ],
       );
     });

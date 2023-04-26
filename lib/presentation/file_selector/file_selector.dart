@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -249,7 +251,9 @@ class _FileSelectorState extends State<FileSelector> {
                                         .toList();
                                     await _cubit.loadFiles(files);
                                   }
-                                } catch (errp) {}
+                                } catch (err) {
+                                  debugPrint(err.toString());
+                                }
                               },
                       ),
                       IconButton(
@@ -275,7 +279,7 @@ class _FileSelectorState extends State<FileSelector> {
                               child: OutlinedButton.icon(
                                 icon: const Icon(Icons.upload_file_rounded),
                                 label:
-                                    Text(AppLocalizations.of(context).upload),
+                                    Text(AppLocalizations.of(context)!.upload),
                                 onPressed: (state.selectedFiles?.length ?? 0) >
                                         0
                                     ? (() => BlocProvider.of<FileSelectorCubit>(

@@ -33,7 +33,7 @@ List<Widget> createFeatureWidgetList(
       Column(
         children: [
           FullWidthTitle(
-            title: AppLocalizations.of(context).communication_topic,
+            title: AppLocalizations.of(context)!.communication_topic,
           ),
           Expanded(
             child: ListView.builder(
@@ -68,13 +68,13 @@ List<Widget> createFeatureWidgetList(
                           });
                     }
                   : null,
-              child: Text(AppLocalizations.of(context).start_new_channel))
+              child: Text(AppLocalizations.of(context)!.start_new_channel))
         ],
       ),
       Column(
         children: [
           FullWidthTitle(
-            title: AppLocalizations.of(context).water_consumption,
+            title: AppLocalizations.of(context)!.water_consumption,
             action: InkWell(
                 onTap: () {
                   context.pushFromCurrentLocation(
@@ -121,7 +121,7 @@ List<Widget> createFeatureWidgetList(
       Column(
         children: [
           FullWidthTitle(
-            title: AppLocalizations.of(context).apartment,
+            title: AppLocalizations.of(context)!.apartment,
             action: OutlinedButton.icon(
               onPressed: state.housingCompany?.isUserManager == true
                   ? () {
@@ -129,7 +129,7 @@ List<Widget> createFeatureWidgetList(
                     }
                   : null,
               icon: const Icon(Icons.add_home),
-              label: Text(AppLocalizations.of(context).add),
+              label: Text(AppLocalizations.of(context)!.add),
             ),
           ),
           Expanded(
@@ -158,7 +158,7 @@ List<Widget> createFeatureWidgetList(
       Column(
         children: [
           FullWidthTitle(
-            title: AppLocalizations.of(context).documents,
+            title: AppLocalizations.of(context)!.documents,
           ),
           Expanded(
             child: ListView.builder(
@@ -193,20 +193,20 @@ List<Widget> createFeatureWidgetList(
               onPressed: () {
                 context.pushFromCurrentLocation(documentListScreenPath);
               },
-              child: Text(AppLocalizations.of(context).more))
+              child: Text(AppLocalizations.of(context)!.more))
         ],
       ),
       Column(
         children: [
           FullWidthTitle(
-            title: AppLocalizations.of(context).polls,
+            title: AppLocalizations.of(context)!.polls,
             action: TextButton(
               onPressed: state.housingCompany?.isUserManager == true
                   ? () {
                       context.pushFromCurrentLocation(pollScreenPath);
                     }
                   : null,
-              child: Text(AppLocalizations.of(context).create_new_poll),
+              child: Text(AppLocalizations.of(context)!.create_new_poll),
             ),
           ),
           Expanded(
@@ -238,13 +238,13 @@ List<Widget> createFeatureWidgetList(
                 }),
           ),
           TextButton(
-              onPressed: () {}, child: Text(AppLocalizations.of(context).more))
+              onPressed: () {}, child: Text(AppLocalizations.of(context)!.more))
         ],
       ),
       Column(
         children: [
           FullWidthTitle(
-            title: AppLocalizations.of(context).fault_report,
+            title: AppLocalizations.of(context)!.fault_report,
           ),
           Expanded(
             child: ListView.builder(
@@ -274,13 +274,13 @@ List<Widget> createFeatureWidgetList(
         Column(
           children: [
             FullWidthTitle(
-              title: AppLocalizations.of(context).invoices,
+              title: AppLocalizations.of(context)!.invoices,
               action: TextButton.icon(
                   onPressed: () {
                     context.pushFromCurrentLocation(invoiceCreationPath);
                   },
                   icon: const Icon(Icons.receipt),
-                  label: Text(AppLocalizations.of(context).new_invoice)),
+                  label: Text(AppLocalizations.of(context)!.new_invoice)),
             ),
             Expanded(
               child: ListView.builder(
@@ -304,13 +304,13 @@ List<Widget> createFeatureWidgetList(
                 onPressed: () {
                   context.pushFromCurrentLocation(invoiceGroupPath);
                 },
-                child: Text(AppLocalizations.of(context).more))
+                child: Text(AppLocalizations.of(context)!.more))
           ],
         ),
       Column(
         children: [
           FullWidthTitle(
-            title: AppLocalizations.of(context).renovation_requests,
+            title: AppLocalizations.of(context)!.renovation_requests,
           )
         ],
       ),

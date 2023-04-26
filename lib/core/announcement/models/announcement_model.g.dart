@@ -20,6 +20,18 @@ AnnouncementModel _$AnnouncementModelFromJson(Map<String, dynamic> json) =>
           ?.map((e) => StorageItemModel.fromJson(e as Map<String, dynamic>))
           .toList(),
       json['display_name'] as String?,
+      (json['translated_body'] as List<dynamic>?)
+          ?.map(
+              (e) => TranslatedMessageModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      (json['translated_title'] as List<dynamic>?)
+          ?.map(
+              (e) => TranslatedMessageModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      (json['translated_subtitle'] as List<dynamic>?)
+          ?.map(
+              (e) => TranslatedMessageModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
       json['is_deleted'] as bool?,
     );
 
@@ -36,4 +48,7 @@ Map<String, dynamic> _$AnnouncementModelToJson(AnnouncementModel instance) =>
       'display_name': instance.display_name,
       'is_deleted': instance.is_deleted,
       'storage_items': instance.storage_items,
+      'translated_body': instance.translated_body,
+      'translated_title': instance.translated_title,
+      'translated_subtitle': instance.translated_subtitle,
     };

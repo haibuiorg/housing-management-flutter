@@ -80,7 +80,7 @@ class MessageListWidget extends StatelessWidget {
           if (state.conversationList?.isNotEmpty == true)
             SliverToBoxAdapter(
                 child: FullWidthTitle(
-              title: AppLocalizations.of(context).from_compamies,
+              title: AppLocalizations.of(context)!.from_compamies,
             )),
           SliverList(
               delegate: SliverChildBuilderDelegate(
@@ -102,7 +102,7 @@ class MessageListWidget extends StatelessWidget {
           if (state.faultConversationList?.isNotEmpty == true)
             SliverToBoxAdapter(
                 child: FullWidthTitle(
-              title: AppLocalizations.of(context).fault_reports,
+              title: AppLocalizations.of(context)!.fault_reports,
             )),
           SliverList(
               delegate: SliverChildBuilderDelegate(
@@ -124,7 +124,7 @@ class MessageListWidget extends StatelessWidget {
           if (state.supportConversationList?.isNotEmpty == true)
             SliverToBoxAdapter(
               child: FullWidthTitle(
-                title: AppLocalizations.of(context).support_requests,
+                title: AppLocalizations.of(context)!.support_requests,
               ),
             ),
           SliverList(

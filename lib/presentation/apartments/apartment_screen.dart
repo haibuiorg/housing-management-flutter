@@ -132,11 +132,11 @@ class ApartmentOwnerView extends StatelessWidget {
               onPressed: () {
                 context.pushFromCurrentLocation(manageScreenPath);
               },
-              child: Text(AppLocalizations.of(context).manange),
+              child: Text(AppLocalizations.of(context)!.manange),
             )
           ],
           title: Text(
-              '${state.apartment?.building ?? AppLocalizations.of(context).apartment} ${state.apartment?.houseCode ?? ''}'),
+              '${state.apartment?.building ?? AppLocalizations.of(context)!.apartment} ${state.apartment?.houseCode ?? ''}'),
         ),
         body: CustomScrollView(
           slivers: [
@@ -148,7 +148,7 @@ class ApartmentOwnerView extends StatelessWidget {
             ),
             SliverToBoxAdapter(
               child: FullWidthTitle(
-                title: AppLocalizations.of(context).pending_fault_reports,
+                title: AppLocalizations.of(context)!.pending_fault_reports,
               ),
             ),
             SliverToBoxAdapter(
@@ -160,7 +160,7 @@ class ApartmentOwnerView extends StatelessWidget {
             SliverToBoxAdapter(
               child: Center(
                 child: OutlinedButton(
-                  child: Text(AppLocalizations.of(context).new_fault_report),
+                  child: Text(AppLocalizations.of(context)!.new_fault_report),
                   onPressed: () => createFaultReportDialog(context),
                 ),
               ),
@@ -229,7 +229,7 @@ class WaterConsumptionChart extends StatelessWidget {
         builder: (context, state) {
       return Column(children: [
         FullWidthTitle(
-          title: AppLocalizations.of(context).water_consumption,
+          title: AppLocalizations.of(context)!.water_consumption,
         ),
         Padding(
           padding: const EdgeInsets.all(16.0),
@@ -250,22 +250,22 @@ class WaterConsumptionChart extends StatelessWidget {
               ]),
         ),
         FullWidthPairText(
-          label: AppLocalizations.of(context).period,
+          label: AppLocalizations.of(context)!.period,
           content: state.latestWaterConsumption?.period.toString() ?? '',
         ),
         FullWidthPairText(
-          label: AppLocalizations.of(context).year,
+          label: AppLocalizations.of(context)!.year,
           content: state.latestWaterConsumption?.year.toString() ?? '',
         ),
         FullWidthPairText(
-          label: AppLocalizations.of(context).basic_fee,
+          label: AppLocalizations.of(context)!.basic_fee,
           content: formatCurrency(
               ((state.latestWaterConsumption?.basicFee ?? 0) /
                   (state.housingCompany?.apartmentCount ?? 1)),
               state.housingCompany?.currencyCode),
         ),
         FullWidthPairText(
-          label: AppLocalizations.of(context).price_per_cube,
+          label: AppLocalizations.of(context)!.price_per_cube,
           content: formatCurrency(state.latestWaterConsumption?.pricePerCube,
               state.housingCompany?.currencyCode),
         ),
@@ -273,7 +273,8 @@ class WaterConsumptionChart extends StatelessWidget {
             ? Column(
                 children: [
                   FullWidthPairText(
-                    label: AppLocalizations.of(context).consumption_this_period,
+                    label:
+                        AppLocalizations.of(context)!.consumption_this_period,
                     content: state.yearlyWaterBills
                             ?.where((element) =>
                                 element.period ==
@@ -283,10 +284,10 @@ class WaterConsumptionChart extends StatelessWidget {
                             .first
                             .consumption
                             .toStringAsFixed(2) ??
-                        AppLocalizations.of(context).not_yet_updated,
+                        AppLocalizations.of(context)!.not_yet_updated,
                   ),
                   FullWidthPairText(
-                      label: AppLocalizations.of(context).invoice_this_period,
+                      label: AppLocalizations.of(context)!.invoice_this_period,
                       content: formatCurrency(
                           state.yearlyWaterBills
                               ?.where((element) =>
@@ -300,8 +301,8 @@ class WaterConsumptionChart extends StatelessWidget {
                 ],
               )
             : FullWidthPairText(
-                label: AppLocalizations.of(context).consumption_this_period,
-                content: AppLocalizations.of(context).not_yet_updated,
+                label: AppLocalizations.of(context)!.consumption_this_period,
+                content: AppLocalizations.of(context)!.not_yet_updated,
               ),
         OutlinedButton(
             onPressed: hasConsumptionValue ||
@@ -326,7 +327,7 @@ class WaterConsumptionChart extends StatelessWidget {
                               },
                             ));
                   },
-            child: Text(AppLocalizations.of(context).add_water_consumption)),
+            child: Text(AppLocalizations.of(context)!.add_water_consumption)),
       ]);
     });
   }
@@ -353,11 +354,11 @@ class _ConsumptionValueDialogState extends State<ConsumptionValueDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(AppLocalizations.of(context).add_consumption_value),
+      title: Text(AppLocalizations.of(context)!.add_consumption_value),
       content: Column(mainAxisSize: MainAxisSize.min, children: [
         CustomFormField(
           keyboardType: const TextInputType.numberWithOptions(decimal: true),
-          hintText: AppLocalizations.of(context).consumption_value,
+          hintText: AppLocalizations.of(context)!.consumption_value,
           textEditingController: _consumptionController,
         )
       ]),
@@ -369,7 +370,7 @@ class _ConsumptionValueDialogState extends State<ConsumptionValueDialog> {
               );
               Navigator.pop(context, true);
             },
-            child: Text(AppLocalizations.of(context).submit))
+            child: Text(AppLocalizations.of(context)!.submit))
       ],
     );
   }
@@ -421,7 +422,7 @@ class _FaultReportDialogState extends State<FaultReportDialog> {
                   ),
                 ),
                 Text(
-                  AppLocalizations.of(context).fault_report,
+                  AppLocalizations.of(context)!.fault_report,
                   style: Theme.of(context).textTheme.titleLarge,
                   textAlign: TextAlign.center,
                 ),
@@ -432,7 +433,7 @@ class _FaultReportDialogState extends State<FaultReportDialog> {
                     maxLines: 1,
                     autofocus: true,
                     decoration: InputDecoration(
-                      hintText: AppLocalizations.of(context).title,
+                      hintText: AppLocalizations.of(context)!.title,
                     ),
                   ),
                 ),
@@ -442,7 +443,7 @@ class _FaultReportDialogState extends State<FaultReportDialog> {
                   maxLines: 20,
                   keyboardType: TextInputType.multiline,
                   decoration: InputDecoration(
-                    hintText: AppLocalizations.of(context).content,
+                    hintText: AppLocalizations.of(context)!.content,
                     border: const OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(16.0)),
                     ),
@@ -465,7 +466,7 @@ class _FaultReportDialogState extends State<FaultReportDialog> {
                             _sendEmail = !_sendEmail;
                           });
                         }),
-                    Text(AppLocalizations.of(context).also_send_email),
+                    Text(AppLocalizations.of(context)!.also_send_email),
                     const Spacer(),
                     OutlinedButton(
                         onPressed: () {
@@ -475,7 +476,7 @@ class _FaultReportDialogState extends State<FaultReportDialog> {
                               title: _titleController.text,
                               uploadedDocuments: _uploadedDocuments);
                         },
-                        child: Text(AppLocalizations.of(context).submit))
+                        child: Text(AppLocalizations.of(context)!.submit))
                   ],
                 ),
               ]),

@@ -57,7 +57,7 @@ class _DocumentListScreenState extends State<DocumentListScreen> {
               builder: (context, state) {
                 return Scaffold(
                   appBar: AppBar(
-                    title: Text(AppLocalizations.of(context).documents),
+                    title: Text(AppLocalizations.of(context)!.documents),
                   ),
                   floatingActionButton: state.addDocument == true
                       ? FloatingActionButton(
@@ -108,7 +108,7 @@ class _DocumentListScreenState extends State<DocumentListScreen> {
                                   _cubit.loadMore();
                                 },
                                 child: Text(
-                                    AppLocalizations.of(context).load_more));
+                                    AppLocalizations.of(context)!.load_more));
                       }),
                 );
               }),

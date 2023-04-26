@@ -73,13 +73,13 @@ class _PollCreationFormState extends State<PollCreationForm> {
       showDialog(
           context: context,
           builder: (builder) => AlertDialog(
-                content: Text(AppLocalizations.of(context).vote_option_error),
+                content: Text(AppLocalizations.of(context)!.vote_option_error),
                 actions: [
                   OutlinedButton(
                       onPressed: () {
                         Navigator.pop(builder);
                       },
-                      child: Text(AppLocalizations.of(context).ok))
+                      child: Text(AppLocalizations.of(context)!.ok))
                 ],
               ));
       return;
@@ -131,20 +131,20 @@ class _PollCreationFormState extends State<PollCreationForm> {
               child: const Icon(Icons.check_rounded),
             ),
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context).create_new_poll),
+        title: Text(AppLocalizations.of(context)!.create_new_poll),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
             CustomFormField(
-              hintText: AppLocalizations.of(context).poll_name,
+              hintText: AppLocalizations.of(context)!.poll_name,
               onChanged: (_) {
                 _checkValidation();
               },
               textEditingController: _nameController,
             ),
             CustomFormField(
-              hintText: AppLocalizations.of(context).poll_description,
+              hintText: AppLocalizations.of(context)!.poll_description,
               onChanged: (_) {
                 _checkValidation();
               },
@@ -155,9 +155,9 @@ class _PollCreationFormState extends State<PollCreationForm> {
               spacing: 8,
               children: List.generate(_votingOptionControllers.length, (index) {
                 return CustomFormField(
-                  hintText: AppLocalizations.of(context)
+                  hintText: AppLocalizations.of(context)!
                       .vote_option_value((index + 1).toString()),
-                  helperText: AppLocalizations.of(context).vote_option_title,
+                  helperText: AppLocalizations.of(context)!.vote_option_title,
                   textEditingController: _votingOptionControllers[index],
                   decoration: InputDecoration(
                       suffixIcon: IconButton(
@@ -170,9 +170,9 @@ class _PollCreationFormState extends State<PollCreationForm> {
             ),
             TextButton(
                 onPressed: _addVotingOption,
-                child: Text(AppLocalizations.of(context).add_vote_option)),
+                child: Text(AppLocalizations.of(context)!.add_vote_option)),
             SettingButton(
-              label: Text(AppLocalizations.of(context).vote_ends_by(
+              label: Text(AppLocalizations.of(context)!.vote_ends_by(
                   getFormattedDateTime(_endedOn.microsecondsSinceEpoch))),
               onPressed: () {
                 showModalBottomSheet(
@@ -189,7 +189,7 @@ class _PollCreationFormState extends State<PollCreationForm> {
             ),
             SettingButton(
               label: Text(
-                AppLocalizations.of(context).participants_name(
+                AppLocalizations.of(context)!.participants_name(
                     _displayName.isEmpty ? '--' : _displayName.join(', ')),
               ),
               onPressed: () {
@@ -212,7 +212,7 @@ class _PollCreationFormState extends State<PollCreationForm> {
               },
             ),
             CheckboxListTile(
-                title: Text(AppLocalizations.of(context).anonymous_poll),
+                title: Text(AppLocalizations.of(context)!.anonymous_poll),
                 value: _annonymous,
                 onChanged: (value) {
                   setState(() {
@@ -221,7 +221,7 @@ class _PollCreationFormState extends State<PollCreationForm> {
                 }),
             CheckboxListTile(
                 title:
-                    Text(AppLocalizations.of(context).participant_add_option),
+                    Text(AppLocalizations.of(context)!.participant_add_option),
                 value: _expandable,
                 onChanged: (value) {
                   setState(() {
@@ -230,7 +230,7 @@ class _PollCreationFormState extends State<PollCreationForm> {
                 }),
             CheckboxListTile(
                 title: Text(
-                    AppLocalizations.of(context).participants_select_multiple),
+                    AppLocalizations.of(context)!.participants_select_multiple),
                 value: _multiple,
                 onChanged: (value) {
                   setState(() {

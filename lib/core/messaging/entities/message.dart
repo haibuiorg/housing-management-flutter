@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:priorli/core/messaging/entities/translated_message.dart';
 import 'package:priorli/core/storage/entities/storage_item.dart';
 
 import '../models/message_model.dart';
@@ -12,6 +13,7 @@ class Message extends Equatable {
   final int? updatedOn;
   final List<String>? seenBy;
   final List<StorageItem>? storageItems;
+  final List<TranslatedMessage>? translatedMessage;
 
   const Message(
       {required this.createdOn,
@@ -21,6 +23,7 @@ class Message extends Equatable {
       required this.senderName,
       this.storageItems,
       this.updatedOn,
+      this.translatedMessage,
       this.seenBy});
 
   Message copyWith({
@@ -31,11 +34,13 @@ class Message extends Equatable {
     String? senderName,
     int? updatedOn,
     List<String>? seenBy,
+    List<TranslatedMessage>? translatedMessage,
     List<StorageItem>? storageItems,
   }) =>
       Message(
           createdOn: createdOn ?? this.createdOn,
           id: id ?? this.id,
+          translatedMessage: translatedMessage ?? this.translatedMessage,
           message: message ?? this.message,
           senderId: senderId ?? this.senderId,
           senderName: senderName ?? this.senderName,
@@ -43,22 +48,25 @@ class Message extends Equatable {
           updatedOn: updatedOn ?? this.updatedOn,
           seenBy: seenBy ?? this.seenBy);
 
-  MessageModel toModel({String? id}) => MessageModel(
-      created_on: createdOn,
-      id: id ?? this.id,
-      message: message,
-      sender_id: senderId,
-      sender_name: senderName,
-      updated_on: updatedOn,
-      seen_by: seenBy);
-
   @override
-  List<Object?> get props =>
-      [createdOn, id, message, senderId, senderName, updatedOn, seenBy];
+  List<Object?> get props => [
+        createdOn,
+        id,
+        message,
+        senderId,
+        senderName,
+        updatedOn,
+        seenBy,
+        storageItems,
+        translatedMessage
+      ];
 
   factory Message.modelToEntity(MessageModel messageModel) => Message(
       updatedOn: messageModel.updated_on,
       seenBy: messageModel.seen_by,
+      translatedMessage: messageModel.translated_message
+          ?.map((e) => TranslatedMessage.modelToEntity(e))
+          .toList(),
       storageItems: messageModel.storage_items
           ?.map((e) => StorageItem.modelToEntity(e))
           .toList(),

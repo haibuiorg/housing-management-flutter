@@ -51,8 +51,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               builder: (context) {
                 return Padding(
                   padding: const EdgeInsets.all(32),
-                  child:
-                      Text(AppLocalizations.of(context).reset_password_success),
+                  child: Text(
+                      AppLocalizations.of(context)!.reset_password_success),
                 );
               });
           _cubit.initState();
@@ -60,7 +60,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       }, builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
-            title: Text(AppLocalizations.of(context).reset_password),
+            title: Text(AppLocalizations.of(context)!.reset_password),
           ),
           body: Padding(
             padding: EdgeInsets.only(
@@ -80,21 +80,21 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     )),
                 const Spacer(),
                 Text(
-                  AppLocalizations.of(context).forgot_password,
+                  AppLocalizations.of(context)!.forgot_password,
                   style: Theme.of(context).textTheme.headlineSmall,
                   textAlign: TextAlign.center,
                 ),
                 Container(
                   margin: const EdgeInsets.only(top: 16),
                   child: Text(
-                    AppLocalizations.of(context).reset_password_instruction,
+                    AppLocalizations.of(context)!.reset_password_instruction,
                     style: Theme.of(context).textTheme.titleMedium,
                     textAlign: TextAlign.center,
                   ),
                 ),
                 const Spacer(),
                 CustomFormField(
-                  hintText: AppLocalizations.of(context).email,
+                  hintText: AppLocalizations.of(context)!.email,
                   textEditingController: _emailController,
                   autoValidate: true,
                   keyboardType: TextInputType.emailAddress,
@@ -107,7 +107,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   textInputAction: TextInputAction.next,
                   validator: (val) {
                     return (!val!.isValidEmail)
-                        ? AppLocalizations.of(context).email_address_error
+                        ? AppLocalizations.of(context)!.email_address_error
                         : null;
                   },
                 ),
@@ -119,7 +119,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       onPressed: _emailController.text.isValidEmail
                           ? _submitResetPassword
                           : null,
-                      child: Text(AppLocalizations.of(context).reset_password)),
+                      child:
+                          Text(AppLocalizations.of(context)!.reset_password)),
                 ),
                 const Spacer(),
               ],

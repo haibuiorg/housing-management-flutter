@@ -71,7 +71,7 @@ class _AccountScreenState extends State<AccountScreen> {
               icon: const Icon(Icons.close),
               onPressed: () => Navigator.of(context).pop(),
             ),
-            title: Text(AppLocalizations.of(context).account_management),
+            title: Text(AppLocalizations.of(context)!.account_management),
             actions: [
               TextButton(
                 onPressed: state.user != state.pendingUser
@@ -84,7 +84,7 @@ class _AccountScreenState extends State<AccountScreen> {
                         _cubit.updateUser(user);
                       }
                     : null,
-                child: Text(AppLocalizations.of(context).save),
+                child: Text(AppLocalizations.of(context)!.save),
               )
             ],
           ),
@@ -118,19 +118,19 @@ class _AccountScreenState extends State<AccountScreen> {
                   },
                 ),
                 FullWidthPairText(
-                    label: AppLocalizations.of(context).email,
+                    label: AppLocalizations.of(context)!.email,
                     content: state.user?.email,
                     isBoldContent: true),
                 CustomFormField(
                   textEditingController: _firstNameController,
-                  hintText: AppLocalizations.of(context).first_name,
+                  hintText: AppLocalizations.of(context)!.first_name,
                   autofocus: false,
                   onChanged: (value) => BlocProvider.of<AccountCubit>(context)
                       .updateFirstName(value),
                   keyboardType: TextInputType.name,
                 ),
                 CustomFormField(
-                  hintText: AppLocalizations.of(context).last_name,
+                  hintText: AppLocalizations.of(context)!.last_name,
                   textEditingController: _lastNameController,
                   autofocus: false,
                   onChanged: (value) => BlocProvider.of<AccountCubit>(context)
@@ -138,7 +138,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   keyboardType: TextInputType.name,
                 ),
                 CustomFormField(
-                  hintText: AppLocalizations.of(context).phone_number,
+                  hintText: AppLocalizations.of(context)!.phone_number,
                   textEditingController: _phoneController,
                   autofocus: false,
                   onChanged: (value) =>
@@ -146,20 +146,20 @@ class _AccountScreenState extends State<AccountScreen> {
                   keyboardType: TextInputType.streetAddress,
                 ),
                 /*SettingButton(
-                  label: Text(AppLocalizations.of(context).notification_setting)),
+                  label: Text(AppLocalizations.of(context)!.notification_setting)),
                   onPressed: () {
                     //GoRouter.of(context).push(paymentPath);
                   },
                 ),*/
                 SettingButton(
-                  label: Text(AppLocalizations.of(context).change_password),
+                  label: Text(AppLocalizations.of(context)!.change_password),
                   onPressed: () {
                     GoRouter.of(context).push(changePasswordPath);
                   },
                 ),
                 SettingButton(
                   icon: const Icon(Icons.open_in_new_outlined),
-                  label: Text(AppLocalizations.of(context).terms_of_use),
+                  label: Text(AppLocalizations.of(context)!.terms_of_use),
                   onPressed: state.legalDocuments
                               ?.where((element) => element.type == 'terms') !=
                           null
@@ -174,7 +174,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 ),
                 SettingButton(
                   icon: const Icon(Icons.open_in_new_outlined),
-                  label: Text(AppLocalizations.of(context).privacy_policies),
+                  label: Text(AppLocalizations.of(context)!.privacy_policies),
                   onPressed: state.legalDocuments?.where(
                               (element) => element.type == 'policies') !=
                           null
@@ -195,25 +195,25 @@ class _AccountScreenState extends State<AccountScreen> {
                         builder: (builder) {
                           return AlertDialog(
                             title: Text(
-                                AppLocalizations.of(context).logout_confirm),
+                                AppLocalizations.of(context)!.logout_confirm),
                             actions: [
                               TextButton(
                                   onPressed: () {
                                     Navigator.of(builder).pop();
                                   },
                                   child: Text(
-                                      AppLocalizations.of(context).cancel)),
+                                      AppLocalizations.of(context)!.cancel)),
                               TextButton(
                                   onPressed: () {
                                     BlocProvider.of<AuthCubit>(context)
                                         .logOut();
                                   },
-                                  child: Text(AppLocalizations.of(context).ok))
+                                  child: Text(AppLocalizations.of(context)!.ok))
                             ],
                           );
                         });
                   },
-                  label: Text(AppLocalizations.of(context).logout),
+                  label: Text(AppLocalizations.of(context)!.logout),
                   icon: const Icon(Icons.logout),
                 ),
               ]),

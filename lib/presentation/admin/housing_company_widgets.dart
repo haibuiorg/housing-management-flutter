@@ -27,7 +27,7 @@ class AdminCompanyListView extends StatelessWidget {
                 tileColor: Theme.of(context).cardColor,
                 shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(10))),
-                title: Text(AppLocalizations.of(context)
+                title: Text(AppLocalizations.of(context)!
                     .company_with_name(state.companyList![index].name)),
               ),
             );

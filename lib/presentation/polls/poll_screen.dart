@@ -56,7 +56,7 @@ class _PollScreenState extends State<PollScreen> {
               return state.isInitializing
                   ? Scaffold(
                       appBar: AppBar(
-                        title: Text(AppLocalizations.of(context).poll_loading),
+                        title: Text(AppLocalizations.of(context)!.poll_loading),
                       ),
                       body: const AppLottieAnimation(
                         loadingResource: 'vote',

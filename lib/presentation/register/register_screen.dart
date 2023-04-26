@@ -49,7 +49,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       appBar: AppBar(
         centerTitle: true,
         elevation: 4,
-        title: Text(AppLocalizations.of(context).register),
+        title: Text(AppLocalizations.of(context)!.register),
       ),
       floatingActionButton: FloatingActionButton(
           onPressed: () => _register(context),
@@ -61,7 +61,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           children: [
             CustomFormField(
               textEditingController: _emailController,
-              hintText: AppLocalizations.of(context).email,
+              hintText: AppLocalizations.of(context)!.email,
               autoValidate: true,
               keyboardType: TextInputType.emailAddress,
               icon: const Icon(
@@ -70,13 +70,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
               textInputAction: TextInputAction.next,
               validator: (val) {
                 return (!val!.isValidEmail)
-                    ? AppLocalizations.of(context).email_address_error
+                    ? AppLocalizations.of(context)!.email_address_error
                     : null;
               },
             ),
             CustomFormField(
               autoValidate: true,
-              hintText: AppLocalizations.of(context).password_title,
+              hintText: AppLocalizations.of(context)!.password_title,
               obscureText: _isObscured,
               textInputAction: TextInputAction.next,
               icon: const Icon(
@@ -85,7 +85,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               textEditingController: _passwordController,
               validator: (val) {
                 return !val!.isValidPassword
-                    ? AppLocalizations.of(context).password_error
+                    ? AppLocalizations.of(context)!.password_error
                     : null;
               },
               onChanged: (_) => setState(() {}),
@@ -101,7 +101,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       })),
             ),
             CustomFormField(
-              hintText: AppLocalizations.of(context).first_name,
+              hintText: AppLocalizations.of(context)!.first_name,
               textInputAction: TextInputAction.next,
               icon: const Icon(
                 Icons.badge_outlined,
@@ -109,7 +109,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               textEditingController: _firstNameController,
             ),
             CustomFormField(
-              hintText: AppLocalizations.of(context).last_name,
+              hintText: AppLocalizations.of(context)!.last_name,
               textInputAction: TextInputAction.next,
               icon: const Icon(
                 Icons.badge_outlined,
@@ -117,7 +117,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               textEditingController: _lastNameController,
             ),
             CustomFormField(
-              hintText: AppLocalizations.of(context).phone_number,
+              hintText: AppLocalizations.of(context)!.phone_number,
               textInputAction: TextInputAction.go,
               icon: const Icon(
                 Icons.phone_iphone_outlined,

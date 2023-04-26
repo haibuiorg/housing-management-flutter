@@ -46,7 +46,7 @@ class _NotificationCenterScreenState extends State<NotificationCenterScreen> {
       create: (_) => cubit,
       child: Scaffold(
         appBar: AppBar(
-          title: Text(AppLocalizations.of(context).notification_center),
+          title: Text(AppLocalizations.of(context)!.notification_center),
         ),
         body: BlocBuilder<NotificationCenterCubit, NotificationCenterState>(
             builder: (context, state) {

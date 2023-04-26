@@ -59,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           GoRouter.of(context).push(createCompanyPath);
                         },
                         child: Text(
-                          AppLocalizations.of(context)
+                          AppLocalizations.of(context)!
                               .create_a_housing_community,
                           textAlign: TextAlign.center,
                         )),
@@ -74,7 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           GoRouter.of(context).push(joinApartmentPath);
                         },
                         child: Text(
-                          AppLocalizations.of(context)
+                          AppLocalizations.of(context)!
                               .join_apartment_with_invitation_code,
                           textAlign: TextAlign.center,
                         )),

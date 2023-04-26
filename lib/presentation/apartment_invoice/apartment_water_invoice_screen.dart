@@ -65,7 +65,7 @@ class _ApartmentWaterInvoiceScreenState
       }, builder: (context, state) {
         return Scaffold(
             appBar: AppBar(
-              title: Text(AppLocalizations.of(context).water_invoices),
+              title: Text(AppLocalizations.of(context)!.water_invoices),
             ),
             body: Padding(
               padding: EdgeInsets.only(
@@ -87,7 +87,7 @@ class _ApartmentWaterInvoiceScreenState
                             ),
                             onPressed: (() => cubit.getWaterBillLink(index)),
                             label: Text(
-                              AppLocalizations.of(context).water_invoice_for(
+                              AppLocalizations.of(context)!.water_invoice_for(
                                   '${state.waterBillList?[index].period}/${state.waterBillList?[index].year}'),
                             ))),
                   )

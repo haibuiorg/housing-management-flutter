@@ -43,7 +43,7 @@ class CreateHousingCompanyScreen extends StatelessWidget {
               child: const Icon(Icons.navigate_next)),
           appBar: AppBar(
             title:
-                Text(AppLocalizations.of(context).create_a_housing_community),
+                Text(AppLocalizations.of(context)!.create_a_housing_community),
           ),
           body: state.isLoading
               ? const Center(child: CircularProgressIndicator())
@@ -68,7 +68,7 @@ class CreateHousingCompanyScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                            AppLocalizations.of(context)
+                            AppLocalizations.of(context)!
                                 .what_is_your_housing_community_name,
                             textAlign: TextAlign.center),
                         CustomFormField(
@@ -79,7 +79,7 @@ class CreateHousingCompanyScreen extends StatelessWidget {
                               BlocProvider.of<CreateHousingCompanyCubit>(
                                       context)
                                   .onTypingName(value),
-                          hintText: AppLocalizations.of(context).name_title,
+                          hintText: AppLocalizations.of(context)!.name_title,
                           textCapitalization: TextCapitalization.words,
                         ),
                         Row(
@@ -87,7 +87,8 @@ class CreateHousingCompanyScreen extends StatelessWidget {
                           children: [
                             Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Text(AppLocalizations.of(context).country),
+                              child:
+                                  Text(AppLocalizations.of(context)!.country),
                             ),
                             Expanded(
                               child: Wrap(
@@ -167,7 +168,7 @@ class _AccountTypeSelectorState extends State<AccountTypeSelector> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text(AppLocalizations.of(context).account_type),
+        Text(AppLocalizations.of(context)!.account_type),
         Row(
           children: [
             Radio(
@@ -179,7 +180,7 @@ class _AccountTypeSelectorState extends State<AccountTypeSelector> {
                 });
               },
             ),
-            Text(AppLocalizations.of(context).individual),
+            Text(AppLocalizations.of(context)!.individual),
           ],
         ),
         Row(
@@ -193,12 +194,12 @@ class _AccountTypeSelectorState extends State<AccountTypeSelector> {
                 });
               },
             ),
-            Text(AppLocalizations.of(context).company),
+            Text(AppLocalizations.of(context)!.company),
           ],
         ),
         if (isBusiness)
           CustomFormField(
-            hintText: AppLocalizations.of(context).business_id,
+            hintText: AppLocalizations.of(context)!.business_id,
             textCapitalization: TextCapitalization.words,
             onChanged: (value) {
               BlocProvider.of<CreateHousingCompanyCubit>(context)

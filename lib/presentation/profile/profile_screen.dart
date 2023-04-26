@@ -53,13 +53,13 @@ class SettingScreen extends StatelessWidget {
               onPressed: () {
                 GoRouter.of(context).push(notificationCenterPath);
               },
-              label: Text(AppLocalizations.of(context).notification_center),
+              label: Text(AppLocalizations.of(context)!.notification_center),
             ),
             SettingButton(
               onPressed: () {
                 GoRouter.of(context).push(helpPath);
               },
-              label: Text(AppLocalizations.of(context).help),
+              label: Text(AppLocalizations.of(context)!.help),
             ),
             const Spacer(),
           ],

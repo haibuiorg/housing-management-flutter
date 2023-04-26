@@ -5,6 +5,8 @@ import 'package:priorli/presentation/file_selector/file_selector.dart';
 import 'package:priorli/presentation/message/message_cubit.dart';
 import 'package:priorli/presentation/message/message_state.dart';
 import 'package:priorli/service_locator.dart';
+import 'package:priorli/setting_cubit.dart';
+import 'package:priorli/setting_state.dart';
 import 'message_item.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -47,15 +49,15 @@ class _MessageScreenState extends State<MessageScreen> {
     showDialog(
         context: context,
         builder: (builder) => AlertDialog(
-              title: Text(AppLocalizations.of(context).join_this_channel),
-              content: Text(AppLocalizations.of(context).join_channel_confirm),
+              title: Text(AppLocalizations.of(context)!.join_this_channel),
+              content: Text(AppLocalizations.of(context)!.join_channel_confirm),
               actions: [
                 OutlinedButton(
                     onPressed: () {
                       _cubit.joinConversation();
                       Navigator.pop(builder, true);
                     },
-                    child: Text(AppLocalizations.of(context).sure)),
+                    child: Text(AppLocalizations.of(context)!.sure)),
               ],
             ));
   }
@@ -75,7 +77,8 @@ class _MessageScreenState extends State<MessageScreen> {
         ..init(
             channelId: widget.channelId,
             conversationId: widget.conversationId,
-            messageType: widget.messageType),
+            messageType: widget.messageType,
+            appLanguage: AppLocalizations.of(context)!.localeName),
       child:
           BlocConsumer<MessageCubit, MessageState>(listener: (context, state) {
         if (state.messageList?.isNotEmpty == true) {
@@ -84,8 +87,44 @@ class _MessageScreenState extends State<MessageScreen> {
       }, builder: (context, state) {
         return Scaffold(
             appBar: AppBar(
-                title: Text(state.conversation?.name.capitalize() ??
-                    AppLocalizations.of(context).messages)),
+              title: Text(state.conversation?.name.capitalize() ??
+                  AppLocalizations.of(context)!.messages),
+              actions: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(AppLocalizations.of(context)!.show_messages_in),
+                ),
+                BlocBuilder<SettingCubit, SettingState>(
+                    builder: (context, settingState) {
+                  return DropdownButton<String>(
+                    enableFeedback: true,
+                    hint: Text(AppLocalizations.of(context)!.language),
+                    dropdownColor:
+                        Theme.of(context).colorScheme.primaryContainer,
+                    value: state.translatedLanguageCode ??
+                        settingState.languageCode,
+                    elevation: 16,
+                    borderRadius: BorderRadius.circular(8),
+                    underline: Container(
+                      height: 0,
+                      color: Theme.of(context).colorScheme.onBackground,
+                    ),
+                    onChanged: (String? value) {
+                      _cubit.switchLanguage(value);
+                    },
+                    items: [...settingState.appSupportLanguageCode!, 'Original']
+                        .toList()
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(
+                            AppLocalizations.of(context)!.language_code(value)),
+                      );
+                    }).toList(),
+                  );
+                }),
+              ],
+            ),
             body: Column(children: [
               Expanded(
                 flex: 2,
@@ -97,6 +136,8 @@ class _MessageScreenState extends State<MessageScreen> {
                       final message = state.messageList?[index];
                       return message != null
                           ? MessageItem(
+                              translatedLanguageCode:
+                                  state.translatedLanguageCode,
                               message: message,
                               isMyMessage:
                                   state.user?.userId == message.senderId,
@@ -139,7 +180,7 @@ class _MessageScreenState extends State<MessageScreen> {
                                   enabled: state.conversation?.joined == true,
                                   keyboardType: TextInputType.multiline,
                                   decoration: InputDecoration(
-                                    hintText: AppLocalizations.of(context)
+                                    hintText: AppLocalizations.of(context)!
                                         .message_title,
                                     border: const OutlineInputBorder(
                                       borderRadius: BorderRadius.all(
@@ -160,8 +201,8 @@ class _MessageScreenState extends State<MessageScreen> {
                                         _showJoinConversationChannelDialog();
                                       },
                                 child: Text(state.conversation?.joined == true
-                                    ? AppLocalizations.of(context).send
-                                    : AppLocalizations.of(context).join)),
+                                    ? AppLocalizations.of(context)!.send
+                                    : AppLocalizations.of(context)!.join)),
                           ],
                         ),
                       ],

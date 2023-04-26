@@ -69,7 +69,7 @@ class _MainScreenState extends State<MainScreen> {
         showDialog(
             context: context,
             builder: (builder) => AlertDialog(
-                  content: Text(AppLocalizations.of(context)
+                  content: Text(AppLocalizations.of(context)!
                       .notification_permission_message),
                   actions: [
                     OutlinedButton(
@@ -78,7 +78,7 @@ class _MainScreenState extends State<MainScreen> {
                               .requestPermissionToSendNotifications();
                           Navigator.pop(builder, true);
                         },
-                        child: Text(AppLocalizations.of(context).thatsok)),
+                        child: Text(AppLocalizations.of(context)!.thatsok)),
                   ],
                 ));
       }
@@ -252,21 +252,22 @@ class _DefaultUIState extends State<DefaultUI> {
                         SidebarXItem(
                           icon: (Icons.home),
                           label:
-                              (AppLocalizations.of(context).housing_companies),
+                              (AppLocalizations.of(context)!.housing_companies),
                           onTap: () => widget.onItemTapped(0, context),
                         ),
                         SidebarXItem(
                             icon: (Icons.feed),
-                            label: (AppLocalizations.of(context).messages),
+                            label: (AppLocalizations.of(context)!.messages),
                             onTap: () => widget.onItemTapped(1, context)),
                         SidebarXItem(
                             icon: (Icons.settings),
-                            label: (AppLocalizations.of(context).settings),
+                            label: (AppLocalizations.of(context)!.settings),
                             onTap: () => widget.onItemTapped(2, context)),
                         if (widget.isAdmin)
                           SidebarXItem(
                               icon: (Icons.admin_panel_settings),
-                              label: (AppLocalizations.of(context).admin_panel),
+                              label:
+                                  (AppLocalizations.of(context)!.admin_panel),
                               onTap: () => widget.onItemTapped(3, context)),
                       ]),
                   Expanded(child: widget.child)

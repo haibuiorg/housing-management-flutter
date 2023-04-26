@@ -89,21 +89,21 @@ class _InvoiceItemFormState extends State<InvoiceItemForm> {
             ResponsiveRowColumnItem(
               rowFlex: 2,
               child: CustomFormField(
-                hintText: AppLocalizations.of(context).item_name,
+                hintText: AppLocalizations.of(context)!.item_name,
                 textEditingController: _nameController,
               ),
             ),
             ResponsiveRowColumnItem(
               rowFlex: 2,
               child: CustomFormField(
-                hintText: AppLocalizations.of(context).item_description,
+                hintText: AppLocalizations.of(context)!.item_description,
                 textEditingController: _descriptionController,
               ),
             ),
             ResponsiveRowColumnItem(
               rowFlex: 1,
               child: CustomFormField(
-                hintText: AppLocalizations.of(context).unit_price,
+                hintText: AppLocalizations.of(context)!.unit_price,
                 textEditingController: _priceController,
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                 onChanged: (_) => _calculateTotal(),
@@ -112,7 +112,7 @@ class _InvoiceItemFormState extends State<InvoiceItemForm> {
             ResponsiveRowColumnItem(
               rowFlex: 1,
               child: CustomFormField(
-                hintText: AppLocalizations.of(context).quantity,
+                hintText: AppLocalizations.of(context)!.quantity,
                 textEditingController: _quantityController,
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                 onChanged: (_) => _calculateTotal(),
@@ -121,7 +121,7 @@ class _InvoiceItemFormState extends State<InvoiceItemForm> {
             ResponsiveRowColumnItem(
               rowFlex: 1,
               child: CustomFormField(
-                hintText: AppLocalizations.of(context).tax_rate,
+                hintText: AppLocalizations.of(context)!.tax_rate,
                 textEditingController: _taxController,
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                 onChanged: (_) => _calculateTotal(),
@@ -130,7 +130,7 @@ class _InvoiceItemFormState extends State<InvoiceItemForm> {
             ResponsiveRowColumnItem(
                 rowFlex: 1,
                 child: Text(
-                  AppLocalizations.of(context)
+                  AppLocalizations.of(context)!
                       .total_value(_total.toStringAsFixed(2)),
                 )),
           ],
@@ -142,7 +142,7 @@ class _InvoiceItemFormState extends State<InvoiceItemForm> {
                   rowFit: FlexFit.loose,
                   child: TextButton(
                     onPressed: _submit,
-                    child: Text(AppLocalizations.of(context).add_item),
+                    child: Text(AppLocalizations.of(context)!.add_item),
                   ))
               : ResponsiveRowColumnItem(
                   rowFit: FlexFit.loose,

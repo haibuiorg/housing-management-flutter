@@ -30,17 +30,17 @@ class _CreateNewChannelDialogState extends State<CreateNewChannelDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(AppLocalizations.of(context).create_new_channel),
+      title: Text(AppLocalizations.of(context)!.create_new_channel),
       content: CustomFormField(
         textEditingController: _channelName,
-        hintText: AppLocalizations.of(context).channel_name,
+        hintText: AppLocalizations.of(context)!.channel_name,
       ),
       actions: [
         OutlinedButton(
             onPressed: () {
               widget.onConfirmed(_channelName.text);
             },
-            child: Text(AppLocalizations.of(context).confirm)),
+            child: Text(AppLocalizations.of(context)!.confirm)),
       ],
     );
   }

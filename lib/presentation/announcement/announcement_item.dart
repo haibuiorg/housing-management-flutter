@@ -5,6 +5,7 @@ import 'package:priorli/presentation/announcement/announcement_item_cubit.dart';
 import 'package:priorli/presentation/announcement/announcement_item_state.dart';
 import 'package:priorli/presentation/shared/app_image_row.dart';
 import 'package:priorli/service_locator.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../core/utils/time_utils.dart';
 
@@ -111,9 +112,15 @@ class _AnnouncementItemState extends State<AnnouncementItem> {
                 ? const IconButton(
                     onPressed: null, icon: Icon(Icons.attachment_rounded))
                 : null,
-            title: Text(widget.announcement.title),
+            title: Text(widget.announcement.translatedTitle
+                    ?.where((element) =>
+                        element.languageCode ==
+                        AppLocalizations.of(context)!.localeName)
+                    .firstOrNull
+                    ?.value ??
+                widget.announcement.title),
             subtitle: Text(
-              '${widget.announcement.subtitle}\n${state.announcement?.updatedOn != null ? 'Edited on' : 'Created on'} ${getFormattedDateTime(state.announcement?.updatedOn ?? state.announcement?.createdOn ?? 0)} by ${state.announcement?.displayName}',
+              '${widget.announcement.translatedSubtitle?.where((element) => element.languageCode == AppLocalizations.of(context)!.localeName).firstOrNull?.value ?? widget.announcement.subtitle}\n${state.announcement?.updatedOn != null ? 'Edited on' : 'Created on'} ${getFormattedDateTime(state.announcement?.updatedOn ?? state.announcement?.createdOn ?? 0)} by ${state.announcement?.displayName}',
               maxLines: 3,
               overflow: TextOverflow.ellipsis,
             ),

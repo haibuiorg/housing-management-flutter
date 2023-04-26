@@ -43,25 +43,25 @@ class SubscriptionPlanBox extends StatelessWidget {
                 ),
               ),
               FullWidthPairText(
-                label: AppLocalizations.of(context).price_title,
+                label: AppLocalizations.of(context)!.price_title,
                 content: formatCurrency(
                     subscriptionPlan.price, subscriptionPlan.currency),
                 isBoldContent: true,
               ),
               FullWidthPairText(
-                label: AppLocalizations.of(context).cost_per_invoice(''),
+                label: AppLocalizations.of(context)!.cost_per_invoice(''),
                 content: formatCurrency(subscriptionPlan.additionalInvoiceCost,
                     subscriptionPlan.currency),
                 isBoldContent: true,
               ),
               FullWidthPairText(
-                  label: AppLocalizations.of(context).max_messaging_channels,
+                  label: AppLocalizations.of(context)!.max_messaging_channels,
                   content: subscriptionPlan.maxMessagingChannels.toString()),
               FullWidthPairText(
-                  label: AppLocalizations.of(context).max_invoice_number,
+                  label: AppLocalizations.of(context)!.max_invoice_number,
                   content: subscriptionPlan.maxInvoiceNumber.toString()),
               FullWidthPairText(
-                  label: AppLocalizations.of(context).max_announcements,
+                  label: AppLocalizations.of(context)!.max_announcements,
                   content: subscriptionPlan.maxAnnouncement.toString()),
               Align(
                   alignment: Alignment.center,
@@ -69,8 +69,8 @@ class SubscriptionPlanBox extends StatelessWidget {
                       onPressed: onPressed,
                       child: Text(
                         isCurrentPlan
-                            ? AppLocalizations.of(context).get_more_apartments
-                            : AppLocalizations.of(context).subscribe,
+                            ? AppLocalizations.of(context)!.get_more_apartments
+                            : AppLocalizations.of(context)!.subscribe,
                         maxLines: 1,
                       )))
             ],

@@ -42,7 +42,9 @@ class MessageCubit extends Cubit<MessageState> {
   Future<void> init(
       {required String channelId,
       required String conversationId,
-      required String messageType}) async {
+      required String messageType,
+      String? appLanguage}) async {
+    emit(state.copyWith(translatedLanguageCode: appLanguage));
     final getUserInfoResult = await _getUserInfo(NoParams());
     MessageState pendingState = state.copyWith(messageType: messageType);
     if (getUserInfoResult is ResultSuccess<User>) {
@@ -93,19 +95,18 @@ class MessageCubit extends Cubit<MessageState> {
     emit(state.copyWith(pendingStorageItems: items));
   }
 
-  _messageListener(List<Message> messageList) async {
-    final List<Message> newList = List.from(state.messageList ?? []);
+  _messageListener(List<Message> upcomingMessage) async {
+    final List<Message> currentList = List.from(state.messageList ?? []);
+    currentList.removeWhere(
+        (element) => upcomingMessage.map((e) => e.id).contains(element.id));
+    final List<Message> newList = [...currentList, ...upcomingMessage];
     final List<Message> modifiedList = [];
-    final idList = newList.map((e) => e.id);
-    messageList.removeWhere(
-      (element) {
-        return idList.contains(element.id);
-      },
-    );
-    for (var message in messageList) {
+    for (var message in newList) {
+      if (message.storageItems == null || message.storageItems!.isEmpty) {
+        continue;
+      }
       final List<StorageItem> storageItems = [];
       await Future.forEach(message.storageItems ?? [], (storageItem) async {
-        // TOOO, maybe move this to usecase
         final downloadLink = await FirebaseStorage.instance
             .ref()
             .child(storageItem.storageLink)
@@ -114,7 +115,8 @@ class MessageCubit extends Cubit<MessageState> {
       });
       modifiedList.add(message.copyWith(storageItems: storageItems));
     }
-
+    newList.removeWhere(
+        (element) => modifiedList.map((e) => e.id).contains(element.id));
     newList.addAll(modifiedList);
     newList.sort(
       (a, b) => b.createdOn - a.createdOn,
@@ -149,5 +151,9 @@ class MessageCubit extends Cubit<MessageState> {
     if (conversationResult is ResultSuccess<Conversation>) {
       emit(state.copyWith(conversation: conversationResult.data));
     }
+  }
+
+  void switchLanguage(String? value) {
+    emit(state.copyWith(translatedLanguageCode: value));
   }
 }

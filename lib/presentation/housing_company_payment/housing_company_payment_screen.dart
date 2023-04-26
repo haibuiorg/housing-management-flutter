@@ -63,7 +63,7 @@ class _HousingCompanyPaymentScreenState
           return Scaffold(
             appBar: AppBar(
               centerTitle: true,
-              title: Text(AppLocalizations.of(context).payment_bank_account),
+              title: Text(AppLocalizations.of(context)!.payment_bank_account),
             ),
             body: Column(
               children: [
@@ -103,7 +103,7 @@ class _HousingCompanyPaymentScreenState
                       FloatingActionButton.extended(
                           elevation: 2,
                           label: Text(
-                              AppLocalizations.of(context).add_bank_account),
+                              AppLocalizations.of(context)!.add_bank_account),
                           icon: const Icon(Icons.add),
                           onPressed: () {
                             showDialog(
@@ -125,7 +125,7 @@ class _HousingCompanyPaymentScreenState
                           }),
                       FloatingActionButton.extended(
                           elevation: 2,
-                          label: Text(AppLocalizations.of(context)
+                          label: Text(AppLocalizations.of(context)!
                               .set_up_payout_account),
                           icon: const Icon(Icons.account_balance_rounded),
                           onPressed: () {
@@ -154,18 +154,18 @@ class BankAccountBox extends StatelessWidget {
       context: context,
       builder: (BuildContext builder) {
         return AlertDialog(
-          title: Text(AppLocalizations.of(context).delete_bank_account),
+          title: Text(AppLocalizations.of(context)!.delete_bank_account),
           content:
-              Text(AppLocalizations.of(context).delete_bank_account_confirm),
+              Text(AppLocalizations.of(context)!.delete_bank_account_confirm),
           actions: [
             OutlinedButton(
                 onPressed: () {
                   onDismiss(builder);
                 },
-                child: Text(AppLocalizations.of(context).remove)),
+                child: Text(AppLocalizations.of(context)!.remove)),
             TextButton(
               onPressed: () => Navigator.of(builder).pop(false),
-              child: Text(AppLocalizations.of(context).cancel),
+              child: Text(AppLocalizations.of(context)!.cancel),
             ),
           ],
         );
@@ -233,12 +233,12 @@ class _AddBankAccountDialogState extends State<AddBankAccountDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(AppLocalizations.of(context).add_bank_account),
+      title: Text(AppLocalizations.of(context)!.add_bank_account),
       content: Column(mainAxisSize: MainAxisSize.min, children: [
         CustomFormField(
           autofocus: false,
           autoValidate: true,
-          hintText: AppLocalizations.of(context).bank_account_name,
+          hintText: AppLocalizations.of(context)!.bank_account_name,
           textEditingController: _bankAccountNameController,
           keyboardType: TextInputType.text,
           onChanged: (value) {
@@ -249,7 +249,7 @@ class _AddBankAccountDialogState extends State<AddBankAccountDialog> {
         CustomFormField(
           autofocus: false,
           autoValidate: true,
-          hintText: AppLocalizations.of(context).iban,
+          hintText: AppLocalizations.of(context)!.iban,
           textEditingController: _bankAccountNumberController,
           keyboardType: TextInputType.text,
           onChanged: (value) {
@@ -259,14 +259,14 @@ class _AddBankAccountDialogState extends State<AddBankAccountDialog> {
           validator: (val) {
             return val?.trim().isNotEmpty == true &&
                     !isValid(val!, sanitize: true)
-                ? AppLocalizations.of(context).iban_error
+                ? AppLocalizations.of(context)!.iban_error
                 : null;
           },
         ),
         CustomFormField(
           autofocus: false,
           autoValidate: true,
-          hintText: AppLocalizations.of(context).bic_swift,
+          hintText: AppLocalizations.of(context)!.bic_swift,
           onChanged: (value) {
             didChange();
           },
@@ -275,7 +275,7 @@ class _AddBankAccountDialogState extends State<AddBankAccountDialog> {
           textInputAction: TextInputAction.done,
           validator: (val) {
             return !val!.isValidBic
-                ? AppLocalizations.of(context).bic_swift_error
+                ? AppLocalizations.of(context)!.bic_swift_error
                 : null;
           },
         ),
@@ -289,7 +289,7 @@ class _AddBankAccountDialogState extends State<AddBankAccountDialog> {
                         swift: _swiftController.text);
                   }
                 : null,
-            child: Text(AppLocalizations.of(context).add)),
+            child: Text(AppLocalizations.of(context)!.add)),
       ],
     );
   }

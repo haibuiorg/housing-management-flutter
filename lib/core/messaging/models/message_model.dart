@@ -2,6 +2,7 @@
 
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:priorli/core/messaging/models/translated_message_model.dart';
 import 'package:priorli/core/storage/models/storage_item_model.dart';
 
 part 'message_model.g.dart';
@@ -16,6 +17,7 @@ class MessageModel extends Equatable {
   final int? updated_on;
   final List<String>? seen_by;
   final List<StorageItemModel>? storage_items;
+  final List<TranslatedMessageModel>? translated_message;
 
   const MessageModel(
       {this.created_on,
@@ -25,6 +27,7 @@ class MessageModel extends Equatable {
       this.sender_name,
       this.updated_on,
       this.storage_items,
+      this.translated_message,
       this.seen_by});
   factory MessageModel.fromJson(Map<String, dynamic> json) =>
       _$MessageModelFromJson(json);
@@ -40,6 +43,7 @@ class MessageModel extends Equatable {
         sender_name,
         updated_on,
         seen_by,
-        storage_items
+        storage_items,
+        translated_message
       ];
 }

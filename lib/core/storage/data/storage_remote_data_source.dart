@@ -37,7 +37,6 @@ class StorageRemoteDataSource implements StorageDataSource {
                 file,
               )
               .onError((error, stackTrace) {
-              print(error);
               throw error!;
             })
           : await storage

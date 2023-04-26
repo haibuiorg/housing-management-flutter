@@ -30,11 +30,11 @@ class ContactLeadListView extends StatelessWidget {
                       : Theme.of(context).cardColor,
                   shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(10))),
-                  title: Text(AppLocalizations.of(context).contact_lead_detail(
+                  title: Text(AppLocalizations.of(context)!.contact_lead_detail(
                       state.contactLeadList![index].name,
                       state.contactLeadList![index].email,
                       state.contactLeadList![index].phone)),
-                  subtitle: Text(AppLocalizations.of(context)
+                  subtitle: Text(AppLocalizations.of(context)!
                       .message(state.contactLeadList![index].message)),
                   leading: state.contactLeadList![index].type == 'contact_form'
                       ? const Icon(Icons.contact_mail_rounded)

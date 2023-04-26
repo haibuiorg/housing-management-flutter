@@ -58,13 +58,13 @@ class _InvoiceCreationFormState extends State<InvoiceCreationForm> {
                     state.receivers?.isNotEmpty == true &&
                     state.invoiceItemList?.isNotEmpty == true
                 ? ElevatedButton(
-                    child: Text(AppLocalizations.of(context).send_invoice),
+                    child: Text(AppLocalizations.of(context)!.send_invoice),
                     onPressed: () {
                       _cubit.createNewInvoice().then((success) {
                         if (success) {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               content: Text(
-                                  AppLocalizations.of(context).invoice_sent)));
+                                  AppLocalizations.of(context)!.invoice_sent)));
                           GoRouter.of(context).pop();
                         }
                       });
@@ -72,13 +72,13 @@ class _InvoiceCreationFormState extends State<InvoiceCreationForm> {
                   )
                 : null,
             appBar: AppBar(
-                title: Text(AppLocalizations.of(context).send_new_invoice)),
+                title: Text(AppLocalizations.of(context)!.send_new_invoice)),
             body: CustomScrollView(slivers: [
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 32.0),
                   child: CustomFormField(
-                    hintText: AppLocalizations.of(context).invoice_name,
+                    hintText: AppLocalizations.of(context)!.invoice_name,
                     onChanged: (value) {
                       _cubit.onNameChanged(value);
                     },
@@ -94,13 +94,13 @@ class _InvoiceCreationFormState extends State<InvoiceCreationForm> {
                   child: Column(
                     children: [
                       InvoiceItemRowColumn(
-                        name: AppLocalizations.of(context).item_name,
+                        name: AppLocalizations.of(context)!.item_name,
                         description:
-                            AppLocalizations.of(context).item_description,
-                        quantity: AppLocalizations.of(context).quantity,
-                        taxPercentage: AppLocalizations.of(context).tax_rate,
-                        unitCost: AppLocalizations.of(context).price_title,
-                        total: AppLocalizations.of(context).total_title,
+                            AppLocalizations.of(context)!.item_description,
+                        quantity: AppLocalizations.of(context)!.quantity,
+                        taxPercentage: AppLocalizations.of(context)!.tax_rate,
+                        unitCost: AppLocalizations.of(context)!.price_title,
+                        total: AppLocalizations.of(context)!.total_title,
                       ),
                       const Divider(),
                     ],
@@ -157,12 +157,12 @@ class _InvoiceCreationFormState extends State<InvoiceCreationForm> {
                           );
                         });
                   },
-                  child: Text(AppLocalizations.of(context).add_item),
+                  child: Text(AppLocalizations.of(context)!.add_item),
                 ),
               ),
               SliverToBoxAdapter(
                 child: SettingButton(
-                  label: Text(AppLocalizations.of(context).payment_terms),
+                  label: Text(AppLocalizations.of(context)!.payment_terms),
                   icon: DropdownButton<String>(
                     enableFeedback: true,
                     dropdownColor:
@@ -200,16 +200,16 @@ class _InvoiceCreationFormState extends State<InvoiceCreationForm> {
               ),
               SliverToBoxAdapter(
                   child: FullWidthPairText(
-                label: AppLocalizations.of(context).payment_due_date(
+                label: AppLocalizations.of(context)!.payment_due_date(
                     getFormattedDate(
                         state.paymentDate?.millisecondsSinceEpoch ?? 0)),
                 content: '',
               )),
               SliverToBoxAdapter(
                 child: SettingButton(
-                  label: Text(AppLocalizations.of(context).receivers(
+                  label: Text(AppLocalizations.of(context)!.receivers(
                       state.receivers?.isNotEmpty != true
-                          ? AppLocalizations.of(context).none
+                          ? AppLocalizations.of(context)!.none
                           : state.receivers
                                   ?.map((e) => e.firstName)
                                   .toString() ??
@@ -238,14 +238,14 @@ class _InvoiceCreationFormState extends State<InvoiceCreationForm> {
                       child: CheckboxListTile(
                           contentPadding: const EdgeInsets.all(8),
                           value: state.sendEmail == true,
-                          title: Text(AppLocalizations.of(context).send_email),
+                          title: Text(AppLocalizations.of(context)!.send_email),
                           onChanged: _cubit.setSendEmail),
                     ),
                     Expanded(
                       child: CheckboxListTile(
                           contentPadding: const EdgeInsets.all(8),
                           value: state.issueExternalInvoice == true,
-                          title: Text(AppLocalizations.of(context)
+                          title: Text(AppLocalizations.of(context)!
                               .issue_external_invoice),
                           onChanged: _cubit.setIssueExternalInvoice),
                     ),
@@ -254,7 +254,7 @@ class _InvoiceCreationFormState extends State<InvoiceCreationForm> {
               ),
               SliverToBoxAdapter(
                 child: FullWidthPairText(
-                  label: AppLocalizations.of(context).bank_accounts,
+                  label: AppLocalizations.of(context)!.bank_accounts,
                 ),
               ),
               SliverToBoxAdapter(
@@ -351,7 +351,7 @@ class InvoiceItemRowColumn extends StatelessWidget {
             rowFit: FlexFit.tight,
             child: Text(
               ResponsiveWrapper.of(context).isSmallerThan(TABLET)
-                  ? AppLocalizations.of(context).item_with_name(name)
+                  ? AppLocalizations.of(context)!.item_with_name(name)
                   : name,
               textAlign: TextAlign.center,
             ),
@@ -361,7 +361,7 @@ class InvoiceItemRowColumn extends StatelessWidget {
             rowFit: FlexFit.tight,
             child: Text(
               ResponsiveWrapper.of(context).isSmallerThan(TABLET)
-                  ? AppLocalizations.of(context)
+                  ? AppLocalizations.of(context)!
                       .item_with_description(description)
                   : description,
               textAlign: TextAlign.center,
@@ -372,7 +372,7 @@ class InvoiceItemRowColumn extends StatelessWidget {
             rowFit: FlexFit.tight,
             child: Text(
               ResponsiveWrapper.of(context).isSmallerThan(TABLET)
-                  ? AppLocalizations.of(context).price_value(unitCost)
+                  ? AppLocalizations.of(context)!.price_value(unitCost)
                   : unitCost,
               textAlign: TextAlign.center,
             ),
@@ -382,7 +382,7 @@ class InvoiceItemRowColumn extends StatelessWidget {
             rowFit: FlexFit.tight,
             child: Text(
               ResponsiveWrapper.of(context).isSmallerThan(TABLET)
-                  ? AppLocalizations.of(context).quantity_with_value(quantity)
+                  ? AppLocalizations.of(context)!.quantity_with_value(quantity)
                   : quantity,
               textAlign: TextAlign.center,
             ),
@@ -392,7 +392,7 @@ class InvoiceItemRowColumn extends StatelessWidget {
             rowFit: FlexFit.tight,
             child: Text(
               ResponsiveWrapper.of(context).isSmallerThan(TABLET)
-                  ? AppLocalizations.of(context)
+                  ? AppLocalizations.of(context)!
                       .tax_rate_with_value(taxPercentage)
                   : taxPercentage,
               textAlign: TextAlign.center,
@@ -403,7 +403,7 @@ class InvoiceItemRowColumn extends StatelessWidget {
               rowFit: FlexFit.tight,
               child: Text(
                 ResponsiveWrapper.of(context).isSmallerThan(TABLET)
-                    ? AppLocalizations.of(context).total_value(total)
+                    ? AppLocalizations.of(context)!.total_value(total)
                     : total,
                 textAlign: TextAlign.center,
               )),
@@ -415,7 +415,7 @@ class InvoiceItemRowColumn extends StatelessWidget {
                       child: Column(
                         children: [
                           TextButton.icon(
-                            label: Text(AppLocalizations.of(context).remove),
+                            label: Text(AppLocalizations.of(context)!.remove),
                             onPressed: onRemove,
                             icon: const Icon(Icons.close),
                           ),

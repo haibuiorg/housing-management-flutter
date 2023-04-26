@@ -65,10 +65,10 @@ class _EventScreenState extends State<EventScreen> {
           return Scaffold(
             appBar: AppBar(
               title: Text(state.isInitializing
-                  ? AppLocalizations.of(context).loading
+                  ? AppLocalizations.of(context)!.loading
                   : state.event != null
-                      ? AppLocalizations.of(context).event_detail
-                      : AppLocalizations.of(context).create_an_event),
+                      ? AppLocalizations.of(context)!.event_detail
+                      : AppLocalizations.of(context)!.create_an_event),
             ),
             bottomSheet: state.event == null
                 ? null
@@ -83,8 +83,8 @@ class _EventScreenState extends State<EventScreen> {
                             children: [
                               ChoiceChip(
                                 labelPadding: const EdgeInsets.all(2.0),
-                                label:
-                                    Text(AppLocalizations.of(context).accepted),
+                                label: Text(
+                                    AppLocalizations.of(context)!.accepted),
                                 selected: (state.event?.accepted ?? [])
                                     .contains(state.userId),
                                 onSelected: (value) {
@@ -95,7 +95,8 @@ class _EventScreenState extends State<EventScreen> {
                               ),
                               ChoiceChip(
                                 labelPadding: const EdgeInsets.all(2.0),
-                                label: Text(AppLocalizations.of(context).maybe),
+                                label:
+                                    Text(AppLocalizations.of(context)!.maybe),
                                 selected: !(state.event?.accepted ?? [])
                                         .contains(state.userId) &&
                                     !(state.event?.declined ?? [])
@@ -108,8 +109,8 @@ class _EventScreenState extends State<EventScreen> {
                               ),
                               ChoiceChip(
                                 labelPadding: const EdgeInsets.all(2.0),
-                                label:
-                                    Text(AppLocalizations.of(context).declined),
+                                label: Text(
+                                    AppLocalizations.of(context)!.declined),
                                 selected: (state.event?.declined ?? [])
                                     .contains(state.userId),
                                 onSelected: (value) {

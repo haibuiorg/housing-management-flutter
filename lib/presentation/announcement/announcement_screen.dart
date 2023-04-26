@@ -52,8 +52,15 @@ class _AnnouncementScreenState extends State<AnnouncementScreen> {
   Widget build(BuildContext context) {
     return BlocProvider<AnnouncementCubit>(
       create: (_) => cubit,
-      child: BlocBuilder<AnnouncementCubit, AnnouncementState>(
-          builder: (context, state) {
+      child: BlocConsumer<AnnouncementCubit, AnnouncementState>(
+          listener: (context, state) {
+        if (state.error != null) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(state.error!),
+          ));
+          cubit.clearError();
+        }
+      }, builder: (context, state) {
         return Scaffold(
             floatingActionButton: state.isManager == true
                 ? FloatingActionButton(
@@ -85,7 +92,7 @@ class _AnnouncementScreenState extends State<AnnouncementScreen> {
                   )
                 : null,
             appBar: AppBar(
-              title: Text(AppLocalizations.of(context).announcement),
+              title: Text(AppLocalizations.of(context)!.announcement),
             ),
             body: RefreshIndicator(
               onRefresh: () => cubit.init(widget.housingCompanyId),
@@ -168,7 +175,7 @@ class _AnnouncementDialogState extends State<AnnouncementDialog> {
                   ),
                 ),
                 Text(
-                  AppLocalizations.of(context).make_annoucement_title,
+                  AppLocalizations.of(context)!.make_annoucement_title,
                   style: Theme.of(context).textTheme.titleLarge,
                   textAlign: TextAlign.center,
                 ),
@@ -180,7 +187,7 @@ class _AnnouncementDialogState extends State<AnnouncementDialog> {
                     autofocus: true,
                     onChanged: _checkIfAllFilled,
                     decoration: InputDecoration(
-                      hintText: AppLocalizations.of(context).title,
+                      hintText: AppLocalizations.of(context)!.title,
                     ),
                   ),
                 ),
@@ -190,7 +197,7 @@ class _AnnouncementDialogState extends State<AnnouncementDialog> {
                     controller: _subtitleController,
                     maxLines: 1,
                     decoration: InputDecoration(
-                      hintText: AppLocalizations.of(context).subtitle,
+                      hintText: AppLocalizations.of(context)!.subtitle,
                     ),
                     onChanged: _checkIfAllFilled,
                   ),
@@ -201,7 +208,7 @@ class _AnnouncementDialogState extends State<AnnouncementDialog> {
                   maxLines: 20,
                   keyboardType: TextInputType.multiline,
                   decoration: InputDecoration(
-                    hintText: AppLocalizations.of(context).content,
+                    hintText: AppLocalizations.of(context)!.content,
                     border: const OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(16.0)),
                     ),
@@ -225,7 +232,7 @@ class _AnnouncementDialogState extends State<AnnouncementDialog> {
                             _sendEmail = !_sendEmail;
                           });
                         }),
-                    Text(AppLocalizations.of(context).also_send_email),
+                    Text(AppLocalizations.of(context)!.also_send_email),
                     const Spacer(),
                     OutlinedButton(
                         onPressed: _isAllFilled
@@ -238,7 +245,7 @@ class _AnnouncementDialogState extends State<AnnouncementDialog> {
                                     uploadedDocuments: _uploadedDocuments);
                               }
                             : null,
-                        child: Text(AppLocalizations.of(context).submit))
+                        child: Text(AppLocalizations.of(context)!.submit))
                   ],
                 ),
               ]),

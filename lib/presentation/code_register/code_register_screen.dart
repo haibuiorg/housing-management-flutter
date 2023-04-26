@@ -44,14 +44,14 @@ class _CodeRegisterScreenState extends State<CodeRegisterScreen> {
             builder: (context, state) => Scaffold(
                   appBar: AppBar(
                     title:
-                        Text(AppLocalizations.of(context).register_with_code),
+                        Text(AppLocalizations.of(context)!.register_with_code),
                   ),
                   body: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         CustomFormField(
-                            hintText: AppLocalizations.of(context).email,
+                            hintText: AppLocalizations.of(context)!.email,
                             autofocus: true,
                             initialValue: '${state.email}',
                             autoValidate: true,
@@ -62,17 +62,17 @@ class _CodeRegisterScreenState extends State<CodeRegisterScreen> {
                             textInputAction: TextInputAction.next,
                             validator: (val) {
                               return (!val!.isValidEmail)
-                                  ? AppLocalizations.of(context)
+                                  ? AppLocalizations.of(context)!
                                       .email_address_error
                                   : null;
                             },
                             onChanged: (email) => _cubit.onTypingEmail(email)),
                         CustomFormField(
-                          hintText: AppLocalizations.of(context).code_title,
+                          hintText: AppLocalizations.of(context)!.code_title,
                           icon: const Icon(
                             Icons.abc,
                           ),
-                          helperText: AppLocalizations.of(context)
+                          helperText: AppLocalizations.of(context)!
                               .invitation_code_from_manager,
                           initialValue: state.code ?? '',
                           onChanged: (code) => _cubit.onTypingCode(code),
@@ -80,7 +80,7 @@ class _CodeRegisterScreenState extends State<CodeRegisterScreen> {
                         CustomFormField(
                           autoValidate: true,
                           hintText:
-                              AppLocalizations.of(context).create_a_password,
+                              AppLocalizations.of(context)!.create_a_password,
                           onChanged: (password) {
                             setState(() {});
                             _cubit.onTypingPassword(password);
@@ -101,7 +101,7 @@ class _CodeRegisterScreenState extends State<CodeRegisterScreen> {
                                   })),
                           validator: (val) {
                             return !val!.isValidPassword
-                                ? AppLocalizations.of(context).password_error
+                                ? AppLocalizations.of(context)!.password_error
                                 : null;
                           },
                         ),
@@ -118,11 +118,11 @@ class _CodeRegisterScreenState extends State<CodeRegisterScreen> {
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(SnackBar(
                                                     content: Text(AppLocalizations
-                                                            .of(context)
+                                                            .of(context)!
                                                         .invalid_code_or_email)))
                                         })
                                 : null,
-                            child: Text(AppLocalizations.of(context).register))
+                            child: Text(AppLocalizations.of(context)!.register))
                       ]),
                 )));
   }

@@ -54,7 +54,7 @@ class _InvoiceGroupListScreenState extends State<InvoiceGroupListScreen> {
               builder: (context, state) {
                 return Scaffold(
                   appBar: AppBar(
-                    title: Text(AppLocalizations.of(context).invoice_groupd),
+                    title: Text(AppLocalizations.of(context)!.invoice_groupd),
                   ),
                   floatingActionButton: state.company?.isUserManager == true
                       ? FloatingActionButton(
@@ -88,7 +88,7 @@ class _InvoiceGroupListScreenState extends State<InvoiceGroupListScreen> {
                                     onPressed: () {
                                       _cubit.loadMore();
                                     },
-                                    child: Text(AppLocalizations.of(context)
+                                    child: Text(AppLocalizations.of(context)!
                                         .load_more));
                           })
                       : const Center(

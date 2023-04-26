@@ -61,17 +61,17 @@ class _HousingCompanyManagementScreenState
       context: context,
       builder: (BuildContext builder) {
         return AlertDialog(
-          title: Text(AppLocalizations.of(context).remove),
-          content: Text(AppLocalizations.of(context).remove_company_confirm),
+          title: Text(AppLocalizations.of(context)!.remove),
+          content: Text(AppLocalizations.of(context)!.remove_company_confirm),
           actions: [
             OutlinedButton(
                 onPressed: () {
                   onDismiss(builder);
                 },
-                child: Text(AppLocalizations.of(context).confirm)),
+                child: Text(AppLocalizations.of(context)!.confirm)),
             TextButton(
               onPressed: () => Navigator.of(builder).pop(false),
-              child: Text(AppLocalizations.of(context).cancel),
+              child: Text(AppLocalizations.of(context)!.cancel),
             ),
           ],
         );
@@ -116,12 +116,12 @@ class _HousingCompanyManagementScreenState
                             }
                           : null,
                       child: Text(
-                        AppLocalizations.of(context).save,
+                        AppLocalizations.of(context)!.save,
                       ),
                     )
                   ],
                   title: Text(
-                    AppLocalizations.of(context).manange,
+                    AppLocalizations.of(context)!.manange,
                   ),
                 ),
                 body: Column(
@@ -131,15 +131,15 @@ class _HousingCompanyManagementScreenState
                         child: Column(children: [
                           CustomFormField(
                             textEditingController: _companyName,
-                            hintText:
-                                AppLocalizations.of(context).company_name_title,
+                            hintText: AppLocalizations.of(context)!
+                                .company_name_title,
                             autofocus: false,
                             onChanged: (value) =>
                                 cubit.updateCompanyName(value),
                             keyboardType: TextInputType.name,
                           ),
                           CustomFormField(
-                            hintText: AppLocalizations.of(context)
+                            hintText: AppLocalizations.of(context)!
                                 .street_address_line1,
                             textEditingController: _streetAddress1,
                             autofocus: false,
@@ -148,7 +148,7 @@ class _HousingCompanyManagementScreenState
                             keyboardType: TextInputType.streetAddress,
                           ),
                           CustomFormField(
-                            hintText: AppLocalizations.of(context)
+                            hintText: AppLocalizations.of(context)!
                                 .street_address_line2,
                             textEditingController: _streetAddress2,
                             autofocus: false,
@@ -157,14 +157,14 @@ class _HousingCompanyManagementScreenState
                             keyboardType: TextInputType.streetAddress,
                           ),
                           CustomFormField(
-                            hintText: AppLocalizations.of(context).postal_code,
+                            hintText: AppLocalizations.of(context)!.postal_code,
                             textEditingController: _postalCode,
                             autofocus: false,
                             onChanged: (value) => cubit.updatePostalCode(value),
                             keyboardType: TextInputType.streetAddress,
                           ),
                           CustomFormField(
-                            hintText: AppLocalizations.of(context).city,
+                            hintText: AppLocalizations.of(context)!.city,
                             textEditingController: _city,
                             autofocus: false,
                             onChanged: (value) => cubit.updateCity(value),
@@ -176,10 +176,11 @@ class _HousingCompanyManagementScreenState
                             child: Row(
                               children: [
                                 Text(
-                                  AppLocalizations.of(context)
-                                      .country_with_name(state
-                                              .housingCompany?.countryCode ??
-                                          AppLocalizations.of(context).no_data),
+                                  AppLocalizations.of(context)!
+                                      .country_with_name(
+                                          state.housingCompany?.countryCode ??
+                                              AppLocalizations.of(context)!
+                                                  .no_data),
                                   style: Theme.of(context).textTheme.bodyLarge,
                                 ),
                                 state.housingCompany?.countryCode != null
@@ -192,12 +193,12 @@ class _HousingCompanyManagementScreenState
                                         borderRadius: 4,
                                       )
                                     : Text(
-                                        AppLocalizations.of(context).no_data),
+                                        AppLocalizations.of(context)!.no_data),
                               ],
                             ),
                           ),
                           CustomFormField(
-                            hintText: AppLocalizations.of(context).business_id,
+                            hintText: AppLocalizations.of(context)!.business_id,
                             textEditingController: _businessId,
                             autofocus: false,
                             onChanged: (value) => cubit.updateCity(value),
@@ -213,7 +214,7 @@ class _HousingCompanyManagementScreenState
                                     companySubscriptionScreenPath);
                               },
                               label: Text(
-                                AppLocalizations.of(context).subscription,
+                                AppLocalizations.of(context)!.subscription,
                                 style: Theme.of(context).textTheme.bodyLarge,
                               ),
                             ),
@@ -223,7 +224,8 @@ class _HousingCompanyManagementScreenState
                                   housingCompanyPaymentPath);
                             },
                             label: Text(
-                              AppLocalizations.of(context).payment_bank_account,
+                              AppLocalizations.of(context)!
+                                  .payment_bank_account,
                               style: Theme.of(context).textTheme.bodyLarge,
                             ),
                           ),
@@ -232,7 +234,7 @@ class _HousingCompanyManagementScreenState
                               context.pushFromCurrentLocation(companyUserPath);
                             },
                             label: Text(
-                              AppLocalizations.of(context).user_management,
+                              AppLocalizations.of(context)!.user_management,
                               style: Theme.of(context).textTheme.bodyLarge,
                             ),
                           ),
@@ -242,7 +244,7 @@ class _HousingCompanyManagementScreenState
                                   housingCompanyUiScreenPath);
                             },
                             label: Text(
-                              AppLocalizations.of(context).company_branding,
+                              AppLocalizations.of(context)!.company_branding,
                               style: Theme.of(context).textTheme.bodyLarge,
                             ),
                           ),
@@ -257,7 +259,7 @@ class _HousingCompanyManagementScreenState
                               });
                             },
                             label: Text(
-                              AppLocalizations.of(context)
+                              AppLocalizations.of(context)!
                                   .delete_housing_company,
                               style: Theme.of(context)
                                   .textTheme

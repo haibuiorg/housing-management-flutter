@@ -33,7 +33,7 @@ class _LoginScreenState extends State<LoginScreen> {
       if (!success) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(AppLocalizations.of(context).login_failed),
+            content: Text(AppLocalizations.of(context)!.login_failed),
           ),
         );
       }
@@ -72,7 +72,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       CustomFormField(
                         textEditingController: _emailController,
-                        hintText: AppLocalizations.of(context).email,
+                        hintText: AppLocalizations.of(context)!.email,
                         autoValidate: true,
                         keyboardType: TextInputType.emailAddress,
                         icon: const Icon(
@@ -81,13 +81,14 @@ class _LoginScreenState extends State<LoginScreen> {
                         textInputAction: TextInputAction.next,
                         validator: (val) {
                           return (!val!.isValidEmail)
-                              ? AppLocalizations.of(context).email_address_error
+                              ? AppLocalizations.of(context)!
+                                  .email_address_error
                               : null;
                         },
                       ),
                       CustomFormField(
                         autoValidate: true,
-                        hintText: AppLocalizations.of(context).password_title,
+                        hintText: AppLocalizations.of(context)!.password_title,
                         obscureText: _isObscured,
                         onSubmitted: (_) {
                           _login(context);
@@ -99,7 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         textEditingController: _passwordController,
                         validator: (val) {
                           return !val!.isValidPassword
-                              ? AppLocalizations.of(context).password_error
+                              ? AppLocalizations.of(context)!.password_error
                               : null;
                         },
                         onChanged: (_) => setState(() {}),
@@ -120,7 +121,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             style: ElevatedButton.styleFrom(
                                 minimumSize: const Size.fromHeight(40)),
                             onPressed: () => _login(context),
-                            child: Text(AppLocalizations.of(context).login)),
+                            child: Text(AppLocalizations.of(context)!.login)),
                       ),
                       OutlinedButton(
                           style: OutlinedButton.styleFrom(
@@ -128,7 +129,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           onPressed: () {
                             GoRouter.of(context).push(codeRegisterPath);
                           },
-                          child: Text(AppLocalizations.of(context)
+                          child: Text(AppLocalizations.of(context)!
                               .join_with_invitation_code)),
                     ],
                   ),
@@ -159,7 +160,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           onPressed: () {
                             GoRouter.of(context).push(registerPath);
                           },
-                          child: Text(AppLocalizations.of(context).register)),*/
+                          child: Text(AppLocalizations.of(context)!.register)),*/
                       TextButton(
                           style: OutlinedButton.styleFrom(
                               minimumSize: const Size.fromHeight(40)),
@@ -167,7 +168,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             GoRouter.of(context).push(forgotPasswordPath);
                           },
                           child: Text(
-                              AppLocalizations.of(context).forgot_password)),
+                              AppLocalizations.of(context)!.forgot_password)),
                     ],
                   ),
                 ),

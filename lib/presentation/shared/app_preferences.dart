@@ -22,7 +22,7 @@ class AppPreferences extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Text(AppLocalizations.of(context).language),
+                        Text(AppLocalizations.of(context)!.language),
                         const SizedBox(width: 8),
                         DropdownButton<String>(
                           enableFeedback: true,
@@ -43,7 +43,8 @@ class AppPreferences extends StatelessWidget {
                               .map<DropdownMenuItem<String>>((String value) {
                             return DropdownMenuItem<String>(
                               value: value,
-                              child: Text(value.toUpperCase()),
+                              child: Text(AppLocalizations.of(context)!
+                                  .language_code(value)),
                             );
                           }).toList(),
                         ),
@@ -53,7 +54,7 @@ class AppPreferences extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text(AppLocalizations.of(context).dark_theme),
+                      Text(AppLocalizations.of(context)!.dark_theme),
                       const SizedBox(width: 8),
                       Switch(
                           value: state.brightness == Brightness.dark,
@@ -71,7 +72,7 @@ class AppPreferences extends StatelessWidget {
               children: [
                 if (languageList?.isNotEmpty == true)
                   SettingButton(
-                    label: Text(AppLocalizations.of(context).language),
+                    label: Text(AppLocalizations.of(context)!.language),
                     icon: DropdownButton<String>(
                       enableFeedback: true,
                       dropdownColor:
@@ -91,13 +92,14 @@ class AppPreferences extends StatelessWidget {
                           .map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
-                          child: Text(value.toUpperCase()),
+                          child: Text(AppLocalizations.of(context)!
+                              .language_code(value)),
                         );
                       }).toList(),
                     ),
                   ),
                 SettingButton(
-                  label: Text(AppLocalizations.of(context).dark_theme),
+                  label: Text(AppLocalizations.of(context)!.dark_theme),
                   icon: Switch(
                       value: state.brightness == Brightness.dark,
                       onChanged: (onChanged) {

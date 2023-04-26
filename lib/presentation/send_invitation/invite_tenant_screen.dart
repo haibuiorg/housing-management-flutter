@@ -56,7 +56,7 @@ class _InviteTenantScreenState extends State<InviteTenantScreen> {
                         : null,
                     child: const Icon(Icons.chevron_right_outlined)),
                 appBar: AppBar(
-                  title: Text(AppLocalizations.of(context).send_invitation),
+                  title: Text(AppLocalizations.of(context)!.send_invitation),
                 ),
                 body: SingleChildScrollView(
                     child: Column(
@@ -71,7 +71,7 @@ class _InviteTenantScreenState extends State<InviteTenantScreen> {
                         ),
                         dropdownDecoratorProps: DropDownDecoratorProps(
                             dropdownSearchDecoration: InputDecoration(
-                                labelText: AppLocalizations.of(context)
+                                labelText: AppLocalizations.of(context)!
                                     .select_apartment)),
                         itemAsString: (Apartment apartment) =>
                             '${apartment.building} ${apartment.houseCode ?? ''}',
@@ -84,11 +84,11 @@ class _InviteTenantScreenState extends State<InviteTenantScreen> {
                       child: CustomFormField(
                         keyboardType: TextInputType.emailAddress,
                         onChanged: (value) => cubit.updateEmails(value),
-                        hintText: AppLocalizations.of(context).email_list_hint,
+                        hintText: AppLocalizations.of(context)!.email_list_hint,
                       ),
                     ),
                     CheckboxListTile(
-                        title: Text(AppLocalizations.of(context)
+                        title: Text(AppLocalizations.of(context)!
                             .set_as_apartment_owner),
                         value: state.setAsApartmentOwner == true,
                         onChanged: cubit.setAsApartmentOwner),

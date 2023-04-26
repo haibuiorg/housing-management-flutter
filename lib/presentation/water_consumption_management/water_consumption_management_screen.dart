@@ -29,7 +29,7 @@ class WaterConsumptionManagementScreen extends StatelessWidget {
       }, builder: (context, state) {
         return Scaffold(
             appBar: AppBar(
-              title: Text(AppLocalizations.of(context).water_consumption),
+              title: Text(AppLocalizations.of(context)!.water_consumption),
             ),
             body: SingleChildScrollView(
               padding: const EdgeInsets.all(8.0),
@@ -39,7 +39,7 @@ class WaterConsumptionManagementScreen extends StatelessWidget {
                   children: [
                     SfCartesianChart(
                         title: ChartTitle(
-                            text: AppLocalizations.of(context)
+                            text: AppLocalizations.of(context)!
                                 .water_price_history,
                             textStyle: Theme.of(context).textTheme.titleMedium),
                         // Initialize category axis
@@ -66,12 +66,12 @@ class WaterConsumptionManagementScreen extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(AppLocalizations.of(context).current_water_price),
-                        Text(AppLocalizations.of(context)
+                        Text(AppLocalizations.of(context)!.current_water_price),
+                        Text(AppLocalizations.of(context)!
                             .price_per_cube_with_value(formatCurrency(
                                 state.activeWaterPrice?.pricePerCube,
                                 state.housingCompany?.currencyCode))),
-                        Text(AppLocalizations.of(context).basic_fee_with_value(
+                        Text(AppLocalizations.of(context)!.basic_fee_with_value(
                             formatCurrency(state.activeWaterPrice?.basicFee,
                                 state.housingCompany?.currencyCode))),
                         if (state.housingCompany?.isUserManager == true)
@@ -88,7 +88,7 @@ class WaterConsumptionManagementScreen extends StatelessWidget {
                                           },
                                         ));
                               },
-                              child: Text(AppLocalizations.of(context)
+                              child: Text(AppLocalizations.of(context)!
                                   .add_new_water_price)),
                       ],
                     ),
@@ -97,27 +97,27 @@ class WaterConsumptionManagementScreen extends StatelessWidget {
                       alignment: Alignment.center,
                       padding: const EdgeInsets.all(16.0),
                       child: Text(
-                          AppLocalizations.of(context).current_water_bill,
+                          AppLocalizations.of(context)!.current_water_bill,
                           textAlign: TextAlign.center,
                           style: Theme.of(context).textTheme.titleMedium),
                     ),
-                    Text(AppLocalizations.of(context).total_reading_with_value(
+                    Text(AppLocalizations.of(context)!.total_reading_with_value(
                         state.latestWaterConsumption?.totalReading.toString() ??
                             '--')),
-                    Text(AppLocalizations.of(context)
+                    Text(AppLocalizations.of(context)!
                         .total_basic_fee_with_value(formatCurrency(
                             state.latestWaterConsumption?.basicFee,
                             state.housingCompany?.currencyCode))),
-                    Text(AppLocalizations.of(context).price_per_cube_with_value(
-                        formatCurrency(
+                    Text(AppLocalizations.of(context)!
+                        .price_per_cube_with_value(formatCurrency(
                             state.latestWaterConsumption?.pricePerCube,
                             state.housingCompany?.currencyCode))),
-                    Text(AppLocalizations.of(context).period_with_value(
+                    Text(AppLocalizations.of(context)!.period_with_value(
                         state.latestWaterConsumption?.period.toString() ??
                             '--')),
-                    Text(AppLocalizations.of(context).year_with_value(
+                    Text(AppLocalizations.of(context)!.year_with_value(
                         state.latestWaterConsumption?.year.toString() ?? '--')),
-                    Text(AppLocalizations.of(context).progess_with_value(
+                    Text(AppLocalizations.of(context)!.progess_with_value(
                         '${state.latestWaterConsumption?.consumptionValues?.length ?? '0'}/${state.housingCompany?.apartmentCount ?? '0'}')),
                     if (state.housingCompany?.isUserManager == true)
                       OutlinedButton(
@@ -141,7 +141,7 @@ class WaterConsumptionManagementScreen extends StatelessWidget {
                                       },
                                     ));
                           },
-                          child: Text(AppLocalizations.of(context)
+                          child: Text(AppLocalizations.of(context)!
                               .start_new_water_bill)),
                     Padding(
                       padding: const EdgeInsets.only(top: 32, bottom: 32),
@@ -201,18 +201,18 @@ class _WaterConsumptionDialogState extends State<WaterConsumptionDialog> {
     return AlertDialog(
       title: widget.showIncompleteError
           ? Text(
-              AppLocalizations.of(context).incomplete_water_period,
+              AppLocalizations.of(context)!.incomplete_water_period,
               style: Theme.of(context)
                   .textTheme
                   .titleLarge
                   ?.copyWith(color: Theme.of(context).colorScheme.error),
             )
-          : Text(AppLocalizations.of(context).start_new_water_bill),
+          : Text(AppLocalizations.of(context)!.start_new_water_bill),
       content: Column(mainAxisSize: MainAxisSize.min, children: [
         CustomFormField(
           inputFormatters: [DecimalTextInputFormatter(decimalRange: 2)],
           keyboardType: const TextInputType.numberWithOptions(decimal: true),
-          hintText: AppLocalizations.of(context).total_reading,
+          hintText: AppLocalizations.of(context)!.total_reading,
           textEditingController: _totalReadingController,
         ),
       ]),
@@ -224,7 +224,7 @@ class _WaterConsumptionDialogState extends State<WaterConsumptionDialog> {
               );
               Navigator.pop(context, true);
             },
-            child: Text(AppLocalizations.of(context).start)),
+            child: Text(AppLocalizations.of(context)!.start)),
       ],
     );
   }
@@ -252,18 +252,18 @@ class _WaterPriceDialogState extends State<WaterPriceDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(AppLocalizations.of(context).add_new_water_price),
+      title: Text(AppLocalizations.of(context)!.add_new_water_price),
       content: Column(mainAxisSize: MainAxisSize.min, children: [
         CustomFormField(
           inputFormatters: [DecimalTextInputFormatter(decimalRange: 2)],
           keyboardType: const TextInputType.numberWithOptions(decimal: true),
-          hintText: AppLocalizations.of(context).price_per_cube,
+          hintText: AppLocalizations.of(context)!.price_per_cube,
           textEditingController: _perCubeController,
         ),
         CustomFormField(
           inputFormatters: [DecimalTextInputFormatter(decimalRange: 2)],
           keyboardType: const TextInputType.numberWithOptions(decimal: true),
-          hintText: AppLocalizations.of(context).basic_fee,
+          hintText: AppLocalizations.of(context)!.basic_fee,
           textEditingController: _basicFeeController,
         )
       ]),
@@ -275,7 +275,7 @@ class _WaterPriceDialogState extends State<WaterPriceDialog> {
                   pricePerCube: _perCubeController.text);
               Navigator.pop(context, true);
             },
-            child: Text(AppLocalizations.of(context).add))
+            child: Text(AppLocalizations.of(context)!.add))
       ],
     );
   }

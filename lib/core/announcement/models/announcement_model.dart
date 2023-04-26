@@ -2,6 +2,7 @@
 
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:priorli/core/messaging/models/translated_message_model.dart';
 import 'package:priorli/core/storage/models/storage_item_model.dart';
 
 part 'announcement_model.g.dart';
@@ -19,6 +20,9 @@ class AnnouncementModel extends Equatable {
   final String? display_name;
   final bool? is_deleted;
   final List<StorageItemModel>? storage_items;
+  final List<TranslatedMessageModel>? translated_body;
+  final List<TranslatedMessageModel>? translated_title;
+  final List<TranslatedMessageModel>? translated_subtitle;
 
   const AnnouncementModel(
       this.id,
@@ -31,6 +35,9 @@ class AnnouncementModel extends Equatable {
       this.updated_on,
       this.storage_items,
       this.display_name,
+      this.translated_body,
+      this.translated_title,
+      this.translated_subtitle,
       this.is_deleted);
 
   factory AnnouncementModel.fromJson(Map<String, dynamic> json) =>
@@ -48,6 +55,9 @@ class AnnouncementModel extends Equatable {
         storage_items,
         updated_on,
         display_name,
-        is_deleted
+        is_deleted,
+        translated_body,
+        translated_title,
+        translated_subtitle
       ];
 }

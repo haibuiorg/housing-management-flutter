@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:priorli/core/messaging/entities/message.dart';
+import 'package:priorli/core/messaging/entities/translated_message.dart';
 import 'package:priorli/presentation/shared/app_gallery.dart';
 import 'package:priorli/presentation/shared/app_lottie_animation.dart';
 
@@ -8,9 +9,13 @@ import '../../core/utils/time_utils.dart';
 
 class MessageItem extends StatefulWidget {
   const MessageItem(
-      {super.key, required this.message, required this.isMyMessage});
+      {super.key,
+      required this.message,
+      required this.isMyMessage,
+      this.translatedLanguageCode});
   final Message message;
   final bool isMyMessage;
+  final String? translatedLanguageCode;
 
   @override
   State<MessageItem> createState() => _MessageItemState();
@@ -58,7 +63,17 @@ class _MessageItemState extends State<MessageItem> {
                         ? CrossAxisAlignment.end
                         : CrossAxisAlignment.start,
                     children: [
-                      Text(widget.message.message),
+                      Text(widget.message.translatedMessage?.firstWhere(
+                            (element) =>
+                                element.languageCode ==
+                                widget.translatedLanguageCode,
+                            orElse: () {
+                              return TranslatedMessage(
+                                  value: widget.message.message,
+                                  languageCode: '');
+                            },
+                          ).value ??
+                          widget.message.message),
                       Text(
                         getFormattedDateTime(widget.message.createdOn),
                         style: Theme.of(context).textTheme.bodySmall,

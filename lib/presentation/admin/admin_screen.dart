@@ -33,28 +33,28 @@ class _AdminScreenState extends State<AdminScreen> {
   List<Tab> _tab(BuildContext context) => [
         Tab(
           child: Text(
-            AppLocalizations.of(context).contact_lead,
+            AppLocalizations.of(context)!.contact_lead,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
         ),
         Tab(
           child: Text(
-            AppLocalizations.of(context).housing_companies,
+            AppLocalizations.of(context)!.housing_companies,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
         ),
         Tab(
           child: Text(
-            AppLocalizations.of(context).conversations,
+            AppLocalizations.of(context)!.conversations,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
         ),
         Tab(
           child: Text(
-            AppLocalizations.of(context).subscription_plans,
+            AppLocalizations.of(context)!.subscription_plans,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
@@ -91,7 +91,7 @@ class _AdminScreenState extends State<AdminScreen> {
                   snap: false,
                   forceElevated: innerBoxIsScrolled,
                   shadowColor: Theme.of(context).colorScheme.primaryContainer,
-                  title: Text(AppLocalizations.of(context).admin),
+                  title: Text(AppLocalizations.of(context)!.admin),
                   actions: [
                     DropdownButton<String>(
                       value: state.selectedCountryCode,

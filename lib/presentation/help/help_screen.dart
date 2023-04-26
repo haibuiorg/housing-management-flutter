@@ -60,7 +60,7 @@ class _HelpScreenState extends State<HelpScreen> {
       }, builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
-            title: Text(AppLocalizations.of(context).help),
+            title: Text(AppLocalizations.of(context)!.help),
           ),
           body: Column(
             children: [
@@ -153,13 +153,13 @@ class _SupportConversationDialogState extends State<SupportConversationDialog> {
             CustomFormField(
               keyboardType: TextInputType.name,
               textCapitalization: TextCapitalization.sentences,
-              hintText: AppLocalizations.of(context).support_subject,
+              hintText: AppLocalizations.of(context)!.support_subject,
               textEditingController: _textEditingController,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(AppLocalizations.of(context).country),
+                Text(AppLocalizations.of(context)!.country),
                 Wrap(
                   crossAxisAlignment: WrapCrossAlignment.center,
                   spacing: 8,
@@ -190,7 +190,7 @@ class _SupportConversationDialogState extends State<SupportConversationDialog> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(AppLocalizations.of(context).language),
+                Text(AppLocalizations.of(context)!.language),
                 Wrap(
                   crossAxisAlignment: WrapCrossAlignment.center,
                   spacing: 8,

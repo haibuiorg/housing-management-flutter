@@ -86,18 +86,18 @@ class _EventDetailState extends State<EventDetail> {
     showDialog(
         context: context,
         builder: (context) => AlertDialog(
-              content: Text(AppLocalizations.of(context).remove_event_confirm),
+              content: Text(AppLocalizations.of(context)!.remove_event_confirm),
               actions: [
                 TextButton(
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    child: Text(AppLocalizations.of(context).cancel)),
+                    child: Text(AppLocalizations.of(context)!.cancel)),
                 OutlinedButton(
                     onPressed: () {
                       widget.onDelete();
                     },
-                    child: Text(AppLocalizations.of(context).remove))
+                    child: Text(AppLocalizations.of(context)!.remove))
               ],
             ));
   }
@@ -147,15 +147,15 @@ class _EventDetailState extends State<EventDetail> {
                   children: [
                     CustomFormField(
                       textEditingController: _nameController,
-                      hintText: AppLocalizations.of(context).event_name,
-                      helperText: AppLocalizations.of(context).event_name,
+                      hintText: AppLocalizations.of(context)!.event_name,
+                      helperText: AppLocalizations.of(context)!.event_name,
                       enabled: _editable,
                     ),
                     CustomFormField(
                       textEditingController: _descriptionController,
-                      hintText: AppLocalizations.of(context).event_description,
+                      hintText: AppLocalizations.of(context)!.event_description,
                       helperText:
-                          AppLocalizations.of(context).event_description,
+                          AppLocalizations.of(context)!.event_description,
                       enabled: _editable,
                     ),
                     _editable
@@ -172,13 +172,13 @@ class _EventDetailState extends State<EventDetail> {
                                 ),
                               );
                             },
-                            label: Text(AppLocalizations.of(context)
+                            label: Text(AppLocalizations.of(context)!
                                 .start_at_time(getFormattedDateTime(
                                     _startTime.millisecondsSinceEpoch))),
                           )
                         : FullWidthPairText(
                             label:
-                                (AppLocalizations.of(context).start_at_title),
+                                (AppLocalizations.of(context)!.start_at_title),
                             content: getFormattedDateTime(
                                 _startTime.millisecondsSinceEpoch)),
                     _editable
@@ -195,17 +195,17 @@ class _EventDetailState extends State<EventDetail> {
                                 ),
                               );
                             },
-                            label: Text(AppLocalizations.of(context).until_time(
-                                getFormattedDateTime(
+                            label: Text(AppLocalizations.of(context)!
+                                .until_time(getFormattedDateTime(
                                     _endTime.millisecondsSinceEpoch))),
                           )
                         : FullWidthPairText(
-                            label: AppLocalizations.of(context).until_title,
+                            label: AppLocalizations.of(context)!.until_title,
                             content: getFormattedDateTime(
                                 _endTime.millisecondsSinceEpoch)),
                     _repeat != null
                         ? SettingButton(
-                            label: Text(AppLocalizations.of(context)
+                            label: Text(AppLocalizations.of(context)!
                                 .repeat_until_time(getFormattedDateTime(
                                     _repeatUntil?.millisecondsSinceEpoch ??
                                         _endTime.millisecondsSinceEpoch))),
@@ -311,12 +311,12 @@ class _EventDetailState extends State<EventDetail> {
                     OutlinedButton(
                         onPressed: _editable ? _saveEdit : _startEdit,
                         child: Text(_editable
-                            ? AppLocalizations.of(context).save
-                            : AppLocalizations.of(context).edit)),
+                            ? AppLocalizations.of(context)!.save
+                            : AppLocalizations.of(context)!.edit)),
                     _editable
                         ? TextButton(
                             onPressed: _clearEdit,
-                            child: Text(AppLocalizations.of(context).clear))
+                            child: Text(AppLocalizations.of(context)!.clear))
                         : const SizedBox.shrink()
                   ],
                 ),
@@ -324,7 +324,7 @@ class _EventDetailState extends State<EventDetail> {
             ],
           ),
           SettingButton(
-            label: Text(AppLocalizations.of(context).manage_participants),
+            label: Text(AppLocalizations.of(context)!.manage_participants),
             onPressed: () {
               showModalBottomSheet(
                 context: context,
@@ -341,7 +341,7 @@ class _EventDetailState extends State<EventDetail> {
           ),
           TextButton(
               onPressed: _showRemoveEvent,
-              child: Text(AppLocalizations.of(context).remove_event))
+              child: Text(AppLocalizations.of(context)!.remove_event))
         ]),
       ),
     );

@@ -13,7 +13,6 @@ class AdminGetCompanies
 
   @override
   Future<Result<List<HousingCompany>>> call(AdminHousingCompanyParams params) {
-    print('object');
     return repository.adminGetCompanies(
         lastCreatedOn:
             params.lastCreatedOn ?? DateTime.now().millisecondsSinceEpoch,

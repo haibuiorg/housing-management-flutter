@@ -69,7 +69,7 @@ class _ManagerCreationFormState extends State<ManagerCreationForm> {
               ResponsiveRowColumnItem(
                 rowFlex: 2,
                 child: CustomFormField(
-                  hintText: AppLocalizations.of(context).email,
+                  hintText: AppLocalizations.of(context)!.email,
                   textEditingController: _emailController,
                   keyboardType: TextInputType.emailAddress,
                 ),
@@ -77,7 +77,7 @@ class _ManagerCreationFormState extends State<ManagerCreationForm> {
               ResponsiveRowColumnItem(
                 rowFlex: 2,
                 child: CustomFormField(
-                  hintText: AppLocalizations.of(context).first_name,
+                  hintText: AppLocalizations.of(context)!.first_name,
                   textEditingController: _firstNameController,
                   keyboardType: TextInputType.name,
                 ),
@@ -85,7 +85,7 @@ class _ManagerCreationFormState extends State<ManagerCreationForm> {
               ResponsiveRowColumnItem(
                 rowFlex: 1,
                 child: CustomFormField(
-                  hintText: AppLocalizations.of(context).last_name,
+                  hintText: AppLocalizations.of(context)!.last_name,
                   textEditingController: _lastnameController,
                   keyboardType: TextInputType.name,
                 ),
@@ -93,7 +93,7 @@ class _ManagerCreationFormState extends State<ManagerCreationForm> {
               ResponsiveRowColumnItem(
                 rowFlex: 1,
                 child: CustomFormField(
-                  hintText: AppLocalizations.of(context).phone_number,
+                  hintText: AppLocalizations.of(context)!.phone_number,
                   textEditingController: _phoneController,
                   keyboardType: TextInputType.phone,
                   inputFormatters: [
@@ -110,7 +110,7 @@ class _ManagerCreationFormState extends State<ManagerCreationForm> {
                       rowFit: FlexFit.loose,
                       child: TextButton(
                         onPressed: _submit,
-                        child: Text(AppLocalizations.of(context).add),
+                        child: Text(AppLocalizations.of(context)!.add),
                       )),
                   valueWhen: [
                     Condition.largerThan(
@@ -119,7 +119,7 @@ class _ManagerCreationFormState extends State<ManagerCreationForm> {
                           rowFit: FlexFit.loose,
                           child: TextButton(
                             onPressed: _submit,
-                            child: Text(AppLocalizations.of(context).add),
+                            child: Text(AppLocalizations.of(context)!.add),
                           ),
                         )),
                     Condition.smallerThan(

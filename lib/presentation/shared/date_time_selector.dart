@@ -61,7 +61,7 @@ class _DateTimePickerState extends State<DateTimePicker> {
                   widget.onConfirmTime(dateFrom);
                   Navigator.pop(context);
                 },
-                child: Text(AppLocalizations.of(context).confirm_date_time))
+                child: Text(AppLocalizations.of(context)!.confirm_date_time))
           ],
         ),
       ],

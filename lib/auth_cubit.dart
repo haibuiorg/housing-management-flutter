@@ -128,7 +128,9 @@ class AuthCubit extends Cubit<AuthState> {
         _updateUserNotificationToken(
             UpdateUserNotificationTokenParams(notificationToken: newToken));
       });
-    } catch (error) {}
+    } catch (error) {
+      debugPrint(error.toString());
+    }
   }
 
   Future<void> changePassword(

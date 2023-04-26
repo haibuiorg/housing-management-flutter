@@ -40,16 +40,16 @@ class _ApartmentManagementScreenState extends State<ApartmentManagementScreen> {
       context: context,
       builder: (BuildContext builderContext) {
         return AlertDialog(
-          title: Text(AppLocalizations.of(context).remove_this_apartment),
-          content: Text(AppLocalizations.of(context)
+          title: Text(AppLocalizations.of(context)!.remove_this_apartment),
+          content: Text(AppLocalizations.of(context)!
               .remove_this_apartment_dialog_content),
           actions: [
             OutlinedButton(
                 onPressed: onDismiss(builderContext),
-                child: Text(AppLocalizations.of(context).remove)),
+                child: Text(AppLocalizations.of(context)!.remove)),
             TextButton(
               onPressed: () => Navigator.of(builderContext).pop(false),
-              child: Text(AppLocalizations.of(context).cancel),
+              child: Text(AppLocalizations.of(context)!.cancel),
             ),
           ],
         );
@@ -92,7 +92,7 @@ class _ApartmentManagementScreenState extends State<ApartmentManagementScreen> {
                           cubit.saveNewApartmentInfo();
                         }
                       : null,
-                  child: Text(AppLocalizations.of(context).save),
+                  child: Text(AppLocalizations.of(context)!.save),
                 )
               ],
             ),
@@ -108,7 +108,7 @@ class _ApartmentManagementScreenState extends State<ApartmentManagementScreen> {
                       child: Column(children: [
                         CustomFormField(
                           textEditingController: _apartmentName,
-                          hintText: AppLocalizations.of(context).building_name,
+                          hintText: AppLocalizations.of(context)!.building_name,
                           autofocus: false,
                           onChanged: (value) =>
                               cubit.updateAparmentBuildingName(value),
@@ -116,7 +116,7 @@ class _ApartmentManagementScreenState extends State<ApartmentManagementScreen> {
                         ),
                         CustomFormField(
                           hintText:
-                              AppLocalizations.of(context).building_number,
+                              AppLocalizations.of(context)!.building_number,
                           textEditingController: _houseCode,
                           autofocus: false,
                           onChanged: (value) =>
@@ -129,23 +129,25 @@ class _ApartmentManagementScreenState extends State<ApartmentManagementScreen> {
                   SettingButton(
                     onPressed: () {},
                     label: Text(
-                        AppLocalizations.of(context).accounts_and_payments),
+                        AppLocalizations.of(context)!.accounts_and_payments),
                   ),
                   SettingButton(
                     onPressed: () {},
-                    label: Text(AppLocalizations.of(context).tenant_management),
+                    label:
+                        Text(AppLocalizations.of(context)!.tenant_management),
                   ),
                   SettingButton(
                     onPressed: () {
                       context.pushFromCurrentLocation(apartmentWaterInvoice);
                     },
-                    label: Text(AppLocalizations.of(context).archived_invoices),
+                    label:
+                        Text(AppLocalizations.of(context)!.archived_invoices),
                   ),
                   SettingButton(
                     onPressed: () {
                       context.pushFromCurrentLocation(documentListScreenPath);
                     },
-                    label: Text(AppLocalizations.of(context).documents),
+                    label: Text(AppLocalizations.of(context)!.documents),
                   ),
                   SettingButton(
                     onPressed: () {
@@ -154,7 +156,7 @@ class _ApartmentManagementScreenState extends State<ApartmentManagementScreen> {
                               (value) => Navigator.of(builderContext).pop()));
                     },
                     label: Text(
-                      AppLocalizations.of(context).remove_this_apartment,
+                      AppLocalizations.of(context)!.remove_this_apartment,
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           color: Theme.of(context).colorScheme.error),
                     ),

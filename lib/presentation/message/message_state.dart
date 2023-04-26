@@ -10,11 +10,13 @@ class MessageState extends Equatable {
   final Conversation? conversation;
   final User? user;
   final List<String>? pendingStorageItems;
+  final String? translatedLanguageCode;
 
   const MessageState(
       {this.messageList,
       this.messageType,
       this.user,
+      this.translatedLanguageCode,
       this.conversation,
       this.pendingStorageItems});
 
@@ -22,16 +24,25 @@ class MessageState extends Equatable {
           {List<Message>? messageList,
           String? messageType,
           User? user,
+          String? translatedLanguageCode,
           List<String>? pendingStorageItems,
           Conversation? conversation}) =>
       MessageState(
           pendingStorageItems: pendingStorageItems ?? this.pendingStorageItems,
           user: user ?? this.user,
+          translatedLanguageCode:
+              translatedLanguageCode ?? this.translatedLanguageCode,
           messageType: messageType ?? this.messageType,
           conversation: conversation ?? this.conversation,
           messageList: messageList ?? this.messageList);
 
   @override
-  List<Object?> get props =>
-      [messageList, messageType, user, conversation, pendingStorageItems];
+  List<Object?> get props => [
+        messageList,
+        messageType,
+        user,
+        conversation,
+        pendingStorageItems,
+        translatedLanguageCode
+      ];
 }

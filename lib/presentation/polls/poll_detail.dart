@@ -117,20 +117,20 @@ class _PollDetailState extends State<PollDetail> {
     showDialog(
         context: context,
         builder: (builder) => AlertDialog(
-              content: Text(AppLocalizations.of(context).remove_poll_confirm),
+              content: Text(AppLocalizations.of(context)!.remove_poll_confirm),
               actions: [
                 TextButton(
                     onPressed: () {
                       Navigator.pop(builder, true);
                     },
-                    child: Text(AppLocalizations.of(context).cancel)),
+                    child: Text(AppLocalizations.of(context)!.cancel)),
                 OutlinedButton(
                     onPressed: () {
                       widget.onDelete(pollId: widget.poll.id);
                       Navigator.pop(builder, true);
                       Navigator.pop(context, true);
                     },
-                    child: Text(AppLocalizations.of(context).ok))
+                    child: Text(AppLocalizations.of(context)!.ok))
               ],
             ));
   }
@@ -141,20 +141,20 @@ class _PollDetailState extends State<PollDetail> {
     showDialog(
         context: context,
         builder: (builder) => AlertDialog(
-              content: Text(AppLocalizations.of(context).remove_option),
+              content: Text(AppLocalizations.of(context)!.remove_option),
               actions: [
                 TextButton(
                     onPressed: () {
                       Navigator.pop(builder);
                     },
-                    child: Text(AppLocalizations.of(context).cancel)),
+                    child: Text(AppLocalizations.of(context)!.cancel)),
                 OutlinedButton(
                     onPressed: () {
                       widget.onRemoveVotingOption(
                           pollId: widget.poll.id, votingOptionId: id);
                       Navigator.pop(builder, true);
                     },
-                    child: Text(AppLocalizations.of(context).ok))
+                    child: Text(AppLocalizations.of(context)!.ok))
               ],
             ));
   }
@@ -186,7 +186,7 @@ class _PollDetailState extends State<PollDetail> {
       body: SingleChildScrollView(
         child: Column(mainAxisSize: MainAxisSize.min, children: [
           FullWidthTitle(
-            title: AppLocalizations.of(context).voting_poll_detail,
+            title: AppLocalizations.of(context)!.voting_poll_detail,
             action: Expanded(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -194,12 +194,12 @@ class _PollDetailState extends State<PollDetail> {
                   OutlinedButton(
                       onPressed: _editable ? _saveEdit : _startEdit,
                       child: Text(_editable
-                          ? AppLocalizations.of(context).save
-                          : AppLocalizations.of(context).edit)),
+                          ? AppLocalizations.of(context)!.save
+                          : AppLocalizations.of(context)!.edit)),
                   _editable
                       ? TextButton(
                           onPressed: _clearEdit,
-                          child: Text(AppLocalizations.of(context).clear))
+                          child: Text(AppLocalizations.of(context)!.clear))
                       : const SizedBox.shrink()
                 ],
               ),
@@ -207,15 +207,15 @@ class _PollDetailState extends State<PollDetail> {
           ),
           CustomFormField(
             textEditingController: _nameController,
-            hintText: AppLocalizations.of(context).event_name,
-            helperText: AppLocalizations.of(context).event_name,
+            hintText: AppLocalizations.of(context)!.event_name,
+            helperText: AppLocalizations.of(context)!.event_name,
             enabled: _editable,
             autofocus: false,
           ),
           CustomFormField(
             textEditingController: _descriptionController,
-            hintText: AppLocalizations.of(context).event_description,
-            helperText: AppLocalizations.of(context).event_description,
+            hintText: AppLocalizations.of(context)!.event_description,
+            helperText: AppLocalizations.of(context)!.event_description,
             enabled: _editable,
             autofocus: false,
           ),
@@ -233,16 +233,16 @@ class _PollDetailState extends State<PollDetail> {
                       ),
                     );
                   },
-                  label: Text(AppLocalizations.of(context).ended_by_time(
+                  label: Text(AppLocalizations.of(context)!.ended_by_time(
                       getFormattedDateTime(_endedOn.millisecondsSinceEpoch))),
                 )
               : FullWidthPairText(
-                  label: AppLocalizations.of(context).ended_by_title,
+                  label: AppLocalizations.of(context)!.ended_by_title,
                   content:
                       getFormattedDateTime(_endedOn.millisecondsSinceEpoch)),
           CheckboxListTile(
               enabled: false,
-              title: Text(AppLocalizations.of(context).anonymous_poll),
+              title: Text(AppLocalizations.of(context)!.anonymous_poll),
               value: _annonymous,
               onChanged: (value) {
                 setState(() {
@@ -251,7 +251,7 @@ class _PollDetailState extends State<PollDetail> {
               }),
           CheckboxListTile(
               enabled: _editable,
-              title: Text(AppLocalizations.of(context).participant_add_option),
+              title: Text(AppLocalizations.of(context)!.participant_add_option),
               value: _expandable,
               onChanged: (value) {
                 setState(() {
@@ -261,7 +261,7 @@ class _PollDetailState extends State<PollDetail> {
           CheckboxListTile(
               enabled: _editable,
               title: Text(
-                  AppLocalizations.of(context).participants_select_multiple),
+                  AppLocalizations.of(context)!.participants_select_multiple),
               value: _multiple,
               onChanged: (value) {
                 setState(() {
@@ -285,7 +285,7 @@ class _PollDetailState extends State<PollDetail> {
           ),
           const Divider(),
           FullWidthTitle(
-            title: AppLocalizations.of(context).vote_option_title,
+            title: AppLocalizations.of(context)!.vote_option_title,
           ),
           BlocBuilder<PollScreenCubit, PollScreenState>(
               builder: (context, state) {
@@ -306,7 +306,7 @@ class _PollDetailState extends State<PollDetail> {
                                 '');
                       },
                       child: Text(
-                        AppLocalizations.of(context).remove_option,
+                        AppLocalizations.of(context)!.remove_option,
                       ))
                 ]);
               }),
@@ -315,11 +315,11 @@ class _PollDetailState extends State<PollDetail> {
           TextButton(
               onPressed: _addVotingOption,
               child: Text(
-                AppLocalizations.of(context).add_vote_option,
+                AppLocalizations.of(context)!.add_vote_option,
               )),
           const Divider(),
           FullWidthTitle(
-            title: AppLocalizations.of(context).your_vote_title,
+            title: AppLocalizations.of(context)!.your_vote_title,
           ),
           BlocBuilder<PollScreenCubit, PollScreenState>(
               builder: (context, state) {
@@ -355,7 +355,7 @@ class _PollDetailState extends State<PollDetail> {
           }),
           const Divider(),
           SettingButton(
-            label: Text(AppLocalizations.of(context).manage_participants),
+            label: Text(AppLocalizations.of(context)!.manage_participants),
             onPressed: () {
               showModalBottomSheet(
                 context: context,
@@ -371,7 +371,7 @@ class _PollDetailState extends State<PollDetail> {
           ),
           TextButton(
               onPressed: _showRemovePoll,
-              child: Text(AppLocalizations.of(context).remove_poll)),
+              child: Text(AppLocalizations.of(context)!.remove_poll)),
         ]),
       ),
     );
@@ -408,14 +408,14 @@ class _AddPollOptionAlerDialogState extends State<AddPollOptionAlerDialog> {
     return AlertDialog(
       content: CustomFormField(
         textEditingController: _descriptionController,
-        hintText: AppLocalizations.of(context).voting_option_description,
+        hintText: AppLocalizations.of(context)!.voting_option_description,
       ),
       actions: [
         OutlinedButton(
             onPressed: () {
               widget.onSubmit(_descriptionController.text);
             },
-            child: Text(AppLocalizations.of(context).add_vote_option)),
+            child: Text(AppLocalizations.of(context)!.add_vote_option)),
       ],
     );
   }

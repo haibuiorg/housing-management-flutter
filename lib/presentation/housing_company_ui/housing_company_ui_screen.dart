@@ -47,7 +47,7 @@ class _HousingCompanyUiScreenState extends State<HousingCompanyUiScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context).company_branding),
+        title: Text(AppLocalizations.of(context)!.company_branding),
       ),
       body: BlocProvider<HousingCompanyUiScreenCubit>(
         create: (_) => _cubit,
@@ -56,7 +56,7 @@ class _HousingCompanyUiScreenState extends State<HousingCompanyUiScreen> {
           return SingleChildScrollView(
             child: Column(children: [
               FullWidthTitle(
-                title: AppLocalizations.of(context).company_logo,
+                title: AppLocalizations.of(context)!.company_logo,
               ),
               InkWell(
                 onTap: () => showDialog(
@@ -92,7 +92,7 @@ class _HousingCompanyUiScreenState extends State<HousingCompanyUiScreen> {
                       ),
               ),
               FullWidthTitle(
-                title: AppLocalizations.of(context).cover_photo,
+                title: AppLocalizations.of(context)!.cover_photo,
               ),
               Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -136,7 +136,7 @@ class _HousingCompanyUiScreenState extends State<HousingCompanyUiScreen> {
                 ),
               ),
               FullWidthTitle(
-                title: AppLocalizations.of(context).primary_color,
+                title: AppLocalizations.of(context)!.primary_color,
               ),
               InkWell(
                 onTap: () => showDialog(
