@@ -2,6 +2,7 @@
 
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:priorli/core/messaging/models/translation_model.dart';
 
 part 'storage_item_model.g.dart';
 
@@ -26,6 +27,7 @@ class StorageItemModel extends Equatable {
   final String? uploaded_by;
   final String? type;
   final String? name;
+  final List<TranslationModel>? summary_translation;
 
   const StorageItemModel(
       {this.id,
@@ -35,6 +37,7 @@ class StorageItemModel extends Equatable {
       this.created_on,
       this.is_deleted,
       this.type,
+      this.summary_translation,
       this.name,
       this.uploaded_by});
 
@@ -51,6 +54,7 @@ class StorageItemModel extends Equatable {
         is_deleted,
         uploaded_by,
         type,
-        name
+        name,
+        summary_translation
       ];
 }

@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:priorli/core/messaging/entities/message.dart';
-import 'package:priorli/core/messaging/entities/translated_message.dart';
+import 'package:priorli/core/messaging/entities/translation.dart';
 import 'package:priorli/presentation/shared/app_gallery.dart';
 import 'package:priorli/presentation/shared/app_lottie_animation.dart';
 
@@ -68,7 +68,7 @@ class _MessageItemState extends State<MessageItem> {
                                 element.languageCode ==
                                 widget.translatedLanguageCode,
                             orElse: () {
-                              return TranslatedMessage(
+                              return Translation(
                                   value: widget.message.message,
                                   languageCode: '');
                             },

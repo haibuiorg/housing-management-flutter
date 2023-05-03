@@ -65,12 +65,14 @@ class _DocumentListScreenState extends State<DocumentListScreen> {
                           onPressed: () {
                             showDialog(
                                 context: context,
-                                builder: (context) => Dialog(
+                                builder: (builder) => Dialog(
                                       child: FileSelector(
                                         onCompleteUploaded:
                                             (tempUploadedFiles) {
                                           _cubit
-                                              .uploadNewFile(tempUploadedFiles);
+                                              .uploadNewFile(tempUploadedFiles)
+                                              .then((value) =>
+                                                  Navigator.pop(builder));
                                         },
                                       ),
                                     ));

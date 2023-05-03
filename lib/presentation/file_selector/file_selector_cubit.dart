@@ -26,6 +26,7 @@ class FileSelectorCubit extends Cubit<FileSelectorState> {
     final List<dynamic> newFileList = List.from(state.selectedFiles ?? []);
     if (state.autoUpload == true) {
       await uploadNewFiles(files);
+      return;
     }
     newFileList.addAll(files);
     emit(state.copyWith(selectedFiles: newFileList, uploading: false));
@@ -54,7 +55,10 @@ class FileSelectorCubit extends Cubit<FileSelectorState> {
           List.from(state.uploadedLocations ?? []);
       currentLocations.addAll(uploadResult.data);
       emit(
-        state.copyWith(uploadedLocations: currentLocations, uploading: false),
+        state.copyWith(
+            uploadedLocations: currentLocations,
+            selectedFiles: [],
+            uploading: false),
       );
       return;
     }

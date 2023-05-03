@@ -21,16 +21,13 @@ AnnouncementModel _$AnnouncementModelFromJson(Map<String, dynamic> json) =>
           .toList(),
       json['display_name'] as String?,
       (json['translated_body'] as List<dynamic>?)
-          ?.map(
-              (e) => TranslatedMessageModel.fromJson(e as Map<String, dynamic>))
+          ?.map((e) => TranslationModel.fromJson(e as Map<String, dynamic>))
           .toList(),
       (json['translated_title'] as List<dynamic>?)
-          ?.map(
-              (e) => TranslatedMessageModel.fromJson(e as Map<String, dynamic>))
+          ?.map((e) => TranslationModel.fromJson(e as Map<String, dynamic>))
           .toList(),
       (json['translated_subtitle'] as List<dynamic>?)
-          ?.map(
-              (e) => TranslatedMessageModel.fromJson(e as Map<String, dynamic>))
+          ?.map((e) => TranslationModel.fromJson(e as Map<String, dynamic>))
           .toList(),
       json['is_deleted'] as bool?,
     );

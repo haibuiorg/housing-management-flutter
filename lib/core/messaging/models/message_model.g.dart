@@ -17,8 +17,7 @@ MessageModel _$MessageModelFromJson(Map<String, dynamic> json) => MessageModel(
           ?.map((e) => StorageItemModel.fromJson(e as Map<String, dynamic>))
           .toList(),
       translated_message: (json['translated_message'] as List<dynamic>?)
-          ?.map(
-              (e) => TranslatedMessageModel.fromJson(e as Map<String, dynamic>))
+          ?.map((e) => TranslationModel.fromJson(e as Map<String, dynamic>))
           .toList(),
       seen_by:
           (json['seen_by'] as List<dynamic>?)?.map((e) => e as String).toList(),

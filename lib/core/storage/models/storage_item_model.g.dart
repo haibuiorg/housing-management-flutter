@@ -15,6 +15,9 @@ StorageItemModel _$StorageItemModelFromJson(Map<String, dynamic> json) =>
       created_on: json['created_on'] as int?,
       is_deleted: json['is_deleted'] as bool?,
       type: json['type'] as String?,
+      summary_translation: (json['summary_translation'] as List<dynamic>?)
+          ?.map((e) => TranslationModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
       name: json['name'] as String?,
       uploaded_by: json['uploaded_by'] as String?,
     );
@@ -30,4 +33,5 @@ Map<String, dynamic> _$StorageItemModelToJson(StorageItemModel instance) =>
       'uploaded_by': instance.uploaded_by,
       'type': instance.type,
       'name': instance.name,
+      'summary_translation': instance.summary_translation,
     };

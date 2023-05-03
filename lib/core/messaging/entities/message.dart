@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:priorli/core/messaging/entities/translated_message.dart';
+import 'package:priorli/core/messaging/entities/translation.dart';
 import 'package:priorli/core/storage/entities/storage_item.dart';
 
 import '../models/message_model.dart';
@@ -13,7 +13,7 @@ class Message extends Equatable {
   final int? updatedOn;
   final List<String>? seenBy;
   final List<StorageItem>? storageItems;
-  final List<TranslatedMessage>? translatedMessage;
+  final List<Translation>? translatedMessage;
 
   const Message(
       {required this.createdOn,
@@ -34,7 +34,7 @@ class Message extends Equatable {
     String? senderName,
     int? updatedOn,
     List<String>? seenBy,
-    List<TranslatedMessage>? translatedMessage,
+    List<Translation>? translatedMessage,
     List<StorageItem>? storageItems,
   }) =>
       Message(
@@ -65,7 +65,7 @@ class Message extends Equatable {
       updatedOn: messageModel.updated_on,
       seenBy: messageModel.seen_by,
       translatedMessage: messageModel.translated_message
-          ?.map((e) => TranslatedMessage.modelToEntity(e))
+          ?.map((e) => Translation.modelToEntity(e))
           .toList(),
       storageItems: messageModel.storage_items
           ?.map((e) => StorageItem.modelToEntity(e))

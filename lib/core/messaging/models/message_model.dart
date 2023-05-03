@@ -2,7 +2,7 @@
 
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:priorli/core/messaging/models/translated_message_model.dart';
+import 'package:priorli/core/messaging/models/translation_model.dart';
 import 'package:priorli/core/storage/models/storage_item_model.dart';
 
 part 'message_model.g.dart';
@@ -17,7 +17,7 @@ class MessageModel extends Equatable {
   final int? updated_on;
   final List<String>? seen_by;
   final List<StorageItemModel>? storage_items;
-  final List<TranslatedMessageModel>? translated_message;
+  final List<TranslationModel>? translated_message;
 
   const MessageModel(
       {this.created_on,

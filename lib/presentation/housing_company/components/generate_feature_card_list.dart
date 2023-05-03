@@ -5,6 +5,7 @@ import 'package:priorli/core/utils/string_extension.dart';
 import 'package:priorli/go_router_navigation.dart';
 import 'package:priorli/presentation/housing_company/components/create_new_channel_dialog.dart';
 import 'package:priorli/presentation/housing_company/housing_company_cubit.dart';
+import 'package:priorli/setting_cubit.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../../core/water_usage/entities/water_consumption.dart';
@@ -168,21 +169,37 @@ List<Widget> createFeatureWidgetList(
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: document != null
-                        ? SettingButton(
-                            onPressed: () {
-                              BlocProvider.of<HousingCompanyCubit>(context)
-                                  .getDocument(
-                                      state.documentList?[index].id ?? '')
-                                  .then((value) => showBottomSheet(
-                                      context: context,
-                                      builder: (builder) => AppGallery(
-                                          galleryItems:
-                                              value != null ? [value] : [])));
-                            },
-                            label: Text(
-                              state.documentList?[index].name ?? '',
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
+                        ? Card(
+                            child: ListTile(
+                              onTap: () {
+                                BlocProvider.of<HousingCompanyCubit>(context)
+                                    .getDocument(
+                                        state.documentList?[index].id ?? '')
+                                    .then((value) => showBottomSheet(
+                                        context: context,
+                                        builder: (builder) => AppGallery(
+                                            galleryItems:
+                                                value != null ? [value] : [])));
+                              },
+                              title: Text(
+                                state.documentList?[index].name ?? '',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              isThreeLine: true,
+                              subtitle: Text(
+                                state.documentList?[index].summaryTranslation
+                                        ?.firstWhere((element) =>
+                                            element.languageCode ==
+                                            BlocProvider.of<SettingCubit>(
+                                                    context)
+                                                .state
+                                                .languageCode)
+                                        .value ??
+                                    '',
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             ),
                           )
                         : const SizedBox.shrink(),

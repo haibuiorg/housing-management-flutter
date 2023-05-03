@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:priorli/core/announcement/models/announcement_model.dart';
 import 'package:priorli/core/storage/entities/storage_item.dart';
 
-import '../../messaging/entities/translated_message.dart';
+import '../../messaging/entities/translation.dart';
 
 class Announcement extends Equatable {
   final String id;
@@ -16,9 +16,9 @@ class Announcement extends Equatable {
   final String displayName;
   final bool isDeleted;
   final List<StorageItem>? storageItems;
-  final List<TranslatedMessage>? translatedBody;
-  final List<TranslatedMessage>? translatedTitle;
-  final List<TranslatedMessage>? translatedSubtitle;
+  final List<Translation>? translatedBody;
+  final List<Translation>? translatedTitle;
+  final List<Translation>? translatedSubtitle;
 
   const Announcement(
       {required this.id,
@@ -47,13 +47,13 @@ class Announcement extends Equatable {
       updatedOn: model.updated_on,
       displayName: model.display_name ?? '',
       translatedBody: model.translated_body
-          ?.map((e) => TranslatedMessage.modelToEntity(e))
+          ?.map((e) => Translation.modelToEntity(e))
           .toList(),
       translatedTitle: model.translated_title?.map((e) {
-        return TranslatedMessage.modelToEntity(e);
+        return Translation.modelToEntity(e);
       }).toList(),
       translatedSubtitle: model.translated_subtitle
-          ?.map((e) => TranslatedMessage.modelToEntity(e))
+          ?.map((e) => Translation.modelToEntity(e))
           .toList(),
       storageItems: model.storage_items
           ?.map((e) => StorageItem.modelToEntity(e))

@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:priorli/core/messaging/entities/translation.dart';
 import 'package:priorli/core/storage/models/storage_item_model.dart';
 
 class StorageItem extends Equatable {
@@ -11,10 +12,12 @@ class StorageItem extends Equatable {
   final String? uploadedBy;
   final String? type;
   final String? name;
+  final List<Translation>? summaryTranslation;
 
   const StorageItem(
       {this.id,
       required this.storageLink,
+      this.summaryTranslation,
       this.presignedUrl,
       this.expiredOn,
       this.createdOn,
@@ -30,6 +33,9 @@ class StorageItem extends Equatable {
       expiredOn: model.expired_on,
       createdOn: model.created_on,
       isDeleted: model.is_deleted,
+      summaryTranslation: model.summary_translation
+          ?.map((e) => Translation.modelToEntity(e))
+          .toList(),
       type: model.type,
       name: model.name,
       uploadedBy: model.uploaded_by);
@@ -44,6 +50,7 @@ class StorageItem extends Equatable {
     String? uploadedBy,
     String? type,
     String? name,
+    List<Translation>? summaryTranslation,
   }) =>
       StorageItem(
           storageLink: storageLink ?? this.storageLink,
@@ -54,6 +61,7 @@ class StorageItem extends Equatable {
           isDeleted: isDeleted ?? this.isDeleted,
           type: type ?? this.type,
           name: name ?? this.name,
+          summaryTranslation: summaryTranslation ?? this.summaryTranslation,
           uploadedBy: uploadedBy ?? this.uploadedBy);
 
   @override
@@ -66,6 +74,7 @@ class StorageItem extends Equatable {
         isDeleted,
         uploadedBy,
         type,
+        summaryTranslation,
         name
       ];
 }
