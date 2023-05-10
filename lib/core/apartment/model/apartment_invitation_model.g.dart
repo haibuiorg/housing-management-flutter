@@ -17,6 +17,7 @@ ApartmentInvitationModel _$ApartmentInvitationModelFromJson(
       housingCompanyId: json['housing_company_id'] as String,
       emailSent: json['email_sent'] as int,
       inviteRetryLimit: json['invite_retry_limit'] as int,
+      email: json['email'] as String?,
       claimedBy: (json['claimed_by'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
@@ -34,4 +35,5 @@ Map<String, dynamic> _$ApartmentInvitationModelToJson(
       'claimed_by': instance.claimedBy,
       'email_sent': instance.emailSent,
       'invite_retry_limit': instance.inviteRetryLimit,
+      'email': instance.email,
     };

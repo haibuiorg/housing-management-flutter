@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:priorli/core/storage/entities/storage_item.dart';
 import 'package:priorli/core/utils/string_extension.dart';
 import 'package:priorli/go_router_navigation.dart';
 import 'package:priorli/presentation/housing_company/components/create_new_channel_dialog.dart';
@@ -17,8 +18,8 @@ import '../../invoice/invoice_group_list_screen.dart';
 import '../../invoice/invoice_list_screen.dart';
 import '../../message/message_screen.dart';
 import '../../polls/poll_screen.dart';
-import '../../shared/app_gallery.dart';
 import '../../shared/conversation_item.dart';
+import '../../shared/document_detail_dialog.dart';
 import '../../shared/full_width_title.dart';
 import '../../shared/setting_button.dart';
 import '../../water_consumption_management/water_consumption_management_screen.dart';
@@ -169,39 +170,8 @@ List<Widget> createFeatureWidgetList(
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: document != null
-                        ? Card(
-                            child: ListTile(
-                              onTap: () {
-                                BlocProvider.of<HousingCompanyCubit>(context)
-                                    .getDocument(
-                                        state.documentList?[index].id ?? '')
-                                    .then((value) => showBottomSheet(
-                                        context: context,
-                                        builder: (builder) => AppGallery(
-                                            galleryItems:
-                                                value != null ? [value] : [])));
-                              },
-                              title: Text(
-                                state.documentList?[index].name ?? '',
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              isThreeLine: true,
-                              subtitle: Text(
-                                state.documentList?[index].summaryTranslation
-                                        ?.firstWhere((element) =>
-                                            element.languageCode ==
-                                            BlocProvider.of<SettingCubit>(
-                                                    context)
-                                                .state
-                                                .languageCode)
-                                        .value ??
-                                    '',
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          )
+                        ? DocumentDetailCard(
+                            document: state.documentList![index])
                         : const SizedBox.shrink(),
                   );
                 }),
@@ -332,3 +302,48 @@ List<Widget> createFeatureWidgetList(
         ],
       ),
     ];
+
+class DocumentDetailCard extends StatelessWidget {
+  const DocumentDetailCard({
+    super.key,
+    required this.document,
+  });
+  final StorageItem document;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<HousingCompanyCubit, HousingCompanyState>(
+        builder: (context, state) {
+      return Card(
+        child: ListTile(
+          onTap: () {
+            BlocProvider.of<HousingCompanyCubit>(context)
+                .getDocument(document.id ?? '')
+                .then((value) => showDialog(
+                    context: context,
+                    builder: (builder) =>
+                        DocumentDetailDialog(document: value!)));
+          },
+          title: Text(
+            document.name ?? '',
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          isThreeLine: true,
+          subtitle: Text(
+            document.summaryTranslation
+                    ?.firstWhere((element) =>
+                        element.languageCode ==
+                        BlocProvider.of<SettingCubit>(context)
+                            .state
+                            .languageCode)
+                    .value ??
+                '',
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      );
+    });
+  }
+}

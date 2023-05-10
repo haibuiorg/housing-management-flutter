@@ -143,6 +143,7 @@ import 'package:priorli/presentation/admin/admin_cubit.dart';
 import 'package:priorli/presentation/announcement/announcement_cubit.dart';
 import 'package:priorli/presentation/announcement/announcement_item_cubit.dart';
 import 'package:priorli/presentation/apartment_invoice/apartment_water_invoice_cubit.dart';
+import 'package:priorli/presentation/apartment_management_tenants/tenant_management_cubit.dart';
 import 'package:priorli/presentation/apartments/apartment_cubit.dart';
 import 'package:priorli/presentation/checkout/check_out_cubit.dart';
 import 'package:priorli/presentation/code_register/code_register_cubit.dart';
@@ -313,15 +314,7 @@ Future<void> init() async {
       serviceLocator(),
       serviceLocator()));
   serviceLocator.registerFactory(() => ApartmentManagementCubit(
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator(),
-      serviceLocator()));
+      serviceLocator(), serviceLocator(), serviceLocator(), serviceLocator()));
   serviceLocator.registerFactory(() => ApartmentWaterInvoiceCubit(
       serviceLocator(), serviceLocator(), serviceLocator()));
   serviceLocator.registerFactory(() => HousingCompanyPaymentCubit(
@@ -420,6 +413,14 @@ Future<void> init() async {
       serviceLocator()));
   serviceLocator.registerFactory(() => PaymentSuccessCubit(serviceLocator()));
   serviceLocator.registerFactory(() => ContactUsPublicCubit(serviceLocator()));
+  serviceLocator.registerFactory(() => TenantManagmentCubit(
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
+      serviceLocator()));
 
   /** usecases */
 

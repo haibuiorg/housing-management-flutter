@@ -7,6 +7,7 @@ import 'package:priorli/presentation/add_apartment/add_apartment_screen.dart';
 import 'package:priorli/presentation/admin/admin_screen.dart';
 import 'package:priorli/presentation/announcement/announcement_screen.dart';
 import 'package:priorli/presentation/apartment_management/apartment_management_screen.dart';
+import 'package:priorli/presentation/apartment_management_tenants/tenant_management_screen.dart';
 import 'package:priorli/presentation/checkout/check_out_screen.dart';
 import 'package:priorli/presentation/code_register/code_register_screen.dart';
 import 'package:priorli/presentation/company_user_management/company_user_screen.dart';
@@ -246,6 +247,17 @@ GoRouter createAppRouter() {
                                 );
                               },
                               routes: [
+                                GoRoute(
+                                  path: tenantManagementPath,
+                                  builder: (context, state) {
+                                    return TenantManagementScreen(
+                                      companyId:
+                                          state.params['companyId'] ?? '',
+                                      apartmentId:
+                                          state.params['apartmentId'] ?? '',
+                                    );
+                                  },
+                                ),
                                 GoRoute(
                                   path: apartmentWaterInvoice,
                                   builder: (BuildContext context,

@@ -12,8 +12,10 @@ import 'invite_tenant_cubit.dart';
 const inviteTenantPath = 'invite';
 
 class InviteTenantScreen extends StatefulWidget {
-  const InviteTenantScreen({super.key, required this.housingCompanyId});
+  const InviteTenantScreen(
+      {super.key, required this.housingCompanyId, this.apartmentId});
   final String housingCompanyId;
+  final String? apartmentId;
 
   @override
   State<InviteTenantScreen> createState() => _InviteTenantScreenState();
@@ -25,7 +27,8 @@ class _InviteTenantScreenState extends State<InviteTenantScreen> {
   @override
   void initState() {
     super.initState();
-    cubit = serviceLocator<InviteTenantCubit>()..init(widget.housingCompanyId);
+    cubit = serviceLocator<InviteTenantCubit>()
+      ..init(widget.housingCompanyId, widget.apartmentId);
   }
 
   @override
@@ -64,10 +67,14 @@ class _InviteTenantScreenState extends State<InviteTenantScreen> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: DropdownSearch<Apartment>(
+                        enabled: widget.apartmentId == null,
                         items: state.apartmentList ?? [],
                         popupProps: PopupProps.menu(
                           showSearchBox:
                               (state.apartmentList?.length ?? 0) > 20,
+                        ),
+                        selectedItem: state.apartmentList?.firstWhere(
+                          (element) => element.id == state.selectedApartment,
                         ),
                         dropdownDecoratorProps: DropDownDecoratorProps(
                             dropdownSearchDecoration: InputDecoration(

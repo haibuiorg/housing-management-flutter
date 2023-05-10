@@ -18,14 +18,19 @@ class AppUserCircleAvatar extends StatelessWidget {
           : null,
       child: user?.avatarUrl?.isNotEmpty == true
           ? null
-          : Text(
-              (user?.firstName.isNotEmpty == true
-                      ? user?.firstName.characters.first.toUpperCase() ?? ''
-                      : '') +
-                  (user?.lastName.isNotEmpty == true
-                      ? user?.lastName.characters.first.toUpperCase() ?? ''
-                      : ''),
-              style: Theme.of(context).textTheme.displaySmall,
+          : FittedBox(
+              child: Padding(
+                padding: EdgeInsets.all((radius ?? 56) / 4),
+                child: Text(
+                  (user?.firstName.isNotEmpty == true
+                          ? user?.firstName.characters.first.toUpperCase() ?? ''
+                          : '') +
+                      (user?.lastName.isNotEmpty == true
+                          ? user?.lastName.characters.first.toUpperCase() ?? ''
+                          : ''),
+                  style: Theme.of(context).textTheme.displaySmall,
+                ),
+              ),
             ),
     );
   }

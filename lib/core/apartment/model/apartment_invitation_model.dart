@@ -22,6 +22,7 @@ class ApartmentInvitationModel extends Equatable {
   final int emailSent;
   @JsonKey(name: 'invite_retry_limit')
   final int inviteRetryLimit;
+  final String? email;
 
   const ApartmentInvitationModel(
       {required this.invitationCode,
@@ -32,6 +33,7 @@ class ApartmentInvitationModel extends Equatable {
       required this.housingCompanyId,
       required this.emailSent,
       required this.inviteRetryLimit,
+      this.email,
       this.claimedBy});
 
   factory ApartmentInvitationModel.fromJson(Map<String, dynamic> json) =>
@@ -44,6 +46,7 @@ class ApartmentInvitationModel extends Equatable {
         isValid,
         validUntil,
         apartmentId,
+        email,
         housingCompanyId,
         claimedBy,
         emailSent,

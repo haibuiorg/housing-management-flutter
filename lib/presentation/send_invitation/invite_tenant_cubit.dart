@@ -18,8 +18,11 @@ class InviteTenantCubit extends Cubit<InviteTenantState> {
       this._sendInvitationToApartment)
       : super(const InviteTenantState());
 
-  Future<void> init(String housingCompanyId) async {
-    emit(state.copyWith(isLoading: true));
+  Future<void> init(String housingCompanyId, String? prefillApartmentId) async {
+    emit(state.copyWith(
+        isLoading: true,
+        housingCompanyId: housingCompanyId,
+        selectedApartment: prefillApartmentId));
     await _getHousingCompanyData(housingCompanyId);
     await _getAparmentData(housingCompanyId);
     emit(state.copyWith(isLoading: false));

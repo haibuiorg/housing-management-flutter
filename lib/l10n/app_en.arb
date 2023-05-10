@@ -672,5 +672,47 @@
           "type": "String"
         }
       }
+    },
+    "pending_invitations": "Pending invitations",
+    "owner": "Owner",
+    "tenant": "Tenant",
+    "change_role": "Change role",
+    "change_role_to": "Change role to {role}",
+    "@change_role_to": {
+      "description": "Change role to",
+      "placeholders": {
+        "role": {
+          "type": "String"
+        }
+      }
+    },
+    "number_of_email_sent": "{number} email sent",
+    "@number_of_email_sent": {
+      "description": "Number of email sent",
+      "placeholders": {
+        "number": {
+          "type": "String"
+        }
+      }
+    },
+    "email_sent_to": "Email sent to {email}",
+    "@email_sent_to": {
+      "description": "Email sent to",
+      "placeholders": {
+        "email": {
+          "type": "String"
+        }
+      }
+    },
+    "resend_invitation": "Resend invitation",
+    "role": "Role",
+    "remove_this_tenant": "Remove this tenant: {name}",
+    "@remove_this_tenant": {
+      "description": "Remove this tenant",
+      "placeholders": {
+        "name": {
+          "type": "String"
+        }
+      }
     }
 }

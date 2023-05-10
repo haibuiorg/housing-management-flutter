@@ -6,6 +6,7 @@ import 'package:priorli/presentation/shared/custom_form_field.dart';
 import 'package:priorli/service_locator.dart';
 import '../../go_router_navigation.dart';
 import '../apartment_invoice/apartment_water_invoice_screen.dart';
+import '../apartment_management_tenants/tenant_management_screen.dart';
 import '../documents/document_list_screen.dart';
 import '../shared/setting_button.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -132,7 +133,9 @@ class _ApartmentManagementScreenState extends State<ApartmentManagementScreen> {
                         AppLocalizations.of(context)!.accounts_and_payments),
                   ),
                   SettingButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      context.pushFromCurrentLocation(tenantManagementPath);
+                    },
                     label:
                         Text(AppLocalizations.of(context)!.tenant_management),
                   ),

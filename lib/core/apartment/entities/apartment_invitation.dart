@@ -10,6 +10,7 @@ class ApartmentInvitation extends Equatable {
   final String housingCompanyId;
   final List<String>? claimedBy;
   final int emailSent;
+  final String? email;
   final int inviteRetryLimit;
 
   const ApartmentInvitation(
@@ -21,11 +22,13 @@ class ApartmentInvitation extends Equatable {
       required this.housingCompanyId,
       required this.emailSent,
       required this.inviteRetryLimit,
+      this.email,
       this.claimedBy});
 
   factory ApartmentInvitation.modelToEntity(
           ApartmentInvitationModel apartmentInvitationModel) =>
       ApartmentInvitation(
+          email: apartmentInvitationModel.email,
           invitationCode: apartmentInvitationModel.invitationCode,
           id: apartmentInvitationModel.id,
           emailSent: apartmentInvitationModel.emailSent,
@@ -45,6 +48,7 @@ class ApartmentInvitation extends Equatable {
         housingCompanyId,
         claimedBy,
         emailSent,
+        email,
         inviteRetryLimit
       ];
 }

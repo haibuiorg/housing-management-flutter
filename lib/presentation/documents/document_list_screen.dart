@@ -3,12 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:priorli/presentation/documents/document_list_screen_cubit.dart';
 import 'package:priorli/presentation/documents/document_list_screen_state.dart';
 import 'package:priorli/presentation/file_selector/file_selector.dart';
+import 'package:priorli/presentation/shared/document_detail_dialog.dart';
 import 'package:priorli/presentation/shared/setting_button.dart';
 import 'package:priorli/service_locator.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
-import '../shared/app_gallery.dart';
 
 const documentListScreenPath = 'documents';
 
@@ -92,12 +91,12 @@ class _DocumentListScreenState extends State<DocumentListScreen> {
                                     _cubit
                                         .getDocument(
                                             state.documentList?[index].id ?? '')
-                                        .then((value) => showBottomSheet(
+                                        .then((value) => showDialog(
                                             context: context,
-                                            builder: (builder) => AppGallery(
-                                                galleryItems: value != null
-                                                    ? [value]
-                                                    : [])));
+                                            builder: (builder) =>
+                                                DocumentDetailDialog(
+                                                  document: value!,
+                                                )));
                                   },
                                   label: Text(
                                     state.documentList?[index].name ?? '',
