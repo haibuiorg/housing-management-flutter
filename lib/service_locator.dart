@@ -23,6 +23,12 @@ import 'package:priorli/core/apartment/usecases/get_pending_apartment_invitation
 import 'package:priorli/core/apartment/usecases/join_apartment.dart';
 import 'package:priorli/core/apartment/usecases/remove_tenant_from_apartment.dart';
 import 'package:priorli/core/apartment/usecases/resend_apartment_invitation.dart';
+import 'package:priorli/core/chatbot/add_document_index.dart';
+import 'package:priorli/core/chatbot/add_generic_reference_doc.dart';
+import 'package:priorli/core/chatbot/chatbot_data_source.dart';
+import 'package:priorli/core/chatbot/chatbot_remote_data_source.dart';
+import 'package:priorli/core/chatbot/chatbot_repository.dart';
+import 'package:priorli/core/chatbot/chatbot_repository_impl.dart';
 import 'package:priorli/core/contact_leads/data/contact_lead_remote_data_source.dart';
 import 'package:priorli/core/contact_leads/repos/contact_lead_repo.dart';
 import 'package:priorli/core/contact_leads/repos/contact_lead_repo_impl.dart';
@@ -403,6 +409,8 @@ Future<void> init() async {
       serviceLocator(),
       serviceLocator(),
       serviceLocator(),
+      serviceLocator(),
+      serviceLocator(),
       serviceLocator()));
   serviceLocator.registerFactory(() => CompanySubscriptionCubit(
       serviceLocator(),
@@ -723,6 +731,10 @@ Future<void> init() async {
       () => RemovePaymentProduct(repository: serviceLocator()));
   serviceLocator.registerLazySingleton<GetPaymentProducts>(
       () => GetPaymentProducts(repository: serviceLocator()));
+  serviceLocator.registerLazySingleton<AddGenericReferenceDoc>(
+      () => AddGenericReferenceDoc(chatbotRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<AddDocumentIndex>(
+      () => AddDocumentIndex(chatbotRepository: serviceLocator()));
 
   /** repos */
   serviceLocator.registerLazySingleton<AuthenticationRepository>(() =>
@@ -763,6 +775,8 @@ Future<void> init() async {
           subscriptionRemoteDataSource: serviceLocator()));
   serviceLocator.registerLazySingleton<ContactLeadRepo>(
       () => ContactLeadRepoImpl(remoteDataSource: serviceLocator()));
+  serviceLocator.registerLazySingleton<ChatbotRepository>(
+      () => ChatbotRepositoryImpl(chatbotDataSource: serviceLocator()));
 
   /** datasource*/
   serviceLocator.registerLazySingleton<AuthenticationDataSource>(() =>
@@ -806,6 +820,8 @@ Future<void> init() async {
       () => SubscriptionRemoteDataSource(client: serviceLocator()));
   serviceLocator.registerLazySingleton<ContactLeadDataSource>(
       () => ContactLeadRemoteDataSource(client: serviceLocator()));
+  serviceLocator.registerLazySingleton<ChatbotDataSource>(
+      () => ChatbotRemoteDataSource(client: serviceLocator()));
 
   /** network */
   serviceLocator.registerLazySingleton<Dio>(

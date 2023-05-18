@@ -7,6 +7,7 @@ import 'package:priorli/presentation/conversation_list/conversation_list_screen.
 import 'package:priorli/service_locator.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import 'generic_chatbot_management.dart';
 import 'housing_company_widgets.dart';
 import 'sale_management_widgets.dart';
 import 'subscription_management_widgets.dart';
@@ -29,6 +30,7 @@ class _AdminScreenState extends State<AdminScreen> {
     const AdminCompanyListView(),
     const ConversationListScreen(),
     const SubscriptionPlanListView(),
+    const GenericChatbotManagement()
   ];
   List<Tab> _tab(BuildContext context) => [
         Tab(
@@ -55,6 +57,13 @@ class _AdminScreenState extends State<AdminScreen> {
         Tab(
           child: Text(
             AppLocalizations.of(context)!.subscription_plans,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+        Tab(
+          child: Text(
+            AppLocalizations.of(context)!.chatbot,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),

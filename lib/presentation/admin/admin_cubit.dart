@@ -1,9 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:priorli/core/base/result.dart';
+import 'package:priorli/core/chatbot/add_generic_reference_doc.dart';
 import 'package:priorli/core/contact_leads/usecases/get_contact_leads.dart';
 import 'package:priorli/core/country/entities/country.dart';
 import 'package:priorli/core/country/usecases/get_support_countries.dart';
 import 'package:priorli/core/housing/usecases/admin_get_companies.dart';
+import 'package:priorli/core/storage/entities/storage_item.dart';
 import 'package:priorli/core/subscription/entities/payment_product_item.dart';
 import 'package:priorli/core/subscription/entities/subscription_plan.dart';
 import 'package:priorli/core/subscription/usecases/add_payment_product.dart';
@@ -14,6 +16,7 @@ import 'package:priorli/core/subscription/usecases/remove_payment_product.dart';
 import 'package:priorli/presentation/admin/admin_state.dart';
 
 import '../../core/base/usecase.dart';
+import '../../core/chatbot/add_document_index.dart';
 import '../../core/contact_leads/entities/contact_lead.dart';
 import '../../core/housing/entities/housing_company.dart';
 import '../../core/subscription/usecases/get_available_subscription_plans.dart';
@@ -28,8 +31,11 @@ class AdminCubit extends Cubit<AdminState> {
   final GetPaymentProducts _getPaymentProducts;
   final AddPaymentProduct _addPaymentProduct;
   final RemovePaymentProduct _removePaymentProduct;
+  final AddGenericReferenceDoc _addGenericReferenceDoc;
+  final AddDocumentIndex _addDocumentIndex;
 
   AdminCubit(
+      this._addDocumentIndex,
       this._addSubscriptionPlan,
       this._availableSubscriptionPlans,
       this._getContactLeads,
@@ -38,6 +44,7 @@ class AdminCubit extends Cubit<AdminState> {
       this._deleteSubscriptionPlan,
       this._getPaymentProducts,
       this._addPaymentProduct,
+      this._addGenericReferenceDoc,
       this._removePaymentProduct)
       : super(const AdminState());
 
@@ -205,5 +212,21 @@ class AdminCubit extends Cubit<AdminState> {
     emit(state.copyWith(selectedCountryCode: value));
     getInitSubscriptionPlans();
     getPaymentProducts();
+  }
+
+  Future<void> addGenericReferenceDoc(List<String> files) async {
+    final addGenericReferenceDocResult = await _addGenericReferenceDoc(
+        AddGenericReferenceDocParams(storageLinks: files, languageCode: 'fi'));
+    if (addGenericReferenceDocResult is ResultSuccess<List<StorageItem>>) {
+      print(addGenericReferenceDocResult.data);
+    }
+  }
+
+  Future<void> addDocumentIndex(
+      {required String indexName, String? vectorDimension}) async {
+    final addDocumentIndex = await _addDocumentIndex(AddDocumentIndexParams(
+        indexName: indexName,
+        vectorDimension: int.tryParse(vectorDimension ?? '')));
+    if (addDocumentIndex is ResultSuccess<bool>) {}
   }
 }

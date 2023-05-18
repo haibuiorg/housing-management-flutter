@@ -714,5 +714,6 @@
           "type": "String"
         }
       }
-    }
+    },
+    "chatbot": "Chatbot"
 }
