@@ -33,7 +33,7 @@ class FileSelectorCubit extends Cubit<FileSelectorState> {
   }
 
   Future<void> removeFilesByPosition(int position) async {
-    final List<File> newFileList = List.from(state.selectedFiles ?? []);
+    final List<dynamic> newFileList = List.from(state.selectedFiles ?? []);
     newFileList.removeAt(position);
     if (state.autoUpload == true) {
       final List<String> currentLocations =
@@ -76,7 +76,10 @@ class FileSelectorCubit extends Cubit<FileSelectorState> {
           uploading: false));
       return;
     }
-    emit(state.copyWith(uploading: false));
+    emit(state.copyWith(
+      uploading: false,
+      selectedFiles: [],
+    ));
   }
 
   void clearSelectedFiles() {

@@ -237,15 +237,18 @@ class _SupportConversationDialogState extends State<SupportConversationDialog> {
                 ),
               ],
             ),
-            OutlinedButton(
-              onPressed: () {
-                BlocProvider.of<HelpCubit>(context)
-                    .startSupportConversation(_textEditingController.text);
-              },
-              child: const Icon(Icons.chevron_right_outlined),
-            )
           ],
         ),
+        actions: [
+          OutlinedButton(
+            onPressed: () {
+              BlocProvider.of<HelpCubit>(context)
+                  .startSupportConversation(_textEditingController.text)
+                  .then((value) => Navigator.pop(context));
+            },
+            child: Text(AppLocalizations.of(context)!.start),
+          )
+        ],
       );
     });
   }

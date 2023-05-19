@@ -23,12 +23,14 @@ import 'package:priorli/core/apartment/usecases/get_pending_apartment_invitation
 import 'package:priorli/core/apartment/usecases/join_apartment.dart';
 import 'package:priorli/core/apartment/usecases/remove_tenant_from_apartment.dart';
 import 'package:priorli/core/apartment/usecases/resend_apartment_invitation.dart';
+import 'package:priorli/core/auth/usecases/login_with_token.dart';
 import 'package:priorli/core/chatbot/add_document_index.dart';
 import 'package:priorli/core/chatbot/add_generic_reference_doc.dart';
 import 'package:priorli/core/chatbot/chatbot_data_source.dart';
 import 'package:priorli/core/chatbot/chatbot_remote_data_source.dart';
 import 'package:priorli/core/chatbot/chatbot_repository.dart';
 import 'package:priorli/core/chatbot/chatbot_repository_impl.dart';
+import 'package:priorli/core/chatbot/get_document_indexes.dart';
 import 'package:priorli/core/contact_leads/data/contact_lead_remote_data_source.dart';
 import 'package:priorli/core/contact_leads/repos/contact_lead_repo.dart';
 import 'package:priorli/core/contact_leads/repos/contact_lead_repo_impl.dart';
@@ -175,6 +177,7 @@ import 'package:priorli/presentation/message/message_cubit.dart';
 import 'package:priorli/presentation/notification_center/notification_center_cubit.dart';
 import 'package:priorli/presentation/payment_success/payment_success_cubit.dart';
 import 'package:priorli/presentation/polls/poll_screen_cubit.dart';
+import 'package:priorli/presentation/public/chat_public_cubit.dart';
 import 'package:priorli/presentation/public/contact_us_public_cubit.dart';
 import 'package:priorli/user_cubit.dart';
 
@@ -200,6 +203,7 @@ import 'core/auth/usecases/is_logged_in.dart';
 import 'core/auth/usecases/log_out.dart';
 import 'core/auth/usecases/login_email_password.dart';
 import 'core/auth/usecases/reset_password.dart';
+import 'core/chatbot/start_chatbot_conversation.dart';
 import 'core/contact_leads/data/contact_lead_data_source.dart';
 import 'core/contact_leads/usecases/submit_contact_form.dart';
 import 'core/housing/data/housing_company_data_source.dart';
@@ -267,12 +271,14 @@ Future<void> init() async {
   serviceLocator.registerFactory(() => SettingCubit(
         serviceLocator(),
         serviceLocator(),
+        serviceLocator(),
       ));
   serviceLocator.registerFactory(() => MainCubit(
         serviceLocator(),
       ));
 
   serviceLocator.registerFactory(() => AuthCubit(
+      serviceLocator(),
       serviceLocator(),
       serviceLocator(),
       serviceLocator(),
@@ -411,6 +417,7 @@ Future<void> init() async {
       serviceLocator(),
       serviceLocator(),
       serviceLocator(),
+      serviceLocator(),
       serviceLocator()));
   serviceLocator.registerFactory(() => CompanySubscriptionCubit(
       serviceLocator(),
@@ -429,6 +436,8 @@ Future<void> init() async {
       serviceLocator(),
       serviceLocator(),
       serviceLocator()));
+  serviceLocator.registerFactory(
+      () => ChatPublicCubit(serviceLocator(), serviceLocator()));
 
   /** usecases */
 
@@ -469,6 +478,8 @@ Future<void> init() async {
       () => IsEmailVerified(authenticationRepository: serviceLocator()));
   serviceLocator.registerLazySingleton<LoginEmailPassword>(
       () => LoginEmailPassword(authenticationRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<LoginWithToken>(
+      () => LoginWithToken(authenticationRepository: serviceLocator()));
   serviceLocator.registerLazySingleton<LogOut>(
       () => LogOut(authenticationRepository: serviceLocator()));
   serviceLocator.registerLazySingleton<ResetPassword>(
@@ -735,6 +746,10 @@ Future<void> init() async {
       () => AddGenericReferenceDoc(chatbotRepository: serviceLocator()));
   serviceLocator.registerLazySingleton<AddDocumentIndex>(
       () => AddDocumentIndex(chatbotRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<GetDocumentIndexes>(
+      () => GetDocumentIndexes(chatbotRepository: serviceLocator()));
+  serviceLocator.registerFactory<StartChatbotConversation>(
+      () => StartChatbotConversation(chatbotRepository: serviceLocator()));
 
   /** repos */
   serviceLocator.registerLazySingleton<AuthenticationRepository>(() =>

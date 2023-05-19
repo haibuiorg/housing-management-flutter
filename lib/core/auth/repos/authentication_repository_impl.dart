@@ -22,7 +22,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   @override
   Future<bool> loginWithEmailPassword(
       {required String email, required String password}) async {
-    return await authenticationDataSource.loginWithEmailPassword(
+    return authenticationDataSource.loginWithEmailPassword(
         email: email, password: password);
   }
 
@@ -63,6 +63,11 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
 
   @override
   Future<bool> isEmailVerified() async {
-    return await authenticationDataSource.isEmailVerified();
+    return authenticationDataSource.isEmailVerified();
+  }
+
+  @override
+  Future<bool> loginWithToken({required String token}) {
+    return authenticationDataSource.loginWithToken(token: token);
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:priorli/core/base/result.dart';
 import 'package:priorli/core/chatbot/add_generic_reference_doc.dart';
+import 'package:priorli/core/chatbot/get_document_indexes.dart';
 import 'package:priorli/core/contact_leads/usecases/get_contact_leads.dart';
 import 'package:priorli/core/country/entities/country.dart';
 import 'package:priorli/core/country/usecases/get_support_countries.dart';
@@ -33,6 +34,7 @@ class AdminCubit extends Cubit<AdminState> {
   final RemovePaymentProduct _removePaymentProduct;
   final AddGenericReferenceDoc _addGenericReferenceDoc;
   final AddDocumentIndex _addDocumentIndex;
+  final GetDocumentIndexes _getDocumentIndexes;
 
   AdminCubit(
       this._addDocumentIndex,
@@ -45,12 +47,14 @@ class AdminCubit extends Cubit<AdminState> {
       this._getPaymentProducts,
       this._addPaymentProduct,
       this._addGenericReferenceDoc,
-      this._removePaymentProduct)
+      this._removePaymentProduct,
+      this._getDocumentIndexes)
       : super(const AdminState());
 
   Future<void> getInit({String? countryCode}) async {
     getInitCompanies();
     getInitContactList();
+    getDocumentIndexes();
     if (countryCode != null) {
       selectCountry(countryCode);
     } else {
@@ -214,9 +218,16 @@ class AdminCubit extends Cubit<AdminState> {
     getPaymentProducts();
   }
 
-  Future<void> addGenericReferenceDoc(List<String> files) async {
+  Future<void> addGenericReferenceDoc(
+      {String? docType,
+      required List<String> files,
+      required String indexName}) async {
     final addGenericReferenceDocResult = await _addGenericReferenceDoc(
-        AddGenericReferenceDocParams(storageLinks: files, languageCode: 'fi'));
+        AddGenericReferenceDocParams(
+            indexName: indexName,
+            storageLinks: files,
+            languageCode: 'fi',
+            docType: docType));
     if (addGenericReferenceDocResult is ResultSuccess<List<StorageItem>>) {
       print(addGenericReferenceDocResult.data);
     }
@@ -228,5 +239,12 @@ class AdminCubit extends Cubit<AdminState> {
         indexName: indexName,
         vectorDimension: int.tryParse(vectorDimension ?? '')));
     if (addDocumentIndex is ResultSuccess<bool>) {}
+  }
+
+  Future<void> getDocumentIndexes() async {
+    final getDocumentIndexesResult = await _getDocumentIndexes(NoParams());
+    if (getDocumentIndexesResult is ResultSuccess<List<String>>) {
+      emit(state.copyWith(documentIndexes: getDocumentIndexesResult.data));
+    }
   }
 }

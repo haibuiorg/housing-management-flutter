@@ -54,6 +54,8 @@ class _FileSelectorState extends State<FileSelector> {
   @override
   void dispose() {
     super.dispose();
+    _cubit.clearSelectedFiles();
+
     _cubit.close();
     fileSelectorController.dispose();
   }
@@ -265,16 +267,15 @@ class _FileSelectorState extends State<FileSelector> {
                       !widget.autoUpload
                           ? Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: OutlinedButton.icon(
-                                icon: const Icon(Icons.upload_file_rounded),
-                                label:
-                                    Text(AppLocalizations.of(context)!.upload),
+                              child: OutlinedButton(
                                 onPressed: (state.selectedFiles?.length ?? 0) >
                                         0
                                     ? (() => BlocProvider.of<FileSelectorCubit>(
                                             context)
                                         .uploadAllFiles())
                                     : null,
+                                child:
+                                    Text(AppLocalizations.of(context)!.upload),
                               ),
                             )
                           : const SizedBox.shrink(),

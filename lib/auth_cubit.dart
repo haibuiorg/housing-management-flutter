@@ -2,6 +2,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:priorli/core/auth/usecases/change_password.dart';
+import 'package:priorli/core/auth/usecases/login_with_token.dart';
 import 'package:priorli/core/base/result.dart';
 import 'package:priorli/core/base/usecase.dart';
 import 'package:priorli/core/user/usecases/delete_user_notification_token.dart';
@@ -26,6 +27,7 @@ class AuthCubit extends Cubit<AuthState> {
   final RegisterWithCode _registerWithCode;
   final UpdateUserNotificationToken _updateUserNotificationToken;
   final DeleteUserNotificationToken _deleteUserNotificationToken;
+  final LoginWithToken _loginWithToken;
 
   AuthCubit(
     this._isLoggedIn,
@@ -37,6 +39,7 @@ class AuthCubit extends Cubit<AuthState> {
     this._deleteUserNotificationToken,
     this._changePassword,
     this._registerWithCode,
+    this._loginWithToken,
   ) : super(const AuthState.initializing()) {
     _checkAppData();
     _checkNotificationToken();
@@ -67,6 +70,22 @@ class AuthCubit extends Cubit<AuthState> {
   Future<bool> logIn({required String email, required String password}) async {
     final loginResult = await _loginEmailPassword(
         LoginEmailPasswordParams(email: email, password: password));
+    final isLoggedIn = (loginResult is ResultSuccess<bool>) && loginResult.data;
+    if (isLoggedIn) {
+      _checkNotificationToken();
+    }
+    emit(state.copyWith(
+      isLoggedIn: isLoggedIn,
+    ));
+    return isLoggedIn;
+  }
+
+  Future<bool> logInWithToken({
+    required String token,
+  }) async {
+    final loginResult = await _loginWithToken(LoginWithTokenParams(
+      token: token,
+    ));
     final isLoggedIn = (loginResult is ResultSuccess<bool>) && loginResult.data;
     if (isLoggedIn) {
       _checkNotificationToken();

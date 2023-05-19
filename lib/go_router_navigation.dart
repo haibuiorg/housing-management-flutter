@@ -30,6 +30,7 @@ import 'package:priorli/presentation/main/main_screen.dart';
 import 'package:priorli/presentation/notification_center/notification_center_screen.dart';
 import 'package:priorli/presentation/polls/poll_screen.dart';
 import 'package:priorli/presentation/public/contact_us_public_screen.dart';
+import 'package:priorli/presentation/public/chat_public_screen.dart';
 import 'package:priorli/presentation/send_invitation/invite_tenant_screen.dart';
 import 'package:priorli/presentation/profile/profile_screen.dart';
 import 'package:priorli/presentation/water_consumption_management/water_consumption_management_screen.dart';
@@ -385,6 +386,12 @@ GoRouter createAppRouter() {
         path: contactUsPublicScreenRoute,
         builder: (BuildContext context, GoRouterState state) {
           return const ContactUsPublicScreen();
+        },
+      ),
+      GoRoute(
+        path: publicChatScreenPath,
+        builder: (BuildContext context, GoRouterState state) {
+          return const ChatPublicScreen();
         },
       ),
       GoRoute(

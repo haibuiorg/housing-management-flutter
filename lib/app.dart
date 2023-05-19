@@ -9,6 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:priorli/core/utils/constants.dart';
 import 'package:priorli/presentation/code_register/code_register_screen.dart';
 import 'package:priorli/presentation/join_apartment/join_apartment_screen.dart';
+import 'package:priorli/presentation/public/chat_public_screen.dart';
 import 'package:priorli/presentation/register/register_screen.dart';
 import 'package:priorli/setting_cubit.dart';
 import 'package:priorli/setting_state.dart';
@@ -215,6 +216,7 @@ class _AppState extends State<App> {
                         if (currentLocation == loginPath ||
                             currentLocation == registerPath ||
                             currentLocation == contactUsPublicScreenRoute ||
+                            currentLocation == publicChatScreenPath ||
                             currentLocation.contains(codeRegisterPath)) {
                           return;
                         }

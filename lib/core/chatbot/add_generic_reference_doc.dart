@@ -13,20 +13,25 @@ class AddGenericReferenceDoc
   @override
   Future<Result<List<StorageItem>>> call(AddGenericReferenceDocParams params) {
     return chatbotRepository.addGenericReferenceDoc(
-        storageLinks: params.storageLinks,
-        languageCode: params.languageCode,
-        docType: "housing-company-generic");
+      storageLinks: params.storageLinks,
+      languageCode: params.languageCode,
+      indexName: params.indexName,
+      docType: params.docType ?? params.indexName,
+    );
   }
 }
 
 class AddGenericReferenceDocParams extends Equatable {
   final List<String> storageLinks;
   final String languageCode;
+  final String indexName;
+  final String? docType;
 
-  const AddGenericReferenceDocParams({
-    required this.storageLinks,
-    required this.languageCode,
-  });
+  const AddGenericReferenceDocParams(
+      {required this.storageLinks,
+      required this.languageCode,
+      required this.indexName,
+      this.docType});
   @override
-  List<Object?> get props => [storageLinks, languageCode];
+  List<Object?> get props => [storageLinks, languageCode, docType, indexName];
 }

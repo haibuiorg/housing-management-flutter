@@ -25,7 +25,10 @@ class DioModule {
         request.headers['Authorization'] = 'Bearer $token';
       } else if (!request.path.contains('/register') &&
           !request.path.contains('/code_register') &&
-          !request.path.contains('/reset_password')) {
+          !request.path.contains('/reset_password') &&
+          !request.path.contains('/chatbot') &&
+          !request.path.contains('/legal_documents') &&
+          !request.path.contains('/user')) {
         return handler.reject(DioError(
             requestOptions: request,
             error: 'No token',

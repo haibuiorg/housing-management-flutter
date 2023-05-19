@@ -17,10 +17,12 @@ class MessageScreen extends StatefulWidget {
       {super.key,
       required this.channelId,
       required this.messageType,
-      required this.conversationId});
+      required this.conversationId,
+      this.isPublic = false});
   final String channelId;
   final String messageType;
   final String conversationId;
+  final bool isPublic;
 
   @override
   State<MessageScreen> createState() => _MessageScreenState();
@@ -159,12 +161,16 @@ class _MessageScreenState extends State<MessageScreen> {
                         const EdgeInsets.only(left: 8.0, right: 8, bottom: 8),
                     child: Column(
                       children: [
-                        FileSelector(
-                          onCompleteUploaded:
-                              BlocProvider.of<MessageCubit>(context)
-                                  .updatePendingStorageItem,
-                          autoUpload: true,
-                        ),
+                        widget.isPublic
+                            ? SizedBox.fromSize(
+                                size: const Size.fromHeight(16),
+                              )
+                            : FileSelector(
+                                onCompleteUploaded:
+                                    BlocProvider.of<MessageCubit>(context)
+                                        .updatePendingStorageItem,
+                                autoUpload: true,
+                              ),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [

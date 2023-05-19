@@ -1,3 +1,5 @@
+// ignore_for_file: sdk_version_since
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:priorli/core/announcement/entities/announcement.dart';

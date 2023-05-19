@@ -11,6 +11,7 @@ class AdminState extends Equatable {
   final List<SubscriptionPlan>? subscriptionPlanList;
   final List<Country>? supportedCountries;
   final List<PaymentProductItem>? paymentProductItems;
+  final List<String>? documentIndexes;
   final String? selectedCountryCode;
   const AdminState({
     this.paymentProductItems,
@@ -19,6 +20,7 @@ class AdminState extends Equatable {
     this.subscriptionPlanList,
     this.supportedCountries,
     this.selectedCountryCode,
+    this.documentIndexes,
   });
 
   AdminState copyWith(
@@ -27,8 +29,10 @@ class AdminState extends Equatable {
           List<SubscriptionPlan>? subscriptionPlanList,
           List<Country>? supportedCountries,
           List<PaymentProductItem>? paymentProductItems,
+          List<String>? documentIndexes,
           String? selectedCountryCode}) =>
       AdminState(
+          documentIndexes: documentIndexes ?? this.documentIndexes,
           selectedCountryCode: selectedCountryCode ?? this.selectedCountryCode,
           companyList: companyList ?? this.companyList,
           subscriptionPlanList:
@@ -45,5 +49,6 @@ class AdminState extends Equatable {
         supportedCountries,
         selectedCountryCode,
         paymentProductItems,
+        documentIndexes
       ];
 }

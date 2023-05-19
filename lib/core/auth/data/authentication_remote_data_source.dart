@@ -88,4 +88,10 @@ class AuthenticationRemoteDataSource implements AuthenticationDataSource {
     await firebaseAuth.currentUser?.reload();
     return firebaseAuth.currentUser?.emailVerified == true;
   }
+
+  @override
+  Future<bool> loginWithToken({required String token}) async {
+    final userCred = await firebaseAuth.signInWithCustomToken(token);
+    return userCred.user != null;
+  }
 }

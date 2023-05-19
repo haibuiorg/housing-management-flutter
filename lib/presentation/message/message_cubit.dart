@@ -81,7 +81,6 @@ class MessageCubit extends Cubit<MessageState> {
     }
     final sendMessageResult = await _sendMessage(SendMessageParams(
         message: message.trim(),
-        senderId: state.user?.userId ?? '',
         messageType: state.messageType ?? messageTypeSupport,
         channelId: state.conversation?.channelId ?? '',
         conversationId: state.conversation?.id ?? '',

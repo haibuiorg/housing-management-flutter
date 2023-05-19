@@ -8,6 +8,7 @@ import 'package:priorli/core/utils/color_extension.dart';
 import 'package:priorli/core/utils/constants.dart';
 import 'package:priorli/presentation/admin/admin_screen.dart';
 import 'package:priorli/presentation/home/home_screen.dart';
+import 'package:priorli/presentation/login/login_screen.dart';
 import 'package:priorli/presentation/main/main_cubit.dart';
 import 'package:priorli/presentation/main/main_state.dart';
 import 'package:priorli/presentation/profile/profile_screen.dart';
@@ -56,7 +57,11 @@ class _MainScreenState extends State<MainScreen> {
                           .contains(adminScreenPath.replaceAll('/', ''))
                       ? 3
                       : 0;
-      await _cubit.init(selectedIndex);
+      await _cubit.init(selectedIndex).then((value) {
+        if (!value) {
+          GoRouter.of(context).go(loginPath);
+        }
+      });
     });
   }
 

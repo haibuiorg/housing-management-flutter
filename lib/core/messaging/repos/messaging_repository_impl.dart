@@ -37,7 +37,6 @@ class MessagingRepositoryImpl implements MessagingRepository {
       {required String channelId,
       required String conversationId,
       required String message,
-      required String senderId,
       required String messageType,
       List<String>? storageItems}) async {
     try {

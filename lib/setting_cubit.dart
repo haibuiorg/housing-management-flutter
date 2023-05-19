@@ -1,9 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:priorli/core/country/entities/legal_document.dart';
 import 'package:priorli/core/housing/entities/ui.dart';
 import 'package:priorli/setting_state.dart';
 import 'package:priorli/core/base/result.dart';
 
+import 'core/country/usecases/get_country_legal_documents.dart';
 import 'core/settings/usecases/get_setting.dart';
 import 'core/settings/usecases/save_setting.dart';
 import 'core/settings/usecases/setting_constants.dart';
@@ -11,13 +13,16 @@ import 'core/settings/usecases/setting_constants.dart';
 class SettingCubit extends Cubit<SettingState> {
   final GetSetting _getSetting;
   final SaveSetting _saveSetting;
+  final GetCountryLegalDocuments _getCountryLegalDocuments;
 
-  SettingCubit(this._getSetting, this._saveSetting)
+  SettingCubit(
+      this._getSetting, this._saveSetting, this._getCountryLegalDocuments)
       : super(SettingState.initializing()) {
     _checkAppData();
   }
 
   Future<void> _checkAppData() async {
+    checkCountryData();
     final isDarkThemeResult =
         await _getSetting(const GetSettingParams(key: darkModeKey));
     final isDarkTheme =
@@ -36,6 +41,15 @@ class SettingCubit extends Cubit<SettingState> {
         useSystemColor: useSystemColor,
         brightness: isDarkTheme ? Brightness.dark : Brightness.light,
         languageCode: languageCodeData));
+  }
+
+  Future<void> checkCountryData() async {
+    final getCountryLegalDocumentResult = await _getCountryLegalDocuments(
+        const GetCountryLegalDocumentDataParams(countryCode: 'fi'));
+
+    if (getCountryLegalDocumentResult is ResultSuccess<List<LegalDocument>>) {
+      emit(state.copyWith(legalDocuments: getCountryLegalDocumentResult.data));
+    }
   }
 
   Future<void> switchTheme(bool isDark) async {
