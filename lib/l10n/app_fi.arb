@@ -648,5 +648,74 @@
    "individual": "Yksityishenkilö",
    "set_up_payout_account": "Aseta maksutili",
    "issue_external_invoice": "Lähetä lasku maksettavalla linkillä",
-   "bank_account_name": "Pankkitilin haltijan nimi"
+   "bank_account_name": "Pankkitilin haltijan nimi",
+   "set_as_apartment_owner": "Aseta asunnon omistajaksi",
+    "remove_this_apartment_dialog_content": "Haluatko varmasti poistaa tämän asunnon",
+    "send_apartment_invitation": "Lähetä kutsu liittymään asuntoon",
+    "tenants": "Vuokralaiset",
+    "managers": "Hallinnoijat",
+    "owners": "Omistajat", 
+    "pending_fault_reports": "Odottavat vikailmoitukset",
+    "new_fault_report": "Uusi vikailmoitus",
+    "tenant_management": "Vuokralaisten hallinta",
+    "invite_tenants": "Kutsu vuokralaisia",
+    "accounts_and_payments": "Tilit ja maksut",
+    "show_messages_in": "Näytä viestit:",
+    "language_code": "{ code, select, fi{Suomi} en{Englanti} other{{code}} }",
+    "@language_code": {
+      "description": "Kielikoodin käännös",
+      "placeholders": {
+        "code": {
+          "type": "String"
+        }
+      }
+    },
+    "pending_invitations": "Odottavat kutsut",
+    "owner": "Omistaja",
+    "tenant": "Vuokralainen",
+    "change_role": "Vaihda roolia",
+    "change_role_to": "Vaihda rooli: {role}",
+    "@change_role_to": {
+      "description": "Vaihda rooli",
+      "placeholders": {
+        "role": {
+          "type": "String"
+        }
+      }
+    },
+    "number_of_email_sent": "{number} sähköpostia lähetetty",
+    "@number_of_email_sent": {
+      "description": "Lähetettyjen sähköpostien määrä",
+      "placeholders": {
+        "number": {
+          "type": "String"
+        }
+      }
+    },
+    "email_sent_to": "Sähköposti lähetetty osoitteeseen {email}",
+    "@email_sent_to": {
+      "description": "Sähköposti lähetetty",
+      "placeholders": {
+        "email": {
+          "type": "String"
+        }
+      }
+    },
+    "resend_invitation": "Lähetä kutsu uudelleen",
+    "role": "Rooli",
+    "remove_this_tenant": "Poista tämä vuokralainen: {name}",
+    "@remove_this_tenant": {
+      "description": "Poista tämä vuokralainen",
+      "placeholders": {
+        "name": {
+          "type": "String"
+        }
+      }
+    },
+    "chatbot": "Chatbot",
+    "accept_terms_policy": "Hyväksyn käyttöehdot ja tietosuojakäytännöt",
+    "anonymous_chat": "Käytä anonyymia chatia",
+    "enter_email_to_chat_title": "Aloitetaan sähköpostillasi",
+    "email_chat_helper": "Tätä sähköpostia voidaan käyttää myöhemmin kirjautumiseen",
+    "or": "tai"
 }

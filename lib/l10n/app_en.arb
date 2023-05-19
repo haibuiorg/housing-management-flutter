@@ -717,7 +717,7 @@
     },
     "chatbot": "Chatbot",
     "accept_terms_policy": "I accept terms of use and privacy policies",
-    "anonymous_chat": "Use anonymous chat (Chat history will be deleted)",
+    "anonymous_chat": "Use anonymous chat",
     "enter_email_to_chat_title": "Let's start with your email",
     "email_chat_helper": "This email can be use for login later",
     "or": "or"

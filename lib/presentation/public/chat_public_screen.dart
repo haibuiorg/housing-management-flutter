@@ -161,20 +161,23 @@ class _EnterEmailToChatDialogState extends State<EnterEmailToChatDialog> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            CustomFormField(
-              enabled: !anonymous,
-              hintText: AppLocalizations.of(context)!.email,
-              helperText: AppLocalizations.of(context)!.email_chat_helper,
-              textEditingController: _emailController,
-              autoValidate: true,
-              onChanged: (value) {
-                setState(() {});
-              },
-              validator: (value) => value!.isValidEmail
-                  ? null
-                  : AppLocalizations.of(context)!.email_address_error,
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: CustomFormField(
+                enabled: !anonymous,
+                hintText: AppLocalizations.of(context)!.email,
+                helperText: AppLocalizations.of(context)!.email_chat_helper,
+                textEditingController: _emailController,
+                autoValidate: true,
+                onChanged: (value) {
+                  setState(() {});
+                },
+                validator: (value) => value!.isValidEmail
+                    ? null
+                    : AppLocalizations.of(context)!.email_address_error,
+              ),
             ),
-            Text(AppLocalizations.of(context)!.or),
+            /*Text(AppLocalizations.of(context)!.or),
             SwitchListTile(
                 value: anonymous,
                 onChanged: (onChanged) {
@@ -182,7 +185,7 @@ class _EnterEmailToChatDialogState extends State<EnterEmailToChatDialog> {
                     anonymous = onChanged;
                   });
                 },
-                title: Text(AppLocalizations.of(context)!.anonymous_chat)),
+                title: Text(AppLocalizations.of(context)!.anonymous_chat)),*/
             TermsAndPolicies(
               accepted: terms,
               onCheckChanged: (p0) {
@@ -200,9 +203,10 @@ class _EnterEmailToChatDialogState extends State<EnterEmailToChatDialog> {
                     (_emailController.text.isValidEmail || anonymous)
                 ? () {
                     widget.onSubmitData(
-                        email: (anonymous || _emailController.text.isValidEmail)
-                            ? null
-                            : _emailController.text);
+                        email:
+                            (anonymous || !_emailController.text.isValidEmail)
+                                ? null
+                                : _emailController.text);
                   }
                 : null,
             child: Text(AppLocalizations.of(context)!.start))
