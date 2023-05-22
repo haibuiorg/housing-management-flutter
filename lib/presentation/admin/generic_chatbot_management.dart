@@ -56,6 +56,17 @@ class DocumentIndexList extends StatelessWidget {
                         context: context,
                         builder: (builder) => AddReferenceDocDialog(
                               indexName: state.documentIndexes![index],
+                              onComplete: (
+                                  {docType,
+                                  required files,
+                                  required indexName}) {
+                                BlocProvider.of<AdminCubit>(context)
+                                    .addGenericReferenceDoc(
+                                        docType: docType,
+                                        files: files,
+                                        indexName: indexName)
+                                    .then((value) => Navigator.pop(builder));
+                              },
                             ));
                   },
                   icon: const Icon(Icons.upload_file)),
@@ -69,8 +80,13 @@ class AddReferenceDocDialog extends StatefulWidget {
   const AddReferenceDocDialog({
     super.key,
     required this.indexName,
+    required this.onComplete,
   });
   final String indexName;
+  final Function(
+      {String? docType,
+      required List<String> files,
+      required String indexName}) onComplete;
 
   @override
   State<AddReferenceDocDialog> createState() => _AddReferenceDocDialogState();
@@ -98,13 +114,12 @@ class _AddReferenceDocDialogState extends State<AddReferenceDocDialog> {
               isSingleFile: true,
               onCompleteUploaded: (onCompleteUploaded) {
                 if (onCompleteUploaded.isNotEmpty == true) {
-                  BlocProvider.of<AdminCubit>(context)
-                      .addGenericReferenceDoc(
-                        indexName: widget.indexName,
-                        files: onCompleteUploaded,
-                        docType: _docTypeController.text,
-                      )
-                      .then((value) => Navigator.pop(context));
+                  widget.onComplete(
+                      docType: _docTypeController.text.isNotEmpty
+                          ? _docTypeController.text
+                          : null,
+                      files: onCompleteUploaded,
+                      indexName: widget.indexName);
                 }
               }),
         ],
