@@ -118,7 +118,11 @@ class _InvoiceCreationFormState extends State<InvoiceCreationForm> {
                     quantity: invoiceItem.quantity.toStringAsFixed(2),
                     taxPercentage: invoiceItem.paymentProductItem.taxPercentage
                         .toStringAsFixed(2),
-                    unitCost: invoiceItem.paymentProductItem.amount
+                    unitCost: ((invoiceItem.paymentProductItem.amount /
+                                (100 +
+                                    invoiceItem
+                                        .paymentProductItem.taxPercentage)) *
+                            100)
                         .toStringAsFixed(2),
                     total: (invoiceItem.quantity *
                             invoiceItem.paymentProductItem.amount)

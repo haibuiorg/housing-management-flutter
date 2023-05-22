@@ -16,9 +16,10 @@ class FullWidthPairText extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label),
+          Expanded(child: Text(label)),
           Text(content ?? '',
               style: isBoldContent
                   ? const TextStyle(fontWeight: FontWeight.bold)

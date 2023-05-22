@@ -10,7 +10,7 @@
             "request": "launch",
             "program": "lib/main.dart",
             "args": [
-                "--dart-define=API_URL=http://192.168.50.209:8181/api/v1",
+                "--dart-define=API_URL=http://192.168.50.206:8181/api/v1",
                 "--web-port", "8001"
               ]
         },
@@ -30,7 +30,7 @@
             "request": "launch",
             "program": "lib/main.dart",
             "args": [
-                "--dart-define=API_URL=http://192.168.50.209:8181/api/v1",
+                "--dart-define=API_URL=http://192.168.50.206:8181/api/v1",
                 "--web-port", "8001"
               ]
         },

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:priorli/presentation/conversation_list/conversation_list_cubit.dart';
 import 'package:priorli/presentation/conversation_list/conversation_list_state.dart';
+import 'package:priorli/presentation/public/chat_public_screen.dart';
 import 'package:priorli/presentation/shared/full_width_title.dart';
 import 'package:priorli/service_locator.dart';
 
@@ -37,6 +38,34 @@ class _ConversationListScreenState extends State<ConversationListScreen> {
     _cubit.close();
   }
 
+  _showStartDialog() {
+    showModalBottomSheet(
+        isScrollControlled: true,
+        useSafeArea: true,
+        context: context,
+        builder: (builder) {
+          return FractionallySizedBox(
+              heightFactor: 0.95,
+              child: Container(
+                  decoration:
+                      BoxDecoration(borderRadius: BorderRadius.circular(8)),
+                  child: Column(
+                    children: [
+                      Center(
+                          child: Container(
+                        margin: const EdgeInsets.all(12),
+                        width: 40,
+                        height: 4,
+                        decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.onSurface,
+                            borderRadius: BorderRadius.circular(8)),
+                      )),
+                      const Expanded(child: ChatPublicScreen()),
+                    ],
+                  )));
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider<ConversationListCubit>(
@@ -45,22 +74,27 @@ class _ConversationListScreenState extends State<ConversationListScreen> {
           listener: (context, state) {},
           builder: (context, state) {
             return Scaffold(
+                floatingActionButton: FloatingActionButton.small(
+                  onPressed: _showStartDialog,
+                  child: const Icon(Icons.message_rounded),
+                ),
                 body: Padding(
-              padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-              child: state.conversationList?.isEmpty == true &&
-                      state.supportConversationList?.isEmpty == true &&
-                      state.faultConversationList?.isEmpty == true
-                  ? const Center(
-                      child: SizedBox(
-                        width: 300,
-                        height: 300,
-                        child: AppLottieAnimation(
-                          loadingResource: 'message',
-                        ),
-                      ),
-                    )
-                  : const MessageListWidget(),
-            ));
+                  padding:
+                      EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+                  child: state.conversationList?.isEmpty == true &&
+                          state.supportConversationList?.isEmpty == true &&
+                          state.faultConversationList?.isEmpty == true
+                      ? const Center(
+                          child: SizedBox(
+                            width: 300,
+                            height: 300,
+                            child: AppLottieAnimation(
+                              loadingResource: 'message',
+                            ),
+                          ),
+                        )
+                      : const MessageListWidget(),
+                ));
           }),
     );
   }

@@ -102,7 +102,7 @@ class InvoiceCreationCubit extends Cubit<InvoiceCreationState> {
       companyId: state.companyId ?? '',
       name: name,
       description: description,
-      price: price,
+      price: total,
       taxPercentage: taxPercentage,
     ));
     if (addCompanyPaymentProductItemResult
