@@ -717,5 +717,17 @@
     "anonymous_chat": "Käytä anonyymia chatia",
     "enter_email_to_chat_title": "Aloitetaan sähköpostillasi",
     "email_chat_helper": "Tätä sähköpostia voidaan käyttää myöhemmin kirjautumiseen",
-    "or": "tai"
+    "or": "tai",
+   "housing_gpt": "Asuntojen GPT",
+   "provided_by": "Tarjoaja: {name}",
+   "@provided_by": {
+   "description": "Tarjoaja:",
+   "placeholders": {
+      "name": {
+         "type": "String"
+         }
+      }
+   },
+   "partners": "Yhteistyökumppanit",
+   "ask_human_join": "Pyydä ihmisasiantuntijaa liittymään keskusteluun!"
 }

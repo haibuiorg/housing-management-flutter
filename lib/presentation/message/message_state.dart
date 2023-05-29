@@ -11,11 +11,13 @@ class MessageState extends Equatable {
   final User? user;
   final List<String>? pendingStorageItems;
   final String? translatedLanguageCode;
+  final bool? isLoading;
 
   const MessageState(
       {this.messageList,
       this.messageType,
       this.user,
+      this.isLoading,
       this.translatedLanguageCode,
       this.conversation,
       this.pendingStorageItems});
@@ -24,10 +26,12 @@ class MessageState extends Equatable {
           {List<Message>? messageList,
           String? messageType,
           User? user,
+          bool? isLoading,
           String? translatedLanguageCode,
           List<String>? pendingStorageItems,
           Conversation? conversation}) =>
       MessageState(
+          isLoading: isLoading ?? this.isLoading,
           pendingStorageItems: pendingStorageItems ?? this.pendingStorageItems,
           user: user ?? this.user,
           translatedLanguageCode:
@@ -43,6 +47,7 @@ class MessageState extends Equatable {
         user,
         conversation,
         pendingStorageItems,
+        isLoading,
         translatedLanguageCode
       ];
 }

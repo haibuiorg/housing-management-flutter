@@ -17,6 +17,7 @@ const createdOn = 'created_on';
 const updatedOn = 'updated_on';
 const appWebsite = 'https://priorli.com';
 const messageTypeSupport = 'support';
+const messageTypeBotSupport = 'bot_support';
 const messageTypeCommunity = 'community';
 const messageTypeFaultReport = 'fault_report';
 const maxNumeberOfAccount = 10000000000;

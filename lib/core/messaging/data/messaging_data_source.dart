@@ -8,19 +8,10 @@ abstract class MessagingDataSource {
     required String companyId,
     required String conversationId,
   });
-  Future<MessageModel> sendCommunityMessage({
-    required String companyId,
-    required Message message,
-    required String conversationId,
-  });
   Stream<List<MessageModel>> getSupportMessages({
     required String supportChannelId,
     required String conversationId,
   });
-  Future<MessageModel> sendSupportMessage(
-      {required String supportChannelId,
-      required String conversationId,
-      required Message message});
   Future<MessageModel> sendMessage(
       {required String channelId,
       required String conversationId,
@@ -36,6 +27,7 @@ abstract class MessagingDataSource {
     required String countryCode,
     required String languageCode,
     required String name,
+    required bool startWithBot,
   });
   Future<ConversationModel> joinConversation({
     required String messageType,
@@ -43,6 +35,11 @@ abstract class MessagingDataSource {
     required String conversationId,
   });
   Future<ConversationModel> setConversationSeen({
+    required String messageType,
+    required String channelId,
+    required String conversationId,
+  });
+  Future<ConversationModel> changeConversationType({
     required String messageType,
     required String channelId,
     required String conversationId,

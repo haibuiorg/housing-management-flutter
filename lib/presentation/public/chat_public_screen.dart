@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:priorli/auth_cubit.dart';
 import 'package:priorli/auth_state.dart';
 import 'package:priorli/core/utils/string_extension.dart';
+import 'package:priorli/presentation/home/home_screen.dart';
 import 'package:priorli/presentation/public/chat_public_cubit.dart';
 import 'package:priorli/presentation/public/chat_public_state.dart';
 import 'package:priorli/presentation/shared/app_preferences.dart';
@@ -53,11 +54,34 @@ class _ChatPublicScreenState extends State<ChatPublicScreen> {
           }
         }, builder: (context, state) {
           return authState.isLoggedIn && state.conversation != null
-              ? MessageScreen(
-                  channelId: state.conversation?.channelId ?? '',
-                  conversationId: state.conversation?.id ?? '',
-                  messageType: state.conversation?.type ?? '',
-                  isPublic: true,
+              ? Scaffold(
+                  appBar: AppBar(
+                    primary: true,
+                    automaticallyImplyLeading: true,
+                    centerTitle: true,
+                    title: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(AppLocalizations.of(context)?.provided_by('') ??
+                            ''),
+                        TextButton(
+                          onPressed: () {
+                            GoRouter.of(context).go(homePath);
+                          },
+                          child: Image.asset(
+                            'assets/images/priorli_horizontal.png',
+                            height: 100,
+                            width: 100,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  body: MessageScreen(
+                    channelId: state.conversation?.channelId ?? '',
+                    conversationId: state.conversation?.id ?? '',
+                    messageType: state.conversation?.type ?? '',
+                  ),
                 )
               : Scaffold(
                   body: authState.isLoggedIn
@@ -67,7 +91,8 @@ class _ChatPublicScreenState extends State<ChatPublicScreen> {
                               .startChatbotConversation(
                                 email: email,
                                 countryCode: 'fi',
-                                conversationName: 'Housing GPT',
+                                conversationName:
+                                    AppLocalizations.of(context)?.housing_gpt,
                                 languageCode: context
                                         .read<SettingCubit>()
                                         .state

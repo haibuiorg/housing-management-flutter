@@ -74,9 +74,10 @@ class _ConversationListScreenState extends State<ConversationListScreen> {
           listener: (context, state) {},
           builder: (context, state) {
             return Scaffold(
-                floatingActionButton: FloatingActionButton.small(
+                floatingActionButton: FloatingActionButton.extended(
                   onPressed: _showStartDialog,
-                  child: const Icon(Icons.message_rounded),
+                  icon: const Icon(Icons.message_rounded),
+                  label: Text('Help'),
                 ),
                 body: Padding(
                   padding:
@@ -154,6 +155,28 @@ class MessageListWidget extends StatelessWidget {
               );
             },
             childCount: state.faultConversationList?.length ?? 0,
+          )),
+          if (state.chatbotConverstionList?.isNotEmpty == true)
+            SliverToBoxAdapter(
+                child: FullWidthTitle(
+              title: AppLocalizations.of(context)!.housing_gpt,
+            )),
+          SliverList(
+              delegate: SliverChildBuilderDelegate(
+            (BuildContext context, int index) {
+              final conversation = state.chatbotConverstionList?[index];
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: conversation != null
+                    ? ConversationItem(
+                        onPressed: () => GoRouter.of(context).push(
+                            '$messagePath/${conversation.type}/${conversation.channelId}/${conversation.id}'),
+                        conversation: conversation,
+                      )
+                    : const SizedBox.shrink(),
+              );
+            },
+            childCount: state.chatbotConverstionList?.length ?? 0,
           )),
           if (state.supportConversationList?.isNotEmpty == true)
             SliverToBoxAdapter(

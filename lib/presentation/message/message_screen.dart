@@ -7,22 +7,23 @@ import 'package:priorli/presentation/message/message_state.dart';
 import 'package:priorli/service_locator.dart';
 import 'package:priorli/setting_cubit.dart';
 import 'package:priorli/setting_state.dart';
+import '../../core/utils/constants.dart';
+import '../shared/app_lottie_animation.dart';
 import 'message_item.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 const messagePath = '/message';
 
 class MessageScreen extends StatefulWidget {
-  const MessageScreen(
-      {super.key,
-      required this.channelId,
-      required this.messageType,
-      required this.conversationId,
-      this.isPublic = false});
+  const MessageScreen({
+    super.key,
+    required this.channelId,
+    required this.messageType,
+    required this.conversationId,
+  });
   final String channelId;
   final String messageType;
   final String conversationId;
-  final bool isPublic;
 
   @override
   State<MessageScreen> createState() => _MessageScreenState();
@@ -130,22 +131,26 @@ class _MessageScreenState extends State<MessageScreen> {
             body: Column(children: [
               Expanded(
                 flex: 2,
-                child: ListView.builder(
-                    reverse: true,
-                    controller: _scrollController,
-                    itemCount: state.messageList?.length ?? 0,
-                    itemBuilder: (context, index) {
-                      final message = state.messageList?[index];
-                      return message != null
-                          ? MessageItem(
-                              translatedLanguageCode:
-                                  state.translatedLanguageCode,
-                              message: message,
-                              isMyMessage:
-                                  state.user?.userId == message.senderId,
-                            )
-                          : const SizedBox.shrink();
-                    }),
+                child: state.isLoading == true
+                    ? const Center(
+                        child: AppLottieAnimation(loadingResource: 'apartment'),
+                      )
+                    : ListView.builder(
+                        reverse: true,
+                        controller: _scrollController,
+                        itemCount: state.messageList?.length ?? 0,
+                        itemBuilder: (context, index) {
+                          final message = state.messageList?[index];
+                          return message != null
+                              ? MessageItem(
+                                  translatedLanguageCode:
+                                      state.translatedLanguageCode,
+                                  message: message,
+                                  isMyMessage:
+                                      state.user?.userId == message.senderId,
+                                )
+                              : const SizedBox.shrink();
+                        }),
               ),
               SingleChildScrollView(
                 keyboardDismissBehavior:
@@ -161,9 +166,16 @@ class _MessageScreenState extends State<MessageScreen> {
                         const EdgeInsets.only(left: 8.0, right: 8, bottom: 8),
                     child: Column(
                       children: [
-                        widget.isPublic
-                            ? SizedBox.fromSize(
-                                size: const Size.fromHeight(16),
+                        state.conversation?.type == messageTypeBotSupport
+                            ? Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: OutlinedButton(
+                                    onPressed: () {
+                                      _cubit.inviteHumanToJoin();
+                                    },
+                                    child: Text(AppLocalizations.of(context)
+                                            ?.ask_human_join ??
+                                        '')),
                               )
                             : FileSelector(
                                 onCompleteUploaded:

@@ -35,6 +35,7 @@ abstract class MessagingRepository {
     String? userId,
     required String countryCode,
     required String languageCode,
+    required bool startWithBot,
     required String name,
   });
   Future<Result<Conversation>> joinConversation({
@@ -50,6 +51,12 @@ abstract class MessagingRepository {
     required String conversationId,
   });
   Future<Result<Conversation>> getConversationDetail({
+    required String messageType,
+    required String channelId,
+    required String conversationId,
+    required String userId,
+  });
+  Future<Result<Conversation>> changeConversationType({
     required String messageType,
     required String channelId,
     required String conversationId,

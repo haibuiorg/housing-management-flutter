@@ -1,3 +1,5 @@
+import 'dart:js_interop';
+
 import 'package:equatable/equatable.dart';
 import 'package:priorli/core/base/result.dart';
 import 'package:priorli/core/base/usecase.dart';
@@ -15,6 +17,7 @@ class StartSupportConversation
     return messagingRepository.startSupportConversation(
         countryCode: params.countryCode,
         languageCode: params.languageCode,
+        startWithBot: params.startWithBot,
         name: params.name,
         userId: params.userId);
   }
@@ -25,18 +28,16 @@ class StartSupportConversationParams extends Equatable {
   final String countryCode;
   final String languageCode;
   final String name;
+  final bool startWithBot;
 
   const StartSupportConversationParams(
       {this.userId,
       required this.countryCode,
       required this.name,
+      this.startWithBot = true,
       required this.languageCode});
 
   @override
-  List<Object?> get props => [
-        userId,
-        name,
-        languageCode,
-        countryCode,
-      ];
+  List<Object?> get props =>
+      [userId, name, languageCode, countryCode, startWithBot];
 }

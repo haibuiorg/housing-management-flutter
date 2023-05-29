@@ -2,12 +2,14 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:priorli/core/base/result.dart';
 import 'package:priorli/core/base/usecase.dart';
 import 'package:priorli/core/messaging/entities/conversation.dart';
 import 'package:priorli/core/messaging/usecases/get_community_messages.dart';
 import 'package:priorli/core/messaging/usecases/get_conversation_detail.dart';
 import 'package:priorli/core/messaging/usecases/get_support_messages.dart';
+import 'package:priorli/core/messaging/usecases/invite_human_to_join.dart';
 import 'package:priorli/core/messaging/usecases/join_conversation.dart';
 import 'package:priorli/core/messaging/usecases/send_message.dart';
 import 'package:priorli/core/messaging/usecases/set_conversation_seen.dart';
@@ -27,6 +29,7 @@ class MessageCubit extends Cubit<MessageState> {
   final GetConversationDetail _getConversationDetail;
   final JoinConversation _joinConversation;
   final SetConversationSeen _setConversationSeen;
+  final InviteHumanToJoin _inviteHumanToJoin;
   StreamSubscription? _myMessageSubscription;
 
   MessageCubit(
@@ -34,6 +37,7 @@ class MessageCubit extends Cubit<MessageState> {
       this._getUserInfo,
       this._getSupportMessages,
       this._sendMessage,
+      this._inviteHumanToJoin,
       this._getConversationDetail,
       this._joinConversation,
       this._setConversationSeen)
@@ -44,9 +48,10 @@ class MessageCubit extends Cubit<MessageState> {
       required String conversationId,
       required String messageType,
       String? appLanguage}) async {
-    emit(state.copyWith(translatedLanguageCode: appLanguage));
+    emit(state.copyWith(translatedLanguageCode: appLanguage, isLoading: true));
     final getUserInfoResult = await _getUserInfo(NoParams());
-    MessageState pendingState = state.copyWith(messageType: messageType);
+    MessageState pendingState =
+        state.copyWith(messageType: messageType, isLoading: false);
     if (getUserInfoResult is ResultSuccess<User>) {
       pendingState = pendingState.copyWith(user: getUserInfoResult.data);
     }
@@ -66,12 +71,15 @@ class MessageCubit extends Cubit<MessageState> {
       _myMessageSubscription = _getCommunityMessages(GetCommunityMessageParams(
               conversationId: conversationId, companyId: channelId))
           .listen(_messageListener);
-    } else if (messageType == messageTypeSupport) {
+    } else if (messageType == messageTypeSupport ||
+        messageType == messageTypeBotSupport) {
       _myMessageSubscription = _getSupportMessages(GetSupportMessageParams(
               supportChannelId: channelId, conversationId: conversationId))
           .listen(_messageListener);
     }
-    emit(pendingState);
+    emit(
+      pendingState,
+    );
     await setConversationSeen();
   }
 
@@ -120,6 +128,13 @@ class MessageCubit extends Cubit<MessageState> {
     newList.sort(
       (a, b) => b.createdOn - a.createdOn,
     );
+    try {
+      if (newList.first.id != "-1") {
+        newList.removeWhere((element) => element.id == "-1");
+      }
+    } catch (error) {
+      debugPrint(error.toString());
+    }
     emit(state.copyWith(messageList: newList));
   }
 
@@ -135,6 +150,18 @@ class MessageCubit extends Cubit<MessageState> {
         messageType: state.messageType ?? '',
         conversationId: state.conversation?.id ?? '',
         channelId: state.conversation?.channelId ?? ''));
+    if (conversationResult is ResultSuccess<Conversation>) {
+      emit(state.copyWith(conversation: conversationResult.data));
+    }
+  }
+
+  Future<void> inviteHumanToJoin() async {
+    final conversationResult = await _inviteHumanToJoin(
+        ChangeConversationTypeParams(
+            userId: state.user?.userId ?? '',
+            messageType: state.messageType ?? '',
+            conversationId: state.conversation?.id ?? '',
+            channelId: state.conversation?.channelId ?? ''));
     if (conversationResult is ResultSuccess<Conversation>) {
       emit(state.copyWith(conversation: conversationResult.data));
     }

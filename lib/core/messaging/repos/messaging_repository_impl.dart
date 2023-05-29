@@ -153,12 +153,36 @@ class MessagingRepositoryImpl implements MessagingRepository {
   Future<Result<Conversation>> startSupportConversation(
       {required String countryCode,
       String? userId,
+      required bool startWithBot,
       required String languageCode,
       required String name}) async {
     try {
       final conversationModel =
           await messagingDataSource.startSupportConversation(
-              languageCode: languageCode, countryCode: countryCode, name: name);
+              languageCode: languageCode,
+              countryCode: countryCode,
+              name: name,
+              startWithBot: startWithBot);
+      return ResultSuccess(Conversation.modelToEntity(
+          conversationModel: conversationModel, userId: userId));
+    } on ServerException {
+      return ResultFailure(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Result<Conversation>> changeConversationType(
+      {required String messageType,
+      required String channelId,
+      required String conversationId,
+      required String userId}) async {
+    try {
+      final conversationModel =
+          await messagingDataSource.changeConversationType(
+        messageType: messageType,
+        channelId: channelId,
+        conversationId: conversationId,
+      );
       return ResultSuccess(Conversation.modelToEntity(
           conversationModel: conversationModel, userId: userId));
     } on ServerException {

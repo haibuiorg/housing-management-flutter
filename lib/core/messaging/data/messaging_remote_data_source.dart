@@ -43,29 +43,6 @@ class MessagingRemoteDataSource implements MessagingDataSource {
   }
 
   @override
-  Future<MessageModel> sendCommunityMessage(
-      {required String companyId,
-      required String conversationId,
-      required Message message}) async {
-    try {
-      final Map<String, dynamic> data = {
-        "channel_id": companyId,
-        "conversation_id": conversationId,
-        "type": messageTypeCommunity,
-        "message": message.message
-      };
-      try {
-        final result = await client.post(_messagePath, data: data);
-        return MessageModel.fromJson(result.data);
-      } catch (error) {
-        throw ServerException(error: error);
-      }
-    } catch (error) {
-      throw ServerException(error: error);
-    }
-  }
-
-  @override
   Stream<List<MessageModel>> getSupportMessages({
     required String supportChannelId,
     required String conversationId,
@@ -87,29 +64,6 @@ class MessagingRemoteDataSource implements MessagingDataSource {
   }
 
   @override
-  Future<MessageModel> sendSupportMessage(
-      {required String supportChannelId,
-      required String conversationId,
-      required Message message}) async {
-    try {
-      final Map<String, dynamic> data = {
-        "channel_id": supportChannelId,
-        "conversation_id": conversationId,
-        "type": messageTypeSupport,
-        "message": message.message
-      };
-      try {
-        final result = await client.post(_messagePath, data: data);
-        return MessageModel.fromJson(result.data);
-      } catch (error) {
-        throw ServerException();
-      }
-    } catch (error) {
-      throw ServerException(error: error);
-    }
-  }
-
-  @override
   Stream<List<ConversationModel>> getConversationLists({
     required bool isFromAdmin,
     required String userId,
@@ -119,16 +73,16 @@ class MessagingRemoteDataSource implements MessagingDataSource {
       query = isFromAdmin
           ? firestore
               .collectionGroup(conversations)
-              .where(type, isEqualTo: messageTypeSupport)
+              .where(type, whereIn: [messageTypeSupport, messageTypeBotSupport])
               .orderBy(updatedOn, descending: true)
               .snapshots()
               .map((it) {
-              final newList = it.docs
-                  .map((e) => ConversationModel.fromJson(e.data()))
-                  .toList();
+                final newList = it.docs
+                    .map((e) => ConversationModel.fromJson(e.data()))
+                    .toList();
 
-              return newList;
-            })
+                return newList;
+              })
           : firestore
               .collectionGroup(conversations)
               .where(userIds, arrayContains: userId)
@@ -287,13 +241,14 @@ class MessagingRemoteDataSource implements MessagingDataSource {
   Future<ConversationModel> startSupportConversation(
       {required String countryCode,
       required String languageCode,
+      required bool startWithBot,
       required String name}) async {
     try {
       final Map<String, dynamic> data = {
         "language_code": languageCode,
         "name": name,
         "country_code": countryCode,
-        "type": messageTypeSupport,
+        "type": startWithBot ? messageTypeBotSupport : messageTypeSupport,
       };
       try {
         final result = await client.post('/start_conversation', data: data);
@@ -301,6 +256,24 @@ class MessagingRemoteDataSource implements MessagingDataSource {
       } catch (error) {
         throw ServerException();
       }
+    } catch (error) {
+      throw ServerException(error: error);
+    }
+  }
+
+  @override
+  Future<ConversationModel> changeConversationType(
+      {required String messageType,
+      required String channelId,
+      required String conversationId}) async {
+    try {
+      final Map<String, dynamic> data = {
+        "channel_id": channelId,
+        "conversation_id": conversationId,
+        "type": messageType,
+      };
+      final result = await client.put('/conversation/type', data: data);
+      return ConversationModel.fromJson(result.data);
     } catch (error) {
       throw ServerException(error: error);
     }

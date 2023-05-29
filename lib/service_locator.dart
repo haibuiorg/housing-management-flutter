@@ -89,6 +89,7 @@ import 'package:priorli/core/messaging/usecases/get_company_conversation_lists.d
 import 'package:priorli/core/messaging/usecases/get_conversation_detail.dart';
 import 'package:priorli/core/messaging/usecases/get_conversation_lists.dart';
 import 'package:priorli/core/messaging/usecases/get_support_messages.dart';
+import 'package:priorli/core/messaging/usecases/invite_human_to_join.dart';
 import 'package:priorli/core/messaging/usecases/join_conversation.dart';
 import 'package:priorli/core/messaging/usecases/send_message.dart';
 import 'package:priorli/core/messaging/usecases/set_conversation_seen.dart';
@@ -336,6 +337,7 @@ Future<void> init() async {
   serviceLocator.registerFactory(() =>
       AnnouncementCubit(serviceLocator(), serviceLocator(), serviceLocator()));
   serviceLocator.registerFactory(() => MessageCubit(
+      serviceLocator(),
       serviceLocator(),
       serviceLocator(),
       serviceLocator(),
@@ -619,6 +621,8 @@ Future<void> init() async {
       () => UploadFile(storageRepository: serviceLocator()));
   serviceLocator.registerLazySingleton<StartSupportConversation>(
       () => StartSupportConversation(messagingRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<InviteHumanToJoin>(
+      () => InviteHumanToJoin(messagingRepository: serviceLocator()));
 
   // country
   serviceLocator.registerLazySingleton<GetSupportCountries>(

@@ -43,10 +43,11 @@ class ChatPublicCubit extends Cubit<ChatPublicState> {
     return false;
   }
 
-  Future<void> startSupportConversation(
-      {required String conversationName,
-      required String countryCode,
-      required String languageCode}) async {
+  Future<void> startSupportConversation({
+    required String conversationName,
+    required String countryCode,
+    required String languageCode,
+  }) async {
     final conversationResult = await _startSupportConversation(
         StartSupportConversationParams(
             countryCode: countryCode,

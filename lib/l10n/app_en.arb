@@ -721,5 +721,16 @@
     "enter_email_to_chat_title": "Let's start with your email",
     "email_chat_helper": "This email can be use for login later",
     "or": "or",
-    "partners": "Partners"
+    "partners": "Partners", 
+    "housing_gpt": "Housing GPT",
+    "provided_by": "Provided by {name}",
+    "@provided_by": {
+      "description": "Provided bu",
+      "placeholders": {
+        "name": {
+          "type": "String"
+        }
+      }
+    },
+    "ask_human_join": "Ask a human assistant to join conversation!"
 }
