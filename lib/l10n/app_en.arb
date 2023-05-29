@@ -720,5 +720,6 @@
     "anonymous_chat": "Use anonymous chat",
     "enter_email_to_chat_title": "Let's start with your email",
     "email_chat_helper": "This email can be use for login later",
-    "or": "or"
+    "or": "or",
+    "partners": "Partners"
 }

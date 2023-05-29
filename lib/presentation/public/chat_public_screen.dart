@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:priorli/auth_cubit.dart';
 import 'package:priorli/auth_state.dart';
 import 'package:priorli/core/utils/string_extension.dart';
@@ -109,7 +110,9 @@ class _SupportMessageDialogState extends State<SupportMessageDialog> {
       actions: [
         TextButton(
             onPressed: () {
-              Navigator.of(context).pop();
+              Navigator.of(context).canPop()
+                  ? Navigator.of(context).pop()
+                  : GoRouter.of(context).go('/');
             },
             child: Text(AppLocalizations.of(context)!.cancel)),
         OutlinedButton(
