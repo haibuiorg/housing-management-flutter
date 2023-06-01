@@ -14,6 +14,7 @@ class GetSupportMessages
     return messagingRepository.getSupportMessages(
       supportChannelId: params.supportChannelId,
       conversationId: params.conversationId,
+      isAdminChat: params.isAdminChat,
     );
   }
 }
@@ -21,12 +22,14 @@ class GetSupportMessages
 class GetSupportMessageParams extends Equatable {
   final String supportChannelId;
   final String conversationId;
+  final bool isAdminChat;
 
   const GetSupportMessageParams({
     required this.supportChannelId,
     required this.conversationId,
+    this.isAdminChat = false,
   });
 
   @override
-  List<Object?> get props => [supportChannelId, conversationId];
+  List<Object?> get props => [supportChannelId, conversationId, isAdminChat];
 }

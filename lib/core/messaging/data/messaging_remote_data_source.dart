@@ -6,7 +6,6 @@ import 'package:priorli/core/messaging/models/conversation_model.dart';
 
 import '../../base/exceptions.dart';
 import '../../utils/constants.dart';
-import '../entities/message.dart';
 import '../models/message_model.dart';
 
 class MessagingRemoteDataSource implements MessagingDataSource {
@@ -46,9 +45,10 @@ class MessagingRemoteDataSource implements MessagingDataSource {
   Stream<List<MessageModel>> getSupportMessages({
     required String supportChannelId,
     required String conversationId,
+    required bool isAdminChat,
   }) {
     return firestore
-        .collection(supportChannels)
+        .collection(isAdminChat ? userChannels : supportChannels)
         .doc(supportChannelId)
         .collection(conversations)
         .doc(conversationId)
@@ -242,13 +242,18 @@ class MessagingRemoteDataSource implements MessagingDataSource {
       {required String countryCode,
       required String languageCode,
       required bool startWithBot,
+      required bool isAdminChat,
       required String name}) async {
     try {
       final Map<String, dynamic> data = {
         "language_code": languageCode,
         "name": name,
         "country_code": countryCode,
-        "type": startWithBot ? messageTypeBotSupport : messageTypeSupport,
+        "type": isAdminChat
+            ? messageTypeAdminBotChat
+            : startWithBot
+                ? messageTypeBotSupport
+                : messageTypeSupport,
       };
       try {
         final result = await client.post('/start_conversation', data: data);
@@ -274,6 +279,29 @@ class MessagingRemoteDataSource implements MessagingDataSource {
       };
       final result = await client.put('/conversation/type', data: data);
       return ConversationModel.fromJson(result.data);
+    } catch (error) {
+      throw ServerException(error: error);
+    }
+  }
+
+  @override
+  Stream<List<ConversationModel>> getAdminBotConversationLists(
+      {required String userId}) {
+    Stream<List<ConversationModel>> query;
+    try {
+      query = firestore
+          .collection(userChannels)
+          .doc(userId)
+          .collection(conversations)
+          .orderBy(updatedOn, descending: true)
+          .snapshots()
+          .map((it) {
+        final newList =
+            it.docs.map((e) => ConversationModel.fromJson(e.data())).toList();
+
+        return newList;
+      });
+      return query;
     } catch (error) {
       throw ServerException(error: error);
     }

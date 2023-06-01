@@ -1,3 +1,7 @@
+import 'dart:async';
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:priorli/core/base/result.dart';
 import 'package:priorli/core/chatbot/add_generic_reference_doc.dart';
@@ -20,6 +24,8 @@ import '../../core/base/usecase.dart';
 import '../../core/chatbot/add_document_index.dart';
 import '../../core/contact_leads/entities/contact_lead.dart';
 import '../../core/housing/entities/housing_company.dart';
+import '../../core/messaging/entities/conversation.dart';
+import '../../core/messaging/usecases/get_admin_bot_conversation_lists.dart';
 import '../../core/subscription/usecases/get_available_subscription_plans.dart';
 
 class AdminCubit extends Cubit<AdminState> {
@@ -35,6 +41,8 @@ class AdminCubit extends Cubit<AdminState> {
   final AddGenericReferenceDoc _addGenericReferenceDoc;
   final AddDocumentIndex _addDocumentIndex;
   final GetDocumentIndexes _getDocumentIndexes;
+  final GetAdminBotConversationList _getAdminBotConversationList;
+  StreamSubscription? _conversationSubscription;
 
   AdminCubit(
       this._addDocumentIndex,
@@ -48,6 +56,7 @@ class AdminCubit extends Cubit<AdminState> {
       this._addPaymentProduct,
       this._addGenericReferenceDoc,
       this._removePaymentProduct,
+      this._getAdminBotConversationList,
       this._getDocumentIndexes)
       : super(const AdminState());
 
@@ -55,6 +64,7 @@ class AdminCubit extends Cubit<AdminState> {
     getInitCompanies();
     getInitContactList();
     getDocumentIndexes();
+    getAdminBotConversationList();
     if (countryCode != null) {
       selectCountry(countryCode);
     } else {
@@ -229,7 +239,7 @@ class AdminCubit extends Cubit<AdminState> {
             languageCode: 'fi',
             docType: docType));
     if (addGenericReferenceDocResult is ResultSuccess<List<StorageItem>>) {
-      print(addGenericReferenceDocResult.data);
+      debugPrint(addGenericReferenceDocResult.data.toString());
     }
   }
 
@@ -246,5 +256,23 @@ class AdminCubit extends Cubit<AdminState> {
     if (getDocumentIndexesResult is ResultSuccess<List<String>>) {
       emit(state.copyWith(documentIndexes: getDocumentIndexesResult.data));
     }
+  }
+
+  void getAdminBotConversationList() async {
+    _conversationSubscription?.cancel();
+    _conversationSubscription = _getAdminBotConversationList(
+            GetAdminBotConversationParams(
+                userId: FirebaseAuth.instance.currentUser?.uid ?? ''))
+        .listen(_messageListener);
+  }
+
+  _messageListener(List<Conversation> conversationList) {
+    emit(state.copyWith(adminBotConversationList: conversationList));
+  }
+
+  @override
+  Future<void> close() {
+    _conversationSubscription?.cancel();
+    return super.close();
   }
 }

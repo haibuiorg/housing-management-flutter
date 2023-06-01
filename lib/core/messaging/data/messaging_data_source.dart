@@ -11,6 +11,7 @@ abstract class MessagingDataSource {
   Stream<List<MessageModel>> getSupportMessages({
     required String supportChannelId,
     required String conversationId,
+    required bool isAdminChat,
   });
   Future<MessageModel> sendMessage(
       {required String channelId,
@@ -27,6 +28,7 @@ abstract class MessagingDataSource {
     required String countryCode,
     required String languageCode,
     required String name,
+    required bool isAdminChat,
     required bool startWithBot,
   });
   Future<ConversationModel> joinConversation({
@@ -55,5 +57,8 @@ abstract class MessagingDataSource {
   });
   Stream<List<ConversationModel>> getCompanyConversationLists({
     required String companyId,
+  });
+  Stream<List<ConversationModel>> getAdminBotConversationLists({
+    required String userId,
   });
 }

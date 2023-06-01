@@ -77,7 +77,7 @@ class _ConversationListScreenState extends State<ConversationListScreen> {
                 floatingActionButton: FloatingActionButton.extended(
                   onPressed: _showStartDialog,
                   icon: const Icon(Icons.message_rounded),
-                  label: Text('Help'),
+                  label: Text(AppLocalizations.of(context)?.help ?? 'Help'),
                 ),
                 body: Padding(
                   padding:

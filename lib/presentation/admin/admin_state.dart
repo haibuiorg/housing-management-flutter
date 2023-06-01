@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:priorli/core/contact_leads/entities/contact_lead.dart';
 import 'package:priorli/core/country/entities/country.dart';
 import 'package:priorli/core/housing/entities/housing_company.dart';
+import 'package:priorli/core/messaging/entities/conversation.dart';
 import 'package:priorli/core/subscription/entities/payment_product_item.dart';
 import 'package:priorli/core/subscription/entities/subscription_plan.dart';
 
@@ -12,6 +13,7 @@ class AdminState extends Equatable {
   final List<Country>? supportedCountries;
   final List<PaymentProductItem>? paymentProductItems;
   final List<String>? documentIndexes;
+  final List<Conversation>? adminBotConversationList;
   final String? selectedCountryCode;
   const AdminState({
     this.paymentProductItems,
@@ -21,6 +23,7 @@ class AdminState extends Equatable {
     this.supportedCountries,
     this.selectedCountryCode,
     this.documentIndexes,
+    this.adminBotConversationList,
   });
 
   AdminState copyWith(
@@ -30,8 +33,11 @@ class AdminState extends Equatable {
           List<Country>? supportedCountries,
           List<PaymentProductItem>? paymentProductItems,
           List<String>? documentIndexes,
+          List<Conversation>? adminBotConversationList,
           String? selectedCountryCode}) =>
       AdminState(
+          adminBotConversationList:
+              adminBotConversationList ?? this.adminBotConversationList,
           documentIndexes: documentIndexes ?? this.documentIndexes,
           selectedCountryCode: selectedCountryCode ?? this.selectedCountryCode,
           companyList: companyList ?? this.companyList,
@@ -45,6 +51,7 @@ class AdminState extends Equatable {
   List<Object?> get props => [
         companyList,
         subscriptionPlanList,
+        adminBotConversationList,
         contactLeadList,
         supportedCountries,
         selectedCountryCode,

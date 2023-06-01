@@ -19,6 +19,7 @@ class StartSupportConversation
         languageCode: params.languageCode,
         startWithBot: params.startWithBot,
         name: params.name,
+        isAdminChat: params.isAdminChat,
         userId: params.userId);
   }
 }
@@ -29,15 +30,17 @@ class StartSupportConversationParams extends Equatable {
   final String languageCode;
   final String name;
   final bool startWithBot;
+  final bool isAdminChat;
 
   const StartSupportConversationParams(
       {this.userId,
       required this.countryCode,
       required this.name,
+      this.isAdminChat = false,
       this.startWithBot = true,
       required this.languageCode});
 
   @override
   List<Object?> get props =>
-      [userId, name, languageCode, countryCode, startWithBot];
+      [userId, name, languageCode, countryCode, isAdminChat, startWithBot];
 }

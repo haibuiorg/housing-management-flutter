@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:priorli/presentation/admin/admin_cubit.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:priorli/presentation/admin/admin_state.dart';
+import 'package:priorli/presentation/message/message_screen.dart';
+import 'package:priorli/presentation/public/chat_public_screen.dart';
 
 import '../file_selector/file_selector.dart';
+import '../shared/conversation_item.dart';
 import '../shared/custom_form_field.dart';
 
 class GenericChatbotManagement extends StatelessWidget {
@@ -14,6 +18,41 @@ class GenericChatbotManagement extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          showModalBottomSheet(
+              isScrollControlled: true,
+              useSafeArea: true,
+              context: context,
+              builder: (builder) {
+                return FractionallySizedBox(
+                    heightFactor: 0.95,
+                    child: Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8)),
+                        child: Column(
+                          children: [
+                            Center(
+                                child: Container(
+                              margin: const EdgeInsets.all(12),
+                              width: 40,
+                              height: 4,
+                              decoration: BoxDecoration(
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
+                                  borderRadius: BorderRadius.circular(8)),
+                            )),
+                            const Expanded(
+                                child: ChatPublicScreen(
+                              isAdminChat: true,
+                            )),
+                          ],
+                        )));
+              });
+        },
+        label: const Text("Start conversation with AI"),
+        icon: const Icon(Icons.android_rounded),
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -31,10 +70,38 @@ class GenericChatbotManagement extends StatelessWidget {
                 },
                 child: const Text("Add index")),
             const DocumentIndexList(),
+            const Divider(),
+            const AdminBotConversation(),
           ],
         ),
       ),
     );
+  }
+}
+
+class AdminBotConversation extends StatelessWidget {
+  const AdminBotConversation({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<AdminCubit, AdminState>(builder: (context, state) {
+      return ListView.builder(
+          shrinkWrap: true,
+          itemCount: state.adminBotConversationList?.length ?? 0,
+          itemBuilder: (context, index) {
+            final conversation = state.adminBotConversationList?[index];
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: conversation != null
+                  ? ConversationItem(
+                      onPressed: () => GoRouter.of(context).push(
+                          '$messagePath/${conversation.type}/${conversation.channelId}/${conversation.id}'),
+                      conversation: conversation,
+                    )
+                  : const SizedBox.shrink(),
+            );
+          });
+    });
   }
 }
 

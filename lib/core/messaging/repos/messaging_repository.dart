@@ -10,6 +10,7 @@ abstract class MessagingRepository {
   Stream<List<Message>> getSupportMessages({
     required String supportChannelId,
     required String conversationId,
+    required bool isAdminChat,
   });
   Future<Result<Message>> sendMessage(
       {required String channelId,
@@ -19,6 +20,9 @@ abstract class MessagingRepository {
       List<String>? storageItems});
   Stream<List<Conversation>> getConversationLists({
     required bool isFromAdmin,
+    required String userId,
+  });
+  Stream<List<Conversation>> getAdminBotConversationLists({
     required String userId,
   });
   Stream<List<Conversation>> getCompanyConversationLists({
@@ -31,13 +35,13 @@ abstract class MessagingRepository {
     required String channelId,
     required String name,
   });
-  Future<Result<Conversation>> startSupportConversation({
-    String? userId,
-    required String countryCode,
-    required String languageCode,
-    required bool startWithBot,
-    required String name,
-  });
+  Future<Result<Conversation>> startSupportConversation(
+      {String? userId,
+      required String countryCode,
+      required String languageCode,
+      required bool startWithBot,
+      required String name,
+      required bool isAdminChat});
   Future<Result<Conversation>> joinConversation({
     required String messageType,
     required String userId,

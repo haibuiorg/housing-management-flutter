@@ -23,11 +23,13 @@ class MessagingRepositoryImpl implements MessagingRepository {
   Stream<List<Message>> getSupportMessages({
     required String supportChannelId,
     required String conversationId,
+    required bool isAdminChat,
   }) {
     return messagingDataSource
         .getSupportMessages(
           conversationId: conversationId,
           supportChannelId: supportChannelId,
+          isAdminChat: isAdminChat,
         )
         .map((event) => event.map((e) => Message.modelToEntity(e)).toList());
   }
@@ -155,6 +157,7 @@ class MessagingRepositoryImpl implements MessagingRepository {
       String? userId,
       required bool startWithBot,
       required String languageCode,
+      required bool isAdminChat,
       required String name}) async {
     try {
       final conversationModel =
@@ -162,6 +165,7 @@ class MessagingRepositoryImpl implements MessagingRepository {
               languageCode: languageCode,
               countryCode: countryCode,
               name: name,
+              isAdminChat: isAdminChat,
               startWithBot: startWithBot);
       return ResultSuccess(Conversation.modelToEntity(
           conversationModel: conversationModel, userId: userId));
@@ -188,5 +192,18 @@ class MessagingRepositoryImpl implements MessagingRepository {
     } on ServerException {
       return ResultFailure(ServerFailure());
     }
+  }
+
+  @override
+  Stream<List<Conversation>> getAdminBotConversationLists(
+      {required String userId}) {
+    return messagingDataSource
+        .getAdminBotConversationLists(
+          userId: userId,
+        )
+        .map((event) => event
+            .map((e) => Conversation.modelToEntity(
+                conversationModel: e, userId: userId))
+            .toList());
   }
 }

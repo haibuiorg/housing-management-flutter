@@ -47,11 +47,13 @@ class ChatPublicCubit extends Cubit<ChatPublicState> {
     required String conversationName,
     required String countryCode,
     required String languageCode,
+    bool isAdminChat = false,
   }) async {
     final conversationResult = await _startSupportConversation(
         StartSupportConversationParams(
             countryCode: countryCode,
             name: conversationName,
+            isAdminChat: isAdminChat,
             languageCode: languageCode));
     if (conversationResult is ResultSuccess<Conversation>) {
       emit(state.copyWith(conversation: conversationResult.data));

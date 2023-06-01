@@ -219,6 +219,7 @@ import 'core/housing/usecases/update_housing_company_info.dart';
 import 'core/invoice/usecases/add_company_payment_product_item.dart';
 import 'core/invoice/usecases/get_invoice_groups.dart';
 import 'core/messaging/data/messaging_data_source.dart';
+import 'core/messaging/usecases/get_admin_bot_conversation_lists.dart';
 import 'core/payment/usecases/add_bank_account.dart';
 import 'core/payment/usecases/setup_connect_payment_account.dart';
 import 'core/settings/data/setting_data_source.dart';
@@ -420,6 +421,7 @@ Future<void> init() async {
       serviceLocator(),
       serviceLocator(),
       serviceLocator(),
+      serviceLocator(),
       serviceLocator()));
   serviceLocator.registerFactory(() => CompanySubscriptionCubit(
       serviceLocator(),
@@ -607,6 +609,8 @@ Future<void> init() async {
       () => GetSupportMessages(messagingRepository: serviceLocator()));
   serviceLocator.registerLazySingleton<GetConversationList>(
       () => GetConversationList(messagingRepository: serviceLocator()));
+  serviceLocator.registerLazySingleton<GetAdminBotConversationList>(
+      () => GetAdminBotConversationList(messagingRepository: serviceLocator()));
   serviceLocator.registerLazySingleton<GetCompanyConversationList>(
       () => GetCompanyConversationList(messagingRepository: serviceLocator()));
   serviceLocator.registerLazySingleton<StartConversation>(

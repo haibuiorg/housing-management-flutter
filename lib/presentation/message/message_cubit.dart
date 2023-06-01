@@ -72,9 +72,12 @@ class MessageCubit extends Cubit<MessageState> {
               conversationId: conversationId, companyId: channelId))
           .listen(_messageListener);
     } else if (messageType == messageTypeSupport ||
-        messageType == messageTypeBotSupport) {
+        messageType == messageTypeBotSupport ||
+        messageType == messageTypeAdminBotChat) {
       _myMessageSubscription = _getSupportMessages(GetSupportMessageParams(
-              supportChannelId: channelId, conversationId: conversationId))
+              supportChannelId: channelId,
+              conversationId: conversationId,
+              isAdminChat: messageType == messageTypeAdminBotChat))
           .listen(_messageListener);
     }
     emit(

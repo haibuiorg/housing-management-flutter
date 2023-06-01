@@ -19,7 +19,8 @@ import '../shared/terms_policies.dart';
 const publicChatScreenPath = '/housing-gpt';
 
 class ChatPublicScreen extends StatefulWidget {
-  const ChatPublicScreen({super.key});
+  const ChatPublicScreen({super.key, this.isAdminChat = false});
+  final bool isAdminChat;
 
   @override
   State<ChatPublicScreen> createState() => _ChatPublicScreenState();
@@ -85,7 +86,9 @@ class _ChatPublicScreenState extends State<ChatPublicScreen> {
                 )
               : Scaffold(
                   body: authState.isLoggedIn
-                      ? const SupportMessageDialog()
+                      ? SupportMessageDialog(
+                          isAdminChat: widget.isAdminChat,
+                        )
                       : EnterEmailToChatDialog(onSubmitData: ({String? email}) {
                           _cubit
                               .startChatbotConversation(
@@ -109,7 +112,8 @@ class _ChatPublicScreenState extends State<ChatPublicScreen> {
 }
 
 class SupportMessageDialog extends StatefulWidget {
-  const SupportMessageDialog({super.key});
+  const SupportMessageDialog({super.key, this.isAdminChat = false});
+  final bool isAdminChat;
 
   @override
   State<SupportMessageDialog> createState() => _SupportMessageDialogState();
@@ -143,6 +147,7 @@ class _SupportMessageDialogState extends State<SupportMessageDialog> {
         OutlinedButton(
           onPressed: () {
             BlocProvider.of<ChatPublicCubit>(context).startSupportConversation(
+                isAdminChat: widget.isAdminChat,
                 conversationName: _textEditingController.text,
                 languageCode:
                     context.read<SettingCubit>().state.languageCode ?? 'fi',
