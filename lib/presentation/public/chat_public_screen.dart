@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:priorli/auth_cubit.dart';
 import 'package:priorli/auth_state.dart';
+import 'package:priorli/core/utils/constants.dart';
 import 'package:priorli/core/utils/string_extension.dart';
 import 'package:priorli/presentation/home/home_screen.dart';
 import 'package:priorli/presentation/public/chat_public_cubit.dart';
@@ -14,6 +15,8 @@ import 'package:priorli/presentation/shared/custom_form_field.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:priorli/service_locator.dart';
 import 'package:priorli/setting_cubit.dart';
+import 'package:url_launcher/url_launcher.dart';
+import '../../core/utils/color_extension.dart';
 import '../message/message_screen.dart';
 import '../shared/terms_policies.dart';
 
@@ -93,21 +96,44 @@ class _ChatPublicScreenState extends State<ChatPublicScreen> {
                       ? SupportMessageDialog(
                           isAdminChat: widget.isAdminChat,
                         )
-                      : EnterEmailToChatDialog(onSubmitData: ({String? email}) {
-                          _cubit
-                              .startChatbotConversation(
-                                email: email,
-                                countryCode: 'fi',
-                                conversationName:
-                                    AppLocalizations.of(context)?.housing_gpt,
-                                languageCode: context
-                                        .read<SettingCubit>()
-                                        .state
-                                        .languageCode ??
-                                    '',
-                              )
-                              .then((value) => {});
-                        }),
+                      : Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                launchUrl(Uri.parse(appWebsite));
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.all(8.0),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(16),
+                                  color:
+                                      HexColor.fromHex(appBackgroundColorDark),
+                                ),
+                                height: 48,
+                                child: Image.asset(
+                                    'assets/images/priorli_horizontal.png'),
+                              ),
+                            ),
+                            EnterEmailToChatDialog(
+                                onSubmitData: ({String? email}) {
+                              _cubit
+                                  .startChatbotConversation(
+                                    email: email,
+                                    countryCode: 'fi',
+                                    conversationName:
+                                        AppLocalizations.of(context)
+                                            ?.housing_gpt,
+                                    languageCode: context
+                                            .read<SettingCubit>()
+                                            .state
+                                            .languageCode ??
+                                        '',
+                                  )
+                                  .then((value) => {});
+                            }),
+                          ],
+                        ),
                 );
         }),
       );

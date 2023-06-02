@@ -1,9 +1,9 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:priorli/presentation/public/contact_us_public_cubit.dart';
 import 'package:priorli/service_locator.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 
 import '../../core/utils/color_extension.dart';
 import '../../core/utils/constants.dart';
@@ -24,6 +24,10 @@ class _ContactUsPublicScreenState extends State<ContactUsPublicScreen> {
   void initState() {
     super.initState();
     _cubit = serviceLocator();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      FirebaseAnalytics.instance
+          .logScreenView(screenName: contactUsPublicScreenRoute);
+    });
   }
 
   @override
@@ -41,7 +45,7 @@ class _ContactUsPublicScreenState extends State<ContactUsPublicScreen> {
           leadingWidth: 300,
           toolbarHeight: 60,
           leading: InkWell(
-            onTap: () => launchUrl(Uri.parse('https://priorli.com/')),
+            onTap: () => launchUrl(Uri.parse(appWebsite)),
             child: Image.asset(
               'assets/images/priorli_horizontal.png',
               height: 48,
