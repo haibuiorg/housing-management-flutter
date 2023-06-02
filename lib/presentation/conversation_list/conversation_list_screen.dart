@@ -84,7 +84,8 @@ class _ConversationListScreenState extends State<ConversationListScreen> {
                       EdgeInsets.only(top: MediaQuery.of(context).padding.top),
                   child: state.conversationList?.isEmpty == true &&
                           state.supportConversationList?.isEmpty == true &&
-                          state.faultConversationList?.isEmpty == true
+                          state.faultConversationList?.isEmpty == true &&
+                          state.chatbotConverstionList?.isEmpty == true
                       ? const Center(
                           child: SizedBox(
                             width: 300,
@@ -109,7 +110,8 @@ class MessageListWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ConversationListCubit, ConversationListState>(
-      builder: (context, state) => CustomScrollView(
+        builder: (context, state) {
+      return CustomScrollView(
         clipBehavior: Clip.none,
         slivers: [
           if (state.conversationList?.isNotEmpty == true)
@@ -202,7 +204,7 @@ class MessageListWidget extends StatelessWidget {
             childCount: state.supportConversationList?.length ?? 0,
           )),
         ],
-      ),
-    );
+      );
+    });
   }
 }

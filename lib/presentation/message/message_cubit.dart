@@ -50,20 +50,18 @@ class MessageCubit extends Cubit<MessageState> {
       String? appLanguage}) async {
     emit(state.copyWith(translatedLanguageCode: appLanguage, isLoading: true));
     final getUserInfoResult = await _getUserInfo(NoParams());
-    MessageState pendingState =
-        state.copyWith(messageType: messageType, isLoading: false);
+    emit(state.copyWith(messageType: messageType, isLoading: false));
     if (getUserInfoResult is ResultSuccess<User>) {
-      pendingState = pendingState.copyWith(user: getUserInfoResult.data);
+      emit(state.copyWith(user: getUserInfoResult.data));
     }
     final conversationResult = await _getConversationDetail(
         GetConversationDetailParams(
-            userId: pendingState.user?.userId ?? '',
+            userId: state.user?.userId ?? '',
             messageType: messageType,
             conversationId: conversationId,
             channelId: channelId));
     if (conversationResult is ResultSuccess<Conversation>) {
-      pendingState =
-          pendingState.copyWith(conversation: conversationResult.data);
+      emit(state.copyWith(conversation: conversationResult.data));
     }
     _myMessageSubscription?.cancel();
     if (messageType == messageTypeCommunity ||
@@ -80,9 +78,6 @@ class MessageCubit extends Cubit<MessageState> {
               isAdminChat: messageType == messageTypeAdminBotChat))
           .listen(_messageListener);
     }
-    emit(
-      pendingState,
-    );
     await setConversationSeen();
   }
 
@@ -107,6 +102,11 @@ class MessageCubit extends Cubit<MessageState> {
 
   _messageListener(List<Message> upcomingMessage) async {
     final List<Message> currentList = List.from(state.messageList ?? []);
+    if (currentList.isEmpty) {
+      currentList.addAll(upcomingMessage);
+      emit(state.copyWith(messageList: currentList));
+      return;
+    }
     currentList.removeWhere(
         (element) => upcomingMessage.map((e) => e.id).contains(element.id));
     final List<Message> newList = [...currentList, ...upcomingMessage];
