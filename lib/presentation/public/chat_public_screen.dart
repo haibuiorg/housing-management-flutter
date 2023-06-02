@@ -58,7 +58,7 @@ class _ChatPublicScreenState extends State<ChatPublicScreen> {
               ? Scaffold(
                   appBar: AppBar(
                     primary: true,
-                    automaticallyImplyLeading: true,
+                    automaticallyImplyLeading: false,
                     centerTitle: true,
                     title: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -185,17 +185,20 @@ class _EnterEmailToChatDialogState extends State<EnterEmailToChatDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      icon: const AppPreferences(
+      iconPadding: const EdgeInsets.all(0),
+      icon: AppPreferences(
         mini: true,
-        verticalMini: false,
+        verticalMini: MediaQuery.of(context).size.height >
+            MediaQuery.of(context).size.width,
       ),
       title: Text(AppLocalizations.of(context)!.enter_email_to_chat_title),
       content: SingleChildScrollView(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: CustomFormField(
                 enabled: !anonymous,
                 hintText: AppLocalizations.of(context)!.email,

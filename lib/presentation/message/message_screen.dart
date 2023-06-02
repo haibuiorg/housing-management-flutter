@@ -38,6 +38,13 @@ class _MessageScreenState extends State<MessageScreen> {
   void initState() {
     _cubit = serviceLocator<MessageCubit>();
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      _cubit.init(
+          channelId: widget.channelId,
+          conversationId: widget.conversationId,
+          messageType: widget.messageType,
+          appLanguage: AppLocalizations.of(context)!.localeName);
+    });
   }
 
   @override
@@ -76,12 +83,7 @@ class _MessageScreenState extends State<MessageScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<MessageCubit>(
-      create: (_) => _cubit
-        ..init(
-            channelId: widget.channelId,
-            conversationId: widget.conversationId,
-            messageType: widget.messageType,
-            appLanguage: AppLocalizations.of(context)!.localeName),
+      create: (_) => _cubit,
       child:
           BlocConsumer<MessageCubit, MessageState>(listener: (context, state) {
         if (state.messageList?.isNotEmpty == true) {

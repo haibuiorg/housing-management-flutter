@@ -63,7 +63,8 @@ class TermsAndPolicies extends StatelessWidget {
               onChanged: (onChanged) {
                 onCheckChanged(onChanged!);
               },
-              title: Text(AppLocalizations.of(context)!.accept_terms_policy)),
+              title: Text(AppLocalizations.of(context)!.accept_terms_policy,
+                  style: Theme.of(context).primaryTextTheme.bodySmall)),
         ],
       );
     });

@@ -1,3 +1,4 @@
+import 'package:flag/flag.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:priorli/presentation/shared/setting_button.dart';
@@ -43,13 +44,30 @@ class AppPreferences extends StatelessWidget {
                                 BlocProvider.of<SettingCubit>(context)
                                     .switchLanguage(value);
                               },
+                              isDense: true,
                               items: languageList!
                                   .map<DropdownMenuItem<String>>(
                                       (String value) {
                                 return DropdownMenuItem<String>(
                                   value: value,
-                                  child: Text(AppLocalizations.of(context)!
-                                      .language_code(value)),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Flag.fromString(
+                                        value.toLowerCase(),
+                                        height: 24,
+                                        width: 24,
+                                        replacement:
+                                            const Icon(Icons.language_rounded),
+                                        flagSize: FlagSize.size_1x1,
+                                        borderRadius: 4,
+                                      ),
+                                      Text(AppLocalizations.of(context)
+                                              ?.language_code(value) ??
+                                          '')
+                                    ],
+                                  ),
                                 );
                               }).toList(),
                             ),
@@ -113,8 +131,24 @@ class AppPreferences extends StatelessWidget {
                                       (String value) {
                                 return DropdownMenuItem<String>(
                                   value: value,
-                                  child: Text(AppLocalizations.of(context)!
-                                      .language_code(value)),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Flag.fromString(
+                                        value.toLowerCase(),
+                                        height: 24,
+                                        width: 24,
+                                        replacement:
+                                            const Icon(Icons.language_rounded),
+                                        flagSize: FlagSize.size_1x1,
+                                        borderRadius: 4,
+                                      ),
+                                      Text(AppLocalizations.of(context)
+                                              ?.language_code(value) ??
+                                          '')
+                                    ],
+                                  ),
                                 );
                               }).toList(),
                             ),
@@ -148,8 +182,22 @@ class AppPreferences extends StatelessWidget {
                           .map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
-                          child: Text(AppLocalizations.of(context)!
-                              .language_code(value)),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Flag.fromString(
+                                value.toLowerCase(),
+                                height: 24,
+                                width: 24,
+                                replacement: const Icon(Icons.language_rounded),
+                                flagSize: FlagSize.size_1x1,
+                                borderRadius: 4,
+                              ),
+                              Text(AppLocalizations.of(context)
+                                      ?.language_code(value) ??
+                                  '')
+                            ],
+                          ),
                         );
                       }).toList(),
                     ),
