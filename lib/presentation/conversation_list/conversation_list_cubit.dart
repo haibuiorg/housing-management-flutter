@@ -33,7 +33,6 @@ class ConversationListCubit extends Cubit<ConversationListState> {
   }
 
   _messageListener(List<Conversation> conversationList) {
-    print('go here $conversationList');
     emit(state.copyWith(
       conversationList: conversationList
           .where((element) => element.type == messageTypeCommunity)

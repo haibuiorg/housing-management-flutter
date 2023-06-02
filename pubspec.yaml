@@ -103,6 +103,7 @@ dependencies:
   flutter_snake_navigationbar: ^0.6.1
   js: ^0.6.6
   webview_flutter_web: ^0.2.1
+  firebase_analytics: ^10.4.2
 dependency_overrides:
   intl: ^0.18.0
 

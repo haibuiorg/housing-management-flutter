@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:priorli/core/base/result.dart';
 import 'package:priorli/core/chatbot/chatbot_conversation.dart';
 import 'package:priorli/presentation/public/chat_public_state.dart';
@@ -33,7 +34,19 @@ class ChatPublicCubit extends Cubit<ChatPublicState> {
       firstName: firstName,
       conversationName: conversationName,
     ));
+    FirebaseAnalytics.instance
+        .logEvent(name: 'start_chatbot_conversation', parameters: {
+      'email': email,
+      'phone': phone,
+      'lastName': lastName,
+      'firstName': firstName,
+      'conversationName': conversationName,
+      'countryCode': countryCode,
+      'languageCode': languageCode,
+    });
+
     if (startChatbotConversationResult is ResultSuccess<ChatbotConversation>) {
+      FirebaseAnalytics.instance.logSignUp(signUpMethod: 'email_chatbot');
       emit(state.copyWith(
         conversation: startChatbotConversationResult.data.conversation,
         token: startChatbotConversationResult.data.token,
