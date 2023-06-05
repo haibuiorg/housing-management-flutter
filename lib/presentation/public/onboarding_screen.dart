@@ -6,6 +6,7 @@ import 'package:priorli/core/utils/color_extension.dart';
 import 'package:priorli/core/utils/constants.dart';
 import 'package:priorli/core/utils/string_extension.dart';
 import 'package:priorli/presentation/public/chat_public_cubit.dart';
+import 'package:priorli/presentation/public/register_screen.dart';
 import 'package:priorli/presentation/shared/app_lottie_animation.dart';
 import 'package:priorli/presentation/shared/app_preferences.dart';
 import 'package:responsive_framework/responsive_framework.dart';
@@ -17,9 +18,16 @@ import '../../setting_cubit.dart';
 import '../shared/custom_form_field.dart';
 import '../shared/terms_policies.dart';
 
+const onboardingScreenPath = '/onboarding';
+
 class OnboardingScreen extends StatefulWidget {
-  const OnboardingScreen({super.key, this.onDone});
+  const OnboardingScreen({
+    super.key,
+    this.onDone,
+    this.isSignUpFlow = false,
+  });
   final Function()? onDone;
+  final bool isSignUpFlow;
 
   @override
   State<OnboardingScreen> createState() => _OnboardingScreenState();
@@ -30,130 +38,41 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(
-          horizontal: ResponsiveValue(
-                context,
-                defaultValue: 16.0,
-                valueWhen: [
-                  const Condition.smallerThan(
-                    name: TABLET,
-                    value: 16.0,
-                  ),
-                  Condition.largerThan(
-                    name: TABLET,
-                    value: MediaQuery.of(context).size.width * 0.3,
-                  )
-                ],
-              ).value ??
-              16.0),
-      child: IntroductionScreen(
-        onChange: (value) {
-          FirebaseAnalytics.instance.logEvent(
-              name: 'nameOnboardingScreen',
-              parameters: {'screen': value.toString()});
-        },
-        key: _introKey,
-        globalHeader: const AppPreferences(
-          mini: true,
-        ),
-        dotsDecorator: DotsDecorator(
-            color: Colors.grey, activeColor: HexColor.fromHex(appPrimaryColor)),
-        pages: [
-          PageViewModel(
-            decoration: PageDecoration(
-                imagePadding: EdgeInsets.only(
-                    top: ResponsiveValue(
-                          context,
-                          defaultValue: 150.0,
-                          valueWhen: [
-                            Condition.smallerThan(
-                              name: TABLET,
-                              value: MediaQuery.of(context).size.height * 0.2,
-                            ),
-                            const Condition.largerThan(
-                                name: TABLET, value: 150.0)
-                          ],
-                        ).value ??
-                        150.0)),
-            title: AppLocalizations.of(context)!.welcome_to_priorli,
-            image: GestureDetector(
-              onTap: () {
-                launchUrl(Uri.parse(appWebsite));
-              },
-              child: Container(
-                padding: const EdgeInsets.all(8.0),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  color: HexColor.fromHex(appBackgroundColorDark),
-                ),
-                height: 48,
-                child: Image.asset('assets/images/priorli_horizontal.png'),
-              ),
-            ),
-            bodyWidget: Column(
-              children: [
-                Text(
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.bodySmall,
-                    ''),
-              ],
-            ),
+    return Scaffold(
+      body: Padding(
+        padding: EdgeInsets.symmetric(
+            horizontal: ResponsiveValue(
+                  context,
+                  defaultValue: 16.0,
+                  valueWhen: [
+                    const Condition.smallerThan(
+                      name: TABLET,
+                      value: 16.0,
+                    ),
+                    Condition.largerThan(
+                      name: TABLET,
+                      value: MediaQuery.of(context).size.width * 0.3,
+                    )
+                  ],
+                ).value ??
+                16.0),
+        child: IntroductionScreen(
+          onChange: (value) {
+            FirebaseAnalytics.instance.logEvent(
+                name: 'nameOnboardingScreen',
+                parameters: {'screen': value.toString()});
+          },
+          key: _introKey,
+          globalHeader: const AppPreferences(
+            mini: true,
           ),
-          PageViewModel(
-            decoration: PageDecoration(
-                imagePadding: EdgeInsets.only(
-                    top: ResponsiveValue(
-                          context,
-                          defaultValue: 150.0,
-                          valueWhen: [
-                            Condition.smallerThan(
-                              name: TABLET,
-                              value: MediaQuery.of(context).size.height * 0.2,
-                            ),
-                            const Condition.largerThan(
-                                name: TABLET, value: 150.0)
-                          ],
-                        ).value ??
-                        150.0)),
-            title: '',
-            image:
-                const AppLottieAnimation(loadingResource: 'computer-apartment'),
-            bodyWidget: Column(
-              children: [
-                Text(
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.bodySmall,
-                    AppLocalizations.of(context)!.onboarding_text_2),
-              ],
-            ),
-          ),
-          PageViewModel(
-            decoration: PageDecoration(
-                imagePadding: EdgeInsets.only(
-                    top: ResponsiveValue(
-                          context,
-                          defaultValue: 150.0,
-                          valueWhen: [
-                            Condition.smallerThan(
-                              name: TABLET,
-                              value: MediaQuery.of(context).size.height * 0.2,
-                            ),
-                            const Condition.largerThan(
-                                name: TABLET, value: 150.0)
-                          ],
-                        ).value ??
-                        150.0)),
-            title: AppLocalizations.of(context)!.onboarding_title_3,
-            image: const AppLottieAnimation(loadingResource: 'ai-chat'),
-            bodyWidget: Text(
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodySmall,
-                AppLocalizations.of(context)!.onboarding_text_3),
-          ),
-          PageViewModel(
+          dotsDecorator: DotsDecorator(
+              color: Colors.grey,
+              activeColor: HexColor.fromHex(appPrimaryColor)),
+          pages: [
+            PageViewModel(
               decoration: PageDecoration(
-                  titlePadding: EdgeInsets.only(
+                  imagePadding: EdgeInsets.only(
                       top: ResponsiveValue(
                             context,
                             defaultValue: 150.0,
@@ -167,13 +86,131 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             ],
                           ).value ??
                           150.0)),
-              title: AppLocalizations.of(context)!.enter_email_to_chat_title,
-              bodyWidget: const FinalStep())
-        ],
-        showNextButton: true,
-        showDoneButton: false,
-        next: Text(AppLocalizations.of(context)!.next),
-        onSkip: widget.onDone,
+              title: AppLocalizations.of(context)!.welcome_to_priorli,
+              image: GestureDetector(
+                onTap: () {
+                  launchUrl(Uri.parse(appWebsite));
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(8.0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    color: HexColor.fromHex(appBackgroundColorDark),
+                  ),
+                  height: 48,
+                  child: Image.asset('assets/images/priorli_horizontal.png'),
+                ),
+              ),
+              bodyWidget: Column(
+                children: [
+                  Text(
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.bodySmall,
+                      ''),
+                ],
+              ),
+            ),
+            PageViewModel(
+              decoration: PageDecoration(
+                  imagePadding: EdgeInsets.only(
+                      top: ResponsiveValue(
+                            context,
+                            defaultValue: 150.0,
+                            valueWhen: [
+                              Condition.smallerThan(
+                                name: TABLET,
+                                value: MediaQuery.of(context).size.height * 0.2,
+                              ),
+                              const Condition.largerThan(
+                                  name: TABLET, value: 150.0)
+                            ],
+                          ).value ??
+                          150.0)),
+              title: '',
+              image: const AppLottieAnimation(
+                  loadingResource: 'computer-apartment'),
+              bodyWidget: Column(
+                children: [
+                  Text(
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.bodySmall,
+                      AppLocalizations.of(context)!.onboarding_text_2),
+                ],
+              ),
+            ),
+            if (widget.isSignUpFlow) ...[
+              PageViewModel(
+                decoration: PageDecoration(
+                    titlePadding: EdgeInsets.only(
+                        top: ResponsiveValue(
+                              context,
+                              defaultValue: 150.0,
+                              valueWhen: [
+                                Condition.smallerThan(
+                                  name: TABLET,
+                                  value:
+                                      MediaQuery.of(context).size.height * 0.05,
+                                ),
+                                const Condition.largerThan(
+                                    name: TABLET, value: 150.0)
+                              ],
+                            ).value ??
+                            150.0)),
+                title: '',
+                bodyWidget: const RegisterScreen(),
+              )
+            ] else ...[
+              PageViewModel(
+                decoration: PageDecoration(
+                    imagePadding: EdgeInsets.only(
+                        top: ResponsiveValue(
+                              context,
+                              defaultValue: 150.0,
+                              valueWhen: [
+                                Condition.smallerThan(
+                                  name: TABLET,
+                                  value:
+                                      MediaQuery.of(context).size.height * 0.2,
+                                ),
+                                const Condition.largerThan(
+                                    name: TABLET, value: 150.0)
+                              ],
+                            ).value ??
+                            150.0)),
+                title: AppLocalizations.of(context)!.onboarding_title_3,
+                image: const AppLottieAnimation(loadingResource: 'ai-chat'),
+                bodyWidget: Text(
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.bodySmall,
+                    AppLocalizations.of(context)!.onboarding_text_3),
+              ),
+              PageViewModel(
+                  decoration: PageDecoration(
+                      titlePadding: EdgeInsets.only(
+                          top: ResponsiveValue(
+                                context,
+                                defaultValue: 150.0,
+                                valueWhen: [
+                                  Condition.smallerThan(
+                                    name: TABLET,
+                                    value: MediaQuery.of(context).size.height *
+                                        0.2,
+                                  ),
+                                  const Condition.largerThan(
+                                      name: TABLET, value: 150.0)
+                                ],
+                              ).value ??
+                              150.0)),
+                  title:
+                      AppLocalizations.of(context)!.enter_email_to_chat_title,
+                  bodyWidget: const FinalStep())
+            ]
+          ],
+          showNextButton: true,
+          showDoneButton: false,
+          next: Text(AppLocalizations.of(context)!.next),
+          onSkip: widget.onDone,
+        ),
       ),
     );
   }

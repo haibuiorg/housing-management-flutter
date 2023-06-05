@@ -31,6 +31,7 @@ import 'package:priorli/presentation/notification_center/notification_center_scr
 import 'package:priorli/presentation/polls/poll_screen.dart';
 import 'package:priorli/presentation/public/contact_us_public_screen.dart';
 import 'package:priorli/presentation/public/chat_public_screen.dart';
+import 'package:priorli/presentation/public/onboarding_screen.dart';
 import 'package:priorli/presentation/send_invitation/invite_tenant_screen.dart';
 import 'package:priorli/presentation/profile/profile_screen.dart';
 import 'package:priorli/presentation/water_consumption_management/water_consumption_management_screen.dart';
@@ -40,7 +41,7 @@ import 'presentation/housing_company_payment/housing_company_payment_screen.dart
 import 'presentation/join_apartment/join_apartment_screen.dart';
 import 'presentation/message/message_screen.dart';
 import 'presentation/payment_success/payment_success_screen.dart';
-import 'presentation/register/register_screen.dart';
+import 'presentation/public/register_screen.dart';
 import 'presentation/shared/dialog_page.dart';
 
 const homePathName = 'Home';
@@ -377,9 +378,11 @@ GoRouter createAppRouter() {
         },
       ),
       GoRoute(
-        path: registerPath,
+        path: onboardingScreenPath,
         builder: (BuildContext context, GoRouterState state) {
-          return const RegisterScreen();
+          return const OnboardingScreen(
+            isSignUpFlow: true,
+          );
         },
       ),
       GoRoute(

@@ -7,6 +7,7 @@ import 'package:priorli/presentation/code_register/code_register_screen.dart';
 import 'package:priorli/presentation/forgot_password/forgot_password_screen.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:priorli/presentation/public/onboarding_screen.dart';
 import 'package:priorli/presentation/shared/app_lottie_animation.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
@@ -158,7 +159,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           style: OutlinedButton.styleFrom(
                               minimumSize: const Size.fromHeight(40)),
                           onPressed: () {
-                            GoRouter.of(context).push(registerPath);
+                            GoRouter.of(context).push(onboardingScreenPath);
                           },
                           child: Text(AppLocalizations.of(context)!.register)),*/
                       TextButton(

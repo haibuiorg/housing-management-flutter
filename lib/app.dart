@@ -10,7 +10,7 @@ import 'package:priorli/core/utils/constants.dart';
 import 'package:priorli/presentation/code_register/code_register_screen.dart';
 import 'package:priorli/presentation/join_apartment/join_apartment_screen.dart';
 import 'package:priorli/presentation/public/chat_public_screen.dart';
-import 'package:priorli/presentation/register/register_screen.dart';
+import 'package:priorli/presentation/public/register_screen.dart';
 import 'package:priorli/setting_cubit.dart';
 import 'package:priorli/setting_state.dart';
 import 'package:priorli/auth_state.dart';
@@ -27,6 +27,7 @@ import 'core/utils/os_utils.dart';
 import 'notification_controller.dart';
 import 'presentation/home/home_screen.dart';
 import 'presentation/public/contact_us_public_screen.dart';
+import 'presentation/public/onboarding_screen.dart';
 import 'presentation/shared/no_transition_builder.dart';
 import 'service_locator.dart';
 
@@ -214,7 +215,7 @@ class _AppState extends State<App> {
                       final currentLocation = appRouter.location;
                       if (!state.isLoggedIn) {
                         if (currentLocation == loginPath ||
-                            currentLocation == registerPath ||
+                            currentLocation == onboardingScreenPath ||
                             currentLocation == contactUsPublicScreenRoute ||
                             currentLocation == publicChatScreenPath ||
                             currentLocation.contains(codeRegisterPath)) {
@@ -225,11 +226,11 @@ class _AppState extends State<App> {
                             widget.initialLink?.link != null) {
                           appRouter.push(_getAppScreenPathFromAppLinkPath(
                                   widget.initialLink?.link.path) ??
-                              registerPath);
+                              onboardingScreenPath);
                         }
                       } else {
                         if (currentLocation == loginPath ||
-                            currentLocation == registerPath ||
+                            currentLocation == onboardingScreenPath ||
                             currentLocation.contains(codeRegisterPath)) {
                           appRouter.go(homePath);
                         }
