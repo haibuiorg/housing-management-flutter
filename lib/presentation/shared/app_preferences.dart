@@ -79,12 +79,15 @@ class AppPreferences extends StatelessWidget {
                         children: [
                           Text(AppLocalizations.of(context)!.dark_theme),
                           const SizedBox(width: 8),
-                          Switch(
-                              value: state.brightness == Brightness.dark,
-                              onChanged: (onChanged) {
-                                BlocProvider.of<SettingCubit>(context)
-                                    .switchTheme(onChanged);
-                              }),
+                          Transform.scale(
+                            scale: mini ? 0.5 : 1,
+                            child: Switch(
+                                value: state.brightness == Brightness.dark,
+                                onChanged: (onChanged) {
+                                  BlocProvider.of<SettingCubit>(context)
+                                      .switchTheme(onChanged);
+                                }),
+                          ),
                         ],
                       )
                     ])

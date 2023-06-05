@@ -16,7 +16,7 @@ class AppLottieAnimation extends StatelessWidget {
           width: constraints.maxWidth,
           child: Lottie.asset(
             loadingResource != null
-                ? 'assets/$loadingResource.json'
+                ? 'assets/lotties/$loadingResource.json'
                 : 'assets/graphing.json',
           ),
         ),

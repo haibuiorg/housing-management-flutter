@@ -66,11 +66,13 @@ class CustomFormField extends StatelessWidget {
                 hintText: hintText,
                 icon: icon,
                 helperText: helperText,
+                helperMaxLines: 3,
                 errorStyle: const TextStyle(inherit: true)) ??
             InputDecoration(
                 hintText: hintText,
                 icon: icon,
                 helperText: helperText,
+                helperMaxLines: 3,
                 errorStyle: const TextStyle(inherit: true)),
       ),
     );

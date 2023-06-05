@@ -729,5 +729,10 @@
       }
    },
    "partners": "Yhteistyökumppanit",
-   "ask_human_join": "Pyydä ihmisasiantuntijaa liittymään keskusteluun!"
+   "ask_human_join": "Pyydä ihmisasiantuntijaa liittymään keskusteluun!",
+   "welcome_to_priorli": "Tervetuloa Priorliin!",
+   "onboarding_text_2": "Verevästi yksinkertaista asuntojen hallinnointitehtäviä Priorlin kattavan ohjelmistoratkaisun avulla. Hallinnoi vuokralaisia ja tapahtumia vaivattomasti, käsittele huoltopyyntöjä, säilytä tärkeitä asiakirjoja turvallisesti ja pysy yhteydessä sisäänrakennetuilla viestintätyökaluilla.",
+   "onboarding_title_3": "Tapaa Priorlin Housing GPT",
+   "onboarding_text_3": "Tervetuloa uuden älykkään avustajasi, Housing GPT Botin, pariin! Edistyksellisen tekoälyteknologian avulla tämä botti on suunniteltu avustamaan asuntojen hallintatehtävissä päivittäin.",
+   "next": "Seuraava"
 }

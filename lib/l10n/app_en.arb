@@ -732,5 +732,10 @@
         }
       }
     },
-    "ask_human_join": "Ask a human assistant to join conversation!"
+    "ask_human_join": "Ask a human assistant to join conversation!",
+    "welcome_to_priorli": "Welcome to Priorli!",
+    "onboarding_text_2": "Simplify your housing management tasks with Priorli's comprehensive software solution. Effortlessly manage tenants and events, handle maintenance requests, securely store important documents, and stay connected with built-in messaging tools.",
+    "onboarding_title_3": "Meet Priorli's Housing GPT",
+    "onboarding_text_3": "Say hello to your new intelligent assistant, the Housing GPT Bot! Powered by advanced AI technology, the bot is designed to assist housing managers in their daily tasks.",
+    "next": "Next"
 }
